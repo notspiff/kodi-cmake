@@ -36,9 +36,10 @@ namespace XBMCAddon
     /**
      * Addon class.
      * 
-     * Addon([id]) -- Creates a new Addon class.
+     * Addon([id, installed]) -- Creates a new Addon class.
      * 
      * id          : [opt] string - id of the addon as specified in addon.xml
+     * installed   : [opt] boolean - False to use an uninstalled addon (default=True)
      * 
      * *Note, specifying the addon id is not needed.\n
      *  Important however is that the addon folder has the same name as the addon id provided in addon.xml.\n
@@ -60,9 +61,10 @@ namespace XBMCAddon
       /**
        * Addon class.
        * 
-       * Addon([id]) -- Creates a new Addon class.
+       * Addon([id, installed]) -- Creates a new Addon class.
        * 
        * id          : [opt] string - id of the addon as specified in addon.xml\n
+       * installed   : [opt] boolean - False to use an uninstalled addon (default=True)
        * 
        * *Note, specifying the addon id is not needed.\n
        *  Important however is that the addon folder has the same name as the addon id provided in addon.xml.\n
@@ -72,7 +74,7 @@ namespace XBMCAddon
        *  - self.Addon = xbmcaddon.Addon()
        *  - self.Addon = xbmcaddon.Addon('script.foo.bar')
        */
-      Addon(const char* id = NULL) throw (AddonException);
+      Addon(const char* id = NULL, bool installed = true) throw (AddonException);
 
       virtual ~Addon();
 
