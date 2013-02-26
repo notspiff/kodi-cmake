@@ -37,7 +37,7 @@ namespace XBMCAddon
 
     String Addon::getAddonVersion() { return languageHook == NULL ? emptyString : languageHook->GetAddonVersion(); }
 
-    Addon::Addon(const char* cid) throw (AddonException)
+    Addon::Addon(const char* cid, bool installed) throw (AddonException)
     {
       String id(cid ? cid : emptyString);
 
@@ -50,8 +50,16 @@ namespace XBMCAddon
       if (id.empty())
         throw AddonException("No valid addon id could be obtained. None was passed and the script wasn't executed in a normal xbmc manner.");
 
+      bool success = ADDON::CAddonMgr::Get().GetAddon(id.c_str(), pAddon);
+      if (!success && !installed)
+      {
+        CAddonDatabase addondb;
+        addondb.Open();
+        success = addondb.GetAddon(id, pAddon);
+      }
+
       // if we still fail we MAY be able to recover.
-      if (!ADDON::CAddonMgr::Get().GetAddon(id.c_str(), pAddon))
+      if (!success)
       {
         // we need to check the version prior to trying a bw compatibility trick
         ADDON::AddonVersion version(getAddonVersion());
@@ -85,16 +93,26 @@ namespace XBMCAddon
 
     String Addon::getLocalizedString(int id)
     {
+      AddonPtr temp;
+      if (!ADDON::CAddonMgr::Get().GetAddon(pAddon->ID(), temp))
+        return ""; // Can't get a string for an addon that isn't installed
       return pAddon->GetString(id);
     }
 
     String Addon::getSetting(const char* id)
     {
+      AddonPtr temp;
+      if (!ADDON::CAddonMgr::Get().GetAddon(pAddon->ID(), temp))
+        return "";
       return pAddon->GetSetting(id);
     }
 
     void Addon::setSetting(const char* id, const String& value)
     {
+      AddonPtr temp;
+      if (!ADDON::CAddonMgr::Get().GetAddon(pAddon->ID(), temp))
+        return;
+
       DelayedCallGuard dcguard(languageHook);
       ADDON::AddonPtr addon(pAddon);
       bool save=true;
@@ -121,6 +139,10 @@ namespace XBMCAddon
 
     void Addon::openSettings()
     {
+      AddonPtr temp;
+      if (!ADDON::CAddonMgr::Get().GetAddon(pAddon->ID(), temp))
+        return;
+
       DelayedCallGuard dcguard(languageHook);
       // show settings dialog
       ADDON::AddonPtr addon(pAddon);
