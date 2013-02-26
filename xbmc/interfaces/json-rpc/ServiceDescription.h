@@ -3298,7 +3298,7 @@ namespace JSONRPC
       "\"params\": ["
         "{ \"name\": \"type\", \"$ref\": \"Addon.Types\" },"
         "{ \"name\": \"content\", \"$ref\": \"Addon.Content\", \"description\": \"Content provided by the addon. Only considered for plugins and scripts.\" },"
-        "{ \"name\": \"enabled\", \"type\": [ { \"type\": \"boolean\" }, { \"type\": \"string\", \"enum\": [ \"all\" ] } ], \"default\": \"all\" },"
+        "{ \"name\": \"enabled\", \"type\": [ { \"type\": \"boolean\" }, { \"type\": \"string\", \"enum\": [ \"all\", \"uninstalled\" ] } ], \"default\": \"all\" },"
         "{ \"name\": \"properties\", \"$ref\": \"Addon.Fields\" },"
         "{ \"name\": \"limits\", \"$ref\": \"List.Limits\" }"
       "],"

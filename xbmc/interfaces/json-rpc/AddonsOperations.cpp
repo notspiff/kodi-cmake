@@ -75,10 +75,27 @@ JSONRPC_STATUS CAddonsOperations::GetAddons(const CStdString &method, ITransport
     addonTypes.push_back(addonType);
 
   VECADDONS addons;
+  CAddonDatabase addondb;
   for (vector<TYPE>::const_iterator typeIt = addonTypes.begin(); typeIt != addonTypes.end(); ++typeIt)
   {
     VECADDONS typeAddons;
-    if (*typeIt == ADDON_UNKNOWN)
+    // "uninstalled" add-ons don't make use of the enabled parameter
+    if (enabled.asString() == "uninstalled")
+    {
+      VECADDONS allAddons;
+      addondb.Open();
+      addondb.GetAddons(allAddons);
+      addondb.Close();
+      for (VECADDONS::const_iterator allIt = allAddons.begin(); allIt != allAddons.end(); allIt++)
+      {
+        AddonPtr allAddon = *allIt;
+        AddonPtr temp;
+        if ((*typeIt == ADDON_UNKNOWN ? true : allAddon->Type() == *typeIt) &&
+              !CAddonMgr::Get().GetAddon(allAddon->ID(), temp, *typeIt, false))
+          typeAddons.push_back(allAddon);
+      }
+    }
+    else if (*typeIt == ADDON_UNKNOWN)
     {
       if (!enabled.isBoolean())
       {
@@ -122,7 +139,6 @@ JSONRPC_STATUS CAddonsOperations::GetAddons(const CStdString &method, ITransport
   int start, end;
   HandleLimits(parameterObject, result, addons.size(), start, end);
   
-  CAddonDatabase addondb;
   for (int index = start; index < end; index++)
     FillDetails(addons.at(index), parameterObject["properties"], result["addons"], addondb, true);
   
