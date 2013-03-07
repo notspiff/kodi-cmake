@@ -20,6 +20,7 @@
 
 #include "system.h"
 #include "input/Key.h"
+#include "input/ButtonTranslator.h"
 
 CKey::CKey(void)
 {
@@ -163,4 +164,9 @@ CAction::CAction(int actionID, const std::string &name):
   m_buttonCode = 0;
   m_unicode = 0;
   m_holdTime = 0;
+}
+
+bool CAction::IsAnalog() const
+{
+  return CButtonTranslator::IsAnalog(m_id);
 }
