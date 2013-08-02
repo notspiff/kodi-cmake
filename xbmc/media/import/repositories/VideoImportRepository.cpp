@@ -368,7 +368,7 @@ bool CVideoImportRepository::RemoveSource(const std::string &identifier, CGUIDia
     return false;
   
   CSingleLock sourcesLock(m_sourcesLock);
-  MediaImportSourceMap::const_iterator it = m_sources.find(identifier);
+  MediaImportSourceMap::iterator it = m_sources.find(identifier);
   if (it == m_sources.end())
     return false;
 
@@ -387,7 +387,7 @@ bool CVideoImportRepository::RemoveSource(const std::string &identifier, CGUIDia
   for (MediaImportMap::iterator it = m_imports.begin(); it != m_imports.end(); )
   {
     if (it->second.GetSource().GetIdentifier().compare(identifier) == 0)
-      it = m_imports.erase(it);
+      m_imports.erase(it++);
     else
       ++it;
   }
