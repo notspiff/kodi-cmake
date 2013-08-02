@@ -960,6 +960,86 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
         return OnBrowseDirectChildren(action, "musicdb://genres/", filter, starting_index, requested_count, sort_criteria, context);
     } else if (NPT_String(search_criteria).Find("object.container.playlistContainer") >= 0) {
         return OnBrowseDirectChildren(action, "special://musicplaylists/", filter, starting_index, requested_count, sort_criteria, context);
+    } else if (NPT_String(search_criteria).Find("object.container.album.videoAlbum.videoBroadcastShow") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetTvShowsByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      items.SetPath("videodb://tvshows/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.container.album.videoAlbum.videoBroadcastSeason") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      if (!database.GetSeasonsByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, true)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      items.SetPath("videodb://tvshows/titles/-1/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.item.videoItem.movie") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetMoviesByWhere("videodb://movies/titles/", CDatabase::Filter("strSource IS NULL"), items, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      items.SetPath("videodb://movies/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.item.videoItem.videoBroadcast") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetEpisodesByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      items.SetPath("videodb://tvshows/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.item.videoItem.musicVideoClip") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetMusicVideosByWhere("videodb://musicvideos/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      items.SetPath("videodb://musicvideos/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
     } else if (NPT_String(search_criteria).Find("object.item.videoItem") >= 0) {
       CFileItemList items, itemsall;
 
@@ -969,14 +1049,23 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
         return NPT_SUCCESS;
       }
 
-      if (!database.GetMoviesNav("videodb://movies/titles/", items)) {
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetMoviesByWhere("videodb://movies/titles/", CDatabase::Filter("strSource IS NULL"), items, SortDescription(), needDetails)) {
         action->SetError(800, "Internal Error");
         return NPT_SUCCESS;
       }
       itemsall.Append(items);
       items.Clear();
 
-      if (!database.GetEpisodesByWhere("videodb://tvshows/titles/", "", items)) {
+      if (!database.GetEpisodesByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      itemsall.Append(items);
+      items.Clear();
+
+      if (!database.GetMusicVideosByWhere("videodb://musicvideos/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
         action->SetError(800, "Internal Error");
         return NPT_SUCCESS;
       }
@@ -990,6 +1079,7 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
       itemsall.Append(items);
       items.Clear();
 
+      items.SetPath("videodb://movies/titles/");
       return BuildResponse(action, itemsall, filter, starting_index, requested_count, sort_criteria, context, NULL);
   } else if (NPT_String(search_criteria).Find("object.item.imageItem") >= 0) {
       CFileItemList items;
