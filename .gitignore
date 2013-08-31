@@ -124,6 +124,8 @@ config.log
 /addons/audioencoder.*
 /addons/pvr.*
 /addons/peripheral.*
+/addons/repository.libretro-linux32/addon.xml
+/addons/repository.libretro-linux64/addon.xml
 /addons/xbmc.addon/addon.xml
 /addons/xbmc.json/addon.xml
 

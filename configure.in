@@ -2590,6 +2590,15 @@ OUTPUT_FILES="$OUTPUT_FILES \
   xbmc/interfaces/python/Makefile \
   xbmc/interfaces/python/test/Makefile"
 
+case $host in
+  i*86*-linux-gnu*|i*86*-*-linux-uclibc*)
+     OUTPUT_FILES="$OUTPUT_FILES addons/repository.libretro-linux32/addon.xml"
+     ;;
+  x86_64-*-linux-gnu*|x86_64-*-linux-uclibc*)
+     OUTPUT_FILES="$OUTPUT_FILES addons/repository.libretro-linux64/addon.xml"
+     ;;
+esac
+
 # Line below is used so we can use AM_INIT_AUTOMAKE. The corresponding
 # .dummy.am does nothing.
 AC_CONFIG_FILES([.dummy])
