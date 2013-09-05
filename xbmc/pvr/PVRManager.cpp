@@ -171,6 +171,19 @@ void CPVRManager::OnSettingAction(const CSetting *setting)
   }
 }
 
+void CPVRManager::AddonEnabled(ADDON::AddonPtr addon, bool bDisabled)
+{
+  // (re)start the pvr manager when enabling a pvr add-on
+  Start(true);
+}
+
+void CPVRManager::AddonDisabled(ADDON::AddonPtr addon)
+{
+  // restart the pvr manager when disabling a pvr add-on with the pvr manager enabled
+  if (IsStarted())
+    Start(true);
+}
+
 bool CPVRManager::IsPVRWindowActive(void) const
 {
   return g_windowManager.IsWindowActive(WINDOW_PVR) ||
@@ -423,6 +436,8 @@ void CPVRManager::Process(void)
   else
     return;
 
+  CAddonDatabase::RegisterAddonDatabaseCallback(ADDON::ADDON_PVRDLL, this);
+
   /* main loop */
   CLog::Log(LOGDEBUG, "PVRManager - %s - entering main loop", __FUNCTION__);
   g_EpgContainer.Start();
@@ -459,6 +474,8 @@ void CPVRManager::Process(void)
     else if (IsStarted() && !bRestart)
       m_triggerEvent.WaitMSec(1000);
   }
+
+  CAddonDatabase::UnregisterAddonDatabaseCallback(ADDON::ADDON_PVRDLL);
 
   if (IsStarted())
   {

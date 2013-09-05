@@ -216,6 +216,9 @@ bool CAddonMgr::CheckUserDirs(const cp_cfg_element_t *settings)
 CAddonMgr::CAddonMgr()
 {
   m_cpluff = NULL;
+
+  // Create the service manager
+  CServiceManager::Get();
 }
 
 CAddonMgr::~CAddonMgr()

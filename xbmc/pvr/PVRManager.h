@@ -21,6 +21,7 @@
 
 #include <map>
 
+#include "addons/AddonDatabase.h"
 #include "addons/include/xbmc_pvr_types.h"
 #include "settings/lib/ISettingCallback.h"
 #include "threads/Event.h"
@@ -84,7 +85,7 @@ namespace PVR
 
   typedef boost::shared_ptr<PVR::CPVRChannelGroup> CPVRChannelGroupPtr;
 
-  class CPVRManager : public ISettingCallback, private CThread, public Observable
+  class CPVRManager : public ISettingCallback, private CThread, public Observable, public IAddonDatabaseCallback
   {
     friend class CPVRClients;
 
@@ -106,8 +107,13 @@ namespace PVR
      */
     static CPVRManager &Get(void);
 
+    // Inherited from ISettingCallback
     virtual void OnSettingChanged(const CSetting *setting);
     virtual void OnSettingAction(const CSetting *setting);
+
+    // Inherited from IAddonDatabaseCallback
+    virtual void AddonEnabled(ADDON::AddonPtr addon, bool bDisabled);
+    virtual void AddonDisabled(ADDON::AddonPtr addon);
 
     /*!
      * @brief Get the channel groups container.
