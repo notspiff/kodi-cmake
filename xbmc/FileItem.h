@@ -53,6 +53,10 @@ namespace PVR
   class CPVRTimerInfoTag;
 }
 class CPictureInfoTag;
+namespace GAME_INFO
+{
+  class CGameInfoTag;
+}
 
 class CAlbum;
 class CArtist;
@@ -151,6 +155,7 @@ public:
    */
   bool IsAudio() const;
 
+  bool IsGame() const;
   bool IsKaraoke() const;
   bool IsCUESheet() const;
   bool IsInternetStream(const bool bStrictCheck = false) const;
@@ -306,6 +311,18 @@ public:
     return m_pictureInfoTag;
   }
 
+  inline bool HasGameInfoTag() const
+  {
+    return m_gameInfoTag != NULL;
+  }
+
+  GAME_INFO::CGameInfoTag* GetGameInfoTag();
+
+  inline const GAME_INFO::CGameInfoTag* GetGameInfoTag() const
+  {
+    return m_gameInfoTag;
+  }
+
   CPictureInfoTag* GetPictureInfoTag();
 
   /*!
@@ -376,6 +393,7 @@ public:
   CStdString FindTrailer() const;
 
   virtual bool LoadMusicTag();
+  virtual bool LoadGameTag();
 
   /* Returns the content type of this item if known */
   const CStdString& GetMimeType() const { return m_mimetype; }
@@ -458,6 +476,7 @@ private:
   PVR::CPVRRecording* m_pvrRecordingInfoTag;
   PVR::CPVRTimerInfoTag * m_pvrTimerInfoTag;
   CPictureInfoTag* m_pictureInfoTag;
+  GAME_INFO::CGameInfoTag* m_gameInfoTag;
   bool m_bIsAlbum;
 };
 
