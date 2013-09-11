@@ -334,6 +334,12 @@
     <Filter Include="network\test">
       <UniqueIdentifier>{1bdb0045-3341-49b7-8d6f-30a53f812350}</UniqueIdentifier>
     </Filter>
+    <Filter Include="games">
+      <UniqueIdentifier>{56b8c4ee-0f45-42e9-a7f7-eeae1c8940fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="games\tags">
+      <UniqueIdentifier>{43ec8ed7-e2f3-4e78-8d03-350479c4b40a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -3139,6 +3145,12 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\input\Key.cpp">
       <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\tags\GameInfoTag.cpp">
+      <Filter>games\tags</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\tags\GameInfoTagLoader.cpp">
+      <Filter>games\tags</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6117,6 +6129,12 @@
     <ClInclude Include="..\..\xbmc\input\Key.h">
       <Filter>input</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\tags\GameInfoTagLoader.h">
+      <Filter>games\tags</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\tags\GameInfoTag.h">
+      <Filter>games\tags</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\xbmc\win32\XBMC_PC.rc">
@@ -6158,5 +6176,11 @@
     <CustomBuild Include="..\..\xbmc\win32\git_revision.t">
       <Filter>win32</Filter>
     </CustomBuild>
+  </ItemGroup>
+</Project>
+  <ItemGroup>
+    <None Include="..\..\xbmc\interfaces\swig\ControlListAddItemMethods.i">
+      <Filter>interfaces\swig</Filter>
+    </None>
   </ItemGroup>
 </Project>
