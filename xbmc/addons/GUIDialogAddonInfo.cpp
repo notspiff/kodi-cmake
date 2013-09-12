@@ -26,6 +26,7 @@
 #include "FileItem.h"
 #include "filesystem/Directory.h"
 #include "filesystem/SpecialProtocol.h"
+#include "games/GameManager.h"
 #include "GUIDialogAddonSettings.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogTextViewer.h"
@@ -52,6 +53,7 @@
 
 using namespace std;
 using namespace ADDON;
+using namespace GAME;
 using namespace XFILE;
 
 CGUIDialogAddonInfo::CGUIDialogAddonInfo(void)
@@ -243,6 +245,7 @@ void CGUIDialogAddonInfo::OnUninstall()
     return;
 
   // ensure the addon isn't disabled in our database
+  CGameManager::Get().ClearAutoLaunch(); // Enabling before uninstalling might launch a queued game
   CAddonMgr::Get().DisableAddon(m_localAddon->ID(), false);
 
   CJobManager::GetInstance().AddJob(new CAddonUnInstallJob(m_localAddon),

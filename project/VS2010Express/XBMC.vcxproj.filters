@@ -340,6 +340,9 @@
     <Filter Include="games\tags">
       <UniqueIdentifier>{43ec8ed7-e2f3-4e78-8d03-350479c4b40a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="games\test">
+      <UniqueIdentifier>{4cad6943-a5ca-415b-b465-7a3207e74dd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -3154,6 +3157,27 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\addons\AddonCallbacksGame.cpp">
       <Filter>addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\test\TestGameFileLoader.cpp">
+      <Filter>games\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\GameFileAutoLauncher.cpp">
+      <Filter>games</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\GameManager.cpp">
+      <Filter>games</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\GameSettings.cpp">
+      <Filter>games</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\SerialState.cpp">
+      <Filter>games</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\GameClient.cpp">
+      <Filter>games</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\games\GameClientProperties.cpp">
+      <Filter>games</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6152,6 +6176,27 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\addons\DllGameClient.h">
       <Filter>addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\GameClient.h">
+      <Filter>games</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\GameFileAutoLauncher.h">
+      <Filter>games</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\GameManager.h">
+      <Filter>games</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\GameSettings.h">
+      <Filter>games</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\SerialState.h">
+      <Filter>games</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\GameClient.h">
+      <Filter>games</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\games\GameClientProperties.h">
+      <Filter>games</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

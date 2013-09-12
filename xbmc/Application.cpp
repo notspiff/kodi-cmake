@@ -198,6 +198,9 @@
 #include "music/tags/MusicInfoTagLoaderFactory.h"
 #include "CompileInfo.h"
 
+/* Game-related include files */
+#include "games/GameManager.h"
+
 #ifdef HAS_PERFORMANCE_SAMPLE
 #include "utils/PerformanceSample.h"
 #else
@@ -1262,6 +1265,8 @@ bool CApplication::Initialize()
 
   // show info dialog about moved configuration files if needed
   ShowAppMigrationMessage();
+
+  GAME::CGameManager::Get().Start();
 
   return true;
 }
@@ -2525,6 +2530,71 @@ bool CApplication::Cleanup()
   {
     g_windowManager.DestroyWindows();
 
+    /* Delete PVR related windows and dialogs */
+    g_windowManager.Delete(WINDOW_TV_CHANNELS);
+    g_windowManager.Delete(WINDOW_TV_RECORDINGS);
+    g_windowManager.Delete(WINDOW_TV_GUIDE);
+    g_windowManager.Delete(WINDOW_TV_TIMERS);
+    g_windowManager.Delete(WINDOW_TV_SEARCH);
+    g_windowManager.Delete(WINDOW_RADIO_CHANNELS);
+    g_windowManager.Delete(WINDOW_RADIO_RECORDINGS);
+    g_windowManager.Delete(WINDOW_RADIO_GUIDE);
+    g_windowManager.Delete(WINDOW_RADIO_TIMERS);
+    g_windowManager.Delete(WINDOW_RADIO_SEARCH);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_GUIDE_INFO);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_RECORDING_INFO);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_TIMER_SETTING);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_GROUP_MANAGER);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_CHANNEL_MANAGER);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_GUIDE_SEARCH);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_CHANNEL_SCAN);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_UPDATE_PROGRESS);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_CHANNELS);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_GUIDE);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_DIRECTOR);
+    g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_CUTTER);
+    g_windowManager.Delete(WINDOW_DIALOG_OSD_TELETEXT);
+
+    g_windowManager.Delete(WINDOW_DIALOG_TEXT_VIEWER);
+    g_windowManager.Delete(WINDOW_DIALOG_PLAY_EJECT);
+    g_windowManager.Delete(WINDOW_STARTUP_ANIM);
+    g_windowManager.Delete(WINDOW_LOGIN_SCREEN);
+    g_windowManager.Delete(WINDOW_VISUALISATION);
+    g_windowManager.Delete(WINDOW_KARAOKELYRICS);
+    g_windowManager.Delete(WINDOW_SETTINGS_MENU);
+    g_windowManager.Delete(WINDOW_SETTINGS_PROFILES);
+    g_windowManager.Delete(WINDOW_SETTINGS_MYPICTURES);  // all the settings categories
+    g_windowManager.Delete(WINDOW_TEST_PATTERN);
+    g_windowManager.Delete(WINDOW_SCREEN_CALIBRATION);
+    g_windowManager.Delete(WINDOW_SYSTEM_INFORMATION);
+    g_windowManager.Delete(WINDOW_SCREENSAVER);
+    g_windowManager.Delete(WINDOW_DIALOG_VIDEO_OSD);
+    g_windowManager.Delete(WINDOW_DIALOG_MUSIC_OVERLAY);
+    g_windowManager.Delete(WINDOW_DIALOG_VIDEO_OVERLAY);
+    g_windowManager.Delete(WINDOW_SLIDESHOW);
+    g_windowManager.Delete(WINDOW_ADDON_BROWSER);
+    g_windowManager.Delete(WINDOW_SKIN_SETTINGS);
+
+    g_windowManager.Delete(WINDOW_HOME);
+    g_windowManager.Delete(WINDOW_PROGRAMS);
+    g_windowManager.Delete(WINDOW_PICTURES);
+    g_windowManager.Delete(WINDOW_WEATHER);
+
+    g_windowManager.Delete(WINDOW_SETTINGS_MYPICTURES);
+    g_windowManager.Remove(WINDOW_SETTINGS_MYPROGRAMS);
+    g_windowManager.Remove(WINDOW_SETTINGS_MYWEATHER);
+    g_windowManager.Remove(WINDOW_SETTINGS_MYMUSIC);
+    g_windowManager.Remove(WINDOW_SETTINGS_SYSTEM);
+    g_windowManager.Remove(WINDOW_SETTINGS_MYVIDEOS);
+    g_windowManager.Remove(WINDOW_SETTINGS_SERVICE);
+    g_windowManager.Remove(WINDOW_SETTINGS_APPEARANCE);
+    g_windowManager.Remove(WINDOW_SETTINGS_MYPVR);
+    g_windowManager.Remove(WINDOW_SETTINGS_MYGAMES);
+    g_windowManager.Remove(WINDOW_DIALOG_KAI_TOAST);
+
+    g_windowManager.Remove(WINDOW_DIALOG_SEEK_BAR);
+    g_windowManager.Remove(WINDOW_DIALOG_VOLUME_BAR);
+
     CAddonMgr::Get().DeInit();
 
     CLog::Log(LOGNOTICE, "closing down remote control service");
@@ -2635,6 +2705,7 @@ void CApplication::Stop(int exitCode)
     CAnnouncementManager::Get().Deinitialize();
 
     StopPVRManager();
+    GAME::CGameManager::Get().Stop();
     StopServices();
     //Sleep(5000);
 

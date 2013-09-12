@@ -6977,6 +6977,7 @@ msgctxt "#15015"
 msgid "Remove"
 msgstr ""
 
+#: system/settings/settings.xml
 msgctxt "#15016"
 msgid "Games"
 msgstr ""
@@ -9375,6 +9376,7 @@ msgctxt "#20012"
 msgid "Video playlists"
 msgstr ""
 
+#: xbmc/games/GameFileAutoLauncher.cpp
 msgctxt "#20013"
 msgid "Do you wish to launch the game?"
 msgstr ""
@@ -12781,7 +12783,76 @@ msgctxt "#25009"
 msgid "The menu of this Blu-ray is not supported"
 msgstr ""
 
-#empty strings from id 25010 to 29799
+#empty strings from id 25010 to 26999
+
+#: system/settings/settings.xml
+msgctxt "#27000"
+msgid "Prefer loading games from memory"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27001"
+msgid "Enable rewind if supported"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27002"
+msgid "Maximum rewind time"
+msgstr ""
+
+#: xbmc/games/GameManager.cpp
+msgctxt "#27003"
+msgid "Error loading DLL"
+msgstr ""
+
+#: xbmc/games/GameFileAutoLauncher.cpp
+msgctxt "#27004"
+msgid "A compatible emulator was installed for:"
+msgstr ""
+
+#: system/settings/settings.xml
+#: xbmc/games/GameFileAutoLauncher.cpp
+msgctxt "#27005"
+msgid "Manage emulators..."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27006"
+msgid "ALL YOUR BASE ARE BELONG[CR]TO US"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27007"
+msgid "No info available yet."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27008"
+msgid "Enable real-time rewinding during game play, if supported. Press rewind or manually seek backwards using the seek bar."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27009"
+msgid "Maximum time possible to rewind, if supported. Large rewind histories can use a lot of RAM."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27010"
+msgid "Install, remove and manage emulators in the Add-on Manager."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27011"
+msgid "No info available yet."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#27012"
+msgid "Some emulators can only load game files on the local hard drive. If the emulator also supports loading files from memory, this is the tie-breaker."
+msgstr ""
+
+#empty strings from id 27013 to 29799
+
 #strings 29800 thru 29998 reserved strings used only in the default Project Mayhem III skin and not c++ code
 
 #: skin.confluence

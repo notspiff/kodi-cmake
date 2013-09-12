@@ -153,7 +153,7 @@ public:
   const std::string Description() const { return m_props.description; }
   const std::string Path() const { return m_props.path; }
   const std::string Profile() const { return m_profile; }
-  const std::string LibPath() const;
+  virtual const std::string LibPath() const;
   const std::string Author() const { return m_props.author; }
   const std::string ChangeLog() const { return m_props.changelog; }
   const std::string FanArt() const { return m_props.fanart; }

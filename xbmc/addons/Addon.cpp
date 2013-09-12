@@ -85,6 +85,7 @@ static const TypeMapping types[] =
    {"xbmc.webinterface",                 ADDON_WEB_INTERFACE,         199, "DefaultAddonWebSkin.png" },
    {"xbmc.addon.repository",             ADDON_REPOSITORY,          24011, "DefaultAddonRepository.png" },
    {"xbmc.pvrclient",                    ADDON_PVRDLL,              24019, "DefaultAddonPVRClient.png" },
+   {"xbmc.gameclient",                   ADDON_GAMEDLL,             27018, "DefaultAddonGame.png" },
    {"xbmc.peripheral",                   ADDON_PERIPHERALDLL,       35010, "DefaultAddonPeripheral.png" },
    {"xbmc.addon.video",                  ADDON_VIDEO,                1037, "DefaultAddonVideo.png" },
    {"xbmc.addon.audio",                  ADDON_AUDIO,                1038, "DefaultAddonMusic.png" },
@@ -172,6 +173,17 @@ AddonProps::AddonProps(const cp_extension_t *ext)
     EMPTY_IF("nofanart",fanart)
     EMPTY_IF("noicon",icon)
     EMPTY_IF("nochangelog",changelog)
+  }
+
+  // If extending xbmc.gameclient, load additional game client info
+  if (type == ADDON_GAMEDLL)
+  {
+    CStdString platforms = CAddonMgr::Get().GetTranslatedString(ext->configuration, "platforms");
+    if (!platforms.empty())
+      extrainfo.insert(make_pair("platforms", platforms));
+    CStdString extensions = CAddonMgr::Get().GetTranslatedString(ext->configuration, "extensions");
+    if (!extensions.empty())
+      extrainfo.insert(make_pair("extensions", extensions));
   }
   BuildDependencies(ext->plugin);
 }
@@ -405,6 +417,7 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_VIZ:
       case ADDON_SCREENSAVER:
       case ADDON_PVRDLL:
+      case ADDON_GAMEDLL:
       case ADDON_SHARED_LIBRARY:
       case ADDON_PERIPHERALDLL:
         {

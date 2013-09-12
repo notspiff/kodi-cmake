@@ -146,7 +146,7 @@ bool CAddonDll<TheDll, TheStruct, TheProps>::LoadDll()
   std::string strFileName;
   if (!m_bIsChild)
   {
-    strFileName = LibPath();
+    strFileName = this->LibPath();
   }
   else
   { //FIXME hack to load same Dll twice

@@ -40,6 +40,8 @@
 #include "DllPVRClient.h"
 #include "pvr/addons/PVRClient.h"
 #endif
+#include "games/GameClient.h"
+#include "games/GameManager.h"
 //#ifdef HAS_SCRAPERS
 #include "Scraper.h"
 //#endif
@@ -51,6 +53,7 @@
 #include "Util.h"
 
 using namespace std;
+using namespace GAME;
 using namespace XFILE;
 
 namespace ADDON
@@ -114,6 +117,7 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
     case ADDON_VIZ:
     case ADDON_SCREENSAVER:
     case ADDON_PVRDLL:
+    case ADDON_GAMEDLL:
 
     case ADDON_AUDIOENCODER:
     case ADDON_SHARED_LIBRARY:
@@ -163,6 +167,10 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
 #ifdef HAS_PVRCLIENTS
           return AddonPtr(new PVR::CPVRClient(props));
 #endif
+        }
+        else if (type == ADDON_GAMEDLL)
+        {
+          return AddonPtr(new CGameClient(props));
         }
         else if (type == ADDON_SCREENSAVER)
         {
@@ -687,6 +695,8 @@ AddonPtr CAddonMgr::AddonFromProps(AddonProps& addonProps)
       return AddonPtr(new PVR::CPVRClient(addonProps));
     case ADDON_AUDIOENCODER:
       return AddonPtr(new CAudioEncoder(addonProps));
+    case ADDON_GAMEDLL:
+      return AddonPtr(new CGameClient(addonProps));
     case ADDON_REPOSITORY:
       return AddonPtr(new CRepository(addonProps));
     default:
