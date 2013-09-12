@@ -271,6 +271,7 @@
 
 /* Game-related include files */
 #include "games/GameManager.h"
+#include "games/windows/GUIWindowGames.h"
 #include "input/IInputHandler.h"
 
 #ifdef HAS_PERFORMANCE_SAMPLE
@@ -1450,6 +1451,7 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIWindowScreensaver);
     g_windowManager.Add(new CGUIWindowWeather);
     g_windowManager.Add(new CGUIWindowStartup);
+    g_windowManager.Add(new CGUIWindowGames);
 
     /* window id's 3000 - 3100 are reserved for python */
 
@@ -3372,6 +3374,7 @@ bool CApplication::Cleanup()
     g_windowManager.Delete(WINDOW_PROGRAMS);
     g_windowManager.Delete(WINDOW_PICTURES);
     g_windowManager.Delete(WINDOW_WEATHER);
+    g_windowManager.Delete(WINDOW_GAMES);
 
     g_windowManager.Delete(WINDOW_SETTINGS_MYPICTURES);
     g_windowManager.Remove(WINDOW_SETTINGS_MYPROGRAMS);
