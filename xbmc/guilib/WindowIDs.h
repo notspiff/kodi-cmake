@@ -57,6 +57,8 @@
 
 #define WINDOW_ADDON_BROWSER              10040
 
+#define WINDOW_GAMES                      10050
+
 #define WINDOW_SCREENSAVER_DIM               97
 #define WINDOW_DEBUG_INFO                    98
 #define WINDOW_DIALOG_POINTER             10099
@@ -105,6 +107,7 @@
 #define WINDOW_DIALOG_EXT_PROGRESS        10151
 #define WINDOW_DIALOG_MEDIA_FILTER        10152
 #define WINDOW_DIALOG_SUBTITLES           10153
+#define WINDOW_DIALOG_GAME_SAVES          10154
 
 #define WINDOW_MUSIC_PLAYLIST             10500
 #define WINDOW_MUSIC_FILES                10501
@@ -140,6 +143,7 @@
 #define WINDOW_SLIDESHOW                  12007
 #define WINDOW_DIALOG_FILESTACKING        12008
 #define WINDOW_KARAOKELYRICS              12009
+#define WINDOW_FULLSCREEN_GAME            12010 // alias for WINDOW_FULLSCREEN_VIDEO to receive tailored keypresses
 #define WINDOW_WEATHER                    12600
 #define WINDOW_SCREENSAVER                12900
 #define WINDOW_DIALOG_VIDEO_OSD           12901

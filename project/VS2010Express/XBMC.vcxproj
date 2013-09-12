@@ -328,6 +328,7 @@
     <ClCompile Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerAudio.cpp" />
     <ClCompile Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerBuffer.cpp" />
     <ClCompile Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerDialogs.cpp" />
+    <ClCompile Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerInput.cpp" />
     <ClCompile Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerVideo.cpp" />
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.cpp" />
     <ClCompile Include="..\..\xbmc\cores\VideoRenderers\RenderCapture.cpp" />
@@ -1022,6 +1023,7 @@
     <ClInclude Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerAudio.h" />
     <ClInclude Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerBuffer.h" />
     <ClInclude Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerDialogs.h" />
+    <ClInclude Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerInput.h" />
     <ClInclude Include="..\..\xbmc\cores\RetroPlayer\RetroPlayerVideo.h" />
     <ClInclude Include="..\..\xbmc\cores\VideoRenderers\OverlayRendererGUI.h" />
     <ClInclude Include="..\..\xbmc\dialogs\GUIDialogKeyboardGeneric.h" />
@@ -1065,6 +1067,7 @@
     <ClInclude Include="..\..\xbmc\guilib\iimage.h" />
     <ClInclude Include="..\..\xbmc\guilib\imagefactory.h" />
     <ClInclude Include="..\..\xbmc\IFileItemListModifier.h" />
+    <ClInclude Include="..\..\xbmc\input\IInputHandler.h" />
     <ClInclude Include="..\..\xbmc\input\touch\generic\GenericTouchActionHandler.h" />
     <ClInclude Include="..\..\xbmc\input\touch\generic\GenericTouchSwipeDetector.h" />
     <ClInclude Include="..\..\xbmc\input\touch\generic\IGenericTouchGestureDetector.h" />

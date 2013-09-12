@@ -21,6 +21,7 @@
 #include "ApplicationPlayer.h"
 #include "cores/IPlayer.h"
 #include "Application.h"
+#include "input/IInputHandler.h"
 
 #define VOLUME_MINIMUM 0.0f        // -60dB
 #define VOLUME_MAXIMUM 1.0f        // 0dB
@@ -459,6 +460,14 @@ void CApplicationPlayer::GetAudioStreamInfo(int index, SPlayerAudioStreamInfo &i
   boost::shared_ptr<IPlayer> player = GetInternal();
   if (player)
     player->GetAudioStreamInfo(index, info);
+}
+
+IInputHandler *CApplicationPlayer::GetInputHandler()
+{
+  boost::shared_ptr<IPlayer> player = GetInternal();
+  if (player)
+    return player->GetInputHandler();
+  return NULL;
 }
 
 bool CApplicationPlayer::OnAction(const CAction &action)
