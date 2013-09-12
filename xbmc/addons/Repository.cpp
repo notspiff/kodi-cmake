@@ -35,10 +35,12 @@
 #include "FileItem.h"
 #include "TextureDatabase.h"
 #include "URL.h"
+#include "games/GameManager.h"
 
 using namespace std;
 using namespace XFILE;
 using namespace ADDON;
+using namespace GAMES;
 
 AddonPtr CRepository::Clone() const
 {
@@ -243,6 +245,16 @@ bool CRepositoryUpdateJob::DoWork()
   }
   if (addons.empty())
     return false;
+
+  // Allow game manager to update its cache of valid game extensions
+  // TODO: Create a callback interface for the Repository Updated action
+  // We must call this so that the game manager's knowledge of file extensions
+  // (which it uses to determine whether files are games) contains the extensions
+  // supported by the game clients of new repositories.
+  VECADDONS vecAddons;
+  for (map<string, AddonPtr>::const_iterator it = addons.begin(); it != addons.end(); ++it)
+    vecAddons.push_back(it->second);
+  CGameManager::Get().UpdateRemoteAddons(vecAddons);
 
   // check for updates
   CAddonDatabase database;

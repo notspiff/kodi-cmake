@@ -129,6 +129,12 @@ namespace ADDON
      */
     bool IsAddonDisabled(const std::string& ID);
 
+    /*!
+     * After cpluff initializes addons, allow CGameManager to track the
+     * properties of game client addons.
+     */
+    void RegisterGameClientAddons();
+
     /* libcpluff */
     CStdString GetExtValue(cp_cfg_element_t *base, const char *path);
 

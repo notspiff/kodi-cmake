@@ -57,6 +57,7 @@
 #include "utils/Variant.h"
 #include "music/karaoke/karaokelyricsfactory.h"
 #include "utils/Mime.h"
+#include "games/GameManager.h"
 #include "games/tags/GameInfoTag.h"
 #include "games/tags/GameInfoTagLoader.h"
 #ifdef HAS_ASAP_CODEC
@@ -70,6 +71,7 @@ using namespace MUSIC_INFO;
 using namespace PVR;
 using namespace EPG;
 using namespace GAME_INFO;
+using namespace GAMES;
 
 CFileItem::CFileItem(const CSong& song)
 {
@@ -850,6 +852,7 @@ bool CFileItem::IsVideo() const
   if (HasPictureInfoTag()) return false;
   if (IsPVRRecording())  return true;
   if (HasGameInfoTag()) return false;
+  if (!GetProperty("gameclient").empty()) return false;
 
   if (IsHDHomeRun() || IsTuxBox() || URIUtils::IsDVD(m_strPath) || IsSlingbox())
     return true;
@@ -863,6 +866,11 @@ bool CFileItem::IsVideo() const
      || extension.Equals("mxf") )
      return true;
   }
+
+  // If the file is a zip file, ask the game clients if any support this file
+  // before assuming it is video.
+  if (URIUtils::GetExtension(m_strPath).Equals(".zip") && CGameManager::Get().IsGame(m_strPath))
+    return false;
 
   return URIUtils::HasExtension(m_strPath, g_advancedSettings.m_videoExtensions);
 }
@@ -912,6 +920,7 @@ bool CFileItem::IsAudio() const
   if (HasVideoInfoTag()) return false;
   if (HasPictureInfoTag()) return false;
   if (HasGameInfoTag()) return false;
+  if (!GetProperty("gameclient").empty()) return false;
   if (IsCDDA()) return true;
 
   if( StringUtils::StartsWithNoCase(m_mimetype, "application/") )
@@ -923,17 +932,23 @@ bool CFileItem::IsAudio() const
      return true;
   }
 
+  // If the file is a zip file, ask the game clients if any support this file
+  // before assuming it is audio.
+  if (URIUtils::GetExtension(m_strPath).Equals(".zip") && CGameManager::Get().IsGame(m_strPath))
+    return false;
+
   return URIUtils::HasExtension(m_strPath, g_advancedSettings.m_musicExtensions);
 }
 
 bool CFileItem::IsGame() const
 {
   if (HasGameInfoTag()) return true;
+  if (!GetProperty("gameclient").empty()) return true;
   if (HasVideoInfoTag()) return false;
   if (HasMusicInfoTag()) return false;
   if (HasPictureInfoTag()) return false;
 
-  return false;
+  return CGameManager::Get().IsGame(m_strPath);
 }
 
 bool CFileItem::IsKaraoke() const
@@ -953,6 +968,7 @@ bool CFileItem::IsPicture() const
   if (HasMusicInfoTag()) return false;
   if (HasVideoInfoTag()) return false;
   if (HasGameInfoTag()) return false;
+  if (!GetProperty("gameclient").empty()) return false;
 
   return CUtil::IsPicture(m_strPath);
 }

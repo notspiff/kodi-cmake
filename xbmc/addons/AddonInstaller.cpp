@@ -766,6 +766,14 @@ void CAddonInstallJob::OnPostInstall(bool reloadAddon)
     // (re)start the pvr manager
     PVR::CPVRManager::Get().Start(true);
   }
+
+  // Update the cache of game client addons used in the ROM-launching selection process
+  if (m_addon->Type() == ADDON_GAMEDLL)
+  {
+    IAddonDatabaseCallback *cb = CAddonDatabase::GetCallbackForType(ADDON_GAMEDLL);
+    if (cb)
+      cb->AddonEnabled(m_addon, false);
+  }
 }
 
 void CAddonInstallJob::ReportInstallError(const CStdString& addonID,
