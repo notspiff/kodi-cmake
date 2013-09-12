@@ -213,9 +213,9 @@ void CPlayerCoreFactory::GetPlayers( const CFileItem& item, VECPLAYERCORES &vecC
 
   // Process defaults
 
-  // Set video default player. Check whether it's video first (overrule audio check)
-  // Also push these players in case it is NOT audio either
-  if (item.IsVideo() || !item.IsAudio())
+  // Set video default player. Check whether it's video first (overrule audio and
+  // game check). Also push these players in case it is NOT audio or game either.
+  if (item.IsVideo() || (!item.IsAudio() && !item.IsGame()))
   {
     PLAYERCOREID eVideoDefault = GetPlayerCore("videodefaultplayer");
     if (eVideoDefault != EPC_NONE)
@@ -239,6 +239,12 @@ void CPlayerCoreFactory::GetPlayers( const CFileItem& item, VECPLAYERCORES &vecC
     }
     GetPlayers(vecCores, true, false); // Audio-only players
     GetPlayers(vecCores, true, true);  // Audio & video players
+  }
+
+  if (item.IsGame())
+  {
+    CLog::Log(LOGDEBUG, "CPlayerCoreFactory::GetPlayers: adding retroplayer");
+    vecCores.push_back(EPC_RETROPLAYER);
   }
 
   /* make our list unique, preserving first added players */
@@ -341,6 +347,9 @@ bool CPlayerCoreFactory::LoadConfiguration(const std::string &file, bool clear)
     CPlayerCoreConfig* paplayer = new CPlayerCoreConfig("PAPlayer", EPC_PAPLAYER, NULL);
     paplayer->m_bPlaysAudio = true;
     m_vecCoreConfigs.push_back(paplayer);
+
+    CPlayerCoreConfig* retroplayer = new CPlayerCoreConfig("RetroPlayer", EPC_RETROPLAYER, NULL);
+    m_vecCoreConfigs.push_back(retroplayer);
 
     for(std::vector<CPlayerSelectionRule *>::iterator it = m_vecCoreSelectionRules.begin(); it != m_vecCoreSelectionRules.end(); ++it)
       delete *it;

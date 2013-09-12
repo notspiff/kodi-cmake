@@ -21,6 +21,7 @@
 #include "GameClient.h"
 #include "GameManager.h"
 #include "addons/AddonManager.h"
+#include "cores/IPlayer.h"
 #include "FileItem.h"
 #include "filesystem/Directory.h"
 #include "filesystem/SpecialProtocol.h"
@@ -35,6 +36,7 @@
 
 using namespace ADDON;
 using namespace GAME;
+using namespace XFILE;
 using namespace std;
 
 #define EXTENSION_SEPARATOR          "|"
@@ -194,7 +196,7 @@ void CGameClient::LogAddonProperties(void)
 
   CLog::Log(LOGINFO, "GAME: ------------------------------------");
   CLog::Log(LOGINFO, "GAME: Loaded DLL for %s", ID().c_str());
-  CLog::Log(LOGINFO, "GAME: Client: %s at version %s", Name().c_str(), Version().asString());
+  CLog::Log(LOGINFO, "GAME: Client: %s at version %s", Name().c_str(), Version().asString().c_str());
   CLog::Log(LOGINFO, "GAME: Valid extensions: %s", StringUtils::Join(vecExtensions, " ").c_str());
   CLog::Log(LOGINFO, "GAME: Supports VFS: %s", m_bSupportsVFS ? "yes" : "no");
   CLog::Log(LOGINFO, "GAME: Supports no game: %s", m_bSupportsNoGame ? "yes" : "no");
@@ -260,7 +262,10 @@ bool CGameClient::CanOpen(const CFileItem& file) const
     {
       // Enumerate the zip and look for a file inside the zip with a valid extension
       std::string strZipUrl;
-      URIUtils::CreateArchivePath(strZipUrl, "zip", translatedUrl.Get(), "");
+
+      const CURL pathToUrl(translatedUrl.Get());
+      CURL url(URIUtils::CreateArchivePath("zip", pathToUrl, "", ""));
+      strZipUrl = url.Get();
 
       string strValidExts;
       for (set<string>::const_iterator it = m_extensions.begin(); it != m_extensions.end(); it++)
@@ -337,7 +342,10 @@ bool CGameClient::OpenInternal(const CFileItem& file)
   {
     // Enumerate the zip and look for a file inside the zip with a valid extension
     std::string strZipUrl;
-    URIUtils::CreateArchivePath(strZipUrl, "zip", strTranslatedUrl, "");
+
+    const CURL pathToUrl(translatedUrl.Get());
+    CURL url(URIUtils::CreateArchivePath("zip", pathToUrl, "", ""));
+    strZipUrl = url.Get();
 
     string strValidExts;
     for (set<string>::const_iterator it = m_extensions.begin(); it != m_extensions.end(); it++)
