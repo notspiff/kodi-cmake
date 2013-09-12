@@ -62,7 +62,7 @@ typedef struct PLT_BrowseData {
 typedef NPT_Reference<PLT_BrowseData> PLT_BrowseDataReference;
 
 // explicitely specify res otherwise WMP won't return a URL!
-#define PLT_DEFAULT_FILTER  "dc:date,dc:description,upnp:longDescription,upnp:genre,res,res@duration,res@size,upnp:albumArtURI,upnp:rating,upnp:lastPlaybackPosition,upnp:lastPlaybackTime,upnp:playbackCount,upnp:originalTrackNumber,upnp:episodeNumber,upnp:programTitle,upnp:seriesTitle,upnp:album,upnp:artist,upnp:author,upnp:director,searchable,childCount,xbmc:dateadded"
+#define PLT_DEFAULT_FILTER  "dc:date,dc:description,upnp:longDescription,upnp:genre,res,res@duration,res@size,res@resolution,res@nrAudioChannels,upnp:albumArtURI,upnp:rating,upnp:lastPlaybackPosition,upnp:lastPlaybackTime,upnp:playbackCount,upnp:originalTrackNumber,upnp:episodeNumber,upnp:episodeCount,upnp:episodeSeason,upnp:programTitle,upnp:seriesTitle,upnp:album,upnp:artist,upnp:author,upnp:director,upnp:actor,searchable,childCount,upnp:recordedStartDateTime,xbmc:dateadded,xbmc:rating,xbmc:votes,xbmc:studio,xbmc:artwork"
 
 /*----------------------------------------------------------------------
 |   PLT_MediaContainerListener
