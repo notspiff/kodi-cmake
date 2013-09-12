@@ -12873,7 +12873,12 @@ msgctxt "#27015"
 msgid "Add-on manager"
 msgstr ""
 
-#empty strings from id 27016 to 29799
+#: xbmc/addons/Addon.cpp
+msgctxt "#27016"
+msgid "Game Add-ons"
+msgstr ""
+
+#empty strings from id 27017 to 29799
 
 #strings 29800 thru 29998 reserved strings used only in the default Project Mayhem III skin and not c++ code
 

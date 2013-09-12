@@ -80,6 +80,8 @@ CPluginSource::Content CPluginSource::Translate(const std::string &content)
     return CPluginSource::EXECUTABLE;
   else if (content == "video")
     return CPluginSource::VIDEO;
+  else if (content == "game")
+    return CPluginSource::GAME;
   else
     return CPluginSource::UNKNOWN;
 }
@@ -89,6 +91,7 @@ bool CPluginSource::IsType(TYPE type) const
   return ((type == ADDON_VIDEO && Provides(VIDEO))
        || (type == ADDON_AUDIO && Provides(AUDIO))
        || (type == ADDON_IMAGE && Provides(IMAGE))
+       || (type == ADDON_GAME && Provides(GAME))
        || (type == ADDON_EXECUTABLE && Provides(EXECUTABLE)));
 }
 
