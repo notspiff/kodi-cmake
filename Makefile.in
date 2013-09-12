@@ -52,6 +52,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/filesystem/filesystem.a \
                    xbmc/games/games.a \
                    xbmc/games/tags/gameinfotags.a \
+                   xbmc/games/windows/gamewindows.a \
                    xbmc/guilib/guilib.a \
                    xbmc/input/input.a \
                    xbmc/interfaces/generic/interfaces-generic.a \

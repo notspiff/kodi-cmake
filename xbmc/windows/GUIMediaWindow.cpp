@@ -795,6 +795,8 @@ bool CGUIMediaWindow::Update(const std::string &strDirectory, bool updateFilterP
   else if (m_vecItems->IsPath("sources://programs/") ||
            m_vecItems->IsPath("sources://files/"))
     showLabel = 1026;
+  if (m_vecItems->IsPath("sources://games/"))
+    showLabel = 27017; // Add Games...
   if (showLabel && (m_vecItems->Size() == 0 || !m_guiState->DisableAddSourceButtons())) // add 'add source button'
   {
     std::string strLabel = g_localizeStrings.Get(showLabel);

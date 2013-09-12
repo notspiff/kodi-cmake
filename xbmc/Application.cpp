@@ -200,6 +200,7 @@
 
 /* Game-related include files */
 #include "games/GameManager.h"
+#include "games/windows/GUIWindowGames.h"
 
 #ifdef HAS_PERFORMANCE_SAMPLE
 #include "utils/PerformanceSample.h"
@@ -1186,7 +1187,7 @@ bool CApplication::Initialize()
   {
     CSettings::Get().GetSetting("powermanagement.displaysoff")->SetRequirementsMet(m_dpms->IsSupported());
 
-    g_windowManager.CreateWindows();
+    g_windowManager.CreateWindows(); // TODO: add g_windowManager.Add(new CGUIWindowHome);
     /* window id's 3000 - 3100 are reserved for python */
 
     // Make sure we have at least the default skin
@@ -2577,6 +2578,7 @@ bool CApplication::Cleanup()
     g_windowManager.Delete(WINDOW_PROGRAMS);
     g_windowManager.Delete(WINDOW_PICTURES);
     g_windowManager.Delete(WINDOW_WEATHER);
+    g_windowManager.Delete(WINDOW_GAMES);
 
     g_windowManager.Delete(WINDOW_SETTINGS_MYPICTURES);
     g_windowManager.Remove(WINDOW_SETTINGS_MYPROGRAMS);
