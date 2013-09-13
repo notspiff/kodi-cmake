@@ -730,12 +730,12 @@ public:
   bool ImportArtFromXML(const TiXmlNode *node, std::map<std::string, std::string> &artwork);
 
   // smart playlists and main retrieval work in these functions
-  bool GetMoviesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription());
+  bool GetMoviesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   bool GetSetsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool ignoreSingleMovieSets = false);
-  bool GetTvShowsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription());
+  bool GetTvShowsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   bool GetSeasonsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription());
-  bool GetEpisodesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription());
-  bool GetMusicVideosByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const SortDescription &sortDescription = SortDescription());
+  bool GetEpisodesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
+  bool GetMusicVideosByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   
   // retrieve sorted and limited items
   bool GetSortedVideos(const MediaType &mediaType, const std::string& strBaseDir, const SortDescription &sortDescription, CFileItemList& items, const Filter &filter = Filter());
