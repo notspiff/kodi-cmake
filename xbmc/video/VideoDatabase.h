@@ -367,8 +367,8 @@ public:
   virtual bool Open();
   virtual bool CommitTransaction();
 
-  int AddMovie(const CStdString& strFilenameAndPath);
-  int AddEpisode(int idShow, const CStdString& strFilenameAndPath);
+  int AddMovie(const CStdString& strFilenameAndPath, CDateTime dateAdded = CDateTime());
+  int AddEpisode(int idShow, const CStdString& strFilenameAndPath, CDateTime dateAdded = CDateTime());
 
   // editing functions
   /*! \brief Set the playcount of an item
@@ -640,7 +640,7 @@ public:
    \param idFile id of the file in the files table
    \param strFileNameAndPath path to the file
    */
-  void UpdateFileDateAdded(int idFile, const CStdString& strFileNameAndPath);
+  void UpdateFileDateAdded(int idFile, const CStdString& strFileNameAndPath, CDateTime dateAdded = CDateTime());
 
   void ExportToXML(const CStdString &path, bool singleFiles = false, bool images=false, bool actorThumbs=false, bool overwrite=false);
   bool ExportSkipEntry(const CStdString &nfoFile);
@@ -735,7 +735,7 @@ protected:
   int AddCountry(const CStdString& strCountry);
   int AddStudio(const CStdString& strStudio1);
 
-  int AddTvShow(const CStdString& strPath);
+  int AddTvShow(const CStdString& strPath, CDateTime dateAdded = CDateTime());
   int AddMusicVideo(const CStdString& strFilenameAndPath);
   int AddSeason(int showID, int season);
 
