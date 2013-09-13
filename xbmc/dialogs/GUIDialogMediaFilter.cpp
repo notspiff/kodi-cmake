@@ -836,7 +836,7 @@ void CGUIDialogMediaFilter::GetStringListOptions(const CSetting *setting, std::v
 void CGUIDialogMediaFilter::GetRange(const Filter &filter, int &min, int &interval, int &max)
 {
   if (filter.field == FieldRating &&
-     (m_mediaType == "albums" || m_mediaType == "songs"))
+     (m_mediaType == MediaTypeAlbum || m_mediaType == MediaTypeSong))
   {
     min = 0;
     interval = 1;
@@ -848,21 +848,21 @@ void CGUIDialogMediaFilter::GetRange(const Filter &filter, int &min, int &interv
     interval = 1;
     max = 0;
 
-    if (m_mediaType == "movies" || m_mediaType == "tvshows" || m_mediaType == "musicvideos")
+    if (m_mediaType == MediaTypeMovie || m_mediaType == MediaTypeTvShow || m_mediaType == MediaTypeEpisode)
     {
       CStdString table;
       CStdString year;
-      if (m_mediaType == "movies")
+      if (m_mediaType == MediaTypeMovie)
       {
         table = "movieview";
         year = DatabaseUtils::GetField(FieldYear, MediaTypeMovie, DatabaseQueryPartWhere);
       }
-      else if (m_mediaType == "tvshows")
+      else if (m_mediaType == MediaTypeTvShow)
       {
         table = "tvshowview";
         year = StringUtils::Format("strftime(\"%%Y\", %s)", DatabaseUtils::GetField(FieldYear, MediaTypeTvShow, DatabaseQueryPartWhere).c_str());
       }
-      else if (m_mediaType == "musicvideos")
+      else if (m_mediaType == MediaTypeMusicVideo)
       {
         table = "musicvideoview";
         year = DatabaseUtils::GetField(FieldYear, MediaTypeMusicVideo, DatabaseQueryPartWhere);
@@ -872,26 +872,19 @@ void CGUIDialogMediaFilter::GetRange(const Filter &filter, int &min, int &interv
       filter.where = year + " > 0";
       GetMinMax(table, year, min, max, filter);
     }
-    else if (m_mediaType == "albums" || m_mediaType == "songs")
+    else if (m_mediaType == MediaTypeAlbum || m_mediaType == MediaTypeSong)
     {
       CStdString table;
-      MediaType mediaType;
-      if (m_mediaType == "albums")
-      {
+      if (m_mediaType == MediaTypeAlbum)
         table = "albumview";
-        mediaType = MediaTypeAlbum;
-      }
-      else if (m_mediaType == "songs")
-      {
+      else if (m_mediaType == MediaTypeSong)
         table = "songview";
-        mediaType = MediaTypeSong;
-      }
       else
         return;
 
       CDatabase::Filter filter;
-      filter.where = DatabaseUtils::GetField(FieldYear, mediaType, DatabaseQueryPartWhere) + " > 0";
-      GetMinMax(table, DatabaseUtils::GetField(FieldYear, mediaType, DatabaseQueryPartSelect), min, max, filter);
+      filter.where = DatabaseUtils::GetField(FieldYear, m_mediaType, DatabaseQueryPartWhere) + " > 0";
+      GetMinMax(table, DatabaseUtils::GetField(FieldYear, m_mediaType, DatabaseQueryPartSelect), min, max, filter);
     }
   }
   else if (filter.field == FieldAirDate)
@@ -900,7 +893,7 @@ void CGUIDialogMediaFilter::GetRange(const Filter &filter, int &min, int &interv
     interval = 1;
     max = 0;
 
-    if (m_mediaType == "episodes")
+    if (m_mediaType == MediaTypeEpisode)
     {
       CStdString field = StringUtils::Format("CAST(strftime(\"%%s\", c%02d) AS INTEGER)", VIDEODB_ID_EPISODE_AIRED);
       
@@ -914,7 +907,7 @@ void CGUIDialogMediaFilter::GetRange(const Filter &filter, int &min, int &interv
     interval = 10;
     max = 0;
 
-    if (m_mediaType == "songs")
+    if (m_mediaType == MediaTypeSong)
       GetMinMax("songview", "iDuration", min, max);
   }
   else if (filter.field == FieldPlaycount)
@@ -923,7 +916,7 @@ void CGUIDialogMediaFilter::GetRange(const Filter &filter, int &min, int &interv
     interval = 1;
     max = 0;
 
-    if (m_mediaType == "songs")
+    if (m_mediaType == MediaTypeSong)
       GetMinMax("songview", "iTimesPlayed", min, max);
   }
 }

@@ -335,7 +335,7 @@ bool CGUIWindowVideoNav::GetDirectory(const CStdString &strDirectory, CFileItemL
         map<string, string> art;
         if (m_database.GetArtForItem(details.m_iDbId, details.m_type, art))
         {
-          items.AppendArt(art, "tvshow");
+          items.AppendArt(art, MediaTypeTvShow);
           items.SetArtFallback("fanart", "tvshow.fanart");
           if (node == NODE_TYPE_SEASONS)
           { // set an art fallback for "thumb"
@@ -361,9 +361,9 @@ bool CGUIWindowVideoNav::GetDirectory(const CStdString &strDirectory, CFileItemL
           // grab the season thumb as the folder thumb
           int seasonID = m_database.GetSeasonId(details.m_iDbId, params.GetSeason());
           CGUIListItem::ArtMap seasonArt;
-          if (m_database.GetArtForItem(seasonID, "season", seasonArt))
+          if (m_database.GetArtForItem(seasonID, MediaTypeSeason, seasonArt))
           {
-            items.AppendArt(art, "season");
+            items.AppendArt(art, MediaTypeSeason);
             // set an art fallback for "thumb"
             if (items.HasArt("season.poster"))
               items.SetArtFallback("thumb", "season.poster");
@@ -962,11 +962,11 @@ bool CGUIWindowVideoNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
   case CONTEXT_BUTTON_SET_ACTOR_THUMB:
   case CONTEXT_BUTTON_SET_ARTIST_THUMB:
     {
-      std::string type = "season";
+      std::string type = MediaTypeSeason;
       if (button == CONTEXT_BUTTON_SET_ACTOR_THUMB)
         type = "actor";
       else if (button == CONTEXT_BUTTON_SET_ARTIST_THUMB)
-        type = "artist";
+        type = MediaTypeArtist;
       
       bool result = CGUIDialogVideoInfo::ManageVideoItemArtwork(m_vecItems->Get(itemNumber), type);
       Refresh();
