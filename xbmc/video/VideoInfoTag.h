@@ -44,6 +44,7 @@ struct SActorInfo
   CScraperUrl thumbUrl;
   std::string thumb;
   int        order;
+  bool operator==(const SActorInfo &rhs) const;
 };
 
 class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
@@ -81,6 +82,18 @@ public:
       return m_strPath;
     return m_strFileNameAndPath;
   };
+
+  bool Equals(const CVideoInfoTag& rhs, bool metadataOnly = false) const;
+
+  bool operator==(const CVideoInfoTag& rhs) const
+  {
+    return Equals(rhs, false);
+  }
+
+  bool operator!=(const CVideoInfoTag& rhs) const
+  {
+    return !(*this == rhs);
+  }
 
   /*! \brief retrieve the duration in seconds.
    Prefers the duration from stream details if available.
