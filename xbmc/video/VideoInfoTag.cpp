@@ -32,6 +32,16 @@
 
 using namespace std;
 
+bool SActorInfo::operator==(const SActorInfo &rhs) const
+{
+  bool ret = true;
+  ret &= strName.Equals(rhs.strName, false);
+  ret &= strRole.Equals(rhs.strRole, false);
+  ret &= thumb.Equals(rhs.thumb, false);
+
+  return ret;
+}
+
 void CVideoInfoTag::Reset()
 {
   m_director.clear();
@@ -821,4 +831,103 @@ unsigned int CVideoInfoTag::GetDurationFromMinuteString(const std::string &runti
     CLog::Log(LOGWARNING, "%s <runtime> should be in minutes. Interpreting '%s' as %u minutes", __FUNCTION__, runtime.c_str(), duration);
   }
   return duration*60;
+}
+
+bool CVideoInfoTag::Equals(const CVideoInfoTag& rhs, bool metadataOnly /* = false */) const
+{
+  bool ret = true;
+
+  if (!metadataOnly)
+  {
+    // check paths
+    ret &= m_parentPathID == rhs.m_parentPathID;
+    ret &= m_basePath.Equals(rhs.m_basePath, true);
+    ret &= m_strFile.Equals(rhs.m_strFile, true);
+    ret &= m_strPath.Equals(rhs.m_strPath, true);
+    ret &= m_strFileNameAndPath.Equals(rhs.m_strFileNameAndPath, true);
+    ret &= m_strShowPath.Equals(rhs.m_strShowPath, true);
+
+    // check IDs
+    ret &= (m_iSetId <= 0 && rhs.m_iSetId <= 0) || m_iSetId == rhs.m_iSetId;
+    ret &= m_iBookmarkId == rhs.m_iBookmarkId;
+    ret &= (m_iIdShow <= 0 && rhs.m_iIdShow <= 0) || m_iIdShow == rhs.m_iIdShow;
+    ret &= (m_iIdSeason <= 0 && rhs.m_iIdSeason <= 0) || m_iIdSeason == rhs.m_iIdSeason;
+
+    ret &= m_hasDetails == rhs.m_hasDetails;
+  }
+
+  ret &= m_playCount == rhs.m_playCount;
+  ret &= m_lastPlayed == rhs.m_lastPlayed;
+  ret &= m_iTop250 == rhs.m_iTop250;
+  ret &= m_iYear == rhs.m_iYear;
+  ret &= m_fRating == rhs.m_fRating;
+  ret &= m_duration == rhs.m_duration;
+
+  ret &= m_strPlot == rhs.m_strPlot;
+  ret &= m_strTitle == rhs.m_strTitle;
+  ret &= m_strSortTitle == rhs.m_strSortTitle;
+  ret &= m_strVotes == rhs.m_strVotes;
+  ret &= m_strIMDBNumber == rhs.m_strIMDBNumber;
+  ret &= m_strOriginalTitle == rhs.m_strOriginalTitle;
+  ret &= m_strShowTitle == rhs.m_strShowTitle;
+  ret &= m_strUniqueId == rhs.m_strUniqueId;
+  ret &= StringUtils::EqualsNoCase(m_type, rhs.m_type);
+
+  ret &= m_director == rhs.m_director;
+  ret &= m_writingCredits == rhs.m_writingCredits;
+  ret &= m_country == rhs.m_country;
+
+  if (m_type == "movie" || m_type == "tvshow" || m_type == "musicvideo")
+  {
+    ret &= m_genre == rhs.m_genre;
+    ret &= m_tags == rhs.m_tags;
+    ret &= m_studio == rhs.m_studio;
+
+    if (m_type == "movie" || m_type == "tvshow")
+    {
+      ret &= m_strMPAARating == rhs.m_strMPAARating;
+
+      if (m_type == "movie")
+      {
+        ret &= m_strTagLine == rhs.m_strTagLine;
+        ret &= m_strPlotOutline == rhs.m_strPlotOutline;
+        ret &= m_strTrailer == rhs.m_strTrailer;
+        ret &= m_strSet == rhs.m_strSet;
+      }
+      else if (m_type == "tvshow")
+      {
+        ret &= m_premiered == rhs.m_premiered;
+        ret &= m_strStatus == rhs.m_strStatus;
+      }
+    }
+    else if (m_type == "musicvideo")
+    {
+      ret &= m_iTrack == rhs.m_iTrack;
+      ret &= m_strAlbum == rhs.m_strAlbum;
+      ret &= m_artist == rhs.m_artist;
+    }
+  }
+
+  if (m_type == "movie" || m_type == "tvshow" || m_type == "episode")
+  {
+    ret &= m_cast == rhs.m_cast;
+  }
+
+  if (m_type == "season" || m_type == "episode")
+  {
+    ret &= m_iSeason == rhs.m_iSeason;
+    ret &= m_iSpecialSortSeason == rhs.m_iSpecialSortSeason;
+    ret &= m_iSpecialSortEpisode == rhs.m_iSpecialSortEpisode;
+
+    if (m_type == "episode")
+    {
+      ret &= m_fEpBookmark == rhs.m_fEpBookmark;
+      ret &= m_iEpisode == rhs.m_iEpisode;
+      ret &= m_strEpisodeGuide == rhs.m_strEpisodeGuide;
+      ret &= m_strProductionCode == rhs.m_strProductionCode;
+      ret &= m_firstAired == rhs.m_firstAired;
+    }
+  }
+
+  return ret;
 }
