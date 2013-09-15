@@ -16652,3 +16652,10 @@ msgstr ""
 msgctxt "#39014"
 msgid "Removing %s..."
 msgstr ""
+
+#. (container title): (media item title)
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+msgctxt "#39015"
+msgid "%s: %s"
+msgstr ""

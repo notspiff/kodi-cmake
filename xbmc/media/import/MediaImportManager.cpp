@@ -49,8 +49,22 @@
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
 
+// TODO
+#include "media/import/handler/EpisodeImportHandler.h"
+#include "media/import/handler/MovieImportHandler.h"
+#include "media/import/handler/MusicVideoImportHandler.h"
+#include "media/import/handler/SeasonImportHandler.h"
+#include "media/import/handler/TvShowImportHandler.h"
+
 CMediaImportManager::CMediaImportManager()
-{ }
+{
+  // TODO
+  RegisterMediaImportHandler(MediaImportHandlerPtr(new CMovieImportHandler()));
+  RegisterMediaImportHandler(MediaImportHandlerPtr(new CTvShowImportHandler()));
+  RegisterMediaImportHandler(MediaImportHandlerPtr(new CSeasonImportHandler()));
+  RegisterMediaImportHandler(MediaImportHandlerPtr(new CEpisodeImportHandler()));
+  RegisterMediaImportHandler(MediaImportHandlerPtr(new CMusicVideoImportHandler()));
+}
 
 CMediaImportManager::~CMediaImportManager()
 {
