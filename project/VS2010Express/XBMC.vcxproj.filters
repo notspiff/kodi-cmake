@@ -316,6 +316,24 @@
     <Filter Include="media">
       <UniqueIdentifier>{fe89da97-8cd1-4ba3-8ef2-ae4ae5498d59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="media\import">
+      <UniqueIdentifier>{784e6295-c8ea-4020-80f1-b7ab8b665211}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\import\handler">
+      <UniqueIdentifier>{77c2d996-17ac-429b-bca2-02410e48429d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\import\repositories">
+      <UniqueIdentifier>{59c42381-6e53-4efa-8da0-f106fcefd39a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\import\task">
+      <UniqueIdentifier>{fa0cd35f-aea6-4688-ae3c-d76d2a18d1d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\import\windows">
+      <UniqueIdentifier>{a67c9f13-962a-43bb-87d7-415c25a2a8a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media\import\dialogs">
+      <UniqueIdentifier>{4e8910ed-dab9-4501-838f-16ce5099ade7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\xbmc\win32\pch.cpp">
@@ -3124,6 +3142,63 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\media\MediaType.cpp">
       <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\MediaImportManager.cpp">
+      <Filter>media\import</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\handler\MovieImportHandler.cpp">
+      <Filter>media\import\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\handler\VideoImportHandler.cpp">
+      <Filter>media\import\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\handler\EpisodeImportHandler.cpp">
+      <Filter>media\import\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\handler\SeasonImportHandler.cpp">
+      <Filter>media\import\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\handler\TvShowImportHandler.cpp">
+      <Filter>media\import\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\repositories\VideoImportRepository.cpp">
+      <Filter>media\import\repositories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\filesystem\ImportDirectory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\handler\MusicVideoImportHandler.cpp">
+      <Filter>media\import\handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\task\MediaImportRetrievalTask.cpp">
+      <Filter>media\import\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\task\MediaImportSynchronisationTask.cpp">
+      <Filter>media\import\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\task\MediaImportSourceRegistrationTask.cpp">
+      <Filter>media\import\task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\MediaImportTaskProcessorJob.cpp">
+      <Filter>media\import</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\windows\GUIViewStateMediaSourceBrowser.cpp">
+      <Filter>media\import\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\windows\GUIWindowMediaSourceBrowser.cpp">
+      <Filter>media\import\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\network\upnp\UPnPMediaImporter.cpp">
+      <Filter>network\upnp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\MediaImport.cpp">
+      <Filter>media\import</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\dialogs\GUIDialogMediaImportInfo.cpp">
+      <Filter>media\import\dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\media\import\task\MediaImportUpdateTask.cpp">
+      <Filter>media\import\task</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6135,6 +6210,81 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\media\MediaType.h">
       <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\IMediaImporter.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\MediaImportManager.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\IMediaImportHandler.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\handler\MovieImportHandler.h">
+      <Filter>media\import\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\handler\VideoImportHandler.h">
+      <Filter>media\import\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\handler\EpisodeImportHandler.h">
+      <Filter>media\import\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\handler\SeasonImportHandler.h">
+      <Filter>media\import\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\handler\TvShowImportHandler.h">
+      <Filter>media\import\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\utils\SpecialSort.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\MediaImportSource.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\MediaImport.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\IMediaImportRepository.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\repositories\VideoImportRepository.h">
+      <Filter>media\import\repositories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\filesystem\ImportDirectory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\handler\MusicVideoImportHandler.h">
+      <Filter>media\import\handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\IMediaImportTask.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\task\MediaImportRetrievalTask.h">
+      <Filter>media\import\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\task\MediaImportSynchronisationTask.h">
+      <Filter>media\import\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\task\MediaImportSourceRegistrationTask.h">
+      <Filter>media\import\task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\MediaImportTaskProcessorJob.h">
+      <Filter>media\import</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\windows\GUIViewStateMediaSourceBrowser.h">
+      <Filter>media\import\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\windows\GUIWindowMediaSourceBrowser.h">
+      <Filter>media\import\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\network\upnp\UPnPMediaImporter.h">
+      <Filter>network\upnp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\dialogs\GUIDialogMediaImportInfo.h">
+      <Filter>media\import\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\media\import\task\MediaImportUpdateTask.h">
+      <Filter>media\import\task</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
