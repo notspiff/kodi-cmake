@@ -15639,7 +15639,77 @@ msgctxt "#37024"
 msgid "Select this if the audio out connection only supports multichannel audio as Dolby Digital 5.1, this allows multichannel audio such as AAC5.1 or FLAC5.1 to be listened to in 5.1 surround sound. Note - Not recommended on Pi as this requires a lot of CPU."
 msgstr ""
 
-#empty strings from id 37025 to 37034
+#empty string with id 37025
+
+#. Importing (media type plural) from (media provider name)
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/MovieImportHandler.cpp
+#: xbmc/media/import/handler/MusicVideoImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+#: xbmc/media/import/handler/TvShowImportHandler.cpp
+msgctxt "#37026"
+msgid "Importing %s from %s..."
+msgstr ""
+
+#. Checking (media item title)
+#: xbmc/media/import/handler/MovieImportHandler.cpp
+#: xbmc/media/import/handler/MusicVideoImportHandler.cpp
+#: xbmc/media/import/handler/TvShowImportHandler.cpp
+msgctxt "#37027"
+msgid "Checking %s..."
+msgstr ""
+
+#. Removing (media item title)
+#: xbmc/media/import/handler/MovieImportHandler.cpp
+#: xbmc/media/import/handler/MusicVideoImportHandler.cpp
+#: xbmc/media/import/handler/TvShowImportHandler.cpp
+msgctxt "#37028"
+msgid "Removing %s..."
+msgstr ""
+
+#. Updating (media item title)
+#: xbmc/media/import/handler/MovieImportHandler.cpp
+#: xbmc/media/import/handler/MusicVideoImportHandler.cpp
+#: xbmc/media/import/handler/TvShowImportHandler.cpp
+msgctxt "#37029"
+msgid "Updating %s..."
+msgstr ""
+
+#. Adding (media item title)
+#: xbmc/media/import/handler/MovieImportHandler.cpp
+#: xbmc/media/import/handler/MusicVideoImportHandler.cpp
+#: xbmc/media/import/handler/TvShowImportHandler.cpp
+msgctxt "#37030"
+msgid "Adding %s..."
+msgstr ""
+
+#. Checking (tvshow title): (media item title)
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+msgctxt "#37031"
+msgid "Checking %s: %s..."
+msgstr ""
+
+#. Removing (tvshow title): (media item title)
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+msgctxt "#37032"
+msgid "Removing %s: %s..."
+msgstr ""
+
+#. Updating (tvshow title): (media item title)
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+msgctxt "#37033"
+msgid "Updating %s: %s..."
+msgstr ""
+
+#. Adding (tvshow title): (media item title)
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+msgctxt "#37034"
+msgid "Adding %s: %s..."
+msgstr ""
 
 #. Retrieving media items from (media provider name)
 #: xbmc/media/import/task/MediaImportRetrievalTask.cpp

@@ -42,9 +42,23 @@
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
 
+// TODO
+#include "media/import/handler/EpisodeImportHandler.h"
+#include "media/import/handler/MovieImportHandler.h"
+#include "media/import/handler/MusicVideoImportHandler.h"
+#include "media/import/handler/SeasonImportHandler.h"
+#include "media/import/handler/TvShowImportHandler.h"
+
 CMediaImportManager::CMediaImportManager()
   : CJobQueue(false, 1, CJob::PRIORITY_LOW_PAUSABLE)
-{ }
+{
+  // TODO
+  RegisterMediaImportHandler(new CMovieImportHandler());
+  RegisterMediaImportHandler(new CTvShowImportHandler());
+  RegisterMediaImportHandler(new CSeasonImportHandler());
+  RegisterMediaImportHandler(new CEpisodeImportHandler());
+  RegisterMediaImportHandler(new CMusicVideoImportHandler());
+}
 
 CMediaImportManager::~CMediaImportManager()
 {

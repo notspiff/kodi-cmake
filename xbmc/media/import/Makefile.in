@@ -1,6 +1,12 @@
 SRCS= MediaImport.cpp \
       MediaImportManager.cpp \
       MediaImportTaskProcessorJob.cpp \
+      handler/EpisodeImportHandler.cpp \
+      handler/MovieImportHandler.cpp \
+      handler/MusicVideoImportHandler.cpp \
+      handler/SeasonImportHandler.cpp \
+      handler/TvShowImportHandler.cpp \
+      handler/VideoImportHandler.cpp \
       task/MediaImportRetrievalTask.cpp \
       task/MediaImportSourceRegistrationTask.cpp \
       task/MediaImportSynchronisationTask.cpp \
