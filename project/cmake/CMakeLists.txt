@@ -53,6 +53,8 @@ set(INCLUDES ${XBMC_SOURCE_DIR}/addons/library.xbmc.addon
              ${CMAKE_BINARY_DIR})
 
 find_package(PkgConfig)
+find_package(Threads REQUIRED)
+list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 
 # Required dependencies
 set(required_deps Sqlite3 Mpeg2 FreeType PCRE Cpluff
