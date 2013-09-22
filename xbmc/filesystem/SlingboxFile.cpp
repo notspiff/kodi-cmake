@@ -21,7 +21,7 @@
 #include "FileItem.h"
 #include "SlingboxFile.h"
 #include "filesystem/File.h"
-#include "lib/SlingboxLib/SlingboxLib.h"
+#include "SlingboxLib/SlingboxLib.h"
 #include "profiles/ProfilesManager.h"
 #include "utils/log.h"
 #include "utils/XMLUtils.h"

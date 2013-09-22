@@ -26,8 +26,8 @@
 
 extern "C"
 {
-#include "lib/libXDAAP/client.h"
-#include "lib/libXDAAP/private.h"
+#include "libXDAAP/client.h"
+#include "libXDAAP/private.h"
 }
 
 namespace XFILE
