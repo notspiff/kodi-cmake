@@ -43,8 +43,7 @@ add_options(ALL_LANGUAGES ALL_BUILDS "-fPIC")
 
 add_definitions(-D_LINUX -DHAVE_UNIX -DHAVE_STRCASECMP
                 -DHAVE_STRNCASECMP -DHAVE_IOS_OPENMODE
-                -DPACKAGE_NAME="libsidplay2" -DPACKAGE_VERSION="1.0.0"
-                -DS_A_WHITE_EMAIL="s_a_white@email.com")
+                -DPACKAGE_NAME="libsidplay2" -DPACKAGE_VERSION="1.0.0")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     libsidplay/win/VC
