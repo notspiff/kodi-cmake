@@ -5,4 +5,6 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
                     ${XBMC_SOURCE_DIR}/xbmc
                     ${XBMC_SOURCE_DIR}/xbmc/cores/dvdplayer/DVDDemuxers)
 
-add_library(XBMC_pvr SHARED ${SOURCES})
+add_options(CXX ALL_BUILDS "-fPIC")
+
+xbmc_add_library(XBMC_pvr 1)
