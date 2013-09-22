@@ -30,7 +30,9 @@
 #include "DVDPlayerVideo.h"
 #include "DVDCodecs/DVDFactoryCodec.h"
 #include "DVDCodecs/DVDCodecUtils.h"
+#ifndef USE_EXTERNAL_LIBAV
 #include "DVDCodecs/Video/DVDVideoPPFFmpeg.h"
+#endif
 #include "DVDCodecs/Video/DVDVideoCodecFFmpeg.h"
 #include "DVDDemuxers/DVDDemux.h"
 #include "DVDDemuxers/DVDDemuxUtils.h"
@@ -304,7 +306,9 @@ void CDVDPlayerVideo::Process()
 
   DVDVideoPicture picture;
   CPulldownCorrection pulldown;
+#ifndef USE_EXTERNAL_LIBAV
   CDVDVideoPPFFmpeg mPostProcess("");
+#endif
   std::string sPostProcessType;
   bool bPostProcessDeint = false;
 
@@ -678,9 +682,11 @@ void CDVDPlayerVideo::Process()
 
             if (!sPostProcessType.empty())
             {
+#ifndef USE_EXTERNAL_LIBAV
               mPostProcess.SetType(sPostProcessType, bPostProcessDeint);
               if (mPostProcess.Process(&picture))
                 mPostProcess.GetPicture(&picture);
+#endif
             }
 
             /* if frame has a pts (usually originiating from demux packet), use that */
