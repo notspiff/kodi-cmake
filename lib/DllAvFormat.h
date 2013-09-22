@@ -35,7 +35,7 @@ extern "C" {
 #ifndef __GNUC__
 #pragma warning(disable:4244)
 #endif
-#if (defined USE_EXTERNAL_FFMPEG)
+#if (defined USE_EXTERNAL_FFMPEG) || (defined USE_EXTERNAL_LIBAV)
   #include <libavformat/avformat.h>
   /* xbmc_read_frame_flush() is defined for us in lib/xbmc-dll-symbols/DllAvFormat.c */
   void xbmc_read_frame_flush(AVFormatContext *s);
@@ -73,7 +73,7 @@ public:
   virtual int av_read_play(AVFormatContext *s)=0;
   virtual int av_read_pause(AVFormatContext *s)=0;
   virtual int av_seek_frame(AVFormatContext *s, int stream_index, int64_t timestamp, int flags)=0;
-#if (!defined USE_EXTERNAL_FFMPEG) && (!defined TARGET_DARWIN) && (!defined USE_STATIC_FFMPEG)
+#if (!defined USE_EXTERNAL_FFMPEG) && (!defined USE_EXTERNAL_LIBAV) && (!defined TARGET_DARWIN)  && (!defined USE_STATIC_FFMPEG)
   virtual int avformat_find_stream_info_dont_call(AVFormatContext *ic, AVDictionary **options)=0;
 #endif
   virtual int avformat_open_input(AVFormatContext **ps, const char *filename, AVInputFormat *fmt, AVDictionary **options)=0;
@@ -108,7 +108,7 @@ public:
 #endif
 };
 
-#if (defined USE_EXTERNAL_FFMPEG) || (defined TARGET_DARWIN) || (defined USE_STATIC_FFMPEG)
+#if (defined USE_EXTERNAL_FFMPEG) || (defined USE_EXTERNAL_LIBAV) || (defined TARGET_DARWIN) || (defined USE_STATIC_FFMPEG)
 
 // Use direct mapping
 class DllAvFormat : public DllDynamic, DllAvFormatInterface
