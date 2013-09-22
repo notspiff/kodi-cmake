@@ -41,7 +41,7 @@ extern "C" {
 #pragma warning(disable:4244)
 #endif
 
-#if (defined USE_EXTERNAL_FFMPEG)
+#if (defined USE_EXTERNAL_FFMPEG) || (defined USE_EXTERNAL_LIBAV)
   #include <libavcodec/avcodec.h>
 #else
   #include "libavcodec/avcodec.h"
@@ -94,7 +94,7 @@ public:
   virtual AVDictionary* av_frame_get_metadata(const AVFrame* frame)=0;
 };
 
-#if (defined USE_EXTERNAL_FFMPEG) || (defined TARGET_DARWIN) || (defined USE_STATIC_FFMPEG)
+#if (defined USE_EXTERNAL_FFMPEG) || (defined USE_EXTERNAL_LIBAV) || (defined TARGET_DARWIN)  || (defined USE_STATIC_FFMPEG)
 
 // Use direct layer
 class DllAvCodec : public DllDynamic, DllAvCodecInterface

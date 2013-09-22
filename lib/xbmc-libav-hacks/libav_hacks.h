@@ -93,4 +93,9 @@ int avfilter_graph_parse_ptr(AVFilterGraph *graph, const char *filters,
                              AVFilterInOut **inputs, AVFilterInOut **outputs,
                              void *log_ctx);
 
+// libavcodec
+#ifndef AVCODEC_MAX_AUDIO_FRAME_SIZE
+#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
+#endif
+
 #endif

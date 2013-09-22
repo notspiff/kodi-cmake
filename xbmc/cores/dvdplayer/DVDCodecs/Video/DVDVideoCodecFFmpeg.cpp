@@ -28,7 +28,9 @@
 #include "DVDClock.h"
 #include "DVDCodecs/DVDCodecs.h"
 #include "DVDCodecs/DVDCodecUtils.h"
+#ifndef USE_EXTERNAL_LIBAV
 #include "DVDVideoPPFFmpeg.h"
+#endif
 #if defined(TARGET_POSIX) || defined(TARGET_WINDOWS)
 #include "utils/CPUInfo.h"
 #endif
@@ -178,7 +180,9 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   if(!m_dllAvUtil.Load()
   || !m_dllAvCodec.Load()
   || !m_dllSwScale.Load()
+#ifndef USE_EXTERNAL_LIBAV
   || !m_dllPostProc.Load()
+#endif
   || !m_dllAvFilter.Load()
   ) return false;
 
@@ -348,7 +352,9 @@ void CDVDVideoCodecFFmpeg::Dispose()
   m_dllAvCodec.Unload();
   m_dllAvUtil.Unload();
   m_dllAvFilter.Unload();
+#ifndef USE_EXTERNAL_LIBAV
   m_dllPostProc.Unload();
+#endif
 }
 
 void CDVDVideoCodecFFmpeg::SetDropState(bool bDrop)

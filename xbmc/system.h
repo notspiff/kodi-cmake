@@ -22,8 +22,9 @@
 
 #if defined(HAVE_CONFIG_H) && !defined(TARGET_WINDOWS)
 #include "config.h"
-#define DECLARE_UNUSED(a,b) a __attribute__((unused)) b;
 #endif
+
+#define DECLARE_UNUSED(a,b) a __attribute__((unused)) b;
 
 #define PRE_SKIN_VERSION_9_10_COMPATIBILITY 1
 #define PRE_SKIN_VERSION_11_COMPATIBILITY 1

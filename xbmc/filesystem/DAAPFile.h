@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "lib/libXDAAP/client.h"
+#include "libXDAAP/client.h"
 #include "CurlFile.h"
 #include "URL.h"
 #include "threads/CriticalSection.h"
