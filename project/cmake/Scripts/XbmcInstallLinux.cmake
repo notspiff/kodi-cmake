@@ -1,15 +1,16 @@
 set(libdir ${CMAKE_INSTALL_PREFIX}/lib)
 set(bindir ${CMAKE_INSTALL_PREFIX}/bin)
 configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc.sh.in
-               xbmc @ONLY)
+               scripts/xbmc @ONLY)
 configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
-               xbmc-standalone @ONLY)
+               scripts/xbmc-standalone @ONLY)
 
 install(TARGETS xbmc-xrandr DESTINATION lib/xbmc)
 install(FILES ${bindings} DESTINATION include/xbmc)
 install(FILES ${cmake_files} ${CMAKE_BINARY_DIR}/xbmc-config.cmake
         DESTINATION lib/xbmc)
-install(PROGRAMS ${CMAKE_BINARY_DIR}/xbmc ${CMAKE_BINARY_DIR}/xbmc-standalone
+install(PROGRAMS ${CMAKE_BINARY_DIR}/scripts/xbmc
+                 ${CMAKE_BINARY_DIR}/scripts/xbmc-standalone
         DESTINATION bin)
 install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/FEH.py
         DESTINATION share/xbmc)
