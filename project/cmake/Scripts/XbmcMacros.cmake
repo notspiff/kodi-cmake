@@ -30,7 +30,7 @@ function(xbmc_link_library lib wraplib)
   elseif("${check_arg}" STREQUAL "extras")
     list(APPEND export ${data_arg})
   endif()
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/system/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
+  add_custom_command(OUTPUT ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                      COMMAND ${CMAKE_C_COMPILER}
                      ARGS    -Wl,--whole-archive
                              ${link_lib}
@@ -38,23 +38,21 @@ function(xbmc_link_library lib wraplib)
                              -shared -o ${CMAKE_BINARY_DIR}/system/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                              ${export}
                      DEPENDS ${target} wrapper.def wrapper)
-  list(APPEND WRAP_FILES ${CMAKE_BINARY_DIR}/system/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
+  list(APPEND WRAP_FILES ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
   set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
-  get_filename_component(dir ${wraplib} PATH)
-  install(PROGRAMS ${CMAKE_BINARY_DIR}/system/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
-          DESTINATION lib/xbmc/system/${dir})
 endfunction()
 
 function(copy_file_to_buildtree file)
-  if (NOT TARGET export-files)
-    add_custom_target(export-files ALL COMMENT "Copying files into build tree")
-  endif (NOT TARGET export-files)
   string(REPLACE "\(" "\\(" filename ${file})
   string(REPLACE "\)" "\\)" file2 ${filename})
-  add_custom_command(TARGET export-files COMMAND ${CMAKE_COMMAND} -E copy_if_different "${XBMC_SOURCE_DIR}/${file2}" "${CMAKE_CURRENT_BINARY_DIR}/${file2}")
-  get_filename_component(dir ${file2} PATH)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${file2}
-          DESTINATION share/xbmc/${dir})
+  if(NOT ${XBMC_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
+    if (NOT TARGET export-files)
+      add_custom_target(export-files ALL COMMENT "Copying files into build tree")
+    endif (NOT TARGET export-files)
+    add_custom_command(TARGET export-files COMMAND ${CMAKE_COMMAND} -E copy_if_different "${XBMC_SOURCE_DIR}/${file2}" "${CMAKE_CURRENT_BINARY_DIR}/${file2}")
+  endif()
+  list(APPEND install_data ${file2})
+  set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
 function(copy_skin_to_buildtree skin)
@@ -73,8 +71,6 @@ function(copy_skin_to_buildtree skin)
                              -dupecheck
                      DEPENDS ${MEDIA_FILES} TexturePacker)
   list(APPEND XBT_FILES ${skin}/media/Textures.xbt)
-  install(FILES ${CMAKE_BINARY_DIR}/${skin}/media/Textures.xbt
-          DESTINATION share/xbmc/${skin}/media)
                 
   set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
 endfunction()
@@ -171,10 +167,4 @@ function(xbmc_optional_dyload_dep dep)
       set(${depup}_SONAME ${${depup}_SONAME} PARENT_SCOPE)
     endif()
   endif()
-endfunction()
-
-function(install_rename file dest)
-  get_filename_component(dir ${dest} PATH)
-  install(CODE "execute_process(COMMAND install -d $ENV{DESTDIR}${dir}
-                                COMMAND install -m0644 ${file} $ENV{DESTDIR}${dest})")
 endfunction()
