@@ -11,7 +11,8 @@ ExternalProject_ADD(libcpluff SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/cpluff
 set(CPLUFF_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/cpluff/include)
 set(CPLUFF_FOUND 1)
 
-xbmc_link_library(${CMAKE_BINARY_DIR}/cpluff/lib/libcpluff.a libcpluff libcpluff "extras" -lexpat)
+xbmc_link_library(${CMAKE_BINARY_DIR}/cpluff/lib/libcpluff.a
+                 system/libcpluff libcpluff "extras" -lexpat)
 set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
 
 mark_as_advanced(CPLUFF_INCLUDE_DIRS CPLUFF_FOUND)
