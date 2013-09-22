@@ -272,6 +272,7 @@ set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
 xbmc_link_library(cximage ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
 xbmc_link_library(exif libexif)
 xbmc_link_library(hdhomerun hdhomerun)
+xbmc_link_library(cmyth libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/paplayer)
 xbmc_link_library(nosefart players/paplayer/nosefart)
