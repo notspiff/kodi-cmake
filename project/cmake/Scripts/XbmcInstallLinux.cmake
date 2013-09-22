@@ -34,8 +34,8 @@ endforeach()
 
 foreach(wraplib ${WRAP_FILES})
   get_filename_component(dir ${wraplib} PATH)
-  install(PROGRAMS ${CMAKE_BINARY_DIR}/system/${wraplib}
-          DESTINATION lib/xbmc/system/${dir})
+  install(PROGRAMS ${CMAKE_BINARY_DIR}/${wraplib}
+          DESTINATION lib/xbmc/${dir})
 endforeach()
 
 foreach(file ${install_data})
