@@ -31,9 +31,9 @@
 #include <arpa/inet.h>
 
 extern "C" {
-#include "lib/libhts/net.h"
-#include "lib/libhts/htsmsg.h"
-#include "lib/libhts/htsmsg_binary.h"
+#include "libhts/net.h"
+#include "libhts/htsmsg.h"
+#include "libhts/htsmsg_binary.h"
 }
 
 using namespace std;

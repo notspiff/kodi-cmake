@@ -1,0 +1,18 @@
+set(SOURCES Bookmark.cpp
+            FFmpegVideoDecoder.cpp
+            GUIViewStateVideo.cpp
+            PlayerController.cpp
+            Teletext.cpp
+            VideoDatabase.cpp
+            VideoDbUrl.cpp
+            VideoInfoDownloader.cpp
+            VideoInfoScanner.cpp
+            VideoInfoTag.cpp
+            VideoReferenceClock.cpp
+            VideoThumbLoader.cpp)
+
+xbmc_add_library(video)
+add_dependencies(video libcpluff ffmpeg)
+
+add_subdirectory(dialogs)
+add_subdirectory(windows)

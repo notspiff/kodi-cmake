@@ -31,6 +31,6 @@ const char *GetXbmcGitRevision()
 #ifdef GIT_REV
   return GIT_REV;
 #else
-  return NULL;
+  return 0;
 #endif
 }

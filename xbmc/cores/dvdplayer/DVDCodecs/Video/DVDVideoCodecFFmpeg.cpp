@@ -28,7 +28,9 @@
 #include "DVDClock.h"
 #include "DVDCodecs/DVDCodecs.h"
 #include "DVDCodecs/DVDCodecUtils.h"
+#ifndef USE_EXTERNAL_LIBAV
 #include "DVDVideoPPFFmpeg.h"
+#endif
 #if defined(TARGET_POSIX) || defined(TARGET_WINDOWS)
 #include "utils/CPUInfo.h"
 #endif
