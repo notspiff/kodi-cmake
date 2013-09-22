@@ -1,0 +1,70 @@
+--- afpfs-ng-0.8.1-orig/include/afpfs-ng/afp.h	2008-03-08 17:08:18.000000000 +0100
++++ afpfs-ng-0.8.1/include/afpfs-ng/afp.h	2013-10-13 23:36:00.639572767 +0200
+@@ -5,7 +5,13 @@
+ #include <arpa/inet.h>
+ #include <pthread.h>
+ #include <netdb.h>
++#ifndef ANDROID
+ #include <sys/statvfs.h>
++#else
++#include <sys/vfs.h>
++#define statvfs statfs
++#define fstatvfs fstatfs
++#endif
+ #include <pwd.h>
+ #include <afp_protocol.h>
+ #include <libafpclient.h>
+--- afpfs-ng-0.8.1-orig/lib/midlevel.c	2008-03-08 17:08:18.000000000 +0100
++++ afpfs-ng-0.8.1/lib/midlevel.c	2013-10-13 23:36:00.639572767 +0200
+@@ -1388,10 +1388,12 @@
+ 	stat->f_frsize=0;
+ 	stat->f_files=0;
+ 	stat->f_ffree=0;
++#ifndef ANDROID
+ 	stat->f_favail=0;
+ 	stat->f_fsid=0;
+ 	stat->f_flag=0;
+ 	stat->f_namemax=255;
++#endif
+ 	return 0;
+ 
+ }
+--- afpfs-ng-0.8.1-orig/lib/lowlevel.c	2008-02-20 02:33:17.000000000 +0100
++++ afpfs-ng-0.8.1/lib/lowlevel.c	2013-10-13 23:36:00.639572767 +0200
+@@ -612,7 +612,7 @@
+ 		modification_date=fp.modification_date;
+ 	}
+ 
+-#ifdef __linux__
++#if defined(__linux__) && !defined(ANDROID)
+ 	stbuf->st_ctim.tv_sec=creation_date;
+ 	stbuf->st_mtim.tv_sec=modification_date;
+ #else
+--- afpfs-ng-0.8.1-orig/lib/dsi.c	2008-02-18 04:53:03.000000000 +0100
++++ afpfs-ng-0.8.1/lib/dsi.c	2013-10-13 23:36:00.639572767 +0200
+@@ -605,7 +605,11 @@
+ 		afp_getsrvrmsg(server,AFPMESG_SERVER,
+ 			((server->using_version->av_number>=30)?1:0),
+ 			DSI_DEFAULT_TIMEOUT,mesg); 
++#if defined(ANDROID)
++		if(memcmp(mesg,"The server is going down for maintenance.",41)==0)
++#else
+ 		if(bcmp(mesg,"The server is going down for maintenance.",41)==0)
++#endif
+ 			shutdown=1;
+ 	}
+ 
+--- afpfs-ng-0.8.1-orig/lib/afp.c	2008-03-08 03:44:16.000000000 +0100
++++ afpfs-ng-0.8.1/lib/afp.c	2013-10-13 23:36:00.639572767 +0200
+@@ -206,7 +206,11 @@
+ {
+         struct afp_server *s;
+ 	for (s=server_base;s;s=s->next) {
++#if defined(ANDROID)
++                if (memcmp(&s->address,address,sizeof(struct sockaddr_in))==0)
++#else
+                 if (bcmp(&s->address,address,sizeof(struct sockaddr_in))==0)
++#endif
+                         return s;
+ 	}
+         return NULL;

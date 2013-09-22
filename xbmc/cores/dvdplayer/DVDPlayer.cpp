@@ -52,7 +52,7 @@
 #include "cores/VideoRenderers/RenderManager.h"
 #endif
 #ifdef HAS_PERFORMANCE_SAMPLE
-#include "xbmc/utils/PerformanceSample.h"
+#include "utils/PerformanceSample.h"
 #else
 #define MEASURE_FUNCTION
 #endif

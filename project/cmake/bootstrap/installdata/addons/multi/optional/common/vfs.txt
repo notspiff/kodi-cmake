@@ -1,0 +1,1 @@
+vfsaddons https://github.com/notspiff/vfs-addons origin/master VFSADDONS OFF

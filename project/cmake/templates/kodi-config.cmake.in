@@ -1,0 +1,8 @@
+set(KODI_INCLUDE_DIR @prefix@/include/kodi)
+set(APP_NAME @APP_NAME@)
+set(APP_VERSION_MAJOR @APP_VERSION_MAJOR@)
+set(APP_VERSION_MINOR @APP_VERSION_MINOR@)
+list(APPEND CMAKE_MODULE_PATH @APP_LIBDIR@)
+add_definitions(@ARCH_DEFINES@ -DBUILD_KODI_ADDON)
+
+include(kodi-addon-helpers)

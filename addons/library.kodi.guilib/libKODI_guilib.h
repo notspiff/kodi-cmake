@@ -24,7 +24,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#ifdef BUILD_KODI_ADDON
+#include "kodi/libXBMC_addon.h"
+#else
 #include "libXBMC_addon.h"
+#endif
 
 typedef void* GUIHANDLE;
 

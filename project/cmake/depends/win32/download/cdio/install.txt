@@ -1,0 +1,4 @@
+libcdio-0.83-win32/include/* include
+libcdio-0.83-win32/lib/libcdio.dll.lib lib
+libcdio-0.83-win32/bin/libcdio-13.dll project/Win32BuildSetup/dependencies
+libcdio-0.83-win32/bin/libiconv-2.dll project/Win32BuildSetup/dependencies

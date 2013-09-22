@@ -24,11 +24,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "xbmc_codec_types.h"
-#include "libXBMC_addon.h"
-
-#ifdef _WIN32
-#define CODEC_HELPER_DLL "\\library.xbmc.codec\\libXBMC_codec" ADDON_HELPER_EXT
+#include <dlfcn.h>
+#ifdef BUILD_KODI_ADDON
+#include "kodi/xbmc_codec_types.h"
+#include "kodi/libXBMC_addon.h"
 #else
 #define CODEC_HELPER_DLL_NAME "libXBMC_codec-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
 #define CODEC_HELPER_DLL "/library.xbmc.codec/" CODEC_HELPER_DLL_NAME

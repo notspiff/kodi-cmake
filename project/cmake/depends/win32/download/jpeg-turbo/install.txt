@@ -1,0 +1,2 @@
+libjpeg-turbo-1.2.0-win32/project/BuildDependencies/include/* include
+libjpeg-turbo-1.2.0-win32/project/BuildDependencies/lib/* lib

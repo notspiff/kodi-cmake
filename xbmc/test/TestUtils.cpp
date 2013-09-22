@@ -31,6 +31,7 @@
 #include <cstdlib>
 #include <climits>
 #include <ctime>
+#include <unistd.h>
 #endif
 
 class CTempFile : public XFILE::CFile

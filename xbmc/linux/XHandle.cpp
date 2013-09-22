@@ -23,6 +23,7 @@
 #include "threads/SingleLock.h"
 
 #include <cassert>
+#include <unistd.h>
 
 int CXHandle::m_objectTracker[10] = {0};
 

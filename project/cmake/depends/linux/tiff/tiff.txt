@@ -1,0 +1,1 @@
+tiff http://mirrors.xbmc.org/build-deps/sources/tiff-3.9.7.tar.gz jpeg-turbo

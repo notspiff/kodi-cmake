@@ -44,7 +44,11 @@
  *        and the add-on should set bHandlesDemuxing to true.
  */
 #ifdef USE_DEMUX
-#include "DVDDemuxPacket.h"
+#ifdef BUILD_KODI_ADDON
+#include "kodi/DVDDemuxPacket.h"
+#else
+#include "cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h"
+#endif
 #else
 struct DemuxPacket;
 #endif

@@ -87,6 +87,7 @@
 #include "URL.h"
 #include "utils/log.h"
 #include "network/WakeOnAccess.h"
+#include "utils/StringUtils.h"
 
 using namespace XFILE;
 

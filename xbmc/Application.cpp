@@ -110,12 +110,7 @@
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
 #include "filesystem/SMBDirectory.h"
 #endif
-#ifdef HAS_FILESYSTEM_NFS
-#include "filesystem/NFSFile.h"
-#endif
-#ifdef HAS_FILESYSTEM_SFTP
-#include "filesystem/SFTPFile.h"
-#endif
+#include "addons/VFSEntry.h"
 #include "PartyModeManager.h"
 #ifdef HAS_VIDEO_PLAYBACK
 #include "cores/VideoRenderers/RenderManager.h"

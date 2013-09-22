@@ -1,0 +1,2 @@
+librtmp-20110723-git-b627335-win32/include/* include/librtmp
+librtmp-20110723-git-b627335-win32/lib/* system/players/dvdplayer

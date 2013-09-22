@@ -24,7 +24,9 @@
 #ifdef TARGET_WINDOWS
 #define __attribute__(dummy_val)
 #else
+#if HAVE_CONFIG_H
 #include <config.h>
+#endif
 #endif
 
 class CDemuxStreamAudioCDDA;

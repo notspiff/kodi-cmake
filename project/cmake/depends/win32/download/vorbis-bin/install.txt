@@ -1,0 +1,3 @@
+bin/vorbis.dll system/cdrip
+bin/vorbisenc.dll system/cdrip
+bin/vorbisfile.dll system/players/paplayer

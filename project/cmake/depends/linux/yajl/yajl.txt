@@ -1,0 +1,1 @@
+yajl http://mirrors.xbmc.org/build-deps/sources/yajl-2.0.1.tar.gz
