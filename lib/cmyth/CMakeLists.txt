@@ -23,5 +23,6 @@ SET(SOURCES libcmyth/bookmark.c
 
 include_directories(libcmyth librefmem include)
 
-add_library(libcmyth SHARED ${SOURCES})
-set_target_properties(libcmyth PROPERTIES PREFIX "")
+add_options(C ALL_BUILDS "-fPIC")
+
+xbmc_add_library(cmyth 1)
