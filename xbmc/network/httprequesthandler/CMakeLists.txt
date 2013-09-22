@@ -1,0 +1,9 @@
+set(SOURCES HTTPImageHandler.cpp
+            HTTPJsonRpcHandler.cpp
+            HTTPVfsHandler.cpp
+            HTTPWebinterfaceAddonsHandler.cpp
+            HTTPWebinterfaceHandler.cpp
+            IHTTPRequestHandler.cpp)
+  
+xbmc_add_library(network_httprequesthandlers)
+add_dependencies(network_httprequesthandlers libcpluff)
