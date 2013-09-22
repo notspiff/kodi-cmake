@@ -31,7 +31,7 @@
 #endif
 
 extern "C" {
-#if (defined USE_EXTERNAL_FFMPEG)
+#if (defined USE_EXTERNAL_FFMPEG) || (defined USE_EXTERNAL_LIBAV)
   #include <libavutil/avutil.h>
   // for av_get_default_channel_layout
   #include <libavutil/audioconvert.h>
@@ -44,7 +44,7 @@ extern "C" {
   #include <libavutil/opt.h>
   #include <libavutil/mem.h>
   #include <libavutil/mathematics.h>
-  #if (defined USE_LIBAV_HACKS)
+  #if (defined USE_EXTERNAL_LIBAV)
     #include "xbmc-libav-hacks/libav_hacks.h"
   #endif
 #else

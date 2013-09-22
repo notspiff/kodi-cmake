@@ -25,6 +25,8 @@
 #include "DynamicDll.h"
 #include "utils/log.h"
 
+#ifndef USE_EXTERNAL_LIBAV
+
 extern "C" {
 #define HAVE_MMX
 #ifndef __STDC_CONSTANT_MACROS
@@ -123,5 +125,7 @@ class DllPostProc : public DllDynamic, DllPostProcInterface
     RESOLVE_METHOD(pp_free_context)
   END_METHOD_RESOLVE()
 };
+
+#endif
 
 #endif

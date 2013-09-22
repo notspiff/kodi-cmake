@@ -27,7 +27,9 @@
 #include "DllAvUtil.h"
 #include "DllSwScale.h"
 #include "DllAvFilter.h"
+#ifndef USE_EXTERNAL_LIBAV
 #include "DllPostProc.h"
+#endif
 
 class CCriticalSection;
 
@@ -117,7 +119,9 @@ protected:
   DllAvUtil  m_dllAvUtil;
   DllSwScale m_dllSwScale;
   DllAvFilter m_dllAvFilter;
+#ifndef USE_EXTERNAL_LIBAV
   DllPostProc m_dllPostProc;
+#endif
 
   std::string m_name;
   bool              m_bSoftware;
