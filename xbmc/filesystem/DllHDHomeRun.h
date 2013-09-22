@@ -20,7 +20,7 @@
  */
 
 #include "DynamicDll.h"
-#include "lib/libhdhomerun/hdhomerun.h"
+#include "libhdhomerun/hdhomerun.h"
 
 class DllHdHomeRunInterface
 {

@@ -22,8 +22,9 @@
 
 #if defined(HAVE_CONFIG_H) && !defined(TARGET_WINDOWS)
 #include "config.h"
-#define DECLARE_UNUSED(a,b) a __attribute__((unused)) b;
 #endif
+
+#define DECLARE_UNUSED(a,b) a __attribute__((unused)) b;
 
 /*****************
  * All platforms
