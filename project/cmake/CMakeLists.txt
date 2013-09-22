@@ -57,7 +57,7 @@ find_package(Threads REQUIRED)
 list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 
 # Required dependencies
-set(required_deps Sqlite3 Mpeg2 FreeType PCRE Cpluff
+set(required_deps Sqlite3 FreeType PCRE Cpluff
                   TinyXML Python Yajl LibSmbClient
                   JPEG Lzo2 Fribidi SampleRate TagLib FFMPEG)
 
@@ -86,7 +86,7 @@ if(NOT UDEV_FOUND)
 endif()
 
 # Required, dyloaded deps
-set(required_dyload Curl MAD Modplug ASS MPEG2
+set(required_dyload Curl MAD Modplug ASS Mpeg2
                     Ogg Vorbis VorbisEnc VorbisFile LibDvd)
 
 foreach(dep ${required_dyload})
