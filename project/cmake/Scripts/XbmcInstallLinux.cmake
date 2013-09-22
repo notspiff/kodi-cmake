@@ -13,8 +13,10 @@ install(PROGRAMS ${CMAKE_BINARY_DIR}/xbmc ${CMAKE_BINARY_DIR}/xbmc-standalone
         DESTINATION bin)
 install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/FEH.py
         DESTINATION share/xbmc)
-install_rename(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-xsession.desktop
-               ${CMAKE_INSTALL_PREFIX}/share/xsessions/XBMC.desktop)
+
+install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc-xsession.desktop
+        RENAME XBMC.desktop
+        DESTINATION share/xsessions)
                 
 install(FILES ${XBMC_SOURCE_DIR}/LICENSE.GPL
               ${XBMC_SOURCE_DIR}/docs/README.linux
@@ -23,9 +25,29 @@ install(FILES ${XBMC_SOURCE_DIR}/LICENSE.GPL
 install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc.desktop
         DESTINATION share/applications)
 
-install_rename(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
-               ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/48x48/apps/xbmc.png)
-install_rename(${XBMC_SOURCE_DIR}/media/icon.png
-               ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps/xbmc.png)
+foreach(texture ${XBT_FILES})
+  get_filename_component(dir ${texture} PATH)
+  install(FILES ${CMAKE_BINARY_DIR}/${texture}
+          DESTINATION share/xbmc/${dir})
+endforeach()
 
-install(CODE "execute_process(COMMAND gtk-update-icon-cache -f -q -t ${DESTDIR}${CMAKE_INSTALL_PREFIX}/share/icons/hicolor ERROR_QUIET)")
+foreach(wraplib ${WRAP_FILES})
+  get_filename_component(dir ${wraplib} PATH)
+  install(PROGRAMS ${CMAKE_BINARY_DIR}/system/${wraplib}
+          DESTINATION lib/xbmc/system/${dir})
+endforeach()
+
+foreach(file ${install_data})
+  get_filename_component(dir ${file} PATH)
+  install(FILES ${CMAKE_BINARY_DIR}/${file}
+          DESTINATION share/xbmc/${dir})
+endforeach()
+
+install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
+        RENAME xbmc.png
+        DESTINATION share/icons/hicolor/48x48/apps)
+install(FILES ${XBMC_SOURCE_DIR}/media/icon.png
+        RENAME xbmc.png
+        DESTINATION share/icons/hicolor/256x256/apps)
+
+install(CODE "execute_process(COMMAND gtk-update-icon-cache -f -q -t $ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/share/icons/hicolor ERROR_QUIET)")
