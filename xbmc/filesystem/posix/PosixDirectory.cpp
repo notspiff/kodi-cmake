@@ -31,6 +31,8 @@
 
 #include <dirent.h>
 #include <sys/stat.h>
+#include <string.h>
+#include <unistd.h>
 
 using namespace std;
 using namespace XFILE;

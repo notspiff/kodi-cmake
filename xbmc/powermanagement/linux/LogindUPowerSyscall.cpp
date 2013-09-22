@@ -23,6 +23,8 @@
 #include "system.h"
 #include "LogindUPowerSyscall.h"
 #include "utils/log.h"
+#include <string.h>
+#include <unistd.h>
 
 #ifdef HAS_DBUS
 

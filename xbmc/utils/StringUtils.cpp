@@ -869,13 +869,13 @@ std::string StringUtils::SecondsToTimeString(long lSeconds, TIME_FORMAT format)
     format = (hh >= 1) ? TIME_FORMAT_HH_MM_SS : TIME_FORMAT_MM_SS;
   std::string strHMS;
   if (format & TIME_FORMAT_HH)
-    strHMS += StringUtils::Format("%02.2i", hh);
+    strHMS += StringUtils::Format("%02i", hh);
   else if (format & TIME_FORMAT_H)
     strHMS += StringUtils::Format("%i", hh);
   if (format & TIME_FORMAT_MM)
-    strHMS += StringUtils::Format(strHMS.empty() ? "%02.2i" : ":%02.2i", mm);
+    strHMS += StringUtils::Format(strHMS.empty() ? "%02i" : ":%02i", mm);
   if (format & TIME_FORMAT_SS)
-    strHMS += StringUtils::Format(strHMS.empty() ? "%02.2i" : ":%02.2i", ss);
+    strHMS += StringUtils::Format(strHMS.empty() ? "%02i" : ":%02i", ss);
   return strHMS;
 }
 

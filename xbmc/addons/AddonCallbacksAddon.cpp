@@ -33,6 +33,10 @@
 #include "utils/StringUtils.h"
 #include "utils/XMLUtils.h"
 #include "cores/dvdplayer/DVDCodecs/DVDCodecs.h"
+#include "URL.h"
+#include "PasswordManager.h"
+#include "include/kodi_vfs_types.h"
+#include "VFSEntry.h"
 
 using namespace XFILE;
 

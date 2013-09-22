@@ -23,6 +23,7 @@
 #include "network/httprequesthandler/IHTTPRequestHandler.h"
 #include "utils/StringUtils.h"
 #include "utils/Variant.h"
+#include "PlatformDefs.h"
 
 #include <algorithm>
 

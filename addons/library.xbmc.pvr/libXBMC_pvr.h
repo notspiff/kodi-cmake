@@ -24,11 +24,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "xbmc_pvr_types.h"
-#include "libXBMC_addon.h"
-
-#ifdef _WIN32
-#define PVR_HELPER_DLL "\\library.xbmc.pvr\\libXBMC_pvr" ADDON_HELPER_EXT
+#ifdef BUILD_KODI_ADDON
+#include "kodi/xbmc_pvr_types.h"
+#include "kodi/libXBMC_addon.h"
 #else
 #define PVR_HELPER_DLL_NAME "libXBMC_pvr-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
 #define PVR_HELPER_DLL "/library.xbmc.pvr/" PVR_HELPER_DLL_NAME

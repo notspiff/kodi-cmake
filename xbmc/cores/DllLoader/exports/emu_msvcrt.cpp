@@ -78,6 +78,7 @@
 #endif
 #include "utils/Environment.h"
 #include "utils/StringUtils.h"
+#include <unistd.h>
 
 using namespace std;
 using namespace XFILE;
@@ -574,12 +575,12 @@ extern "C"
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
     {
-      errno = NOERROR;
+      errno = 0;
       const ssize_t ret = pFile->Read(buffer, uiSize);
       if (ret < 0)
       {
         const int err = errno; // help compiler to optimize, "errno" can be macro
-        if (err == NOERROR ||
+        if (err == 0 ||
             (err != EAGAIN && err != EINTR && err != EIO && err != EOVERFLOW && err != EWOULDBLOCK &&
              err != ECONNRESET && err != ENOTCONN && err != ETIMEDOUT &&
              err != ENOBUFS && err != ENOMEM && err != ENXIO))
@@ -605,12 +606,12 @@ extern "C"
     CFile* pFile = g_emuFileWrapper.GetFileXbmcByDescriptor(fd);
     if (pFile != NULL)
     {
-      errno = NOERROR;
+      errno = 0;
       const ssize_t ret = pFile->Write(buffer, uiSize);
       if (ret < 0)
       {
         const int err = errno; // help compiler to optimize, "errno" can be macro
-        if (err == NOERROR ||
+        if (err == 0 ||
             (err != EAGAIN && err != EFBIG && err != EINTR && err != EIO && err != ENOSPC && err != EPIPE && err != EWOULDBLOCK &&
              err != ECONNRESET &&
              err != ENOBUFS && err != ENXIO &&

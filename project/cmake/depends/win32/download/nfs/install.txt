@@ -1,0 +1,2 @@
+libnfs-1.6.1-win32/project/BuildDependencies/include/nfsc/* include/nfsc
+libnfs-1.6.1-win32/system/*.dll system
