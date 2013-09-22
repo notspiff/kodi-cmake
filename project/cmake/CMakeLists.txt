@@ -36,16 +36,11 @@ option(ENABLE_SDL         "Enable SDL?" ON)
 option(ENABLE_OPENGL      "Enable OpenGL?" ON)
 option(ENABLE_EXTERNAL_FFMPEG "Enable external ffmpeg?" OFF)
 option(ENABLE_EXTERNAL_LIBAV "Enable external libav?" OFF)
-
 set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
 
 set(XBMC_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../..)
 
-set(DEP_DEFINES -D__STDC_CONSTANT_MACROS -DLIRC_DEVICE=${LIRC_DEVICE}
-                -D_FILE_DEFINED -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64)
-set(ARCH_DEFINES -D_LINUX -DTARGET_POSIX -DTARGET_LINUX)
-
-set(ARCH x86_64-linux)
+include(Scripts/XbmcArchSetup.cmake)
 
 set(INCLUDES ${XBMC_SOURCE_DIR}/addons/library.xbmc.addon
              ${XBMC_SOURCE_DIR}/addons/library.xbmc.codec
@@ -137,7 +132,7 @@ if(EXISTS ${XBMC_SOURCE_DIR}/addons/skin.touched/addon.xml)
 endif()
 
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
-add_definitions(${ARCH_DEFINES} ${DEP_DEFINES})
+add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES})
 
 set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
 
