@@ -1,0 +1,2 @@
+libbluray-0.2.3-win32/system/players/dvdplayer/* system/players/dvdplayer
+libbluray-0.2.3-win32/project/BuildDependencies/include/libbluray/* include/libbluray

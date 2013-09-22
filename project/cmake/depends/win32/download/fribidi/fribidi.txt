@@ -1,0 +1,1 @@
+fribidi http://mirrors.xbmc.org/build-deps/win32/fribidi-0.19.2-lib-1.zip

@@ -24,6 +24,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #if defined(TARGET_LINUX)
   #include <linux/if.h>
   #include <linux/wireless.h>

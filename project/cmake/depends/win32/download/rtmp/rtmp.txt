@@ -1,0 +1,1 @@
+rtmp http://mirrors.xbmc.org/build-deps/win32/librtmp-20110723-git-b627335-win32.7z

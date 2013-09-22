@@ -1,0 +1,1 @@
+service.xbmc.versioncheck https://github.com/XBMC-Addons/service.xbmc.versioncheck a78723bea # VERSIONCHECK OFF

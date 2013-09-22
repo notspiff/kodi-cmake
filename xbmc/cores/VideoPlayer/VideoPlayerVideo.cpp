@@ -29,7 +29,9 @@
 #include "VideoPlayerVideo.h"
 #include "DVDCodecs/DVDFactoryCodec.h"
 #include "DVDCodecs/DVDCodecUtils.h"
+#ifndef USE_EXTERNAL_LIBAV
 #include "DVDCodecs/Video/DVDVideoPPFFmpeg.h"
+#endif
 #include "DVDCodecs/Video/DVDVideoCodecFFmpeg.h"
 #include "DVDDemuxers/DVDDemux.h"
 #include "guilib/GraphicContext.h"

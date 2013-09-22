@@ -1,0 +1,6 @@
+include/* include
+bin/libcurl.dll system
+bin/libeay32.dll system
+bin/libidn-11.dll system
+bin/libssh2.dll system
+bin/libssl32.dll system

@@ -1,0 +1,1 @@
+mpeg2 http://mirrors.xbmc.org/build-deps/sources/libmpeg2-0.5.1.tar.gz

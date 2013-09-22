@@ -600,7 +600,7 @@ void CAirPlayServer::CTCPClient::ComposeReverseEvent( std::string& reverseHeader
         break;
     }
     reverseHeader = "Content-Type: text/x-apple-plist+xml\r\n";
-    reverseHeader = StringUtils::Format("%sContent-Length: %ld\r\n",reverseHeader.c_str(), reverseBody.size());
+    reverseHeader = StringUtils::Format("%sContent-Length: %lu\r\n",reverseHeader.c_str(), reverseBody.size());
     reverseHeader = StringUtils::Format("%sx-apple-session-id: %s\r\n",reverseHeader.c_str(), m_sessionId.c_str());
     m_lastEvent = state;
   }
@@ -1158,7 +1158,7 @@ int CAirPlayServer::CTCPClient::ProcessRequest( std::string& responseHeader,
     }
     else
     {
-      responseBody = StringUtils::Format(PLAYBACK_INFO_NOT_READY);
+      responseBody = PLAYBACK_INFO_NOT_READY;
       responseHeader = "Content-Type: text/x-apple-plist+xml\r\n";     
     }
   }
