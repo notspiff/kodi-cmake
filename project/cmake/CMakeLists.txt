@@ -320,11 +320,5 @@ configure_file(${XBMC_SOURCE_DIR}/project/cmake/xbmc-config.cmake.in
                xbmc-config.cmake @ONLY)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  set(libdir ${CMAKE_INSTALL_PREFIX}/lib)
-  set(bindir ${CMAKE_INSTALL_PREFIX}/bin)
-  configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc.sh.in
-                 xbmc @ONLY)
-  configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
-                 xbmc-standalone @ONLY)
   include(Scripts/XbmcInstallLinux.cmake)
 endif()
