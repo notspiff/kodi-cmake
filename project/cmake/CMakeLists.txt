@@ -184,10 +184,10 @@ if(WIN32)
   add_subdirectory(${XBMC_SOURCE_DIR}/xbmc/input/windows         wininput.dir)
 endif()
 
-add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.addon library.xbmc.addon.dir)
-add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.codec library.xbmc.codec.dir)
-add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.gui   library.xbmc.gui.dir)
-add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.pvr   library.xbmc.pvr.dir)
+add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.addon XBMC_addon.dir)
+add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.codec XBMC_codec.dir)
+add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.gui   XBMC_gui.dir)
+add_subdirectory(${XBMC_SOURCE_DIR}/lib/addons/library.xbmc.pvr   XBMC_pvr.dir)
 
 add_subdirectory(${XBMC_SOURCE_DIR}/lib/cmyth                    cmyth.dir)
 add_subdirectory(${XBMC_SOURCE_DIR}/lib/cximage-6.0              cximage.dir)
@@ -269,20 +269,25 @@ set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
                     ${JASPER_LIBRARIES} )
 
-xbmc_link_library(cximage ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
-xbmc_link_library(exif libexif)
-xbmc_link_library(hdhomerun hdhomerun)
-xbmc_link_library(cmyth libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
+xbmc_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
+xbmc_link_library(exif system/libexif)
+xbmc_link_library(hdhomerun system/hdhomerun)
+xbmc_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/paplayer)
-xbmc_link_library(nosefart players/paplayer/nosefart)
-xbmc_link_library(sidplay2 players/paplayer/libsidplay2)
-xbmc_link_library(stsoundlibrary players/paplayer/stsoundlibrary)
-xbmc_link_library(xbadpcm players/paplayer/adpcm)
-xbmc_link_library(vgmstream players/paplayer/vgmstream)
+xbmc_link_library(nosefart system/players/paplayer/nosefart)
+xbmc_link_library(sidplay2 system/players/paplayer/libsidplay2)
+xbmc_link_library(stsoundlibrary system/players/paplayer/stsoundlibrary)
+xbmc_link_library(xbadpcm system/players/paplayer/adpcm)
+xbmc_link_library(vgmstream system/players/paplayer/vgmstream)
 xbmc_link_library(timidity
-                  players/paplayer/timidity "export"
+                  system/players/paplayer/timidity "export"
                   ${XBMC_SOURCE_DIR}/lib/timidity/exports.def)
+
+xbmc_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
+xbmc_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
+xbmc_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
+xbmc_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
 add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})

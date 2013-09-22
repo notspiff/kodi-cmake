@@ -9,7 +9,8 @@ if(ENABLE_DVDCSS)
                                         --with-pic
                                         --prefix=<INSTALL_DIR>)
 
-  xbmc_link_library(${CMAKE_BINARY_DIR}/libdvd/lib/libdvdcss.a players/dvdplayer/libdvdcss dvdcss)
+  xbmc_link_library(${CMAKE_BINARY_DIR}/libdvd/lib/libdvdcss.a
+                    system/players/dvdplayer/libdvdcss dvdcss)
 endif()
 
 set(DVDREAD_CFLAGS "-D_XBMC")
@@ -30,7 +31,8 @@ if(ENABLE_DVDCSS)
   add_dependencies(dvdread dvdcss)
 endif()
 
-xbmc_link_library(${CMAKE_BINARY_DIR}/libdvd/lib/libdvdread.a players/dvdplayer/libdvdread dvdread)
+xbmc_link_library(${CMAKE_BINARY_DIR}/libdvd/lib/libdvdread.a
+                  system/players/dvdplayer/libdvdread dvdread)
 
 set(dvdnav_conf )
 string(REPLACE ";" " " dvdnav_conf "${dvdnav_conf}")
@@ -49,6 +51,7 @@ ExternalProject_ADD(dvdnav SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/
                                       "CFLAGS=${DVDREAD_CFLAGS}"
                                       "LIBS=-ldvdcss")
 add_dependencies(dvdnav dvdread)
-xbmc_link_library(${CMAKE_BINARY_DIR}/libdvd/lib/libdvdnav.a players/dvdplayer/libdvdnav dvdnav)
+xbmc_link_library(${CMAKE_BINARY_DIR}/libdvd/lib/libdvdnav.a
+                  system/players/dvdplayer/libdvdnav dvdnav)
 
 set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
