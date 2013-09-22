@@ -35,7 +35,7 @@ function(xbmc_link_library lib wraplib)
                      ARGS    -Wl,--whole-archive
                              ${link_lib}
                              -Wl,--no-whole-archive -lm
-                             -shared -o ${CMAKE_BINARY_DIR}/system/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
+                             -shared -o ${CMAKE_BINARY_DIR}/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                              ${export}
                      DEPENDS ${target} wrapper.def wrapper)
   list(APPEND WRAP_FILES ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
