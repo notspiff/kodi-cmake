@@ -18,4 +18,4 @@ if(BLURAY_FOUND)
 endif()
 
 xbmc_add_library(dvdinputstreams)
-add_dependencies(dvdinputstreams libcpluff)
+add_dependencies(dvdinputstreams libcpluff dvdnav)
