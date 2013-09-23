@@ -18,7 +18,7 @@ set(SOURCES DVDAudio.cpp
             Edl.cpp)
 
 xbmc_add_library(dvdplayer)
-add_dependencies(dvdplayer libcpluff ffmpeg)
+add_dependencies(dvdplayer libcpluff ffmpeg dvdnav)
 
 add_subdirectory(DVDCodecs)
 add_subdirectory(DVDDemuxers)
