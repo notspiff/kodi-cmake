@@ -25,6 +25,8 @@
 #include "config.h"
 #endif
 
+#include "vm.h"
+
 #ifdef WIN32
 
 /* pthread_mutex_* wrapper for win32 */
@@ -226,12 +228,12 @@ int64_t dvdnav_convert_time(dvd_time_t *time);
 /*
  * Get current playback state
  */
-dvdnav_status_t dvdnav_get_state(dvdnav_t *this, dvd_state_t *save_state);
+dvdnav_status_t dvdnav_get_state(dvdnav_t *, dvd_state_t *save_state);
 
 /*
  * Resume playback state
  */
-dvdnav_status_t dvdnav_set_state(dvdnav_t *this, dvd_state_t *save_state);
+dvdnav_status_t dvdnav_set_state(dvdnav_t *, dvd_state_t *save_state);
 /* end XBMC */
 
 /** USEFUL MACROS **/
