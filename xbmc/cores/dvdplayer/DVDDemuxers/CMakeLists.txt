@@ -10,4 +10,4 @@ set(SOURCES DVDDemuxBXA.cpp
             DVDFactoryDemuxer.cpp)
 
 xbmc_add_library(dvddemuxers)
-add_dependencies(dvddemuxers libcpluff ffmpeg)
+add_dependencies(dvddemuxers libcpluff ffmpeg dvdnav)
