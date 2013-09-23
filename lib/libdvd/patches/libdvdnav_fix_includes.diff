@@ -1,0 +1,27 @@
+diff --git a/lib/libdvd/libdvdnav/src/dvdnav_internal.h b/lib/libdvd/libdvdnav/src/dvdnav_internal.h
+index cfae7a8..8000680 100644
+--- a/lib/libdvd/libdvdnav/src/dvdnav_internal.h
++++ b/lib/libdvd/libdvdnav/src/dvdnav_internal.h
+@@ -25,6 +25,8 @@
+ #include "config.h"
+ #endif
+ 
++#include "vm.h"
++
+ #ifdef WIN32
+ 
+ /* pthread_mutex_* wrapper for win32 */
+diff --git a/lib/libdvd/libdvdnav/src/vm/vm.h b/lib/libdvd/libdvdnav/src/vm/vm.h
+index 2405489..44dc599 100644
+--- a/lib/libdvd/libdvdnav/src/vm/vm.h
++++ b/lib/libdvd/libdvdnav/src/vm/vm.h
+@@ -23,6 +23,9 @@
+ #ifndef LIBDVDNAV_VM_H
+ #define LIBDVDNAV_VM_H
+ 
++#include "decoder.h"
++#include "remap.h"
++
+ /* DOMAIN enum */
+ 
+ typedef enum {

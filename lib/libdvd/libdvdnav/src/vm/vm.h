@@ -23,6 +23,9 @@
 #ifndef LIBDVDNAV_VM_H
 #define LIBDVDNAV_VM_H
 
+#include "decoder.h"
+#include "remap.h"
+
 /* DOMAIN enum */
 
 typedef enum {
