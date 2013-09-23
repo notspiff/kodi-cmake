@@ -36,6 +36,11 @@ option(ENABLE_SDL         "Enable SDL?" ON)
 option(ENABLE_OPENGL      "Enable OpenGL?" ON)
 option(ENABLE_EXTERNAL_FFMPEG "Enable external ffmpeg?" OFF)
 option(ENABLE_EXTERNAL_LIBAV "Enable external libav?" OFF)
+# System options
+option(ENABLE_CROSSCOMPILE    "Enable Cross_compiling?" OFF)
+option(WITH_ARCH              "build with given arch" OFF)
+option(WITH_CPU               "build with given cpu" OFF)
+
 set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
 
 set(XBMC_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../..)
