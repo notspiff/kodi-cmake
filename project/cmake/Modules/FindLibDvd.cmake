@@ -49,5 +49,16 @@ ExternalProject_ADD(dvdnav SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/
 add_dependencies(dvdnav dvdread)
 xbmc_link_library(${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/lib/libdvdnav.a
                   system/players/dvdplayer/libdvdnav dvdnav)
-
 set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
+
+set(dvdnav_internal_headers ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/dvdnav_internal.h
+                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/vm.h)
+
+foreach(dvdnav_header ${dvdnav_internal_headers})
+ add_custom_command(TARGET dvdnav
+                   COMMAND cmake -E copy ${dvdnav_header}
+                           ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav)
+endforeach()
+
+set(LIBDVD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include)
+set(LIBDVD_FOUND 1)
