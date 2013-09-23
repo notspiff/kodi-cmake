@@ -41,17 +41,17 @@ foreach(INPUT ${INPUTS})
   generate_file(${INPUT})
 endforeach()
 
-add_custom_target(doxygen DEPENDS ${CMAKE_BINARY_DIR}/doxygen-gen)
+add_custom_target(doxygen DEPENDS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/doxygen-gen)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/doxygen-gen
+  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/doxygen-gen
                      COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
-                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/doxygen-gen
+                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/doxygen-gen
                      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                      MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
 else(DOXYGEN_FOUND)
   message(STATUS "Warning: No doxygen installed. The Api will not have any docstrings.")
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/doxygen-gen
+  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/doxygen-gen
                    COMMAND mkdir -p ${CMAKE_CURRENT_SOURCE_DIR}/generated/doxygenxml)
 endif(DOXYGEN_FOUND)
                    

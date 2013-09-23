@@ -45,26 +45,26 @@ else()
                    --enable-runtime-cpudetect
                    --enable-pic
                    --custom-libname-with-major=$(FULLNAME)-$(LIBMAJOR)-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
-                   --prefix=${CMAKE_BINARY_DIR}/ffmpeg)
+                   --prefix=${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg)
 
   # All this nonsense required to avoid evaluating $()
   string(REPLACE ";" " " ffmpeg_conf "${ffmpeg_conf}")
-  file(WRITE ${CMAKE_BINARY_DIR}/ffmpeg/tmp/configure_ffmpeg ${ffmpeg_conf})
-  execute_process(COMMAND sed -e "s/\\$/\\\\$/g" -i ${CMAKE_BINARY_DIR}/ffmpeg/tmp/configure_ffmpeg)
-  execute_process(COMMAND sed -e "s/(/\\\\(/g" -i ${CMAKE_BINARY_DIR}/ffmpeg/tmp/configure_ffmpeg)
-  execute_process(COMMAND sed -e "s/)/\\\\)/g" -i ${CMAKE_BINARY_DIR}/ffmpeg/tmp/configure_ffmpeg)
-  execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/ffmpeg/tmp/configure_ffmpeg)
+  file(WRITE ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg ${ffmpeg_conf})
+  execute_process(COMMAND sed -e "s/\\$/\\\\$/g" -i ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}ffmpeg/tmp/configure_ffmpeg)
+  execute_process(COMMAND sed -e "s/(/\\\\(/g" -i ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
+  execute_process(COMMAND sed -e "s/)/\\\\)/g" -i ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
+  execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
   ExternalProject_ADD(ffmpeg SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/ffmpeg
-                      PREFIX ffmpeg
-                      CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/ffmpeg/tmp/configure_ffmpeg)
+                      PREFIX ${XBMC_BUILD_DIR}/ffmpeg
+                      CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
   set(ffmpeg_libs avcodec-54 avformat-54 avfilter-3
                   avutil-52 swscale-2 swresample-0 postproc-52)
   foreach(lib ${ffmpeg_libs})
     add_custom_command(TARGET ffmpeg POST_BUILD
-                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/ffmpeg/lib/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX} ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
+                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/lib/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX} ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
     install(PROGRAMS ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
             DESTINATION lib/xbmc/system/players/dvdplayer)
   endforeach()
 
-  set(FFMPEG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/ffmpeg/include)
+  set(FFMPEG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/ffmpeg/include)
 endif()
