@@ -61,21 +61,29 @@ set(required_deps Sqlite3 FreeType PCRE Cpluff
                   TinyXML Python Yajl LibSmbClient
                   JPEG Lzo2 Fribidi SampleRate TagLib FFMPEG)
 
-foreach(dep ${required_deps})
-  xbmc_require_dep(${dep})
-endforeach()
-
-# Required by shared objects we link
-set(required_dep_libs Jasper PNG TIFF ZLIB EXPAT)
-
-foreach(dep ${required_dep_libs})
-  find_package(${dep} REQUIRED)
-endforeach()
-
 # Optional dependencies
 set(optional_deps MicroHttpd MySqlClient SSH
                   Alsa UDev Dbus Avahi
                   PulseAudio VDPAU VAAPI)
+
+# Required, dyloaded deps
+set(required_dyload Curl MAD Modplug ASS Mpeg2
+                    Ogg Vorbis VorbisEnc VorbisFile LibDvd)
+
+# Optional, dyloaded deps
+set(dyload_optional Lame RTMP CEC Bluray
+                    AfpClient Plist NFS)
+
+# Required by shared objects we link
+set(required_dep_libs Jasper PNG TIFF ZLIB EXPAT)
+
+foreach(dep ${required_deps})
+  xbmc_require_dep(${dep})
+endforeach()
+
+foreach(dep ${required_dep_libs})
+  find_package(${dep} REQUIRED)
+endforeach()
 
 foreach(dep ${optional_deps})
   xbmc_optional_dep(${dep})
@@ -85,10 +93,6 @@ if(NOT UDEV_FOUND)
   xbmc_optional_dep(LibUsb)
 endif()
 
-# Required, dyloaded deps
-set(required_dyload Curl MAD Modplug ASS Mpeg2
-                    Ogg Vorbis VorbisEnc VorbisFile LibDvd)
-
 foreach(dep ${required_dyload})
   xbmc_require_dyload_dep(${dep})
 endforeach()
@@ -96,10 +100,6 @@ endforeach()
 # Need a special case due to upper case lib name
 find_package(FLAC REQUIRED)
 xbmc_find_soname(FLAC FLAC)
-
-# Optional, dyloaded deps
-set(dyload_optional Lame RTMP CEC Bluray
-                    AfpClient Plist NFS)
 
 foreach(dep ${dyload_optional})
   xbmc_optional_dyload_dep(${dep})
