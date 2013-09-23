@@ -5,6 +5,7 @@ set(SOURCES AutorunMediaJob.cpp
             MediaManager.cpp)
 
 xbmc_add_library(storage)
+add_dependencies(storage dvdnav)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   add_subdirectory(linux)
