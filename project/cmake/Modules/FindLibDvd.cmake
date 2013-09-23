@@ -52,7 +52,9 @@ xbmc_link_library(${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/lib/libdvdnav.a
 set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
 
 set(dvdnav_internal_headers ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/dvdnav_internal.h
-                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/vm.h)
+                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/remap.h
+                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/vm.h
+                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/decoder.h)
 
 foreach(dvdnav_header ${dvdnav_internal_headers})
  add_custom_command(TARGET dvdnav
