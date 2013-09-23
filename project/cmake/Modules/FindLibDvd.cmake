@@ -57,9 +57,10 @@ set(dvdnav_internal_headers ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/dvdnav_i
                             ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/decoder.h)
 
 foreach(dvdnav_header ${dvdnav_internal_headers})
- add_custom_command(TARGET dvdnav
+ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav/${dvdnav_header}
                    COMMAND cmake -E copy ${dvdnav_header}
                            ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav)
+ add_dependencies(dvdnav ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav/${dvdnav_header})
 endforeach()
 
 set(LIBDVD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include)
