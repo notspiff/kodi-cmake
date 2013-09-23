@@ -8,12 +8,12 @@ endfunction()
 
 function(xbmc_link_library lib wraplib)
   set(export -Wl,--unresolved-symbols=ignore-all
-             `cat ${CMAKE_BINARY_DIR}/dllloader.dir/exports/wrapper.def`
-             ${CMAKE_BINARY_DIR}/dllloader.dir/exports/CMakeFiles/wrapper.dir/wrapper.c.o)
+             `cat ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/dllloader.dir/exports/wrapper.def`
+             ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/dllloader.dir/exports/CMakeFiles/wrapper.dir/wrapper.c.o)
   set(check_arg "")
   if(TARGET ${lib})
     set(target ${lib})
-    set(link_lib ${CMAKE_BINARY_DIR}/${lib}.dir/${lib}.a)
+    set(link_lib ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/${lib}.dir/${lib}.a)
     set(check_arg ${ARGV2})
     set(data_arg  ${ARGV3})
   else()
@@ -65,7 +65,7 @@ function(copy_skin_to_buildtree skin)
   endforeach()
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${skin}/media)
   add_custom_command(OUTPUT  ${skin}/media/Textures.xbt
-                     COMMAND ${CMAKE_BINARY_DIR}/texturepacker.dir/TexturePacker
+                     COMMAND ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/texturepacker.dir/TexturePacker
                      ARGS    -input ${XBMC_SOURCE_DIR}/${skin}/media
                              -output ${CMAKE_BINARY_DIR}/${skin}/media/Textures.xbt
                              -dupecheck
