@@ -7,6 +7,7 @@ include(scripts/AddOptions.cmake)
 include(scripts/Macros.cmake)
 include(scripts/ManageString.cmake)
 include(scripts/ProjectMacros.cmake)
+include(scripts/PathSetup.cmake)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 
@@ -146,7 +147,7 @@ if(ENABLE_SKIN_TOUCHED)
 endif()
 
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
-add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES})
+add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES} ${PATH_DEFINES})
 
 set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
 mark_as_advanced(xbmc-bin_DEPENDS)
@@ -174,7 +175,7 @@ core_add_optional_subdirs_from_filelist("
 add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
 target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-whole-archive
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
-install(TARGETS xbmc.bin DESTINATION lib/xbmc)
+install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
 
 # copy files to build tree
 file(GLOB lists ${PROJECT_SOURCE_DIR}/installdata/common/*.txt)
@@ -235,7 +236,6 @@ add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
 
 add_dependencies(xbmc.bin export-files)
 
-set(prefix ${CMAKE_INSTALL_PREFIX})
 configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
@@ -285,3 +285,4 @@ endforeach()
 
 list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
 include(scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
+
