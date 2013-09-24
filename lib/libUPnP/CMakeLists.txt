@@ -81,4 +81,4 @@ INCLUDE_DIRECTORIES(Neptune/Source/Core
                     Neptune/Source/System/Posix
                     Platinum/Source/Extras)
 
-xbmc_add_library(upnp)
+core_add_library(upnp)

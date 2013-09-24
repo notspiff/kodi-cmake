@@ -11,7 +11,7 @@ set(SOURCES Bookmark.cpp
             VideoReferenceClock.cpp
             VideoThumbLoader.cpp)
 
-xbmc_add_library(video)
+core_add_library(video)
 add_dependencies(video libcpluff ffmpeg)
 
 add_subdirectory(dialogs)

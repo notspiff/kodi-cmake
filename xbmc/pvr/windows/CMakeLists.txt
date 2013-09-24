@@ -7,5 +7,5 @@ set(SOURCES GUIViewStatePVR.cpp
             GUIWindowPVRSearch.cpp
             GUIWindowPVRTimers.cpp)
 
-xbmc_add_library(pvr_windows)
+core_add_library(pvr_windows)
 add_dependencies(pvr_windows libcpluff)
