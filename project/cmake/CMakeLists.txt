@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8.8)
 
 include(ExternalProject)
 include(AddOptions.cmake)
-include(Scripts/XbmcMacros.cmake)
+include(Scripts/Macros.cmake)
 include(Scripts/ManageString.cmake)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Modules)
 
@@ -49,7 +49,7 @@ else()
   set(UPDATE_COMMAND autoreconf -vif)
 endif()
 
-include(Scripts/XbmcArchSetup.cmake)
+include(Scripts/ArchSetup.cmake)
 
 set(INCLUDES ${XBMC_SOURCE_DIR}/addons/library.xbmc.addon
              ${XBMC_SOURCE_DIR}/addons/library.xbmc.codec
@@ -248,6 +248,4 @@ set(cmake-files ${XBMC_SOURCE_DIR}/Scripts/AddOptions.cmake
 configure_file(${XBMC_SOURCE_DIR}/project/cmake/Templates/xbmc-config.cmake.in
                ${XBMC_BUILD_DIR}/xbmc-config.cmake @ONLY)
 
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  include(Scripts/XbmcInstallLinux.cmake)
-endif()
+include(Scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
