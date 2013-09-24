@@ -19,9 +19,9 @@ function(add_git id repo rev prefix)
   if("${id}" MATCHES "^skin" AND BOOTSTRAP_IN_TREE)
     list(APPEND exclude "PATTERN media EXCLUDE")
   endif()
-  file(WRITE ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake "FILE(COPY build/${id}/src/${id}
-                                                              DESTINATION ${OUTPUT_DIR}/${prefix}
-                                                              ${exclude})")
+  file(WRITE ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
+       "FILE(COPY build/${id}/src/${id}
+             DESTINATION ${OUTPUT_DIR}/${prefix} ${exclude})")
   add_custom_command(OUTPUT ${OUTPUT_DIR}/${prefix}/${id}
                      COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
                      DEPENDS ${id})
@@ -42,6 +42,7 @@ if(NOT OUTPUT_DIR)
   set(OUTPUT_DIR ${CMAKE_BINARY_DIR})
 endif()
 
+# Several add-ons host in subdirs of a common git
 foreach(file ${multi_dirs})
   file(STRINGS ${file} lines)
   string(REPLACE "\n" ";" lines "${lines}")
@@ -64,19 +65,18 @@ foreach(file ${multi_dirs})
   foreach(entry ${lines})
     if(BOOTSTRAP_DIR)
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E copy_directory ${BOOTSTRAP_DIR}}/${entry} ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E touch ${OUTPUT_DIR}/addons/${entry})
+                         COMMAND cmake -E copy_directory ${BOOTSTRAP_DIR}}/${entry} ${OUTPUT_DIR}/addons/${entry})
     else()
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E copy_directory build/${id}/${entry} ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E touch ${OUTPUT_DIR}/addons/${entry}
+                         COMMAND cmake -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/build/${id}/src/${id}/${entry} ${OUTPUT_DIR}/addons/${entry}
                          DEPENDS ${id})
     endif()
     list(APPEND SOURCES ${OUTPUT_DIR}/addons/${entry})
-    list(APPEND install_data ${OUTPUT_DIR}/addons/${entry})
+    list(APPEND install_dirs ${OUTPUT_DIR}/addons/${entry})
   endforeach()
 endforeach()
 
+# Add-ons hosted in a separate git
 foreach(file ${separate_input_files})
   file(STRINGS ${file} entries)
   string(REPLACE "\n" ";" entries "${entries}")
@@ -93,10 +93,12 @@ foreach(file ${separate_input_files})
         add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${id}
                            COMMAND cmake -E copy_directory ${BOOTSTRAP_DIR}}/addons/${id} ${OUTPUT_DIR}/addons/${id})
         list(APPEND SOURCES ${OUTPUT_DIR}/addons/${id})
+        list(APPEND install_dirs ${OUTPUT_DIR}/addons/${id})
       endif()
     else()
       add_git(${id} ${repo} ${hash} addons)
       list(APPEND SOURCES ${OUTPUT_DIR}/addons/${id})
+      list(APPEND install_dirs ${OUTPUT_DIR}/addons/${id})
       if("${id}" MATCHES "^skin")
         if(BOOTSTRAP_IN_TREE)
           list(APPEND EXTRA_XBT addons/${id})
@@ -106,6 +108,11 @@ foreach(file ${separate_input_files})
     endif()
   endforeach()
 endforeach()
+
+# Write a list of dirs to glob at installation time
+string(REPLACE ";" "\n" install_dirs "${install_dirs}")
+file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs
+           ${install_dirs})
 
 add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig swig.dir)
 
