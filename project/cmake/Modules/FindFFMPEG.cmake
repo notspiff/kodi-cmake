@@ -35,6 +35,7 @@ else()
                    --disable-ffmpeg
                    --disable-crystalhd
                    --enable-shared
+                   --disable-static
                    --disable-doc
                    --enable-postproc
                    --enable-gpl
