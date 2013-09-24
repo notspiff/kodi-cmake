@@ -34,8 +34,8 @@ if(ENABLE_SKIN_TOUCHED)
   list(APPEND separate_input_files skin.touched.txt)
 endif()
 
-if(NOT XBMC_SOURCE_DIR)
-  set(XBMC_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+if(NOT CORE_SOURCE_DIR)
+  set(CORE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
 endif()
 
 if(NOT OUTPUT_DIR)
@@ -107,7 +107,7 @@ foreach(file ${separate_input_files})
   endforeach()
 endforeach()
 
-add_subdirectory(${XBMC_SOURCE_DIR}/xbmc/interfaces/swig swig.dir)
+add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig swig.dir)
 
 set(autoconf_dirs lib/libdvd/libdvdcss
                    lib/libdvd/libdvdread
@@ -115,9 +115,9 @@ set(autoconf_dirs lib/libdvd/libdvdcss
                    lib/cpluff)
 
 foreach(dir ${autoconf_dirs})
-  add_custom_command(OUTPUT ${XBMC_SOURCE_DIR}/${dir}/config.h.in
-                     COMMAND autoreconf -vif WORKING_DIRECTORY ${XBMC_SOURCE_DIR}/${dir})
-  list(APPEND SOURCES ${XBMC_SOURCE_DIR}/${dir}/config.h.in)
+  add_custom_command(OUTPUT ${CORE_SOURCE_DIR}/${dir}/config.h.in
+                     COMMAND autoreconf -vif WORKING_DIRECTORY ${CORE_SOURCE_DIR}/${dir})
+  list(APPEND SOURCES ${CORE_SOURCE_DIR}/${dir}/config.h.in)
 endforeach()
 
 add_custom_target(bootstrap ALL SOURCES ${SOURCES})

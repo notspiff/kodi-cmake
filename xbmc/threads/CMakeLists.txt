@@ -6,4 +6,4 @@ set(SOURCES Atomics.cpp
             SystemClock.cpp
             platform/Implementation.cpp)
 
-xbmc_add_library(threads)
+core_add_library(threads)

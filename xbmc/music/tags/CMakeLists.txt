@@ -12,4 +12,4 @@ set(SOURCES MusicInfoTag.cpp
             TagLibVFSStream.cpp
             TagLoaderTagLib.cpp)
 
-xbmc_add_library(music_tags)
+core_add_library(music_tags)

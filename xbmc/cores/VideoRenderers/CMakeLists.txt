@@ -19,7 +19,7 @@ if(GLES_FOUND)
   list(APPEND SOURCES LinuxRendererGLES.cpp)
 endif()
 
-xbmc_add_library(videorenderers)
+core_add_library(videorenderers)
 add_dependencies(videorenderers ffmpeg)
 
 add_subdirectory(VideoShaders)

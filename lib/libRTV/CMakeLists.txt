@@ -9,4 +9,4 @@ set(SOURCES crypt.c
             rtv.c
             sleep.c)
 
-xbmc_add_library(rtv)
+core_add_library(rtv)

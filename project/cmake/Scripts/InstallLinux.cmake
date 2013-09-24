@@ -1,29 +1,29 @@
 set(libdir ${CMAKE_INSTALL_PREFIX}/lib)
 set(bindir ${CMAKE_INSTALL_PREFIX}/bin)
-configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc.sh.in
-               ${XBMC_BUILD_DIR}/scripts/xbmc @ONLY)
-configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
-               ${XBMC_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
+configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc.sh.in
+               ${CORE_BUILD_DIR}/scripts/xbmc @ONLY)
+configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
+               ${CORE_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
 
 install(TARGETS xbmc-xrandr DESTINATION lib/xbmc)
-install(FILES ${addon_bindings} DESTINATION include/xbmc)
-install(FILES ${cmake_files} ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/xbmc-config.cmake
+install(FILES ${bindings} DESTINATION include/xbmc)
+install(FILES ${cmake_files} ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/xbmc-config.cmake
         DESTINATION lib/xbmc)
-install(PROGRAMS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/scripts/xbmc
-                 ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/scripts/xbmc-standalone
+install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc
+                 ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc-standalone
         DESTINATION bin)
-install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/FEH.py
+install(FILES ${CORE_SOURCE_DIR}/tools/Linux/FEH.py
         DESTINATION share/xbmc)
 
-install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc-xsession.desktop
+install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-xsession.desktop
         RENAME XBMC.desktop
         DESTINATION share/xsessions)
                 
-install(FILES ${XBMC_SOURCE_DIR}/LICENSE.GPL
-              ${XBMC_SOURCE_DIR}/docs/README.linux
+install(FILES ${CORE_SOURCE_DIR}/LICENSE.GPL
+              ${CORE_SOURCE_DIR}/docs/README.linux
         DESTINATION share/doc/xbmc)
 
-install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc.desktop
+install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc.desktop
         DESTINATION share/applications)
 
 foreach(texture ${XBT_FILES})
@@ -44,10 +44,10 @@ foreach(file ${install_data})
           DESTINATION share/xbmc/${dir})
 endforeach()
 
-install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
+install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
         RENAME xbmc.png
         DESTINATION share/icons/hicolor/48x48/apps)
-install(FILES ${XBMC_SOURCE_DIR}/media/icon.png
+install(FILES ${CORE_SOURCE_DIR}/media/icon.png
         RENAME xbmc.png
         DESTINATION share/icons/hicolor/256x256/apps)
 

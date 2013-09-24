@@ -5,4 +5,4 @@ set(SOURCES htsmsg.c
             net_posix.c
             sha1.c)
 
-xbmc_add_library(hts)
+core_add_library(hts)
