@@ -41,8 +41,6 @@ option(ENABLE_CROSSCOMPILE    "Enable Cross_compiling?" OFF)
 option(WITH_ARCH              "build with given arch" OFF)
 option(WITH_CPU               "build with given cpu" OFF)
 
-set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
-
 set(XBMC_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../..)
 set(XBMC_BUILD_DIR build)
 if(BOOTSTRAP_DIR)
