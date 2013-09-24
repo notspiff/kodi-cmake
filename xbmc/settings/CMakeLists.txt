@@ -18,7 +18,7 @@ set(SOURCES AdvancedSettings.cpp
             SkinSettings.cpp
             VideoSettings.cpp)
 
-xbmc_add_library(settings)
+core_add_library(settings)
 add_dependencies(settings libcpluff)
 
 add_subdirectory(dialogs)

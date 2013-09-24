@@ -8,4 +8,4 @@ set(SOURCES PlayListB4S.cpp
             PlayListXML.cpp
             SmartPlayList.cpp)
 
-xbmc_add_library(playlists)
+core_add_library(playlists)

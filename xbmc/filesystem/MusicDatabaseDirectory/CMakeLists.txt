@@ -21,4 +21,4 @@ set(SOURCES DirectoryNodeAlbumCompilations.cpp
             QueryParams.cpp)
 
   
-xbmc_add_library(musicdatabasedirectory)
+core_add_library(musicdatabasedirectory)

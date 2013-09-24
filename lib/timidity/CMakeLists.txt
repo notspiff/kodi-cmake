@@ -47,4 +47,4 @@ add_definitions(-DHAVE_GETTIMEOFDAY=1 -DHAVE_ALSA_ASOUNDLIB=1 -DHAVE_LIBASOUND=1
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} timidity libarc utils)
 
-xbmc_add_library(timidity 1)
+core_add_library(timidity 1)

@@ -10,5 +10,5 @@ set(SOURCES GUIMediaWindow.cpp
             GUIWindowSystemInfo.cpp
             GUIWindowWeather.cpp)
 
-xbmc_add_library(windows)
+core_add_library(windows)
 add_dependencies(windows libcpluff)
