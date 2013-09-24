@@ -55,6 +55,19 @@ function(copy_file_to_buildtree file)
   set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
+function(pack_xbt input output)
+  file(GLOB_RECURSE MEDIA_FILES ${input}/*)
+  string(REPLACE "${CMAKE_BINARY_DIR}/" "" pretty_output ${output})
+  add_custom_command(OUTPUT  ${pretty_output}
+                     COMMAND ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/texturepacker.dir/TexturePacker
+                     ARGS    -input ${input}
+                             -output ${output}
+                             -dupecheck
+                     DEPENDS ${MEDIA_FILES} TexturePacker)
+  list(APPEND XBT_FILES ${pretty_output})
+  set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
+endfunction()
+
 function(copy_skin_to_buildtree skin)
   file(GLOB_RECURSE FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${skin}/*)
   file(GLOB_RECURSE MEDIA_FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${skin}/media/*)
@@ -64,13 +77,8 @@ function(copy_skin_to_buildtree skin)
     copy_file_to_buildtree(${file})
   endforeach()
   file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${skin}/media)
-  add_custom_command(OUTPUT  ${skin}/media/Textures.xbt
-                     COMMAND ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/texturepacker.dir/TexturePacker
-                     ARGS    -input ${XBMC_SOURCE_DIR}/${skin}/media
-                             -output ${CMAKE_BINARY_DIR}/${skin}/media/Textures.xbt
-                             -dupecheck
-                     DEPENDS ${MEDIA_FILES} TexturePacker)
-  list(APPEND XBT_FILES ${skin}/media/Textures.xbt)
+  pack_xbt(${XBMC_SOURCE_DIR}/${skin}/media
+           ${CMAKE_BINARY_DIR}/${skin}/media/Textures.xbt)
                 
   set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
 endfunction()
