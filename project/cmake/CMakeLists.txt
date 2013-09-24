@@ -66,8 +66,8 @@ find_package(Threads REQUIRED)
 list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 
 # Required dependencies
-set(required_deps Sqlite3 FreeType PCRE Cpluff
-                  TinyXML Python Yajl LibSmbClient
+set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
+                  TinyXML Python Yajl LibSmbClient ZLIB
                   JPEG Lzo2 Fribidi SampleRate TagLib FFMPEG)
 
 # Optional dependencies
@@ -84,7 +84,7 @@ set(dyload_optional Lame RTMP CEC Bluray
                     AfpClient Plist NFS)
 
 # Required by shared objects we link
-set(required_dep_libs Jasper PNG TIFF ZLIB EXPAT)
+set(required_dep_libs Jasper PNG TIFF EXPAT)
 
 foreach(dep ${required_deps})
   xbmc_require_dep(${dep})
@@ -235,7 +235,8 @@ endif()
 
 # main binary
 add_executable(xbmc.bin ${XBMC_SOURCE_DIR}/xbmc/main/main.cpp)
-target_link_libraries(xbmc.bin -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-whole-archive ${DEPLIBS})
+target_link_libraries(xbmc.bin -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-whole-archive 
+                      ${DEPLIBS} ${CMAKE_DL_LIBS})
 install(TARGETS xbmc.bin DESTINATION lib/xbmc)
 
 # copy files to build tree
