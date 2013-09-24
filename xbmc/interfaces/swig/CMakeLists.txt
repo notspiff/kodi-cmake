@@ -9,21 +9,23 @@ macro(generate_file file)
   list(APPEND SOURCES ${file}.cpp)
 endmacro()
 
-find_package(Java REQUIRED)
-find_package(SWIG REQUIRED)
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
-                     COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/../python/Doxyfile
-                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../python
-                     MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/../python/Doxyfile)
-else(DOXYGEN_FOUND)
-  message(STATUS "Warning: No doxygen installed. The Api will not have any docstrings.")
-  add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/.doxygen-gen
-                     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/generated/doxygenxml
-                     COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/.doxygen-gen)
-endif(DOXYGEN_FOUND)
+if(NOT BOOTSTRAP_DIR)
+  find_package(Java REQUIRED)
+  find_package(SWIG REQUIRED)
+  find_package(Doxygen)
+  if(DOXYGEN_FOUND)
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
+                       COMMAND ${DOXYGEN_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/../python/Doxyfile
+                       COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
+                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../python
+                       MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/../python/Doxyfile)
+  else()
+    message(STATUS "Warning: No doxygen installed. The Api will not have any docstrings.")
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
+                       COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/generated/doxygenxml
+                       COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/.doxygen-gen)
+  endif()
+endif()
 
 # The generated bindings
 set(INPUTS AddonModuleXbmcaddon.i
