@@ -44,6 +44,12 @@ foreach(file ${install_data})
           DESTINATION share/xbmc/${dir})
 endforeach()
 
+if(ENABLE_SKIN_TOUCHED)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/addons/skin.touched
+          DESTINATION share/xbmc/addons
+          FILES_MATCHING
+          PATTERN "*.jpg;*.png" EXCLUDE)
+endif()
 install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
         RENAME xbmc.png
         DESTINATION share/icons/hicolor/48x48/apps)
