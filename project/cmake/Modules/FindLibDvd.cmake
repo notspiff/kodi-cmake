@@ -1,7 +1,7 @@
 if(ENABLE_DVDCSS)
   ExternalProject_ADD(dvdcss SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdcss/
                       PREFIX ${XBMC_BUILD_DIR}/libdvd
-                      UPDATE_COMMAND autoreconf -vif
+                      UPDATE_COMMAND ${UPDATE_COMMAND}
                       CONFIGURE_COMMAND <SOURCE_DIR>/configure
                                         --disable-doc
                                         --enable-static
@@ -20,7 +20,7 @@ endif(ENABLE_DVDCSS)
 
 ExternalProject_ADD(dvdread SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdread/
                     PREFIX ${XBMC_BUILD_DIR}/libdvd
-                    UPDATE_COMMAND autoreconf -vif
+                    UPDATE_COMMAND ${UPDATE_COMMAND}
                     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                                       --enable-static
                                       --disable-shared
@@ -36,7 +36,7 @@ xbmc_link_library(${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/lib/libdvdread.a
 
 ExternalProject_ADD(dvdnav SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/
                     PREFIX ${XBMC_BUILD_DIR}/libdvd
-                    UPDATE_COMMAND autoreconf -vif
+                    UPDATE_COMMAND ${UPDATE_COMMAND}
                     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                                       --disable-shared
                                       --enable-static
