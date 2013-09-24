@@ -20,14 +20,12 @@ function(add_git id repo rev prefix)
     list(APPEND exclude "PATTERN media EXCLUDE")
   endif()
   file(WRITE ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake "FILE(COPY build/${id}/src/${id}
-                                     DESTINATION ${OUTPUT_DIR}/${prefix}
-                                     ${exclude})")
+                                                              DESTINATION ${OUTPUT_DIR}/${prefix}
+                                                              ${exclude})")
   add_custom_command(OUTPUT ${OUTPUT_DIR}/${prefix}/${id}
                      COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
                      DEPENDS ${id})
 endfunction()
-
-file(STRINGS separates.txt TOUCHED)
 
 list(APPEND separate_input_files separates.txt)
 list(APPEND multi_dirs scrapers.txt)
