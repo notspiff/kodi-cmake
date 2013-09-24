@@ -68,7 +68,7 @@ foreach(file ${multi_dirs})
                          COMMAND cmake -E touch ${OUTPUT_DIR}/addons/${entry})
     else()
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E copy_directory build/scrapers/${entry} ${OUTPUT_DIR}/addons/${entry}
+                         COMMAND cmake -E copy_directory build/${id}/${entry} ${OUTPUT_DIR}/addons/${entry}
                          COMMAND cmake -E touch ${OUTPUT_DIR}/addons/${entry}
                          DEPENDS ${id})
     endif()
