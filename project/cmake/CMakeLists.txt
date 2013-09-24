@@ -3,10 +3,11 @@ project(xbmc)
 cmake_minimum_required(VERSION 2.8.8)
 
 include(ExternalProject)
-include(Scripts/AddOptions.cmake)
-include(Scripts/Macros.cmake)
-include(Scripts/ManageString.cmake)
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Modules)
+include(scripts/AddOptions.cmake)
+include(scripts/Macros.cmake)
+include(scripts/ManageString.cmake)
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 
 enable_language(CXX)
 enable_language(C)
@@ -49,7 +50,7 @@ else()
   set(UPDATE_COMMAND autoreconf -vif)
 endif()
 
-include(Scripts/ArchSetup.cmake)
+include(scripts/ArchSetup.cmake)
 
 set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
              ${CORE_SOURCE_DIR}/addons/library.xbmc.codec
@@ -181,9 +182,9 @@ target_link_libraries(xbmc.bin -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-
 install(TARGETS xbmc.bin DESTINATION lib/xbmc)
 
 # copy files to build tree
-file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/common.txt copy_dirs)
-if(EXISTS ${PROJECT_SOURCE_DIR}/treedata/${CMAKE_SYSTEM_NAME}.txt)
-  file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/${CMAKE_SYSTEM_NAME}.txt copy_dirs2)
+file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/common.txt copy_dirs)
+if(EXISTS ${PROJECT_SOURCE_DIR}/installdata/${CMAKE_SYSTEM_NAME}.txt)
+  file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/${CMAKE_SYSTEM_NAME}.txt copy_dirs2)
   list(APPEND copy_dirs ${copy_dirs2})
 endif()
 foreach(dir ${copy_dirs})
@@ -245,12 +246,12 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
-file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/addon-bindings.txt addon_bindings)
+file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/addon-bindings.txt bindings)
 
-set(cmake-files ${XBMC_SOURCE_DIR}/Scripts/AddOptions.cmake
-                ${XBMC_SOURCE_DIR}/Scripts/xbmc-addon-helpers.cmake
-                ${XBMC_SOURCE_DIR}/xbmc-config.cmake)
-configure_file(${XBMC_SOURCE_DIR}/project/cmake/Templates/xbmc-config.cmake.in
-               ${XBMC_BUILD_DIR}/xbmc-config.cmake @ONLY)
+set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/AddOptions.cmake
+                ${CORE_SOURCE_DIR}/project/cmake/scripts/xbmc-addon-helpers.cmake
+                ${CORE_BUILD_DIR}/xbmc-config.cmake)
+configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
+               ${CORE_BUILD_DIR}/xbmc-config.cmake @ONLY)
 
-include(Scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
+include(scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
