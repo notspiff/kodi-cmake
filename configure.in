@@ -2576,7 +2576,8 @@ OUTPUT_FILES="Makefile \
     xbmc/android/jni/Makefile \
     xbmc/utils/Makefile \
     xbmc/main/Makefile \
-    project/cmake/xbmc-config.cmake"
+    xbmc/windowing/tests/wayland/Makefile \
+    project/cmake/Templates/xbmc-config.cmake"
 
 if test "$use_wayland" = "yes"; then
 OUTPUT_FILES="$OUTPUT_FILES xbmc/windowing/tests/wayland/Makefile"
