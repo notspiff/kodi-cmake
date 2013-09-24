@@ -10,7 +10,7 @@ macro(generate_file file)
 endmacro()
 
 if(NOT BOOTSTRAP_DIR)
-  find_package(Java REQUIRED)
+  find_package(Java COMPONENTS Runtime REQUIRED)
   find_package(SWIG REQUIRED)
   find_package(Doxygen)
   if(DOXYGEN_FOUND)
@@ -26,6 +26,7 @@ if(NOT BOOTSTRAP_DIR)
                        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/.doxygen-gen)
   endif()
 endif()
+
 
 # The generated bindings
 set(INPUTS AddonModuleXbmcaddon.i
