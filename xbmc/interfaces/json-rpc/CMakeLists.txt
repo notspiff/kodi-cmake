@@ -16,5 +16,5 @@ set(SOURCES AddonsOperations.cpp
             VideoLibrary.cpp
             XBMCOperations.cpp)
   
-xbmc_add_library(jsonrpc_interface)
+core_add_library(jsonrpc_interface)
 add_dependencies(jsonrpc_interface libcpluff)

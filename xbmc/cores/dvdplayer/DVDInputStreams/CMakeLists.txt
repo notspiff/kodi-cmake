@@ -17,5 +17,5 @@ if(BLURAY_FOUND)
   list(APPEND SOURCES DVDInputStreamBluray.cpp)
 endif()
 
-xbmc_add_library(dvdinputstreams)
+core_add_library(dvdinputstreams)
 add_dependencies(dvdinputstreams libcpluff dvdnav)

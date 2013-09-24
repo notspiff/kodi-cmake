@@ -5,5 +5,5 @@ set(SOURCES DVDAudioCodecFFmpeg.cpp
             DVDAudioCodecPassthroughFFmpeg.cpp
             DVDAudioCodecPcm.cpp)
 
-xbmc_add_library(dvdaudiocodecs)
+core_add_library(dvdaudiocodecs)
 add_dependencies(dvdaudiocodecs ffmpeg)

@@ -25,4 +25,4 @@ include_directories(libcmyth librefmem include)
 
 add_options(C ALL_BUILDS "-fPIC")
 
-xbmc_add_library(cmyth 1)
+core_add_library(cmyth 1)
