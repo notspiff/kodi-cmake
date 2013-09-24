@@ -35,5 +35,5 @@ set(SOURCES Application.cpp
             xbmc.cpp
             XbmcContext.cpp)
 
-xbmc_add_library(xbmc)
+core_add_library(xbmc)
 add_dependencies(xbmc libcpluff)

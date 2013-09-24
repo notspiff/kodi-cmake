@@ -15,4 +15,4 @@ add_options(ALL_LANGUAGES ALL_BUILDS "-fPIC")
 
 add_definitions(-D_LINUX -DNSF_PLAYER)
 
-xbmc_add_library(nosefart 1)
+core_add_library(nosefart 1)

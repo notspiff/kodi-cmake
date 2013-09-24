@@ -75,5 +75,5 @@ set(SOURCES ActorProtocol.cpp
 
 
 enable_language(ASM)
-xbmc_add_library(utils)
+core_add_library(utils)
 add_dependencies(utils libcpluff ffmpeg)

@@ -7,7 +7,7 @@ set(SOURCES Album.cpp
             MusicThumbLoader.cpp
             Song.cpp)
 
-xbmc_add_library(music)
+core_add_library(music)
 add_dependencies(music libcpluff)
 
 add_subdirectory(dialogs)

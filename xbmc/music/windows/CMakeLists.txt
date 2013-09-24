@@ -5,5 +5,5 @@ set(SOURCES GUIWindowMusicBase.cpp
             GUIWindowMusicSongs.cpp
             GUIWindowVisualisation.cpp)
 
-xbmc_add_library(music_windows)
+core_add_library(music_windows)
 add_dependencies(music_windows libcpluff)
