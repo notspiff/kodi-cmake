@@ -273,11 +273,14 @@ endforeach()
 
 list(APPEND SKINS "${XBMC_SOURCE_DIR}/addons/skin.confluence\;${XBMC_SOURCE_DIR}")
 
+# These are skins that are copied into place from the source tree
 foreach(skin ${SKINS})
   list(GET skin 0 dir)
   list(GET skin 1 relative)
   copy_skin_to_buildtree(${dir} ${relative})
 endforeach()
+
+# These for skins we cloned from a git within the build system
 foreach(xbt ${EXTRA_XBT})
   pack_xbt(${xbt}/media ${CMAKE_BINARY_DIR}/${xbt}/media/Textures.xbt ${CMAKE_BINARY_DIR})
 endforeach()
@@ -315,7 +318,7 @@ add_dependencies(xbmc.bin export-files)
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
 configure_file(${XBMC_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
-               build/DllPaths_generated.h @ONLY)
+               ${XBMC_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
 add_executable(xbmc-xrandr ${XBMC_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
@@ -341,7 +344,7 @@ set(bindings ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_addon_cpp_dll.h
 
 file(GLOB cmake_files ${XBMC_SOURCE_DIR}/project/cmake/*.cmake)
 configure_file(${XBMC_SOURCE_DIR}/project/cmake/xbmc-config.cmake.in
-               build/xbmc-config.cmake @ONLY)
+               ${XBMC_BUILD_DIR}/xbmc-config.cmake @ONLY)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   include(Scripts/XbmcInstallLinux.cmake)
