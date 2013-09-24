@@ -17,4 +17,4 @@ if(OMXLIB_FOUND)
                       OMXCore.cpp)
 endif()
   
-xbmc_add_library(linuxsupport)
+core_add_library(linuxsupport)

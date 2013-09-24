@@ -6,5 +6,4 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   endif()
 endif()
 
-xbmc_add_library(peripheral_bus)
-
+core_add_library(peripheral_bus)

@@ -18,5 +18,5 @@ set(SOURCES ADPCMCodec.cpp
             WAVcodec.cpp
             YMCodec.cpp)
 
-xbmc_add_library(paplayer)
+core_add_library(paplayer)
 add_dependencies(paplayer ffmpeg)

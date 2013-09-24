@@ -3,5 +3,5 @@ set(SOURCES GUIWindowFullScreen.cpp
             GUIWindowVideoNav.cpp
             GUIWindowVideoPlaylist.cpp)
 
-xbmc_add_library(video_windows)
+core_add_library(video_windows)
 add_dependencies(video_windows libcpluff)

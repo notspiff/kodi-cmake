@@ -4,5 +4,5 @@ set(SOURCES GUIDialogMusicInfo.cpp
             GUIDialogSongInfo.cpp
             GUIDialogVisualisationPresetList.cpp)
 
-xbmc_add_library(music_dialogs)
+core_add_library(music_dialogs)
 add_dependencies(music_dialogs libcpluff)
