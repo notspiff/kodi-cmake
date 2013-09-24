@@ -40,6 +40,11 @@ set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
 
 set(XBMC_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../..)
 set(XBMC_BUILD_DIR build)
+if(BOOTSTRAP_DIR)
+  set(UPDATE_COMMAND "")
+else()
+  set(UPDATE_COMMAND autoreconf -vif)
+endif()
 
 include(Scripts/XbmcArchSetup.cmake)
 
@@ -131,8 +136,6 @@ endif()
 
 if(ENABLE_SKIN_TOUCHED)
   list(APPEND DEP_DEFINES "-DHAS_SKIN_TOUCHED=1")
-  pack_xbt(${CMAKE_BINARY_DIR}/addons/skin.touched/media
-           ${CMAKE_BINARY_DIR}/addons/skin.touched/media/Textures.xbt)
 endif()
 
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
@@ -140,6 +143,9 @@ add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES})
 
 set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
 
+if(NOT BOOTSTRAP_DIR)
+  set(BOOTSTRAP_IN_TREE 1)
+endif()
 add_subdirectory(bootstrap ${XBMC_BUILD_DIR}/bootstrap.dir)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
@@ -261,13 +267,22 @@ set(copy_dirs addons/xbmc.addon/*
 foreach(dir ${copy_dirs})
   file(GLOB_RECURSE FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${dir})
   foreach(file ${FILES})
-    copy_file_to_buildtree(${file})
+    copy_file_to_buildtree(${XBMC_SOURCE_DIR}/${file} ${XBMC_SOURCE_DIR})
   endforeach()
 endforeach()
 
-copy_skin_to_buildtree(addons/skin.confluence)
+list(APPEND SKINS "${XBMC_SOURCE_DIR}/addons/skin.confluence\;${XBMC_SOURCE_DIR}")
+
+foreach(skin ${SKINS})
+  list(GET skin 0 dir)
+  list(GET skin 1 relative)
+  copy_skin_to_buildtree(${dir} ${relative})
+endforeach()
+foreach(xbt ${EXTRA_XBT})
+  pack_xbt(${xbt}/media ${CMAKE_BINARY_DIR}/${xbt}/media/Textures.xbt ${CMAKE_BINARY_DIR})
+endforeach()
 add_custom_target(pack-skins ALL
-                  DEPENDS bootstrap ${XBT_FILES})
+                  DEPENDS bootstrap export-files ${XBT_FILES})
 
 set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
