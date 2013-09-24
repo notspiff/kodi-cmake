@@ -41,8 +41,8 @@ option(ENABLE_CROSSCOMPILE    "Enable Cross_compiling?" OFF)
 option(WITH_ARCH              "build with given arch" OFF)
 option(WITH_CPU               "build with given cpu" OFF)
 
-set(XBMC_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../..)
-set(XBMC_BUILD_DIR build)
+set(CORE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../..)
+set(CORE_BUILD_DIR build)
 if(BOOTSTRAP_DIR)
   set(UPDATE_COMMAND "")
 else()
@@ -51,15 +51,15 @@ endif()
 
 include(Scripts/ArchSetup.cmake)
 
-set(INCLUDES ${XBMC_SOURCE_DIR}/addons/library.xbmc.addon
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.codec
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.gui
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.pvr
-             ${XBMC_SOURCE_DIR}/lib
-             ${XBMC_SOURCE_DIR}/xbmc
-             ${XBMC_SOURCE_DIR}/xbmc/linux
-             ${XBMC_SOURCE_DIR}/xbmc/cores/dvdplayer
-             ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR})
+set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
+             ${CORE_SOURCE_DIR}/addons/library.xbmc.codec
+             ${CORE_SOURCE_DIR}/addons/library.xbmc.gui
+             ${CORE_SOURCE_DIR}/addons/library.xbmc.pvr
+             ${CORE_SOURCE_DIR}/lib
+             ${CORE_SOURCE_DIR}/xbmc
+             ${CORE_SOURCE_DIR}/xbmc/linux
+             ${CORE_SOURCE_DIR}/xbmc/cores/dvdplayer
+             ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
 
 find_package(PkgConfig)
 find_package(Threads REQUIRED)
@@ -87,7 +87,7 @@ set(dyload_optional Lame RTMP CEC Bluray
 set(required_dep_libs Jasper PNG TIFF EXPAT)
 
 foreach(dep ${required_deps})
-  xbmc_require_dep(${dep})
+  core_require_dep(${dep})
 endforeach()
 
 foreach(dep ${required_dep_libs})
@@ -95,23 +95,23 @@ foreach(dep ${required_dep_libs})
 endforeach()
 
 foreach(dep ${optional_deps})
-  xbmc_optional_dep(${dep})
+  core_optional_dep(${dep})
 endforeach()
 
 if(NOT UDEV_FOUND)
-  xbmc_optional_dep(LibUsb)
+  core_optional_dep(LibUsb)
 endif()
 
 foreach(dep ${required_dyload})
-  xbmc_require_dyload_dep(${dep})
+  core_require_dyload_dep(${dep})
 endforeach()
 
 # Need a special case due to upper case lib name
 find_package(FLAC REQUIRED)
-xbmc_find_soname(FLAC FLAC)
+find_soname(FLAC FLAC)
 
 foreach(dep ${dyload_optional})
-  xbmc_optional_dyload_dep(${dep})
+  core_optional_dyload_dep(${dep})
 endforeach()
 
 if(ENABLE_UPNP)
@@ -123,18 +123,18 @@ if(ENABLE_NONFREE)
   list(APPEND SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/subdirs-nonfree.txt)
 endif()
 
-xbmc_optional_dep(Shairplay ENABLE_AIRTUNES)
+core_optional_dep(Shairplay ENABLE_AIRTUNES)
 if(NOT SHAIRPLAY_FOUND)
-  xbmc_optional_dep(Shairport ENABLE_AIRTUNES)
+  core_optional_dep(Shairport ENABLE_AIRTUNES)
 endif()
 
 if(NOT WIN32)
-  xbmc_optional_dep(OpenGl)
+  core_optional_dep(OpenGl)
   if(OPENGL_FOUND)
-    xbmc_require_dep(GLEW)
-    xbmc_optional_dep(X ENABLE_X11)
-    xbmc_optional_dep(XRandR ENABLE_X11)
-    xbmc_optional_dep(Sdl)
+    core_require_dep(GLEW)
+    core_optional_dep(X ENABLE_X11)
+    core_optional_dep(XRandR ENABLE_X11)
+    core_optional_dep(Sdl)
   endif()
 endif()
 
@@ -150,7 +150,7 @@ set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
 if(NOT BOOTSTRAP_DIR)
   set(BOOTSTRAP_IN_TREE 1)
 endif()
-add_subdirectory(bootstrap ${XBMC_BUILD_DIR}/bootstrap.dir)
+add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap.dir)
 
 # Subdirs
 list(APPEND SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/subdirs-common.txt)
@@ -163,15 +163,20 @@ endif()
 xbmc_add_subdir_from_files("${SUBDIRS}")
 
 if(ENABLE_EXTERNAL_FFMPEG OR ENABLE_EXTERNAL_LIBAV)
-  add_subdirectory(${XBMC_SOURCE_DIR}/lib/xbmc-dll-symbols ${XBMC_BUILD_DIR}/dll_symbols.dir)
+  add_subdirectory(${CORE_SOURCE_DIR}/lib/xbmc-dll-symbols ${CORE_BUILD_DIR}/dll_symbols.dir)
 endif()
 if(ENABLE_EXTERNAL_LIBAV)
-  add_subdirectory(${XBMC_SOURCE_DIR}/lib/xbmc-libav-hacks ${XBMC_BUILD_DIR}/libav-hacks.dir)
+  add_subdirectory(${CORE_SOURCE_DIR}/lib/xbmc-libav-hacks ${CORE_BUILD_DIR}/libav-hacks.dir)
+endif()
+
+# non-free libraries
+if(ENABLE_NONFREE)
+  add_subdirectory(${CORE_SOURCE_DIR}/lib/UnrarXLib              ${CORE_BUILD_DIR}/unrarxlib.dir)
 endif()
 
 # main binary
-add_executable(xbmc.bin ${XBMC_SOURCE_DIR}/xbmc/main/main.cpp)
-target_link_libraries(xbmc.bin -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-whole-archive 
+add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
+target_link_libraries(xbmc.bin -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-whole-archive
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
 install(TARGETS xbmc.bin DESTINATION lib/xbmc)
 
@@ -182,13 +187,13 @@ if(EXISTS ${PROJECT_SOURCE_DIR}/treedata/${CMAKE_SYSTEM_NAME}.txt)
   list(APPEND copy_dirs ${copy_dirs2})
 endif()
 foreach(dir ${copy_dirs})
-  file(GLOB_RECURSE FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${dir})
+  file(GLOB_RECURSE FILES RELATIVE ${CORE_SOURCE_DIR} ${CORE_SOURCE_DIR}/${dir})
   foreach(file ${FILES})
-    copy_file_to_buildtree(${XBMC_SOURCE_DIR}/${file} ${XBMC_SOURCE_DIR})
+    copy_file_to_buildtree(${CORE_SOURCE_DIR}/${file} ${CORE_SOURCE_DIR})
   endforeach()
 endforeach()
 
-list(APPEND SKINS "${XBMC_SOURCE_DIR}/addons/skin.confluence\;${XBMC_SOURCE_DIR}")
+list(APPEND SKINS "${CORE_SOURCE_DIR}/addons/skin.confluence\;${CORE_SOURCE_DIR}")
 
 # These are skins that are copied into place from the source tree
 foreach(skin ${SKINS})
@@ -208,25 +213,25 @@ set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
                     ${JASPER_LIBRARIES} )
 
-xbmc_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
-xbmc_link_library(exif system/libexif)
-xbmc_link_library(hdhomerun system/hdhomerun)
-xbmc_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
+core_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
+core_link_library(exif system/libexif)
+core_link_library(hdhomerun system/hdhomerun)
+core_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/paplayer)
-xbmc_link_library(nosefart system/players/paplayer/nosefart)
-xbmc_link_library(sidplay2 system/players/paplayer/libsidplay2)
-xbmc_link_library(stsoundlibrary system/players/paplayer/stsoundlibrary)
-xbmc_link_library(xbadpcm system/players/paplayer/adpcm)
-xbmc_link_library(vgmstream system/players/paplayer/vgmstream)
-xbmc_link_library(timidity
+core_link_library(nosefart system/players/paplayer/nosefart)
+core_link_library(sidplay2 system/players/paplayer/libsidplay2)
+core_link_library(stsoundlibrary system/players/paplayer/stsoundlibrary)
+core_link_library(xbadpcm system/players/paplayer/adpcm)
+core_link_library(vgmstream system/players/paplayer/vgmstream)
+core_link_library(timidity
                   system/players/paplayer/timidity "export"
-                  ${XBMC_SOURCE_DIR}/lib/timidity/exports.def)
+                  ${CORE_SOURCE_DIR}/lib/timidity/exports.def)
 
-xbmc_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
-xbmc_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
-xbmc_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
-xbmc_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
+core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
+core_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
+core_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
+core_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
 add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
@@ -234,10 +239,10 @@ add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
 add_dependencies(xbmc.bin export-files)
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
-configure_file(${XBMC_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
-               ${XBMC_BUILD_DIR}/DllPaths_generated.h @ONLY)
+configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
+               ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
-add_executable(xbmc-xrandr ${XBMC_SOURCE_DIR}/xbmc-xrandr.c)
+add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
 file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/addon-bindings.txt addon_bindings)

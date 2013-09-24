@@ -1,10 +1,10 @@
 set(SOURCES libXBMC_pvr.cpp)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${XBMC_SOURCE_DIR}/xbmc/addons/include
-                    ${XBMC_SOURCE_DIR}/xbmc
-                    ${XBMC_SOURCE_DIR}/xbmc/cores/dvdplayer/DVDDemuxers)
+                    ${CORE_SOURCE_DIR}/xbmc/addons/include
+                    ${CORE_SOURCE_DIR}/xbmc
+                    ${CORE_SOURCE_DIR}/xbmc/cores/dvdplayer/DVDDemuxers)
 
 add_options(CXX ALL_BUILDS "-fPIC")
 
-xbmc_add_library(XBMC_pvr 1)
+core_add_library(XBMC_pvr 1)

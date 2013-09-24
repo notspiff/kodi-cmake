@@ -5,5 +5,5 @@ set(SOURCES EpgContainer.cpp
             EpgSearchFilter.cpp
             GUIEPGGridContainer.cpp)
 
-xbmc_add_library(epg)
+core_add_library(epg)
 add_dependencies(epg libcpluff)

@@ -1,3 +1,3 @@
 set(SOURCES SlingboxLib.cpp)
 
-xbmc_add_library(slingbox)
+core_add_library(slingbox)

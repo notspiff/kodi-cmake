@@ -3,5 +3,5 @@ set(SOURCES MusicAlbumInfo.cpp
             MusicInfoScanner.cpp
             MusicInfoScraper.cpp)
 
-xbmc_add_library(music_infoscanner)
+core_add_library(music_infoscanner)
 add_dependencies(music_infoscanner libcpluff)
