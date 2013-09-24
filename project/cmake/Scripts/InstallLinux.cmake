@@ -27,8 +27,9 @@ install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc.desktop
         DESTINATION share/applications)
 
 foreach(texture ${XBT_FILES})
-  get_filename_component(dir ${texture} PATH)
-  install(FILES ${CMAKE_BINARY_DIR}/${texture}
+  string(REPLACE "${CMAKE_BINARY_DIR}/" "" dir ${texture})
+  get_filename_component(dir ${dir} PATH)
+  install(FILES ${texture}
           DESTINATION share/xbmc/${dir})
 endforeach()
 
@@ -43,6 +44,15 @@ foreach(file ${install_data})
   install(FILES ${CMAKE_BINARY_DIR}/${file}
           DESTINATION share/xbmc/${dir})
 endforeach()
+
+install(CODE "file(STRINGS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs dirs)
+              foreach(dir \${dirs})
+                file(GLOB_RECURSE FILES RELATIVE ${CMAKE_BINARY_DIR} \${dir}/*)
+                foreach(file \${FILES})
+                  get_filename_component(dir \${file} PATH)
+                  file(INSTALL \${file} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/xbmc/\${dir})
+                endforeach()
+              endforeach()")
 
 install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
         RENAME xbmc.png
