@@ -3,7 +3,7 @@ project(xbmc)
 cmake_minimum_required(VERSION 2.8.8)
 
 include(ExternalProject)
-include(AddOptions.cmake)
+include(Scripts/AddOptions.cmake)
 include(Scripts/Macros.cmake)
 include(Scripts/ManageString.cmake)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/Modules)
