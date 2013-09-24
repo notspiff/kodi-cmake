@@ -304,28 +304,13 @@ configure_file(${XBMC_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${XBMC_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
-set(bindings ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_addon_cpp_dll.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_addon_cpp_dll.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_addon_dll.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_addon_types.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_codec_types.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_epg_types.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_pvr_dll.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_pvr_types.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_scr_dll.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_scr_types.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_vis_dll.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_vis_types.h
-             ${XBMC_SOURCE_DIR}/xbmc/addons/include/xbmc_stream_utils.hpp
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.addon/libXBMC_addon.h
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.gui/libXBMC_gui.h
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.pvr/libXBMC_pvr.h
-             ${XBMC_SOURCE_DIR}/addons/library.xbmc.codec/libXBMC_codec.h
-             ${XBMC_SOURCE_DIR}/xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h)
+file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/addon-bindings.txt addon_bindings)
 
-file(GLOB cmake_files ${XBMC_SOURCE_DIR}/project/cmake/*.cmake)
-configure_file(${XBMC_SOURCE_DIR}/project/cmake/xbmc-config.cmake.in
-               ${XBMC_BUILD_DIR}/xbmc-config.cmake @ONLY)
+set(cmake-files ${CORE_SOURCE_DIR}/Scripts/AddOptions.cmake
+                ${CORE_SOURCE_DIR}/Scripts/xbmc-addon-helpers.cmake
+                ${CORE_BUILD_DIR}/xbmc-config.cmake)
+configure_file(${CORE_SOURCE_DIR}/project/cmake/Templates/xbmc-config.cmake.in
+               ${CORE_BUILD_DIR}/xbmc-config.cmake @ONLY)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   include(Scripts/XbmcInstallLinux.cmake)
