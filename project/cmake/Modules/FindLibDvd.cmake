@@ -51,16 +51,16 @@ xbmc_link_library(${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/lib/libdvdnav.a
                   system/players/dvdplayer/libdvdnav dvdnav)
 set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
 
-set(dvdnav_internal_headers ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/dvdnav_internal.h
-                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/remap.h
-                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/vm.h
-                            ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/src/vm/decoder.h)
+set(dvdnav_internal_headers libdvdnav/src/dvdnav_internal.h
+                            libdvdnav/src/remap.h
+                            libdvdnav/src/vm/vm.h
+                            libdvdnav/src/vm/decoder.h)
 
 foreach(dvdnav_header ${dvdnav_internal_headers})
- add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav/${dvdnav_header}
-                   COMMAND cmake -E copy ${dvdnav_header}
-                           ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav)
- add_dependencies(dvdnav ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav/${dvdnav_header})
+  get_filename_component(header ${dvdnav_header} NAME)
+  file(COPY ${XBMC_SOURCE_DIR}/lib/libdvd/${dvdnav_header}
+       DESTINATION ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include/dvdnav)
+  list(APPEND dvdnav_headers include/dvdnav/${header})
 endforeach()
 
 set(LIBDVD_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/include)
