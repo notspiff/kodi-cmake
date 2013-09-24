@@ -129,15 +129,18 @@ if(NOT WIN32)
   endif()
 endif()
 
-if(EXISTS ${XBMC_SOURCE_DIR}/addons/skin.touched/addon.xml)
+if(ENABLE_SKIN_TOUCHED)
   list(APPEND DEP_DEFINES "-DHAS_SKIN_TOUCHED=1")
-  copy_skin_to_buildtree(addons/skin.touched)
+  pack_xbt(${CMAKE_BINARY_DIR}/addons/skin.touched/media
+           ${CMAKE_BINARY_DIR}/addons/skin.touched/media/Textures.xbt)
 endif()
 
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
 add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES})
 
 set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
+
+add_subdirectory(bootstrap ${XBMC_BUILD_DIR}/bootstrap.dir)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   add_subdirectory(${XBMC_SOURCE_DIR}/xbmc/linux                 ${XBMC_BUILD_DIR}/linuxsupport.dir)
@@ -262,11 +265,9 @@ foreach(dir ${copy_dirs})
   endforeach()
 endforeach()
 
-list(APPEND copy_skins addons/skin.confluence)
-
 copy_skin_to_buildtree(addons/skin.confluence)
 add_custom_target(pack-skins ALL
-                  DEPENDS ${XBT_FILES})
+                  DEPENDS bootstrap ${XBT_FILES})
 
 set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
