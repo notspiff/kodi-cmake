@@ -655,7 +655,9 @@ endif
 	@for f in $(BINDINGS); do \
 	  install -m 0644 $$f $(DESTDIR)$(includedir)/xbmc ; \
 	done
-	@for f in project/cmake/*.cmake; do \
+	@for f in project/cmake/Scripts/AddOptions.cmake \
+	  	  project/cmake/Scripts/xbmc-addon-helpers.cmake \
+		  project/cmake/Templates/xbmc-config.cmake; do \
 	  install -m 0644 $$f $(DESTDIR)$(libdir)/xbmc; \
 	done
 
