@@ -1,6 +1,6 @@
 ExternalProject_ADD(libcpluff SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/cpluff
                     PREFIX ${XBMC_BUILD_DIR}/cpluff
-                    UPDATE_COMMAND autoreconf -vif
+                    UPDATE_COMMAND ${UPDATE_COMMAND}
                     CONFIGURE_COMMAND ${XBMC_SOURCE_DIR}/lib/cpluff/configure
                                       --disable-nls
                                       --enable-static
