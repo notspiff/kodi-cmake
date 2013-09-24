@@ -2,7 +2,7 @@ set(SOURCES PVRGUIInfo.cpp
             PVRManager.cpp
             PVRDatabase.cpp)
 
-xbmc_add_library(pvr)
+core_add_library(pvr)
 add_dependencies(pvr libcpluff)
 
 add_subdirectory(addons)

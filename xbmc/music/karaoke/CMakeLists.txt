@@ -11,5 +11,5 @@ set(SOURCES GUIDialogKaraokeSongSelector.cpp
             karaokevideobackground.cpp
             karaokewindowbackground.cpp)
 
-xbmc_add_library(music_karaoke)
+core_add_library(music_karaoke)
 add_dependencies(music_karaoke ffmpeg)

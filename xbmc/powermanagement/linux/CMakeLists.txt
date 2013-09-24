@@ -4,4 +4,4 @@ set(SOURCES ConsoleDeviceKitPowerSyscall.cpp
             UPowerSyscall.cpp
             LogindUPowerSyscall.cpp)
 
-xbmc_add_library(powermanagement_linux)
+core_add_library(powermanagement_linux)

@@ -15,4 +15,4 @@ set(SOURCES DirectoryNode.cpp
             DirectoryNodeTvShowsOverview.cpp
             QueryParams.cpp)
 
-xbmc_add_library(videodatabasedirectory)
+core_add_library(videodatabasedirectory)

@@ -2,7 +2,7 @@ set(SOURCES emu_dummy.cpp
             emu_kernel32.cpp
             emu_msvcrt.cpp)
 
-xbmc_add_library(dllexports)
+core_add_library(dllexports)
 
 add_options(C ALL_BUILDS "-fPIC")
 add_library(wrapper OBJECT wrapper.c)

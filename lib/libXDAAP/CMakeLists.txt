@@ -9,4 +9,4 @@ set(SOURCES daap.c
             Authentication/hasher.c
             Authentication/md5.c)
 
-xbmc_add_library(xdaap)
+core_add_library(xdaap)

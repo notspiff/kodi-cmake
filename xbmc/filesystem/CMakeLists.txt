@@ -112,16 +112,16 @@ if(BLURAY_FOUND)
   list(APPEND SOURCES BlurayDirectory.cpp)
 endif()
 
-INCLUDE_DIRECTORIES(${XBMC_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Platinum
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaConnect
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaRenderer
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaServer
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Extras
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Neptune/Source/System/Posix
-                    ${XBMC_SOURCE_DIR}/lib/libUPnP/Neptune/Source/Core)
+INCLUDE_DIRECTORIES(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Platinum
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaConnect
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaRenderer
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaServer
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Extras
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Neptune/Source/System/Posix
+                    ${CORE_SOURCE_DIR}/lib/libUPnP/Neptune/Source/Core)
   
-xbmc_add_library(filesystem)
+core_add_library(filesystem)
 add_dependencies(filesystem libcpluff)
 
 add_subdirectory(MusicDatabaseDirectory)

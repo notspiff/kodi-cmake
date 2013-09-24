@@ -9,5 +9,5 @@ set(SOURCES GUIDialogPVRChannelManager.cpp
             GUIDialogPVRRecordingInfo.cpp
             GUIDialogPVRTimerSettings.cpp)
 
-xbmc_add_library(pvr_dialogs)
+core_add_library(pvr_dialogs)
 add_dependencies(pvr_dialogs libcpluff)
