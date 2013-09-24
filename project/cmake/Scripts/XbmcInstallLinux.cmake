@@ -1,16 +1,16 @@
 set(libdir ${CMAKE_INSTALL_PREFIX}/lib)
 set(bindir ${CMAKE_INSTALL_PREFIX}/bin)
 configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc.sh.in
-               build/scripts/xbmc @ONLY)
+               ${XBMC_BUILD_DIR}/scripts/xbmc @ONLY)
 configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
-               build/scripts/xbmc-standalone @ONLY)
+               ${XBMC_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
 
 install(TARGETS xbmc-xrandr DESTINATION lib/xbmc)
 install(FILES ${bindings} DESTINATION include/xbmc)
 install(FILES ${cmake_files} ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/xbmc-config.cmake
         DESTINATION lib/xbmc)
-install(PROGRAMS ${CMAKE_BINARY_DIR}/build/scripts/xbmc
-                 ${CMAKE_BINARY_DIR}/build/scripts/xbmc-standalone
+install(PROGRAMS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/scripts/xbmc
+                 ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/scripts/xbmc-standalone
         DESTINATION bin)
 install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/FEH.py
         DESTINATION share/xbmc)
@@ -44,12 +44,6 @@ foreach(file ${install_data})
           DESTINATION share/xbmc/${dir})
 endforeach()
 
-if(ENABLE_SKIN_TOUCHED)
-  install(DIRECTORY ${CMAKE_BINARY_DIR}/addons/skin.touched
-          DESTINATION share/xbmc/addons
-          FILES_MATCHING
-          PATTERN "*.jpg;*.png" EXCLUDE)
-endif()
 install(FILES ${XBMC_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
         RENAME xbmc.png
         DESTINATION share/icons/hicolor/48x48/apps)
