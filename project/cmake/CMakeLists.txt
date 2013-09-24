@@ -239,34 +239,11 @@ target_link_libraries(xbmc.bin -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-
 install(TARGETS xbmc.bin DESTINATION lib/xbmc)
 
 # copy files to build tree
-set(copy_dirs addons/xbmc.addon/*
-              addons/xbmc.codec/*
-              addons/xbmc.core/*
-              addons/xbmc.debug/*
-              addons/xbmc.gui/*
-              addons/xbmc.json/*
-              addons/xbmc.metadata/*
-              addons/xbmc.pvr/*
-              addons/xbmc.python/*
-              addons/library.xbmc.addon/*
-              addons/library.xbmc.codec/*
-              addons/library.xbmc.gui/*
-              addons/library.xbmc.pvr/*
-              addons/repository.xbmc.org/*
-              addons/webinterface.default/*
-              addons/screensaver.xbmc.builtin.dim/*
-              addons/screensaver.xbmc.builtin.black/*
-              language/*
-              media/*
-              sounds/*
-              system/keymaps/*
-              system/library/*
-              system/players/dvdplayer/etc/*
-              system/shaders/*
-              system/settings/*
-              userdata/*
-              system/*.xml)
-
+file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/common.txt copy_dirs)
+if(EXISTS ${PROJECT_SOURCE_DIR}/treedata/${CMAKE_SYSTEM_NAME}.txt)
+  file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/${CMAKE_SYSTEM_NAME}.txt copy_dirs2)
+  list(APPEND copy_dirs ${copy_dirs2})
+endif()
 foreach(dir ${copy_dirs})
   file(GLOB_RECURSE FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${dir})
   foreach(file ${FILES})
