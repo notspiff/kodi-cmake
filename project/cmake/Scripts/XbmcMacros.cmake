@@ -42,43 +42,47 @@ function(xbmc_link_library lib wraplib)
   set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
 endfunction()
 
-function(copy_file_to_buildtree file)
+function(copy_file_to_buildtree file relative)
   string(REPLACE "\(" "\\(" filename ${file})
   string(REPLACE "\)" "\\)" file2 ${filename})
+  string(REPLACE "${relative}/" "" file3 ${file2})
+
   if(NOT ${XBMC_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
     if (NOT TARGET export-files)
       add_custom_target(export-files ALL COMMENT "Copying files into build tree")
     endif (NOT TARGET export-files)
-    add_custom_command(TARGET export-files COMMAND ${CMAKE_COMMAND} -E copy_if_different "${XBMC_SOURCE_DIR}/${file2}" "${CMAKE_CURRENT_BINARY_DIR}/${file2}")
+    add_custom_command(TARGET export-files COMMAND ${CMAKE_COMMAND} -E copy_if_different "${file2}" "${CMAKE_CURRENT_BINARY_DIR}/${file3}")
   endif()
   list(APPEND install_data ${file2})
   set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
-function(pack_xbt input output)
+function(pack_xbt input output relative)
   file(GLOB_RECURSE MEDIA_FILES ${input}/*)
-  string(REPLACE "${CMAKE_BINARY_DIR}/" "" pretty_output ${output})
-  add_custom_command(OUTPUT  ${pretty_output}
+  get_filename_component(dir ${output} PATH)
+  add_custom_command(OUTPUT  ${output}
+                     COMMAND ${CMAKE_COMMAND} -E make_directory ${dir}
                      COMMAND ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/texturepacker.dir/TexturePacker
                      ARGS    -input ${input}
                              -output ${output}
                              -dupecheck
                      DEPENDS ${MEDIA_FILES} TexturePacker)
-  list(APPEND XBT_FILES ${pretty_output})
+  list(APPEND XBT_FILES ${output})
   set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
 endfunction()
 
-function(copy_skin_to_buildtree skin)
-  file(GLOB_RECURSE FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${skin}/*)
-  file(GLOB_RECURSE MEDIA_FILES RELATIVE ${XBMC_SOURCE_DIR} ${XBMC_SOURCE_DIR}/${skin}/media/*)
+function(copy_skin_to_buildtree skin relative)
+  file(GLOB_RECURSE FILES ${skin}/*)
+  file(GLOB_RECURSE MEDIA_FILES ${skin}/media/*)
   list(REMOVE_ITEM FILES ${MEDIA_FILES})
-  file(GLOB_RECURSE MEDIA_FILES ${XBMC_SOURCE_DIR}/${skin}/media/*)
   foreach(file ${FILES})
-    copy_file_to_buildtree(${file})
+    copy_file_to_buildtree(${file} ${relative})
   endforeach()
-  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${skin}/media)
-  pack_xbt(${XBMC_SOURCE_DIR}/${skin}/media
-           ${CMAKE_BINARY_DIR}/${skin}/media/Textures.xbt)
+  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${dest}/media)
+  string(REPLACE "${relative}/" "" dest ${skin})
+  pack_xbt(${skin}/media
+           ${CMAKE_BINARY_DIR}/${dest}/media/Textures.xbt
+           ${CMAKE_BINARY_DIR})
                 
   set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
 endfunction()
