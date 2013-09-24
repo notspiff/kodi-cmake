@@ -1,7 +1,7 @@
 set(SOURCES AnnouncementManager.cpp
             Builtins.cpp)
   
-xbmc_add_library(interfaces)
+core_add_library(interfaces)
 add_dependencies(interfaces libcpluff)
 
 add_subdirectory(generic)

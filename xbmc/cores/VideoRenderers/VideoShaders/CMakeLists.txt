@@ -9,4 +9,4 @@ if(OPENGL_FOUND OR GLES_FOUND)
                       YUV2RGBShader.cpp)
 endif()
 
-xbmc_add_library(videoshaders)
+core_add_library(videoshaders)

@@ -11,4 +11,4 @@ add_options(C ALL_BUILDS "-Wall -Wmissing-declarations -Wmissing-prototypes -Wst
 
 add_definitions(-D__MINGW__)
 
-xbmc_add_library(hdhomerun 1)
+core_add_library(hdhomerun 1)

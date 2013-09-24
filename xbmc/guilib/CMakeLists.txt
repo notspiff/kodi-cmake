@@ -99,5 +99,5 @@ if(WIN32)
                       TextureDX.cpp)
 endif()
 
-xbmc_add_library(guilib)
+core_add_library(guilib)
 add_dependencies(guilib libcpluff)

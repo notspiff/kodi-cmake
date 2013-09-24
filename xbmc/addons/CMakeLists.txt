@@ -21,5 +21,5 @@ set(SOURCES AddonCallbacksAddon.cpp
             Skin.cpp
             Visualisation.cpp)
 
-xbmc_add_library(addons)
+core_add_library(addons)
 add_dependencies(addons libcpluff ffmpeg)

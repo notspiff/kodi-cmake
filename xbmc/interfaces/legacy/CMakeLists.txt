@@ -25,5 +25,5 @@ set(SOURCES AddonCallback.cpp
             WindowDialogMixin.cpp
             WindowXML.cpp)
 
-xbmc_add_library(legacy_interface)
+core_add_library(legacy_interface)
 add_dependencies(legacy_interface libcpluff)

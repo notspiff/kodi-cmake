@@ -3,4 +3,4 @@ set(SOURCES WebSocket.cpp
             WebSocketV13.cpp
             WebSocketV8.cpp)
   
-xbmc_add_library(network_websockets)
+core_add_library(network_websockets)

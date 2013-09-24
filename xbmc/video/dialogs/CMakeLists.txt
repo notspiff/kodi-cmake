@@ -8,4 +8,4 @@ set(SOURCES GUIDialogAudioSubtitleSettings.cpp
             GUIDialogVideoOverlay.cpp
             GUIDialogVideoSettings.cpp)
 
-xbmc_add_library(video_dialogs)
+core_add_library(video_dialogs)

@@ -23,7 +23,7 @@ if(SHAIRPLAY_FOUND OR SHAIRPORT_FOUND)
   list(APPEND SOURCES AirTunesServer.cpp)
 endif()
   
-xbmc_add_library(network)
+core_add_library(network)
 add_dependencies(network ffmpeg)
 
 add_subdirectory(httprequesthandler)

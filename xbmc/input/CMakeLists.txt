@@ -9,7 +9,7 @@ if(SDL_FOUND)
   list(APPEND SOURCES SDLJoystick.cpp)
 endif()
   
-xbmc_add_library(input)
+core_add_library(input)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   add_subdirectory(linux)
