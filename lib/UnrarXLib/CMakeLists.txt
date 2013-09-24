@@ -43,4 +43,4 @@ set(SOURCES archive.cpp
 
 add_definitions(-DSILENT)
 
-xbmc_add_library(unrarxlib)
+core_add_library(unrarxlib)

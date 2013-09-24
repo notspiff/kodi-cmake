@@ -10,5 +10,5 @@ if(LAME_FOUND)
   list(APPEND SOURCES EncoderLame.cpp)
 endif()
 
-xbmc_add_library(cdrip)
+core_add_library(cdrip)
 add_dependencies(cdrip ffmpeg)

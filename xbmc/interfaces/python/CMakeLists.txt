@@ -6,5 +6,5 @@ set(SOURCES AddonPythonInvoker.cpp
             swig.cpp
             PyContext.cpp)
             
-xbmc_add_library(python_interface)
+core_add_library(python_interface)
 add_dependencies(python_interface libcpluff)

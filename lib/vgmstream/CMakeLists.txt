@@ -185,4 +185,4 @@ add_options(ALL_LANGUAGES ALL_BUILDS "-fPIC")
 
 add_definitions(-D_LINUX -DXBMC)
 
-xbmc_add_library(vgmstream 1)
+core_add_library(vgmstream 1)
