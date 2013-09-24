@@ -11,5 +11,5 @@ set(SOURCES DVDFactorySubtitle.cpp
             DVDSubtitleTagMicroDVD.cpp
             DVDSubtitleTagSami.cpp)
 
-xbmc_add_library(dvdsubtitles)
+core_add_library(dvdsubtitles)
 add_dependencies(dvdsubtitles ffmpeg)

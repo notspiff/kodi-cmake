@@ -11,4 +11,4 @@ if(HAS_CEC)
   list(APPEND SOURCES PeripheralCecAdapter.cpp)
 endif()
 
-xbmc_add_library(peripherals_devices)
+core_add_library(peripherals_devices)

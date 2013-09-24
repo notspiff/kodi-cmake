@@ -45,4 +45,4 @@ include_directories(${ZLIB_INCLUDE_DIRS}
 
 add_options(ALL_LANGUAGES ALL_BUILDS "-fPIC")
 
-xbmc_add_library(cximage 1)
+core_add_library(cximage 1)

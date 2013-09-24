@@ -8,4 +8,4 @@ else()
   endif()
 endif()
 
-xbmc_add_library(peripheral_bus_linux)
+core_add_library(peripheral_bus_linux)

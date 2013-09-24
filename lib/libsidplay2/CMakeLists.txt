@@ -52,4 +52,4 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     resid
                     libsidplay/include)
 
-xbmc_add_library(sidplay2 1)
+core_add_library(sidplay2 1)

@@ -17,7 +17,7 @@ set(SOURCES DVDAudio.cpp
             DVDTSCorrection.cpp
             Edl.cpp)
 
-xbmc_add_library(dvdplayer)
+core_add_library(dvdplayer)
 add_dependencies(dvdplayer libcpluff ffmpeg dvdnav)
 
 add_subdirectory(DVDCodecs)

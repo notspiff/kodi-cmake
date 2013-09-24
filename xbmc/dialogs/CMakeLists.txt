@@ -27,5 +27,5 @@ set(SOURCES GUIDialogBoxBase.cpp
             GUIDialogVolumeBar.cpp
             GUIDialogYesNo.cpp)
 
-xbmc_add_library(dialogs)
+core_add_library(dialogs)
 add_dependencies(dialogs libcpluff)
