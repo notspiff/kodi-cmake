@@ -1,0 +1,3 @@
+IRSSmap.xml
+X10-Lola-IRSSmap.xml
+addons/repository.pvr-win32.xbmc.org/*
