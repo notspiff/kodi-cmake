@@ -23,7 +23,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
       message(WARNING "unknown CPU: ${CPU}")
     endif()
   endif()
-
 else()
   message(WARNING "unsupported system")
 endif()
