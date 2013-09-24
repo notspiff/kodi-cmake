@@ -5,5 +5,5 @@ set(SOURCES HTTPImageHandler.cpp
             HTTPWebinterfaceHandler.cpp
             IHTTPRequestHandler.cpp)
   
-xbmc_add_library(network_httprequesthandlers)
+core_add_library(network_httprequesthandlers)
 add_dependencies(network_httprequesthandlers libcpluff)

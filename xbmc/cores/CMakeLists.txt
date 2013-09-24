@@ -1,3 +1,3 @@
 set(SOURCES DummyVideoPlayer.cpp)
 
-xbmc_add_library(cores)
+core_add_library(cores)

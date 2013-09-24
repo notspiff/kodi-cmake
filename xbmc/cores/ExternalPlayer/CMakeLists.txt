@@ -1,3 +1,3 @@
 set(SOURCES ExternalPlayer.cpp)
 
-xbmc_add_library(externalplayer)
+core_add_library(externalplayer)

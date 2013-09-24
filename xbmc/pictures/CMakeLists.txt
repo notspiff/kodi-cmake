@@ -8,5 +8,5 @@ set(SOURCES GUIDialogPictureInfo.cpp
             PictureThumbLoader.cpp
             SlideShowPicture.cpp)
 
-xbmc_add_library(pictures)
+core_add_library(pictures)
 add_dependencies(pictures ffmpeg)

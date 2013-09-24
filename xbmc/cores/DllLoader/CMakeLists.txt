@@ -15,4 +15,4 @@ add_subdirectory(exports)
 
 add_definitions(-DAPI_DEBUG)
 
-xbmc_add_library(dllloader)
+core_add_library(dllloader)

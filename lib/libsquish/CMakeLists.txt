@@ -10,4 +10,4 @@ set(SOURCES alpha.cpp
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
-xbmc_add_library(squish)
+core_add_library(squish)

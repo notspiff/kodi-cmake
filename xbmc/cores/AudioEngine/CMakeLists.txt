@@ -60,5 +60,5 @@ endif()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
-xbmc_add_library(audioengine)
+core_add_library(audioengine)
 add_dependencies(audioengine ffmpeg)
