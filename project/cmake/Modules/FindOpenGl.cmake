@@ -13,7 +13,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(OPENGL DEFAULT_MSG OPENGL_INCLUDE_DIRS OPENGL_LIBRARIES)
+find_package_handle_standard_args(OpenGl DEFAULT_MSG OPENGL_INCLUDE_DIRS OPENGL_LIBRARIES)
 
 list(APPEND OPENGL_DEFINITIONS -DHAVE_GL=1)
 

@@ -14,6 +14,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(VORBIS DEFAULT_MSG VORBIS_INCLUDE_DIRS VORBIS_LIBRARIES)
+find_package_handle_standard_args(Vorbis DEFAULT_MSG VORBIS_INCLUDE_DIRS VORBIS_LIBRARIES)
 
 mark_as_advanced(VORBIS_INCLUDE_DIRS VORBIS_LIBRARIES)

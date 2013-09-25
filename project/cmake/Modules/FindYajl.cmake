@@ -13,7 +13,7 @@ else()
 endif()
  
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(YAJL DEFAULT_MSG YAJL_INCLUDE_DIRS YAJL_LIBRARIES)
+find_package_handle_standard_args(Yajl DEFAULT_MSG YAJL_INCLUDE_DIRS YAJL_LIBRARIES)
 
 #if(YAJL_FOUND)
 #  find_path(YAJL_VERSION_INCLUDE yajl/yajl_version.h)
