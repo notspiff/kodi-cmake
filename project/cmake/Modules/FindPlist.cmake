@@ -1,7 +1,7 @@
 # - Try to find PLIST
 # Once done this will define
 #
-# PLIST_FOUND - system has libplist 
+# PLIST_FOUND - system has libplist
 # PLIST_INCLUDE_DIRS - the libplist include directory
 # PLIST_LIBRARIES - The libplist libraries
 
