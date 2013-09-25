@@ -13,7 +13,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SHAIRPORT DEFAULT_MSG SHAIRPORT_INCLUDE_DIRS SHAIRPORT_LIBRARIES)
+find_package_handle_standard_args(Shairport DEFAULT_MSG SHAIRPORT_INCLUDE_DIRS SHAIRPORT_LIBRARIES)
 
 list(APPEND SHAIRPORT_DEFINITIONS -DHAVE_LIBSHAIRPORT=1)
 
