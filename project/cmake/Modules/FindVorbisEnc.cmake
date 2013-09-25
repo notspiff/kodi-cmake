@@ -14,6 +14,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(VORBISENC DEFAULT_MSG VORBISENC_INCLUDE_DIRS VORBISENC_LIBRARIES)
+find_package_handle_standard_args(VorbisEnc DEFAULT_MSG VORBISENC_INCLUDE_DIRS VORBISENC_LIBRARIES)
 
 mark_as_advanced(VORBISENC_INCLUDE_DIRS VORBISENC_LIBRARIES)
