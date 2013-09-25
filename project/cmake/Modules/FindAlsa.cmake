@@ -1,7 +1,7 @@
 # - Try to find ALSA
 # Once done this will define
 #
-# ALSA_FOUND - system has libALSA 
+# ALSA_FOUND - system has libALSA
 # ALSA_INCLUDE_DIRS - the libALSA include directory
 # ALSA_LIBRARIES - The libALSA libraries
 
