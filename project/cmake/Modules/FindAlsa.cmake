@@ -13,7 +13,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(ALSA DEFAULT_MSG ALSA_INCLUDE_DIRS ALSA_LIBRARIES)
+find_package_handle_standard_args(Alsa DEFAULT_MSG ALSA_INCLUDE_DIRS ALSA_LIBRARIES)
 
 set(ALSA_INCLUDE_DIRS "") # Dont want these added as 'timer.h' is a dangerous file
 mark_as_advanced(ALSA_INCLUDE_DIRS ALSA_LIBRARIES)

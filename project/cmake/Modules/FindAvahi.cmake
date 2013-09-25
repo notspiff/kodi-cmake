@@ -20,7 +20,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(AVAHI DEFAULT_MSG AVAHI_INCLUDE_DIRS AVAHI_LIBRARIES)
+find_package_handle_standard_args(Avahi DEFAULT_MSG AVAHI_INCLUDE_DIRS AVAHI_LIBRARIES)
 
 mark_as_advanced(AVAHI_INCLUDE_DIRS AVAHI_LIBRARIES)
 list(APPEND AVAHI_DEFINITIONS -DHAVE_LIBAVAHI_COMMON=1 -DHAVE_LIBAVAHI_CLIENT=1)

@@ -12,6 +12,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(FREETYPE DEFAULT_MSG FREETYPE_INCLUDE_DIRS FREETYPE_LIBRARIES)
+find_package_handle_standard_args(FreeType DEFAULT_MSG FREETYPE_INCLUDE_DIRS FREETYPE_LIBRARIES)
 
 mark_as_advanced(FREETYPE_INCLUDE_DIRS FREETYPE_LIBRARIES)
