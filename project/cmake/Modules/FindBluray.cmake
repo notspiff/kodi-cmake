@@ -14,7 +14,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(BLURAY DEFAULT_MSG BLURAY_INCLUDE_DIRS BLURAY_LIBRARIES)
+find_package_handle_standard_args(Bluray DEFAULT_MSG BLURAY_INCLUDE_DIRS BLURAY_LIBRARIES)
 
 list(APPEND BLURAY_DEFINITIONS -DHAVE_LIBBLURAY=1)
 
