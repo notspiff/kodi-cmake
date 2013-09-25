@@ -27,7 +27,7 @@ if(NOT BOOTSTRAP_DIR)
     message(STATUS "Warning: No doxygen installed. The Api will not have any docstrings.")
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
                        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/generated/doxygenxml
-                       COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/.doxygen-gen)
+                       COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen)
   endif()
 endif()
 
