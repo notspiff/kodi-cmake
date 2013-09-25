@@ -14,6 +14,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(MPEG2 DEFAULT_MSG MPEG2_INCLUDE_DIRS MPEG2_LIBRARIES)
+find_package_handle_standard_args(Mpeg2 DEFAULT_MSG MPEG2_INCLUDE_DIRS MPEG2_LIBRARIES)
 
 mark_as_advanced(MPEG2_INCLUDE_DIRS MPEG2_LIBRARIES)

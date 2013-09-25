@@ -13,6 +13,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(CURL DEFAULT_MSG CURL_INCLUDE_DIRS CURL_LIBRARIES)
+find_package_handle_standard_args(Curl DEFAULT_MSG CURL_INCLUDE_DIRS CURL_LIBRARIES)
 
 mark_as_advanced(CURL_INCLUDE_DIRS CURL_LIBRARIES)
