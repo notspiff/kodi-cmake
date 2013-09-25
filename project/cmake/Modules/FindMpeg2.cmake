@@ -1,7 +1,7 @@
 # - Try to find MPEG2
 # Once done this will define
 #
-# MPEG2_FOUND - system has libMPEG2 
+# MPEG2_FOUND - system has libMPEG2
 # MPEG2_INCLUDE_DIRS - the libMPEG2 include directory
 # MPEG2_LIBRARIES - The libMPEG2 libraries
 
