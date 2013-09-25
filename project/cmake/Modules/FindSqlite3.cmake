@@ -14,6 +14,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SQLITE3 DEFAULT_MSG SQLITE3_INCLUDE_DIRS SQLITE3_LIBRARIES)
+find_package_handle_standard_args(Sqlite3 DEFAULT_MSG SQLITE3_INCLUDE_DIRS SQLITE3_LIBRARIES)
 
 mark_as_advanced(SQLITE3_INCLUDE_DIRS SQLITE3_LIBRARIES)

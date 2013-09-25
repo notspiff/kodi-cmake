@@ -13,7 +13,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(XRANDR DEFAULT_MSG XRANDR_INCLUDE_DIRS XRANDR_LIBRARIES)
+find_package_handle_standard_args(XRandR DEFAULT_MSG XRANDR_INCLUDE_DIRS XRANDR_LIBRARIES)
 
 list(APPEND XRANDR_DEFINITIONS -DHAVE_LIBXRANDR=1)
 

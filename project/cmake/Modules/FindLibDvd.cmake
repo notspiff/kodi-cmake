@@ -49,7 +49,7 @@ ExternalProject_ADD(dvdnav SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/libdvd/libdvdnav/
 add_dependencies(dvdnav dvdread)
 xbmc_link_library(${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/libdvd/lib/libdvdnav.a
                   system/players/dvdplayer/libdvdnav dvdnav)
-set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
+#set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
 
 set(dvdnav_internal_headers libdvdnav/src/dvdnav_internal.h
                             libdvdnav/src/remap.h
