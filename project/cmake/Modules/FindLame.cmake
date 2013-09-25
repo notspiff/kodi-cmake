@@ -1,7 +1,7 @@
 # - Try to find LAME
 # Once done this will define
 #
-# LAME_FOUND - system has liblame 
+# LAME_FOUND - system has liblame
 # LAME_INCLUDE_DIRS - the liblame include directory
 # LAME_LIBRARIES - The liblame libraries
 
