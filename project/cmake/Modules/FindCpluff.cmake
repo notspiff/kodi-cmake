@@ -1,3 +1,4 @@
+string(REPLACE ";" " " defines "${SYSTEM_DEFINES}")
 ExternalProject_ADD(libcpluff SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/cpluff
                     PREFIX ${XBMC_BUILD_DIR}/cpluff
                     UPDATE_COMMAND ${UPDATE_COMMAND}
@@ -6,7 +7,8 @@ ExternalProject_ADD(libcpluff SOURCE_DIR ${XBMC_SOURCE_DIR}/lib/cpluff
                                       --enable-static
                                       --disable-shared
                                       --with-pic
-                                      --prefix=<INSTALL_DIR>)
+                                      --prefix=<INSTALL_DIR>
+                                      CFLAGS=${defines})
 
 set(CPLUFF_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/cpluff/include)
 set(CPLUFF_FOUND 1)
