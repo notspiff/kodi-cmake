@@ -9,7 +9,7 @@ find_path(AFPCLIENT_INCLUDE_DIRS afpfs-ng/libafpclient.h)
 find_library(AFPCLIENT_LIBRARIES afpclient)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(AFPCLIENT DEFAULT_MSG AFPCLIENT_INCLUDE_DIRS AFPCLIENT_LIBRARIES)
+find_package_handle_standard_args(AfpClient DEFAULT_MSG AFPCLIENT_INCLUDE_DIRS AFPCLIENT_LIBRARIES)
 
 list(APPEND AFPCLIENT_DEFINITIONS -DHAVE_LIBAFPCLIENT=1)
 

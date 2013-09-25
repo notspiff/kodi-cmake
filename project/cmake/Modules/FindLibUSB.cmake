@@ -14,7 +14,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(USB DEFAULT_MSG USB_INCLUDE_DIRS USB_LIBRARIES)
+find_package_handle_standard_args(LibUSB DEFAULT_MSG USB_INCLUDE_DIRS USB_LIBRARIES)
 
 list(APPEND USB_DEFINITIONS -DUSE_LIBUSB=1)
 mark_as_advanced(USB_INCLUDE_DIRS USB_LIBRARIES USB_DEFINITIONS)

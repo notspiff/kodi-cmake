@@ -16,6 +16,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(SAMPLERATE DEFAULT_MSG SAMPLERATE_INCLUDE_DIRS SAMPLERATE_LIBRARIES)
+find_package_handle_standard_args(SampleRate DEFAULT_MSG SAMPLERATE_INCLUDE_DIRS SAMPLERATE_LIBRARIES)
 
 mark_as_advanced(SAMPLERATE_INCLUDE_DIRS SAMPLERATE_LIBRARIES)
