@@ -13,6 +13,6 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(FRIBIDI DEFAULT_MSG FRIBIDI_INCLUDE_DIRS FRIBIDI_LIBRARIES)
+find_package_handle_standard_args(Fribidi DEFAULT_MSG FRIBIDI_INCLUDE_DIRS FRIBIDI_LIBRARIES)
 
 mark_as_advanced(FRIBIDI_INCLUDE_DIRS FRIBIDI_LIBRARIES)
