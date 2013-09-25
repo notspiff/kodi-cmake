@@ -21,6 +21,6 @@ endif()
 # handle the QUIETLY and REQUIRED arguments and set TINYXML_FOUND to TRUE if
 # all listed variables are TRUE
 include( "FindPackageHandleStandardArgs" )
-find_package_handle_standard_args(TINYXML DEFAULT_MSG TINYXML_INCLUDE_DIRS TINYXML_LIBRARIES )
+find_package_handle_standard_args(TinyXML DEFAULT_MSG TINYXML_INCLUDE_DIRS TINYXML_LIBRARIES )
 
 mark_as_advanced(TINYXML_INCLUDE_DIRS TINYXML_LIBRARIES)
