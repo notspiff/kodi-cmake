@@ -1,7 +1,7 @@
 # - Try to find libusb
 # Once done this will define
 #
-# USB_FOUND - system has libusb 
+# USB_FOUND - system has libusb
 # USB_INCLUDE_DIRS - the libusb include directory
 # USB_LIBRARIES - The libusb libraries
 
