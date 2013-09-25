@@ -13,7 +13,7 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(PLIST DEFAULT_MSG PLIST_INCLUDE_DIRS PLIST_LIBRARIES)
+find_package_handle_standard_args(Plist DEFAULT_MSG PLIST_INCLUDE_DIRS PLIST_LIBRARIES)
 
 list(APPEND PLIST_DEFINITIONS -DHAVE_LIBPLIST=1)
 
