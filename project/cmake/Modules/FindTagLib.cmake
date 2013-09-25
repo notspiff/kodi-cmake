@@ -7,12 +7,14 @@
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules (TAGLIB taglib>=1.8.0)
-else()
+endif()
+
+if(NOT TAGLIB_FOUND)
   find_path(TAGLIB_INCLUDE_DIRS taglib/tag.h)
   find_library(TAGLIB_LIBRARIES tag)
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(TAGLIB DEFAULT_MSG TAGLIB_INCLUDE_DIRS TAGLIB_LIBRARIES)
+find_package_handle_standard_args(TagLib REQUIRED_VARS TAGLIB_INCLUDE_DIRS TAGLIB_LIBRARIES)
 
 mark_as_advanced(TAGLIB_INCLUDE_DIRS TAGLIB_LIBRARIES)

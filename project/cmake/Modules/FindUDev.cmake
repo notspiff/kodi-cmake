@@ -8,13 +8,15 @@
 if(PKG_CONFIG_FOUND)
   pkg_check_modules (UDEV libudev)
   list(APPEND UDEV_INCLUDE_DIRS ${UDEV_INCLUDEDIR})
-else()
+endif()
+
+if(NOT UDEV_FOUND)
   find_path(UDEV_INCLUDE_DIRS libudev.h)
   find_library(UDEV_LIBRARIES udev)
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(UDEV DEFAULT_MSG UDEV_INCLUDE_DIRS UDEV_LIBRARIES)
+find_package_handle_standard_args(UDev DEFAULT_MSG UDEV_INCLUDE_DIRS UDEV_LIBRARIES)
 
 mark_as_advanced(UDEV_INCLUDE_DIRS UDEV_LIBRARIES)
 list(APPEND UDEV_DEFINITIONS -DUSE_LIBUDEV=1)
