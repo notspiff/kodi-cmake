@@ -6,7 +6,7 @@ configure_file(${XBMC_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
                ${XBMC_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
 
 install(TARGETS xbmc-xrandr DESTINATION lib/xbmc)
-install(FILES ${bindings} DESTINATION include/xbmc)
+install(FILES ${addon_bindings} DESTINATION include/xbmc)
 install(FILES ${cmake_files} ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/xbmc-config.cmake
         DESTINATION lib/xbmc)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${XBMC_BUILD_DIR}/scripts/xbmc
