@@ -306,11 +306,11 @@ target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
 file(STRINGS ${PROJECT_SOURCE_DIR}/treedata/addon-bindings.txt addon_bindings)
 
-set(cmake-files ${CORE_SOURCE_DIR}/Scripts/AddOptions.cmake
-                ${CORE_SOURCE_DIR}/Scripts/xbmc-addon-helpers.cmake
-                ${CORE_BUILD_DIR}/xbmc-config.cmake)
-configure_file(${CORE_SOURCE_DIR}/project/cmake/Templates/xbmc-config.cmake.in
-               ${CORE_BUILD_DIR}/xbmc-config.cmake @ONLY)
+set(cmake-files ${XBMC_SOURCE_DIR}/Scripts/AddOptions.cmake
+                ${XBMC_SOURCE_DIR}/Scripts/xbmc-addon-helpers.cmake
+                ${XBMC_SOURCE_DIR}/xbmc-config.cmake)
+configure_file(${XBMC_SOURCE_DIR}/project/cmake/Templates/xbmc-config.cmake.in
+               ${XBMC_BUILD_DIR}/xbmc-config.cmake @ONLY)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   include(Scripts/XbmcInstallLinux.cmake)
