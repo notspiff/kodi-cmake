@@ -149,6 +149,7 @@ include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
 add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES})
 
 set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
+mark_as_advanced(xbmc-bin_DEPENDS)
 
 file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/addon-bindings.txt bindings)
 foreach(binding ${bindings})
