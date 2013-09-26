@@ -97,6 +97,7 @@ macro(export_dep)
   set(DEPLIBS ${DEPLIBS} PARENT_SCOPE)
   set(DEP_DEFINES ${DEP_DEFINES} PARENT_SCOPE)
   set(${depup}_FOUND ${${depup}_FOUND} PARENT_SCOPE)
+  mark_as_advanced(${depup}_LIBRARIES)
 endmacro()
 
 function(core_require_dep dep)
