@@ -46,3 +46,5 @@ check_type(string std::u32string HAVE_STD__U32_STRING)
 check_type(string char16_t HAVE_CHAR16_T)
 check_type(string char32_t HAVE_CHAR32_T)
 check_type(stdint.h uint_least16_t HAVE_STDINT_H)
+
+string(TOLOWER ${CMAKE_SYSTEM_NAME} CORE_SYSTEM_NAME)
