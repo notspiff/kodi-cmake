@@ -57,36 +57,6 @@ function(copy_file_to_buildtree file relative)
   set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
-function(pack_xbt input output relative)
-  file(GLOB_RECURSE MEDIA_FILES ${input}/*)
-  get_filename_component(dir ${output} PATH)
-  add_custom_command(OUTPUT  ${output}
-                     COMMAND ${CMAKE_COMMAND} -E make_directory ${dir}
-                     COMMAND ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/texturepacker.dir/TexturePacker
-                     ARGS    -input ${input}
-                             -output ${output}
-                             -dupecheck
-                     DEPENDS ${MEDIA_FILES} TexturePacker)
-  list(APPEND XBT_FILES ${output})
-  set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
-endfunction()
-
-function(copy_skin_to_buildtree skin relative)
-  file(GLOB_RECURSE FILES ${skin}/*)
-  file(GLOB_RECURSE MEDIA_FILES ${skin}/media/*)
-  list(REMOVE_ITEM FILES ${MEDIA_FILES})
-  foreach(file ${FILES})
-    copy_file_to_buildtree(${file} ${relative})
-  endforeach()
-  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${dest}/media)
-  string(REPLACE "${relative}/" "" dest ${skin})
-  pack_xbt(${skin}/media
-           ${CMAKE_BINARY_DIR}/${dest}/media/Textures.xbt
-           ${CMAKE_BINARY_DIR})
-                
-  set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
-endfunction()
-
 function(find_soname lib)
   if(ARGV1)
     set(liblow ${ARGV1})
@@ -181,7 +151,7 @@ function(core_optional_dyload_dep dep)
   endif()
 endfunction()
 
-function(xbmc_add_subdir_from_files dirfiles)
+function(core_add_subdir_from_files dirfiles)
   if(VERBOSE)
     message(STATUS "Adding subdirs from: ${dirfiles}")
   endif()
@@ -193,9 +163,9 @@ function(xbmc_add_subdir_from_files dirfiles)
     STRING_SPLIT(subdir " " ${subdir})
     list(GET subdir  0 subdir_src)
     list(GET subdir -1 subdir_dest)
-  if(VERBOSE)
-    message(STATUS "Adding subdir ${XBMC_SOURCE_DIR}/${subdir_src} -> ${XBMC_BUILD_DIR}/${subdir_dest}")
-  endif()
-    add_subdirectory(${XBMC_SOURCE_DIR}/${subdir_src} ${XBMC_BUILD_DIR}/${subdir_dest})
+    if(VERBOSE)
+      message(STATUS "Adding subdir ${CORE_SOURCE_DIR}${subdir_src} -> ${CORE_BUILD_DIR}/${subdir_dest}")
+    endif()
+    add_subdirectory(${CORE_SOURCE_DIR}/${subdir_src} ${CORE_BUILD_DIR}/${subdir_dest})
   endforeach()
 endfunction()
