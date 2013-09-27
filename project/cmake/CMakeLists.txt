@@ -250,7 +250,7 @@ target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/AddOptions.cmake
                 ${CORE_SOURCE_DIR}/project/cmake/scripts/xbmc-addon-helpers.cmake)
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
-               ${CORE_BUILD_DIR}/xbmc-config.cmake @ONLY)
+               ${CORE_BUILD_DIR}/modules/xbmc-config.cmake @ONLY)
 
 # These for built extras
 if(build_dirs)
@@ -267,22 +267,25 @@ foreach(subdir ${build_dirs})
                         GIT_TAG ${hash}
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                        -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_CXX_FLAGS=-I${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                         INSTALL_COMMAND "")
-    set(dest_path ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src/${id})
+    set(dest_path ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src)
   else()
     externalproject_add(${id}
                         SOURCE_DIR ${BOOTSTRAP_DIR}/addons/${id}/src/${id}
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                        -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_CXX_FLAGS=-I${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                         INSTALL_COMMAND "")
    set(dest_path ${BOOTSTRAP_DIR}/addons/${id}/src/${id})
   endif()
+  add_dependencies(${id} xbmc-platform)
 endforeach()
 
 list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
