@@ -6,7 +6,7 @@ configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
                ${CORE_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
 
 install(TARGETS xbmc-xrandr DESTINATION lib/xbmc)
-install(FILES ${bindings} DESTINATION include/xbmc)
+install(FILES ${addon_bindings} DESTINATION include/xbmc)
 install(FILES ${cmake_files} ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/xbmc-config.cmake
         DESTINATION lib/xbmc)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc
@@ -53,6 +53,11 @@ install(CODE "file(STRINGS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs 
                   file(INSTALL \${file} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/xbmc/\${dir})
                 endforeach()
               endforeach()")
+foreach(subdir ${build_dirs})
+  string(REPLACE " " ";" subdir ${subdir})
+  list(GET subdir 0 id)
+  install(CODE "execute_process(COMMAND make -C ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src/${id}-build install)")
+endforeach()
 
 install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
         RENAME xbmc.png
