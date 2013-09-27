@@ -97,3 +97,6 @@ IF(ADDONS_PREFER_STATIC_LIBS)
   SET(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
 ENDIF(ADDONS_PREFER_STATIC_LIBS)
 
+# Needed to quell warning about passed option being unused
+# when reconfigured
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH})
