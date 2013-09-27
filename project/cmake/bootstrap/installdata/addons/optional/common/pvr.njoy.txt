@@ -1,0 +1,1 @@
+PVRADDONS OFF pvr.njoy git://github.com/cptspiff/pvr.njoy fb166bda
