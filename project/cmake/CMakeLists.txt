@@ -13,6 +13,8 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 enable_language(CXX)
 enable_language(C)
 
+# general
+option(VERBOSE            "Enable verbose output?" OFF)
 option(ENABLE_DVDCSS      "Enable libdvdcss support?" ON)
 option(ENABLE_PULSEAUDIO  "Enable PulseAudio support?" OFF)
 option(ENABLE_VDPAU       "Enable VDPAU support?" ON)
@@ -159,12 +161,15 @@ endif()
 add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap.dir)
 
 # Subdirs
-file(GLOB SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/common/*.txt)
-file(GLOB sub_plat ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt)
-list(APPEND SUBDIRS ${sub_plat})
+#file(GLOB SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/common/*.txt)
+#file(GLOB sub_plat ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt)
+#file(GLOB opt_sub_plat ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
+#list(APPEND opt_subs ${opt_sub_plat})
+list(APPEND SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/common/*.txt
+                    ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt
+                    ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
+
 file(GLOB opt_subs ${PROJECT_SOURCE_DIR}/treedata/optional/common/*.txt)
-file(GLOB opt_sub_plat ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
-list(APPEND opt_subs ${opt_sub_plat})
 foreach(sub ${opt_subs})
   file(STRINGS ${sub} sublines)
   string(REPLACE " " ";" sublines "${sublines}")
@@ -175,7 +180,7 @@ foreach(sub ${opt_subs})
     endif()
   endforeach()
 endforeach()
-core_add_subdir_from_files("${SUBDIRS}" sort)
+core_add_subdirs_from_filelist("${SUBDIRS}" sort)
 
 # main binary
 add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
