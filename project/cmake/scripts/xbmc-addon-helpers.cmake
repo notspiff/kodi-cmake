@@ -91,3 +91,6 @@ IF(HAVE_LTO)
   ENDIF(USE_LTO)
 ENDIF(HAVE_LTO) 
 
+# Needed to quell warning about passed option being unused
+# when reconfigured
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH})
