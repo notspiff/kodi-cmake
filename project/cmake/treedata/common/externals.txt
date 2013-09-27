@@ -1,0 +1,7 @@
+lib/cmyth                    cmyth.dir
+lib/cximage-6.0              cximage.dir
+lib/libexif                  exif.dir
+lib/libhts                   hts.dir
+lib/libsquish                squish.dir
+lib/libUPnP                  upnp.dir
+lib/libXDAAP                 xdaap.dir
