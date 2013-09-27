@@ -1,0 +1,1 @@
+PVRADDONS OFF pvr.dvbviewer git://github.com/cptspiff/pvr.dvbviewer da233dd4
