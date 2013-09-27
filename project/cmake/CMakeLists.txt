@@ -167,7 +167,7 @@ endif()
 if(WIN32)
   list(APPEND SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/subdirs-windows.txt)
 endif()
-core_add_subdir_from_files("${SUBDIRS}")
+core_add_subdir_from_files("${SUBDIRS}" sort)
 
 if(ENABLE_EXTERNAL_FFMPEG OR ENABLE_EXTERNAL_LIBAV)
   add_subdirectory(${CORE_SOURCE_DIR}/lib/xbmc-dll-symbols ${CORE_BUILD_DIR}/dll_symbols.dir)
