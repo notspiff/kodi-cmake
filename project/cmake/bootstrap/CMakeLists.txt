@@ -6,7 +6,7 @@ include(ExternalProject)
 
 find_package(Git REQUIRED)
 
-function(add_git id repo rev prefix)
+function(add_git_copy id repo rev prefix)
   externalproject_add(${id}
                       GIT_REPOSITORY ${repo}
                       PREFIX build/${id}
@@ -16,8 +16,8 @@ function(add_git id repo rev prefix)
                       BUILD_COMMAND ""
                       INSTALL_COMMAND "")
   set(exclude "PATTERN .git EXCLUDE")
-  if("${id}" MATCHES "^skin" AND BOOTSTRAP_IN_TREE)
-    list(APPEND exclude "PATTERN media EXCLUDE")
+  if("${id}" MATCHES "^skin." AND BOOTSTRAP_IN_TREE)
+    set(exclude "${exclude} PATTERN media EXCLUDE")
   endif()
   file(WRITE ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
        "FILE(COPY build/${id}/src/${id}
@@ -27,15 +27,28 @@ function(add_git id repo rev prefix)
                      DEPENDS ${id})
 endfunction()
 
-macro(add_addon_separate entry)
+function(add_git_cmake id repo rev prefix)
+  externalproject_add(${id}
+                      GIT_REPOSITORY ${repo}
+                      PREFIX ${OUTPUT_DIR}/${prefix}/${id}
+                      GIT_TAG ${hash}
+                      UPDATE_COMMAND ""
+                      CONFIGURE_COMMAND ""
+                      BUILD_COMMAND ""
+                      INSTALL_COMMAND "")
+endfunction()
+
+function(add_addon_separate entry)
   string(REPLACE " " ";" entry "${entry}")
   list(GET entry 0 id)
   list(GET entry 1 repo)
   list(GET entry 2 hash)
   if(BOOTSTRAP_DIR)
-    if("${id}" MATCHES "^skin")
+    if("${id}" MATCHES "^skin.")
       list(APPEND SKINS "${BOOTSTRAP_DIR}/addons/${id}\;${BOOTSTRAP_DIR}")
-      set(SKINS ${SKINS} PARENT_SCOPE)
+    elseif("${id}" MATCHES "^visualization" OR
+           "${id}" MATCHES "^pvr.")
+      list(APPEND build_dirs "${id} ${repo} ${hash}")
     else()
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${id}
                          COMMAND cmake -E copy_directory ${BOOTSTRAP_DIR}}/addons/${id} ${OUTPUT_DIR}/addons/${id})
@@ -43,17 +56,31 @@ macro(add_addon_separate entry)
       list(APPEND install_dirs ${OUTPUT_DIR}/addons/${id})
     endif()
   else()
-    add_git(${id} ${repo} ${hash} addons)
-    list(APPEND SOURCES ${OUTPUT_DIR}/addons/${id})
-    list(APPEND install_dirs ${OUTPUT_DIR}/addons/${id})
-    if("${id}" MATCHES "^skin")
+    if("${id}" MATCHES "^visualization." OR
+       "${id}" MATCHES "^pvr.")
+      if(BOOTSTRAP_IN_TREE)
+        list(APPEND build_dirs "${id} ${repo} ${hash}")
+      else()
+        add_git_cmake(${id} ${repo} ${hash} addons)
+      endif()
+    else()
+      add_git_copy(${id} ${repo} ${hash} addons)
+      list(APPEND install_dirs ${OUTPUT_DIR}/addons/${id})
+      set(install_dirs ${install_dirs} PARENT_SCOPE)
+      list(APPEND SOURCES ${OUTPUT_DIR}/addons/${id})
+    endif()
+    if("${id}" MATCHES "^skin.")
       if(BOOTSTRAP_IN_TREE)
         list(APPEND EXTRA_XBT addons/${id})
-        set(EXTRA_XBT ${EXTRA_XBT} PARENT_SCOPE)
       endif()
     endif()
   endif()
-endmacro()
+  set(EXTRA_XBT ${EXTRA_XBT} PARENT_SCOPE)
+  set(build_dirs ${build_dirs} PARENT_SCOPE)
+  set(install_dirs ${install_dirs} PARENT_SCOPE)
+  set(SOURCES ${SOURCES} PARENT_SCOPE)
+  set(SKINS ${SKINS} PARENT_SCOPE)
+endfunction()
 
 function(add_addon_multi lines)
   list(GET lines 0 base)
@@ -178,3 +205,10 @@ foreach(dir ${autoconf_dirs})
 endforeach()
 
 add_custom_target(bootstrap ALL SOURCES ${SOURCES})
+
+if(BOOTSTRAP_IN_TREE OR BOOTSTRAP_DIR)
+  set(build_dirs ${build_dirs} PARENT_SCOPE)
+  set(install_dirs ${install_dirs} PARENT_SCOPE)
+  set(EXTRA_XBT ${EXTRA_XBT} PARENT_SCOPE)
+  set(SKINS ${SKINS} PARENT_SCOPE)
+endif()

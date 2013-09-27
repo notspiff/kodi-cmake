@@ -6,6 +6,7 @@ include(ExternalProject)
 include(scripts/AddOptions.cmake)
 include(scripts/Macros.cmake)
 include(scripts/ManageString.cmake)
+include(scripts/ProjectMacros.cmake)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 
@@ -148,6 +149,11 @@ add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES})
 
 set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
 
+file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/addon-bindings.txt bindings)
+foreach(binding ${bindings})
+  list(APPEND addon_bindings ${CORE_SOURCE_DIR}/${binding})
+endforeach()
+
 if(NOT BOOTSTRAP_DIR)
   set(BOOTSTRAP_IN_TREE 1)
 endif()
@@ -161,18 +167,13 @@ endif()
 if(WIN32)
   list(APPEND SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/subdirs-windows.txt)
 endif()
-xbmc_add_subdir_from_files("${SUBDIRS}")
+core_add_subdir_from_files("${SUBDIRS}")
 
 if(ENABLE_EXTERNAL_FFMPEG OR ENABLE_EXTERNAL_LIBAV)
   add_subdirectory(${CORE_SOURCE_DIR}/lib/xbmc-dll-symbols ${CORE_BUILD_DIR}/dll_symbols.dir)
 endif()
 if(ENABLE_EXTERNAL_LIBAV)
   add_subdirectory(${CORE_SOURCE_DIR}/lib/xbmc-libav-hacks ${CORE_BUILD_DIR}/libav-hacks.dir)
-endif()
-
-# non-free libraries
-if(ENABLE_NONFREE)
-  add_subdirectory(${CORE_SOURCE_DIR}/lib/UnrarXLib              ${CORE_BUILD_DIR}/unrarxlib.dir)
 endif()
 
 # main binary
@@ -246,12 +247,43 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
-file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/addon-bindings.txt bindings)
-
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/AddOptions.cmake
-                ${CORE_SOURCE_DIR}/project/cmake/scripts/xbmc-addon-helpers.cmake
-                ${CORE_BUILD_DIR}/xbmc-config.cmake)
+                ${CORE_SOURCE_DIR}/project/cmake/scripts/xbmc-addon-helpers.cmake)
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
                ${CORE_BUILD_DIR}/xbmc-config.cmake @ONLY)
 
+# These for built extras
+if(build_dirs)
+  prepare_addon_env()
+endif()
+foreach(subdir ${build_dirs})
+  string(REPLACE " " ";" subdir ${subdir})
+  list(GET subdir 0 id)
+  list(GET subdir 1 url)
+  list(GET subdir 2 hash)
+  if(BOOTSTRAP_IN_TREE)
+    externalproject_add(${id}
+                        GIT_REPOSITORY ${url}
+                        GIT_TAG ${hash}
+                        PREFIX ${CORE_BUILD_DIR}/${id}
+                        CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                        -DCMAKE_CXX_FLAGS=-I${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include
+                        -DBUILD_SHARED_LIBS=1
+                        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                        INSTALL_COMMAND "")
+    set(dest_path ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src/${id})
+  else()
+    externalproject_add(${id}
+                        SOURCE_DIR ${BOOTSTRAP_DIR}/addons/${id}/src/${id}
+                        PREFIX ${CORE_BUILD_DIR}/${id}
+                        CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                        -DCMAKE_CXX_FLAGS=-I${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include
+                        -DBUILD_SHARED_LIBS=1
+                        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                        INSTALL_COMMAND "")
+   set(dest_path ${BOOTSTRAP_DIR}/addons/${id}/src/${id})
+  endif()
+endforeach()
+
+list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
 include(scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
