@@ -1,0 +1,6 @@
+lib/nosefart                 nosefart.dir
+lib/libsidplay2              sidplay2.dir
+lib/stsound/StSoundLibrary   stsoundlibrary.dir
+lib/timidity                 timidity.dir
+lib/vgmstream                vgmstream.dir
+lib/xbadpcm                  xbadpcm.dir
