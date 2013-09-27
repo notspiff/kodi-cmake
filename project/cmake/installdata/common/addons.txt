@@ -17,15 +17,3 @@ addons/screensaver.xbmc.builtin.dim/*
 addons/screensaver.xbmc.builtin.black/*
 addons/script.module.pil/*
 addons/script.module.pysqlite/*
-language/*
-media/*
-sounds/*
-system/keymaps/*
-system/library/*
-system/players/dvdplayer/etc/*
-system/shaders/*
-system/settings/*
-userdata/*
-system/colors.xml
-system/peripherals.xml
-system/playercorefactory.xml
