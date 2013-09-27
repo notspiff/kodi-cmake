@@ -36,24 +36,3 @@ xbmc/view                    view.dir
 xbmc/windowing               windowing.dir
 xbmc/windows                 windows.dir
 tools/TexturePacker          texturepacker.dir
-lib/cmyth                    cmyth.dir
-lib/cximage-6.0              cximage.dir
-lib/libexif                  exif.dir
-lib/libhdhomerun             hdhomerun.dir
-lib/libhts                   hts.dir
-lib/libRTV                   rtv.dir
-lib/libsidplay2              sidplay2.dir
-lib/libsquish                squish.dir
-lib/libUPnP                  upnp.dir
-lib/libXDAAP                 xdaap.dir
-lib/nosefart                 nosefart.dir
-lib/SlingboxLib              slingbox.dir
-lib/stsound/StSoundLibrary   stsoundlibrary.dir
-lib/timidity                 timidity.dir
-lib/vgmstream                vgmstream.dir
-lib/xbadpcm                  xbadpcm.dir
-lib/addons/library.xbmc.addon XBMC_addon.dir
-lib/addons/library.xbmc.codec XBMC_codec.dir
-lib/addons/library.xbmc.gui   XBMC_gui.dir
-lib/addons/library.xbmc.pvr   XBMC_pvr.dir
-
