@@ -46,8 +46,9 @@ function(add_addon_separate entry)
   if(BOOTSTRAP_DIR)
     if("${id}" MATCHES "^skin.")
       list(APPEND SKINS "${BOOTSTRAP_DIR}/addons/${id}\;${BOOTSTRAP_DIR}")
-    elseif("${id}" MATCHES "^visualization" OR
-           "${id}" MATCHES "^pvr.")
+    elseif("${id}" MATCHES "^visualization\\." OR
+           "${id}" MATCHES "^screensavers?\\."
+           "${id}" MATCHES "^pvr\\.")
       list(APPEND build_dirs "${xbmc-platform_DEF}")
       list(REMOVE_DUPLICATES build_dirs)
     else()
@@ -57,8 +58,9 @@ function(add_addon_separate entry)
       list(APPEND install_dirs ${OUTPUT_DIR}/addons/${id})
     endif()
   else()
-    if("${id}" MATCHES "^visualization." OR
-       "${id}" MATCHES "^pvr.")
+    if("${id}" MATCHES "^visualization\\." OR
+       "${id}" MATCHES "^screensavers?\\." OR
+       "${id}" MATCHES "^pvr\\.")
       if(BOOTSTRAP_IN_TREE)
         list(APPEND build_dirs "${id} ${repo} ${hash}")
         list(APPEND build_dirs "${xbmc-platform_DEF}")
