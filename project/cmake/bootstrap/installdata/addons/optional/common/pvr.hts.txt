@@ -1,0 +1,1 @@
+PVRADDONS OFF pvr.hts git://github.com/cptspiff/pvr.hts f724f8a4d

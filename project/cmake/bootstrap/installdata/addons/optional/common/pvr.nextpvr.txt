@@ -1,0 +1,1 @@
+PVRADDONS OFF pvr.nextpvr git://github.com/cptspiff/pvr.nextpvr fc0ea2f4
