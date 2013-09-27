@@ -1,0 +1,1 @@
+PVRADDONS OFF pvr.vdr.vnsi git://github.com/cptspiff/pvr.vdr.vnsi 4578bd5
