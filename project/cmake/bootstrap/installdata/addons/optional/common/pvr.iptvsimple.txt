@@ -1,0 +1,1 @@
+PVRADDONS OFF pvr.iptvsimple git://github.com/cptspiff/pvr.iptvsimple db21d43c
