@@ -161,26 +161,13 @@ endif()
 add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap.dir)
 
 # Subdirs
-#file(GLOB SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/common/*.txt)
-#file(GLOB sub_plat ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt)
-#file(GLOB opt_sub_plat ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
-#list(APPEND opt_subs ${opt_sub_plat})
-list(APPEND SUBDIRS ${PROJECT_SOURCE_DIR}/treedata/common/*.txt
-                    ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt
-                    ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
+core_add_subdirs_from_filelist("
+                    ${PROJECT_SOURCE_DIR}/treedata/common/*.txt;
+                    ${PROJECT_SOURCE_DIR}/treedata/${CORE_SYSTEM_NAME}/*.txt")
+core_add_optional_subdirs_from_filelist("
+                    ${PROJECT_SOURCE_DIR}/treedata/optional/common/*.txt;
+                    ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt")
 
-file(GLOB opt_subs ${PROJECT_SOURCE_DIR}/treedata/optional/common/*.txt)
-foreach(sub ${opt_subs})
-  file(STRINGS ${sub} sublines)
-  string(REPLACE " " ";" sublines "${sublines}")
-  list(GET sublines 3 opts)
-  foreach(opt ${opts})
-    if(ENABLE_${opt})
-      list(APPEND SUBDIRS ${sub})
-    endif()
-  endforeach()
-endforeach()
-core_add_subdirs_from_filelist("${SUBDIRS}" sort)
 
 # main binary
 add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
