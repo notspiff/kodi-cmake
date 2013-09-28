@@ -1,1 +1,1 @@
-pvr.argustv git://github.com/cptspiff/pvr.argustv db8de490 # PVRADDONS OFF 
+pvr.argustv git://github.com/cptspiff/pvr.argustv db8de490 # PVRADDONS;PVRARGUSTV OFF 
