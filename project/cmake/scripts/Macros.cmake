@@ -152,10 +152,10 @@ function(core_optional_dyload_dep dep)
 endfunction()
 
 function(core_file_read_filtered result filepattern)
-  # Reads STRINGS from a text file
+  # Reads STRINGS from text files
   #  with comments filtered out
   # Result: [list: result]
-  # Input:  [glob pattern: filename]
+  # Input:  [glob pattern: filepattern]
   file(GLOB filenames ${filepattern})
   list(SORT filenames)
   foreach(filename ${filenames})
@@ -173,16 +173,15 @@ function(core_file_read_filtered result filepattern)
   set(${result} ${filename_strings} PARENT_SCOPE)
 endfunction()
 
-function(core_add_subdirs_from_filelist files sort)
-  # Adds subdirectories from a optionally sorted list of files
+function(core_add_subdirs_from_filelist files)
+  # Adds subdirectories from a sorted list of files
   # Input: [list: filenames] [bool: sort]
-  if(${sort})
-    list(SORT files)
-  endif()
+  list(SORT files)
   if(VERBOSE)
     message(STATUS "core_add_subdirs_from_filelist - adding subdirs from: ${files}")
   endif()
   foreach(filename ${files})
+    string(STRIP ${filename} filename)
     core_file_read_filtered(fstrings ${filename})
     foreach(subdir ${fstrings})
       STRING_SPLIT(subdir " " ${subdir})
@@ -196,4 +195,43 @@ function(core_add_subdirs_from_filelist files sort)
   endforeach()
 endfunction()
 
+macro(core_add_optional_subdirs_from_filelist pattern)
+  # Adds subdirectories from text files
+  #  if the option(s) in the 3rd field are enabled
+  # Input: [glob pattern: filepattern]
+  foreach(elem ${pattern})
+    string(STRIP ${elem} elem)
+    list(APPEND filepattern ${elem})
+  endforeach()
 
+  file(GLOB filenames ${filepattern})
+  list(SORT filenames)
+  if(VERBOSE)
+    message(STATUS "core_add_optional_subdirs_from_filelist - got pattern: ${filenames}")
+  endif()
+
+  foreach(filename ${filenames})
+    if(VERBOSE)
+      message(STATUS "core_add_optional_subdirs_from_filelist - reading file: ${filename}")
+    endif()
+    file(STRINGS ${filename} fstrings REGEX "^[^#//]")
+    foreach(line ${fstrings})
+      string(REPLACE " " ";" line "${line}")
+      list(GET line 0 subdir_src)
+      list(GET line 1 subdir_dest)
+      list(GET line 3 opts)
+      foreach(opt ${opts})
+        if(ENABLE_${opt})
+          if(VERBOSE)
+            message(STATUS "  core_add_optional_subdirs_from_filelist - adding subdir: ${CORE_SOURCE_DIR}${subdir_src} -> ${CORE_BUILD_DIR}/${subdir_dest}")
+          endif()
+          add_subdirectory(${CORE_SOURCE_DIR}/${subdir_src} ${CORE_BUILD_DIR}/${subdir_dest})
+         else()
+            if(VERBOSE)
+              message(STATUS "  core_add_optional_subdirs_from_filelist: OPTION ${opt} not enabled for ${subdir_src}, skipping subdir")
+            endif()
+        endif()
+      endforeach()
+    endforeach()
+  endforeach()
+endmacro()
