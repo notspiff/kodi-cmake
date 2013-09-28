@@ -25,7 +25,7 @@
 #include "DynamicDll.h"
 #include "utils/log.h"
 
-#ifdef __linux__
+#if defined(TARGET_LINUX) || defined(TARGET_FREEBSD)
 #include <libmodplug/modplug.h>
 #else
 #include "lib/libmodplug/src/modplug.h"
