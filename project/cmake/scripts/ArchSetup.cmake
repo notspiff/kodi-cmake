@@ -1,17 +1,15 @@
 message(STATUS "system type: ${CMAKE_SYSTEM_NAME}")
+
+if(WITH_CPU)
+  set(CPU ${WITH_CPU})
+else()
+  set(CPU ${CMAKE_SYSTEM_PROCESSOR})
+endif()
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
   set(ARCH_DEFINES -D_LINUX -DTARGET_POSIX -DTARGET_LINUX)
   set(SYSTEM_DEFINES -D__STDC_CONSTANT_MACROS -D_FILE_DEFINED
                      -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64)
-  set(DEP_DEFINES -DLIRC_DEVICE=${LIRC_DEVICE})
-
-  if(WITH_CPU)
-    set(CPU ${WITH_CPU})
-  else()
-    set(CPU ${CMAKE_SYSTEM_PROCESSOR})
-  endif()
-
   if(WITH_ARCH)
     set(ARCH ${WITH_ARCH})
   else()
@@ -23,9 +21,31 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
       message(WARNING "unknown CPU: ${CPU}")
     endif()
   endif()
-else()
-  message(WARNING "unsupported system")
 endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  set(ARCH_DEFINES -D_LINUX -DTARGET_POSIX -DTARGET_FREEBSD)
+  set(SYSTEM_DEFINES -D__STDC_CONSTANT_MACROS -D_FILE_DEFINED
+                     -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64)
+  set(SYSTEM_LDFLAGS -L/usr/local/lib)
+  if(WITH_ARCH)
+    set(ARCH ${WITH_ARCH})
+  else()
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "amd64")
+      set(ARCH x86_64-freebsd)
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "i.86")
+      set(ARCH x86-freebsd)
+    else()
+      message(WARNING "unknown CPU: ${CPU}")
+    endif()
+  endif()
+endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
+  set(DEP_DEFINES -DLIRC_DEVICE=${LIRC_DEVICE})
+endif()
+
 message(STATUS "CPU: ${CPU}, ARCH: ${ARCH}")
 
 include(CheckCXXSourceCompiles)
