@@ -12,5 +12,6 @@ find_package(SDL_image REQUIRED)
 
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 add_executable(TexturePacker ${SOURCES})
-target_link_libraries(TexturePacker squish ${SDLIMAGE_LIBRARY} ${SDL_LIBRARIES}
-                                           ${LZO2_LIBRARIES})
+target_link_libraries(TexturePacker ${SYSTEM_LDFLAGS} squish
+                                    ${SDLIMAGE_LIBRARY} ${SDL_LIBRARIES}
+                                    ${LZO2_LIBRARIES})
