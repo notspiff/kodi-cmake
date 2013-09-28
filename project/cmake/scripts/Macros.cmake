@@ -28,7 +28,9 @@ function(core_link_library lib wraplib)
   elseif("${check_arg}" STREQUAL "nowrap")
     set(export ${data_arg})
   elseif("${check_arg}" STREQUAL "extras")
-    list(APPEND export ${data_arg})
+    foreach(arg ${data_arg})
+      list(APPEND export ${arg})
+    endforeach()
   endif()
   add_custom_command(OUTPUT ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                      COMMAND ${CMAKE_C_COMPILER}
