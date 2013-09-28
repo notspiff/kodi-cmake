@@ -9,7 +9,8 @@
 if(PKG_CONFIG_FOUND)
   pkg_check_modules (TINYXML tinyxml)
   list(APPEND TINYXML_INCLUDE_DIRS ${TINYXML_INCLUDEDIR})
-else()
+endif()
+if(NOT TINYXML_FOUND)
   find_path( TINYXML_INCLUDE_DIRS "tinyxml.h"
              PATH_SUFFIXES "tinyxml" )
 
