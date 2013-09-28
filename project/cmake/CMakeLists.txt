@@ -103,7 +103,7 @@ foreach(dep ${optional_deps})
 endforeach()
 
 if(NOT UDEV_FOUND)
-  core_optional_dep(LibUsb)
+  core_optional_dep(LibUSB)
 endif()
 
 foreach(dep ${required_dyload})
