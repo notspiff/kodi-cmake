@@ -45,15 +45,12 @@ else()
                    --enable-pthreads
                    --enable-runtime-cpudetect
                    --enable-pic
-                   --custom-libname-with-major=$(FULLNAME)-$(LIBMAJOR)-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
+                   --custom-libname-with-major='$(FULLNAME)-$(LIBMAJOR)'-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                    --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg)
 
   # All this nonsense required to avoid evaluating $()
   string(REPLACE ";" " " ffmpeg_conf "${ffmpeg_conf}")
   file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg ${ffmpeg_conf})
-  execute_process(COMMAND sed -e "s/\\$/\\\\$/g" -i ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
-  execute_process(COMMAND sed -e "s/(/\\\\(/g" -i ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
-  execute_process(COMMAND sed -e "s/)/\\\\)/g" -i ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
   execute_process(COMMAND chmod 755 ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
   ExternalProject_ADD(ffmpeg SOURCE_DIR ${CORE_SOURCE_DIR}/lib/ffmpeg
                       PREFIX ${CORE_BUILD_DIR}/ffmpeg
