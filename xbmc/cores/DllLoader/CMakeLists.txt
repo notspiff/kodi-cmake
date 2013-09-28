@@ -6,10 +6,13 @@ set(SOURCES coff.cpp
             dll_tracker_file.cpp
             dll_tracker_library.cpp
             dll_util.cpp
-            ldt_keeper.c
             LibraryLoader.cpp
             mmap_anon.c
             SoLoader.cpp)
+
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  list(APPEND SOURCES ldt_keeper.c)
+endif()
 
 add_subdirectory(exports)
 
