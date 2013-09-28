@@ -1,0 +1,2 @@
+xbmc/linux   linuxsupport.dir
+xbmc/freebsd freebsdsupport.dir
