@@ -11,6 +11,7 @@ endif()
   
 core_add_library(input)
 
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR
+   ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
   add_subdirectory(linux)
 endif()
