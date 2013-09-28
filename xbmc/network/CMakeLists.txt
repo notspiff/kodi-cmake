@@ -30,7 +30,8 @@ add_subdirectory(httprequesthandler)
 add_subdirectory(upnp)
 add_subdirectory(websocket)
 
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR
+   ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
   add_subdirectory(linux)
 endif()
 
