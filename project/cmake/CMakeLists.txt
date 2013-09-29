@@ -178,18 +178,10 @@ target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${xbmc-bin_
 install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
 
 # copy files to build tree
-file(GLOB lists ${PROJECT_SOURCE_DIR}/installdata/common/*.txt)
-file(GLOB lists2 ${PROJECT_SOURCE_DIR}/installdata/${CORE_SYSTEM_NAME}/*.txt)
-list(APPEND lists ${lists2})
-foreach(file ${lists})
-  file(STRINGS ${file} copy_dirs)
-  foreach(dir ${copy_dirs})
-    file(GLOB_RECURSE FILES RELATIVE ${CORE_SOURCE_DIR} ${CORE_SOURCE_DIR}/${dir})
-    foreach(file ${FILES})
-      copy_file_to_buildtree(${CORE_SOURCE_DIR}/${file} ${CORE_SOURCE_DIR})
-    endforeach()
-  endforeach()
-endforeach()
+copy_files_from_filelist_to_buildtree("
+                    ${PROJECT_SOURCE_DIR}/installdata/common/*.txt;
+                    ${PROJECT_SOURCE_DIR}/installdata/${CORE_SYSTEM_NAME}/*.txt")
+
 
 list(APPEND SKINS "${CORE_SOURCE_DIR}/addons/skin.confluence\;${CORE_SOURCE_DIR}")
 
