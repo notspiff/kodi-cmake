@@ -286,3 +286,10 @@ endforeach()
 list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
 include(scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
 
+# Status
+message("#---- CONFIGURATION ----#")
+foreach(msg ${final_message})
+  message(STATUS ${msg})
+endforeach()
+message("#-----------------------#")
+
