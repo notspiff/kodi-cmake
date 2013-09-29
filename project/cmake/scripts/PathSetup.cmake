@@ -22,6 +22,7 @@ if(NOT datadir)
   set(datadir \${datarootdir})
 endif()
 
+list(APPEND final_message "-- PATH config --")
 list(APPEND final_message "Prefix: ${prefix}")
 list(APPEND final_message "Libdir: ${libdir}")
 list(APPEND final_message "Bindir: ${bindir}")
