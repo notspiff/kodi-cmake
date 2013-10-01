@@ -26,6 +26,7 @@ function(copy_skin_to_buildtree skin relative)
            ${CMAKE_BINARY_DIR})
                 
   set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
+  set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
 function(prepare_addon_env)
