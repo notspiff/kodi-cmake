@@ -90,12 +90,12 @@ set(dyload_optional Lame RTMP CEC Bluray
 # Required by shared objects we link
 set(required_dep_libs Jasper PNG TIFF EXPAT)
 
-foreach(dep ${required_deps})
-  core_require_dep(${dep})
-endforeach()
-
 foreach(dep ${required_dep_libs})
   find_package(${dep} REQUIRED)
+endforeach()
+
+foreach(dep ${required_deps})
+  core_require_dep(${dep})
 endforeach()
 
 foreach(dep ${optional_deps})
