@@ -1,0 +1,1 @@
+libssh-bin http://mirrors.xbmc.org/build-deps/win32/libssh-vc100-0.4.7-1-bin.tar.bz2

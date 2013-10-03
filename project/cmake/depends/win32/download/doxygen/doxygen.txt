@@ -1,0 +1,1 @@
+doxygen http://mirrors.xbmc.org/build-deps/win32/doxygen-1.8.2-win32.7z

@@ -1,0 +1,1 @@
+iconv http://mirrors.xbmc.org/build-deps/win32/libiconv-1.13.1-win32.zip

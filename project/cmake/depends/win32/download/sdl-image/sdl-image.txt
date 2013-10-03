@@ -1,0 +1,1 @@
+sdl-image http://mirrors.xbmc.org/build-deps/win32/SDL_image-devel-1.2.10-VC.zip

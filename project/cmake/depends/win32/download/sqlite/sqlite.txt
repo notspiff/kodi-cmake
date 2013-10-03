@@ -1,0 +1,1 @@
+sqlite http://mirrors.xbmc.org/build-deps/win32/sqlite-3.7.16.1-win32.7z
