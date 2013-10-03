@@ -1,0 +1,1 @@
+lzo2 http://mirrors.xbmc.org/build-deps/win32/lzo-2.04_win32.7z
