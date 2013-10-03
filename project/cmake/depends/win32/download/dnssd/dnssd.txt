@@ -1,0 +1,1 @@
+dnssd http://mirrors.xbmc.org/build-deps/win32/dnssd-379.32.1-win32.7z

@@ -1,0 +1,2 @@
+libplist-1.7-win32-2/bin/airplay/* system/airplay
+libplist-1.7-win32-2/include/plist/* include/plist
