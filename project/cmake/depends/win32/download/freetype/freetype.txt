@@ -1,0 +1,1 @@
+freetype http://mirrors.xbmc.org/build-deps/win32/freetype-2.4.6-win32-2.7z
