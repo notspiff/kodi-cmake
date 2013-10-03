@@ -1,0 +1,2 @@
+lzo-2.04_win32/include/lzo/* include/lzo
+lzo-2.04_win32/lib/* lib
