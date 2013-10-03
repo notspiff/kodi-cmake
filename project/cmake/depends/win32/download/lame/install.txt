@@ -1,0 +1,2 @@
+lame_enc-3.99.5-win32/system/cdrip/* system/cdrip
+lame_enc-3.99.5-win32/project/BuildDependencies/include/lame/* include/lame

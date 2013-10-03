@@ -1,0 +1,3 @@
+dnssd-379.32.1-win32/system/dnssd.dll system
+dnssd-379.32.1-win32/project/BuildDependencies/include/* include
+dnssd-379.32.1-win32/project/BuildDependencies/lib/* lib

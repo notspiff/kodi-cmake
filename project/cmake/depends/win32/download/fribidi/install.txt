@@ -1,0 +1,2 @@
+fribidi-0.19.2-lib/include/fribidi/* include/fribidi
+fribidi-0.19.2-lib/lib/* lib

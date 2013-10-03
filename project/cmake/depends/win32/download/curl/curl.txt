@@ -1,0 +1,1 @@
+curl http://mirrors.xbmc.org/build-deps/win32/curl-7.21.1-devel-mingw32.zip
