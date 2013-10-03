@@ -1,0 +1,1 @@
+fontconfig-dev http://mirrors.xbmc.org/build-deps/win32/fontconfig-dev_2.8.0-2_win32.zip

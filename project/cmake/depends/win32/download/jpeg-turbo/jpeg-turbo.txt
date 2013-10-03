@@ -1,0 +1,1 @@
+jpeg-turbo http://mirrors.xbmc.org/build-deps/win32/libjpeg-turbo-1.2.0-win32.7z

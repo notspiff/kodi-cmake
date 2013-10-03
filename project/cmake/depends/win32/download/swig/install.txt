@@ -1,0 +1,2 @@
+swig.exe bin/swig
+Lib/* bin/swig/Lib

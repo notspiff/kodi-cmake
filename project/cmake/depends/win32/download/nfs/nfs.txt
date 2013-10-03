@@ -1,0 +1,1 @@
+nfs http://mirrors.xbmc.org/build-deps/win32/libnfs-1.6.1-win32.7z

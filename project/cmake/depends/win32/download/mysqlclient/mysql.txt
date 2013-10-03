@@ -1,0 +1,1 @@
+mysqlclient http://mirrors.xbmc.org/build-deps/win32/mysql-connector-c-noinstall-6.0.2-win32.zip
