@@ -1,0 +1,2 @@
+yajl-2.0.1/lib/Debug/*.lib lib
+yajl-2.0.1/lib/Release/*.lib lib

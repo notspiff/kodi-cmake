@@ -1,0 +1,3 @@
+freetype-2.4.6-win32-1/include/* include
+freetype-2.4.6-win32-1/lib/* lib
+freetype-2.4.6-win32-1/bin/freetype6.dll system/players/dvdplayer

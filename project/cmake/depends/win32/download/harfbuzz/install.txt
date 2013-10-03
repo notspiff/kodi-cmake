@@ -1,0 +1,2 @@
+harfbuzz-0.7.0/include/* include
+harfbuzz-0.7.0/lib/* lib
