@@ -1,0 +1,1 @@
+sdl http://mirrors.xbmc.org/build-deps/win32/SDL-devel-1.2.14-VC8.zip
