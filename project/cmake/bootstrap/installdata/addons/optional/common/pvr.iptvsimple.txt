@@ -1,1 +1,1 @@
-pvr.iptvsimple git://github.com/cptspiff/pvr.iptvsimple db21d43c # PVRADDONS;PVRIPTVSIMPLE OFF
+pvr.iptvsimple https://github.com/cptspiff/pvr.iptvsimple db21d43c # PVRADDONS;PVRIPTVSIMPLE OFF
