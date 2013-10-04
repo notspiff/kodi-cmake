@@ -1,1 +1,1 @@
-visualization.goom git://github.com/cptspiff/visualization.goom 1730e5b3 # GOOM OFF
+visualization.goom https://github.com/cptspiff/visualization.goom 1730e5b3 # GOOM OFF
