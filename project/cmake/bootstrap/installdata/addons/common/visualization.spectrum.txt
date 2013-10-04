@@ -1,1 +1,1 @@
-visualization.spectrum git://github.com/cptspiff/visualization.spectrum aefb300e
+visualization.spectrum https://github.com/cptspiff/visualization.spectrum aefb300e

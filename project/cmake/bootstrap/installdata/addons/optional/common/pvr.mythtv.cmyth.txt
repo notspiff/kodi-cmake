@@ -1,1 +1,1 @@
-pvr.mythtv.cmyth git://github.com/cptspiff/pvr.mythtv.cmyth e030af792 # PVRADDONS;PVRMYTH OFF 
+pvr.mythtv.cmyth https://github.com/cptspiff/pvr.mythtv.cmyth e030af792 # PVRADDONS;PVRMYTH OFF 
