@@ -1,1 +1,1 @@
-visualization.waveform git://github.com/cptspiff/visualization.waveform f4456c20
+visualization.waveform https://github.com/cptspiff/visualization.waveform f4456c20
