@@ -30,6 +30,7 @@ option(ENABLE_PLIST       "Enable AirPlay support?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
 option(ENABLE_SSH         "Enable SSH support?" ON)
 option(ENABLE_NFS         "Enable NFS support?" ON)
+option(ENABLE_GNUTLS      "Enable gnutls support?" ON)
 option(ENABLE_EXTERNAL_FFMPEG "Enable external ffmpeg?" OFF)
 option(ENABLE_EXTERNAL_LIBAV "Enable external libav?" OFF)
 if(UNIX)
@@ -94,8 +95,18 @@ set(dyload_optional Lame RTMP CEC Bluray
 # Required by shared objects we link
 set(required_dep_libs Jasper PNG TIFF EXPAT)
 
+# Optional libs for shared objects we link
+set(optional_dep_libs GnuTls)
+
 foreach(dep ${required_dep_libs})
   find_package(${dep} REQUIRED)
+endforeach()
+
+foreach(dep ${optional_dep_libs})
+  string(TOUPPER dep depup)
+  if(ENABLE_${depup})
+    find_package(${dep})
+  endif()
 endforeach()
 
 foreach(dep ${required_deps})
