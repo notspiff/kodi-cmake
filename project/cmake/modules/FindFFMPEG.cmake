@@ -48,6 +48,10 @@ else()
                    --custom-libname-with-major='$(FULLNAME)-$(LIBMAJOR)'-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                    --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg)
 
+  if(GNUTLS_FOUND)
+    list(APPEND ffmpeg_conf --enable-gnutls)
+  endif()
+
   # All this nonsense required to avoid evaluating $()
   string(REPLACE ";" " " ffmpeg_conf "${ffmpeg_conf}")
   file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg ${ffmpeg_conf})
