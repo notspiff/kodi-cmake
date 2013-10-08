@@ -267,7 +267,6 @@ foreach(subdir ${build_dirs})
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                         INSTALL_COMMAND "")
-    set(dest_path ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src)
   else()
     externalproject_add(${id}
                         SOURCE_DIR ${BOOTSTRAP_DIR}/addons/${id}/src/${id}
@@ -277,7 +276,6 @@ foreach(subdir ${build_dirs})
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                         INSTALL_COMMAND "")
-   set(dest_path ${BOOTSTRAP_DIR}/addons/${id}/src/${id})
   endif()
   add_dependencies(${id} xbmc-platform)
 endforeach()
