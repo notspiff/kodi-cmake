@@ -264,7 +264,6 @@ foreach(subdir ${build_dirs})
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DCMAKE_CXX_FLAGS=-I${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                         INSTALL_COMMAND "")
@@ -275,7 +274,6 @@ foreach(subdir ${build_dirs})
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DCMAKE_CXX_FLAGS=-I${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                         INSTALL_COMMAND "")
