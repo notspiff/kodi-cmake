@@ -36,4 +36,4 @@ set(SOURCES Application.cpp
             XbmcContext.cpp)
 
 core_add_library(xbmc)
-add_dependencies(xbmc libcpluff)
+add_dependencies(xbmc libcpluff ffmpeg)
