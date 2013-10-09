@@ -65,6 +65,18 @@ macro (build_addon target prefix libs)
     INSTALL(TARGETS ${target} DESTINATION lib/kodi/addons/${target})
     INSTALL(DIRECTORY ${target} DESTINATION share/kodi/addons)
   ENDIF(PACKAGE_ZIP OR PACKAGE_TGZ)
+  if(XBMC_BUILD_DIR)
+    file(GLOB_RECURSE files ${CMAKE_CURRENT_SOURCE_DIR}/${target}/*)
+    foreach(file ${files})
+      string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/${target}/" "" name "${file}")
+      # A good way to deal with () in filenames
+      configure_file(${file} ${XBMC_BUILD_DIR}/addons/${target}/${name} COPYONLY)
+    endforeach()
+      add_custom_command(TARGET ${target} POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E copy
+                                $<TARGET_LINKER_FILE:${target}>
+                                ${XBMC_BUILD_DIR}/addons/${target}/$<TARGET_LINKER_FILE_NAME:${target}>)
+  endif()
 endmacro()
 
 # finds a path to a given file (recursive)
