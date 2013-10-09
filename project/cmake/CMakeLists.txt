@@ -266,6 +266,7 @@ foreach(subdir ${build_dirs})
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                        -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
                         INSTALL_COMMAND "")
   else()
     externalproject_add(${id}
@@ -275,6 +276,7 @@ foreach(subdir ${build_dirs})
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DBUILD_SHARED_LIBS=1
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                        -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
                         INSTALL_COMMAND "")
   endif()
   add_dependencies(${id} xbmc-platform)
