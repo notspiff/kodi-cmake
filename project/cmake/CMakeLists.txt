@@ -41,7 +41,6 @@ if(UNIX)
   option(ENABLE_VDPAU       "Enable VDPAU support?" ON)
 endif()
 # System options
-option(ENABLE_CROSSCOMPILE    "Enable Cross_compiling?" OFF)
 option(WITH_ARCH              "build with given arch" OFF)
 option(WITH_CPU               "build with given cpu" OFF)
 
@@ -72,6 +71,12 @@ set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
 
 find_package(PkgConfig)
+if(CMAKE_CROSSCOMPILING)
+  if(PKG_CONFIG_EXECUTABLE)
+    message(STATUS "CMAKE_CROSSCOMPILING: ${CMAKE_CROSSCOMPILING}")
+    set(PKG_CONFIG_FOUND TRUE)
+  endif()
+endif()
 find_package(Threads REQUIRED)
 list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 
