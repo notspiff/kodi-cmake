@@ -139,4 +139,20 @@ linux-system-libs:
 	[ -f $(PREFIX)/lib/pkgconfig/ice.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/ice.pc $(PREFIX)/lib/pkgconfig/ice.pc
 	[ -f $(PREFIX)/lib/pkgconfig/sm.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/sm.pc $(PREFIX)/lib/pkgconfig/sm.pc
 	[ -f $(PREFIX)/lib/pkgconfig/xmu.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xmu.pc $(PREFIX)/lib/pkgconfig/xmu.pc
+	[ -f $(PREFIX)/lib/pkgconfig/gl.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/gl.pc $(PREFIX)/lib/pkgconfig/gl.pc
+	[ -f $(PREFIX)/lib/pkgconfig/glu.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/glu.pc $(PREFIX)/lib/pkgconfig/glu.pc
+	[ -f $(PREFIX)/lib/pkgconfig/glew.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/glew.pc $(PREFIX)/lib/pkgconfig/glew.pc
 	[ -f $(PREFIX)/lib/pkgconfig/libdrm.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/libdrm.pc $(PREFIX)/lib/pkgconfig/libdrm.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xdamage.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xdamage.pc $(PREFIX)/lib/pkgconfig/xdamage.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xfixes.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xfixes.pc $(PREFIX)/lib/pkgconfig/xfixes.pc
+	[ -f $(PREFIX)/lib/pkgconfig/x11-xcb.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/x11-xcb.pc $(PREFIX)/lib/pkgconfig/x11-xcb.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xcb-glx.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xcb-glx.pc $(PREFIX)/lib/pkgconfig/xcb-glx.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xcb-dri2.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xcb-dri2.pc $(PREFIX)/lib/pkgconfig/xcb-dri2.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xxf86vm.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xxf86vm.pc $(PREFIX)/lib/pkgconfig/xxf86vm.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xrandr.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xrandr.pc $(PREFIX)/lib/pkgconfig/xrandr.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xrender.pc ] || ln -s /usr/lib/$(HOST)/pkgconfig/xrender.pc $(PREFIX)/lib/pkgconfig/xrender.pc
+	[ -f $(PREFIX)/lib/pkgconfig/damageproto.pc ] || ln -s /usr/share/pkgconfig/damageproto.pc $(PREFIX)/lib/pkgconfig/damageproto.pc
+	[ -f $(PREFIX)/lib/pkgconfig/fixesproto.pc ] || ln -s /usr/share/pkgconfig/fixesproto.pc $(PREFIX)/lib/pkgconfig/fixesproto.pc
+	[ -f $(PREFIX)/lib/pkgconfig/xf86vidmodeproto.pc ] || ln -s /usr/share/pkgconfig/xf86vidmodeproto.pc $(PREFIX)/lib/pkgconfig/xf86vidmodeproto.pc
+	[ -f $(PREFIX)/lib/pkgconfig/randrproto.pc ] || ln -s /usr/share/pkgconfig/randrproto.pc $(PREFIX)/lib/pkgconfig/randrproto.pc
+	[ -f $(PREFIX)/lib/pkgconfig/renderproto.pc ] || ln -s /usr/share/pkgconfig/renderproto.pc $(PREFIX)/lib/pkgconfig/renderproto.pc
