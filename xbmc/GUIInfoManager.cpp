@@ -446,7 +446,8 @@ const infomap container_ints[] = {{ "row",              CONTAINER_ROW },
 const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
                                   { "content",          CONTAINER_CONTENT }};
 
-const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
+const infomap listitem_labels[]= {{ "enabled",          LISTITEM_ENABLED },
+                                  { "thumb",            LISTITEM_THUMB },
                                   { "icon",             LISTITEM_ICON },
                                   { "actualicon",       LISTITEM_ACTUAL_ICON },
                                   { "overlay",          LISTITEM_OVERLAY },
@@ -5129,7 +5130,9 @@ bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
   else if (item->IsFileItem())
   {
     const CFileItem *pItem = (const CFileItem *)item;
-    if (condition == LISTITEM_ISRECORDING)
+    if (condition == LISTITEM_ENABLED)
+      return pItem->IsEnabled();
+    else if (condition == LISTITEM_ISRECORDING)
     {
       if (!g_PVRManager.IsStarted())
         return false;

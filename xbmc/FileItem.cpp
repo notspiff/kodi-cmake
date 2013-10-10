@@ -417,6 +417,7 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
 {
   if (this == &item) return * this;
   CGUIListItem::operator=(item);
+  m_enabled = item.m_enabled;
   m_bLabelPreformated=item.m_bLabelPreformated;
   FreeMemory();
   m_strPath = item.GetPath();
@@ -538,6 +539,7 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
 
 void CFileItem::Reset()
 {
+  m_enabled = true;
   m_strLabel2.clear();
   SetLabel("");
   m_bLabelPreformated=false;
@@ -635,6 +637,8 @@ void CFileItem::Archive(CArchive& ar)
     }
     else
       ar << 0;
+
+    ar << m_enabled;
   }
   else
   {
@@ -674,6 +678,8 @@ void CFileItem::Archive(CArchive& ar)
     ar >> iType;
     if (iType == 1)
       ar >> *GetPictureInfoTag();
+
+    ar >> m_enabled;
 
     SetInvalid();
   }
