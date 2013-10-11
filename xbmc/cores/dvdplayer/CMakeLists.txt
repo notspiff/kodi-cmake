@@ -19,8 +19,3 @@ set(SOURCES DVDAudio.cpp
 
 core_add_library(dvdplayer)
 add_dependencies(dvdplayer libcpluff ffmpeg dvdnav)
-
-add_subdirectory(DVDCodecs)
-add_subdirectory(DVDDemuxers)
-add_subdirectory(DVDInputStreams)
-add_subdirectory(DVDSubtitles)

@@ -13,6 +13,3 @@ set(SOURCES Bookmark.cpp
 
 core_add_library(video)
 add_dependencies(video libcpluff ffmpeg)
-
-add_subdirectory(dialogs)
-add_subdirectory(windows)
