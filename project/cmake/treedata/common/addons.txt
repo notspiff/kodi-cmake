@@ -1,4 +1,4 @@
-lib/addons/library.xbmc.addon XBMC_addon.dir
-lib/addons/library.xbmc.codec XBMC_codec.dir
-lib/addons/library.xbmc.gui   XBMC_gui.dir
-lib/addons/library.xbmc.pvr   XBMC_pvr.dir
+lib/addons/library.xbmc.addon XBMC_addon
+lib/addons/library.xbmc.codec XBMC_codec
+lib/addons/library.xbmc.gui   XBMC_gui
+lib/addons/library.xbmc.pvr   XBMC_pvr
