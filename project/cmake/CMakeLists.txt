@@ -174,7 +174,7 @@ endforeach()
 if(NOT BOOTSTRAP_DIR)
   set(BOOTSTRAP_IN_TREE 1)
 endif()
-add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap.dir)
+add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap)
 
 # Subdirs
 core_add_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/common/*.txt
