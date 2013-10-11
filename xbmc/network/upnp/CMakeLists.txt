@@ -5,7 +5,7 @@ set(SOURCES UPnP.cpp
             UPnPServer.cpp
             UPnPSettings.cpp)
 
-INCLUDE_DIRECTORIES(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
+include_directories(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Platinum
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaConnect
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaRenderer

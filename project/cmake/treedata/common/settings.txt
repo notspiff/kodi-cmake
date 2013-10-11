@@ -1,0 +1,3 @@
+xbmc/settings         settings
+xbmc/settings/dialogs settings/dialogs
+xbmc/settings/windows settings/windows
