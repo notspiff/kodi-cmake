@@ -10,7 +10,3 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endif()
 
 core_add_library(windowing)
-
-if (X_FOUND)
-  add_subdirectory(X11)
-endif()

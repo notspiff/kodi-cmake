@@ -21,5 +21,3 @@ endif()
 
 core_add_library(videorenderers)
 add_dependencies(videorenderers ffmpeg)
-
-add_subdirectory(VideoShaders)
