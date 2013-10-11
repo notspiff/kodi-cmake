@@ -15,5 +15,3 @@ if(OS STREQUAL "Android")
 endif()
 
 add_dependencies(wrapper.def wrapper)
-
-add_subdirectory(util)
