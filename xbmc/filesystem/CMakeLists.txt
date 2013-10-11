@@ -112,7 +112,7 @@ if(BLURAY_FOUND)
   list(APPEND SOURCES BlurayDirectory.cpp)
 endif()
 
-INCLUDE_DIRECTORIES(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
+include_directories(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Platinum
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaConnect
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Devices/MediaRenderer
@@ -123,6 +123,3 @@ INCLUDE_DIRECTORIES(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
   
 core_add_library(filesystem)
 add_dependencies(filesystem libcpluff)
-
-add_subdirectory(MusicDatabaseDirectory)
-add_subdirectory(VideoDatabaseDirectory)

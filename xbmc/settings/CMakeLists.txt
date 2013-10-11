@@ -20,6 +20,3 @@ set(SOURCES AdvancedSettings.cpp
 
 core_add_library(settings)
 add_dependencies(settings libcpluff)
-
-add_subdirectory(dialogs)
-add_subdirectory(windows)

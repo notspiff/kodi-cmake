@@ -14,8 +14,6 @@ if(NOT CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
   list(APPEND SOURCES ldt_keeper.c)
 endif()
 
-add_subdirectory(exports)
-
 add_definitions(-DAPI_DEBUG)
 
 core_add_library(dllloader)
