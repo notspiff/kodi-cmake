@@ -1,0 +1,3 @@
+xbmc/video         video
+xbmc/video/dialogs video/dialogs
+xbmc/video/windows video/windows
