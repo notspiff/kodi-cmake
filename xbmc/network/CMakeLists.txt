@@ -25,20 +25,3 @@ endif()
   
 core_add_library(network)
 add_dependencies(network ffmpeg)
-
-add_subdirectory(httprequesthandler)
-add_subdirectory(upnp)
-add_subdirectory(websocket)
-
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR
-   ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
-  add_subdirectory(linux)
-endif()
-
-if(APPLE)
-  add_subdirectory(osx)
-endif()
-
-if(WIN32)
-  add_subdirectory(windows)
-endif()

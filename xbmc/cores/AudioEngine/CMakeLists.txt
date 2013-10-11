@@ -42,9 +42,9 @@ else()
                       Engines/SoftAE/SoftAESound.cpp)
 endif()
 
-#if(ALSA_FOUND)
+if(ALSA_FOUND)
   list(APPEND SOURCES Sinks/AESinkALSA.cpp)
-#endif()
+endif()
 
 if(PULSEAUDIO_FOUND)
   list(APPEND SOURCES Engines/PulseAE/PulseAE.cpp
@@ -58,7 +58,7 @@ if(WIN32)
                       Sinks/AESinkWASAPI.cpp)
 endif()
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 core_add_library(audioengine)
 add_dependencies(audioengine ffmpeg)
