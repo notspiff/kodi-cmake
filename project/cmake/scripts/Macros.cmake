@@ -8,12 +8,12 @@ endfunction()
 
 function(core_link_library lib wraplib)
   set(export -Wl,--unresolved-symbols=ignore-all
-             `cat ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/dllloader.dir/exports/wrapper.def`
-             ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/dllloader.dir/exports/CMakeFiles/wrapper.dir/wrapper.c.o)
+             `cat ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/dllloader/exports/wrapper.def`
+             ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/dllloader/exports/CMakeFiles/wrapper.dir/wrapper.c.o)
   set(check_arg "")
   if(TARGET ${lib})
     set(target ${lib})
-    set(link_lib ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${lib}.dir/${lib}.a)
+    set(link_lib ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${lib}/${lib}.a)
     set(check_arg ${ARGV2})
     set(data_arg  ${ARGV3})
   else()

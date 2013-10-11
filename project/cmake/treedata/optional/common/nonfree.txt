@@ -1,1 +1,1 @@
-lib/UnrarXLib unrarxlib.dir # NONFREE 
+lib/UnrarXLib unrarxlib # NONFREE 
