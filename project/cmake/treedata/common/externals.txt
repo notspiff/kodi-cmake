@@ -1,7 +1,7 @@
-lib/cmyth                    cmyth.dir
-lib/cximage-6.0              cximage.dir
-lib/libexif                  exif.dir
-lib/libhts                   hts.dir
-lib/libsquish                squish.dir
-lib/libUPnP                  upnp.dir
-lib/libXDAAP                 xdaap.dir
+lib/cmyth                    cmyth
+lib/cximage-6.0              cximage
+lib/libexif                  exif
+lib/libhts                   hts
+lib/libsquish                squish
+lib/libUPnP                  upnp
+lib/libXDAAP                 xdaap
