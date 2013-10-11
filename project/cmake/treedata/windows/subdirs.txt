@@ -1,1 +1,1 @@
-xbmc/input/windows  wininput.dir
+xbmc/input/windows  wininput
