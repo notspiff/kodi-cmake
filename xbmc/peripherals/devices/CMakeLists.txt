@@ -7,7 +7,7 @@ set(SOURCES Peripheral.cpp
             PeripheralNyxboard.cpp
             PeripheralTuner.cpp)
 
-if(HAS_CEC)
+if(CEC_FOUND)
   list(APPEND SOURCES PeripheralCecAdapter.cpp)
 endif()
 
