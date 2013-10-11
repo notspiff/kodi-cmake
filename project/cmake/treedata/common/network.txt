@@ -1,0 +1,4 @@
+xbmc/network                    network
+xbmc/network/httprequesthandler network/httprequesthandler
+xbmc/network/upnp               network/upnp
+xbmc/network/websocket          network/websocket
