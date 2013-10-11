@@ -1,1 +1,1 @@
-lib/xbmc-dll-symbols dll_symbols.dir # EXTERNAL_FFMPEG;EXTERNAL_LIBAV
+lib/xbmc-dll-symbols dll_symbols # EXTERNAL_FFMPEG;EXTERNAL_LIBAV
