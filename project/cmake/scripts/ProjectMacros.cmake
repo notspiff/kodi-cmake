@@ -3,7 +3,7 @@ function(pack_xbt input output relative)
   get_filename_component(dir ${output} PATH)
   add_custom_command(OUTPUT  ${output}
                      COMMAND ${CMAKE_COMMAND} -E make_directory ${dir}
-                     COMMAND ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/texturepacker.dir/TexturePacker
+                     COMMAND ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/texturepacker/TexturePacker
                      ARGS    -input ${input}
                              -output ${output}
                              -dupecheck
