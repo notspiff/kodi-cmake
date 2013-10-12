@@ -1,2 +1,2 @@
-IRSSmap.xml
-X10-Lola-IRSSmap.xml
+system/IRSSmap.xml
+system/X10-Lola-IRSSmap.xml
