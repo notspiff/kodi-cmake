@@ -42,6 +42,8 @@ if(UNIX)
   option(ENABLE_OPENGL      "Enable OpenGL?" ON)
   option(ENABLE_SDL         "Enable SDL?" ON)
   option(ENABLE_X11         "Enable X11 support?" ON)
+  option(ENABLE_WAYLAND     "Enable Wayland support?" OFF)
+  option(ENABLE_EGL         "Enable EGL?" OFF)
   option(ENABLE_VAAPI       "Enable VAAPI support?" ON)
   option(ENABLE_VDPAU       "Enable VDPAU support?" ON)
 endif()
@@ -81,7 +83,7 @@ set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
 
 # Optional dependencies
 set(optional_deps MicroHttpd MySqlClient SSH
-                  Alsa UDev Dbus Avahi
+                  Alsa UDev Dbus Avahi Wayland
                   PulseAudio VDPAU VAAPI)
 
 # Required, dyloaded deps
