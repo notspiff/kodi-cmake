@@ -2,13 +2,6 @@ project(xbmc)
 
 cmake_minimum_required(VERSION 2.8.8)
 
-include(ExternalProject)
-include(scripts/AddOptions.cmake)
-include(scripts/Macros.cmake)
-include(scripts/ManageString.cmake)
-include(scripts/ProjectMacros.cmake)
-include(scripts/PathSetup.cmake)
-
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
 
 enable_language(CXX)
@@ -60,7 +53,13 @@ else()
   set(UPDATE_COMMAND autoreconf -vif)
 endif()
 
-include(scripts/ArchSetup.cmake)
+include(scripts/common/addoptions.cmake)
+include(scripts/common/archsetup.cmake)
+include(scripts/common/macros.cmake)
+include(scripts/common/managestring.cmake)
+include(scripts/common/projectmacros.cmake)
+include(scripts/common/pathsetup.cmake)
+include(ExternalProject)
 
 set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
              ${CORE_SOURCE_DIR}/addons/library.xbmc.codec
@@ -165,8 +164,8 @@ endif()
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
 add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES} ${PATH_DEFINES})
 
-set(xbmc-bin_DEPENDS "" CACHE STRING "" FORCE)
-mark_as_advanced(xbmc-bin_DEPENDS)
+set(core_DEPENDS "" CACHE STRING "" FORCE)
+mark_as_advanced(core_DEPENDS)
 
 file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/addon-bindings.txt bindings)
 foreach(binding ${bindings})
@@ -186,7 +185,7 @@ core_add_optional_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/optional/
 
 # main binary
 add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
-target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${xbmc-bin_DEPENDS} -Wl,--no-whole-archive
+target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
 install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
 
@@ -245,8 +244,8 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
-set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/AddOptions.cmake
-                ${CORE_SOURCE_DIR}/project/cmake/scripts/xbmc-addon-helpers.cmake)
+set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
+                ${CORE_SOURCE_DIR}/project/cmake/scripts/common/xbmc-addon-helpers.cmake)
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
                ${CORE_BUILD_DIR}/modules/xbmc-config.cmake @ONLY)
 
@@ -285,7 +284,7 @@ foreach(subdir ${build_dirs})
 endforeach()
 
 list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
-include(scripts/Install${CMAKE_SYSTEM_NAME}.cmake)
+include(scripts/${CORE_SYSTEM_NAME}/install.cmake)
 
 # Status
 message("#---- CONFIGURATION ----#")
