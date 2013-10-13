@@ -16,43 +16,43 @@ endmacro()
 
 # Grab the version from a given add-on's addon.xml
 macro (addon_version dir prefix)
-  FILE(READ ${dir}/addon.xml ADDONXML)
-  STRING(REGEX MATCH "<addon[^>]*version.?=.?.[0-9\\.]+" VERSION_STRING ${ADDONXML}) 
-  STRING(REGEX REPLACE ".*version=.([0-9\\.]+).*" "\\1" ${prefix}_VERSION ${VERSION_STRING})
+  file(READ ${dir}/addon.xml ADDONXML)
+  string(REGEX MATCH "<addon[^>]*version.?=.?.[0-9\\.]+" VERSION_STRING ${ADDONXML}) 
+  string(REGEX REPLACE ".*version=.([0-9\\.]+).*" "\\1" ${prefix}_VERSION ${VERSION_STRING})
   message(STATUS ${prefix}_VERSION=${${prefix}_VERSION})
 endmacro()
 
 # Build, link and optionally package an add-on
 macro (build_addon target prefix libs)
-  ADD_LIBRARY(${target} ${${prefix}_SOURCES})
-  TARGET_LINK_LIBRARIES(${target} ${${libs}})
+  add_library(${target} ${${prefix}_SOURCES})
+  target_link_libraries(${target} ${${libs}})
   addon_version(${target} ${prefix})
   SET_TARGET_PROPERTIES(${target} PROPERTIES VERSION ${${prefix}_VERSION}
                                              SOVERSION ${APP_VERSION_MAJOR}.${APP_VERSION_MINOR}
                                              PREFIX "")
-  IF(OS STREQUAL "android")
-    SET_TARGET_PROPERTIES(${target} PROPERTIES PREFIX "lib")
-  ENDIF(OS STREQUAL "android")
+  if(OS STREQUAL "android")
+    set_target_properties(${target} PROPERTIES PREFIX "lib")
+  endif()
 
   # set zip as default if addon-package is called without PACKAGE_XXX
-  SET(CPACK_GENERATOR "ZIP")
-  SET(ext "zip")
-  IF(PACKAGE_ZIP OR PACKAGE_TGZ)
-    IF(PACKAGE_TGZ)
-      SET(CPACK_GENERATOR "TGZ")
-      SET(ext "tar.gz")
-    ENDIF(PACKAGE_TGZ)
-    SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+  set(CPACK_GENERATOR "ZIP")
+  set(ext "zip")
+  if(PACKAGE_ZIP OR PACKAGE_TGZ)
+    if(PACKAGE_TGZ)
+      set(CPACK_GENERATOR "TGZ")
+      set(ext "tar.gz")
+    endif()
+    set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
     set(CPACK_PACKAGE_FILE_NAME addon)
-    IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-      SET(CPACK_STRIP_FILES TRUE)
-    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+      set(CPACK_STRIP_FILES TRUE)
+    endif()
     set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
     set(CPACK_COMPONENTS_IGNORE_GROUPS 1)
     list(APPEND CPACK_COMPONENTS_ALL ${target}-${${prefix}_VERSION})
     # Pack files together to create an archive
-    INSTALL(DIRECTORY ${target} DESTINATION ./ COMPONENT ${target}-${${prefix}_VERSION})
-    IF(WIN32)
+    install(DIRECTORY ${target} DESTINATION ./ COMPONENT ${target}-${${prefix}_VERSION})
+    if(WIN32)
       # get the installation location for the addon's target
       get_property(dll_location TARGET ${target} PROPERTY LOCATION)
       # in case of a VC++ project the installation location contains a $(Configuration) VS variable
@@ -61,24 +61,24 @@ macro (build_addon target prefix libs)
       string(REPLACE "$(Configuration)" "${CMAKE_BUILD_TYPE}" dll_location "${dll_location}")
 
       # install the generated DLL file
-      INSTALL(PROGRAMS ${dll_location} DESTINATION ${target}
+      install(PROGRAMS ${dll_location} DESTINATION ${target}
               COMPONENT ${target}-${${prefix}_VERSION})
 
-      IF(CMAKE_BUILD_TYPE MATCHES Debug)
+      if(CMAKE_BUILD_TYPE MATCHES Debug)
         # for debug builds also install the PDB file
         get_filename_component(dll_directory ${dll_location} DIRECTORY)
-        INSTALL(FILES ${dll_directory}/${target}.pdb DESTINATION ${target}
+        install(FILES ${dll_directory}/${target}.pdb DESTINATION ${target}
                 COMPONENT ${target}-${${prefix}_VERSION})
-      ENDIF()
-    ELSE(WIN32)
-      INSTALL(TARGETS ${target} DESTINATION ${target}
+      endif()
+    else()
+      install(TARGETS ${target} DESTINATION ${target}
               COMPONENT ${target}-${${prefix}_VERSION})
-    ENDIF(WIN32)
+    endif(WIN32)
     add_cpack_workaround(${target} ${${prefix}_VERSION} ${ext})
-  ELSE(PACKAGE_ZIP OR PACKAGE_TGZ)
-    INSTALL(TARGETS ${target} DESTINATION lib/kodi/addons/${target})
-    INSTALL(DIRECTORY ${target} DESTINATION share/kodi/addons)
-  ENDIF(PACKAGE_ZIP OR PACKAGE_TGZ)
+  else()
+    install(TARGETS ${target} DESTINATION lib/kodi/${target})
+    install(DIRECTORY ${target} DESTINATION share/kodi/addons)
+  endif()
   if(XBMC_BUILD_DIR)
     file(GLOB_RECURSE files ${CMAKE_CURRENT_SOURCE_DIR}/${target}/*)
     foreach(file ${files})
@@ -105,23 +105,23 @@ endfunction()
 # Cmake build options
 include(addoptions)
 include(TestCXXAcceptsFlag)
-OPTION(PACKAGE_ZIP "Package Zip file?" OFF)
-OPTION(PACKAGE_TGZ "Package TGZ file?" OFF)
-OPTION(BUILD_SHARED_LIBS "Build shared libs?" ON)
+option(PACKAGE_ZIP "Package Zip file?" OFF)
+option(PACKAGE_TGZ "Package TGZ file?" OFF)
+option(BUILD_SHARED_LIBS "Build shared libs?" ON)
 
 # LTO support?
-CHECK_CXX_ACCEPTS_FLAG("-flto" HAVE_LTO)
-IF(HAVE_LTO)
-  OPTION(USE_LTO "use link time optimization" OFF)
-  IF(USE_LTO)
+check_cxx_accepts_flag("-flto" HAVE_LTO)
+if(HAVE_LTO)
+  option(USE_LTO "use link time optimization" OFF)
+  if(USE_LTO)
     add_options(ALL_LANGUAGES ALL_BUILDS "-flto")
-  ENDIF(USE_LTO)
-ENDIF(HAVE_LTO) 
+  endif()
+endif() 
 
 # set this to try linking dependencies as static as possible
-IF(ADDONS_PREFER_STATIC_LIBS)
-  SET(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
-ENDIF(ADDONS_PREFER_STATIC_LIBS)
+if(ADDONS_PREFER_STATIC_LIBS)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+endif()
 
 # Needed to quell warning about passed option being unused
 # when reconfigured
