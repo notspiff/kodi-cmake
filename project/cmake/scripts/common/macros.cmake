@@ -1,49 +1,32 @@
+# This script holds the main functions used to construct the build system
+
+# include system specific macros
+include(${PROJECT_SOURCE_DIR}/scripts/${CORE_SYSTEM_NAME}/macros.cmake)
+
+# Add a library, optionally as a dependency of the main application
+# Arguments:
+#   name name of the library to add
+#   if another argument is given, library is not added to main depends
+# Implicit arguments:
+#   SOURCES the sources of the library
+# On return:
+#   Library will be built, optionally added to ${core_DEPENDS}
 function(core_add_library name)
   add_library(${name} STATIC ${SOURCES})
   set_target_properties(${name} PROPERTIES PREFIX "")
   if("${ARGN}" STREQUAL "")
-    set(xbmc-bin_DEPENDS ${name} ${xbmc-bin_DEPENDS} CACHE STRING "" FORCE)
+    set(core_DEPENDS ${name} ${core_DEPENDS} CACHE STRING "" FORCE)
   endif()
 endfunction()
 
-function(core_link_library lib wraplib)
-  set(export -Wl,--unresolved-symbols=ignore-all
-             `cat ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/dllloader/exports/wrapper.def`
-             ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/dllloader/exports/CMakeFiles/wrapper.dir/wrapper.c.o)
-  set(check_arg "")
-  if(TARGET ${lib})
-    set(target ${lib})
-    set(link_lib ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${lib}/${lib}.a)
-    set(check_arg ${ARGV2})
-    set(data_arg  ${ARGV3})
-  else()
-    set(target ${ARGV2})
-    set(link_lib ${lib})
-    set(check_arg ${ARGV3})
-    set(data_arg ${ARGV4})
-  endif()
-  if("${check_arg}" STREQUAL "export")
-    set(export ${export} 
-        -Wl,--version-script=${ARGV3})
-  elseif("${check_arg}" STREQUAL "nowrap")
-    set(export ${data_arg})
-  elseif("${check_arg}" STREQUAL "extras")
-    foreach(arg ${data_arg})
-      list(APPEND export ${arg})
-    endforeach()
-  endif()
-  add_custom_command(OUTPUT ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
-                     COMMAND ${CMAKE_C_COMPILER}
-                     ARGS    -Wl,--whole-archive
-                             ${link_lib}
-                             -Wl,--no-whole-archive -lm
-                             -shared -o ${CMAKE_BINARY_DIR}/${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
-                             ${export}
-                     DEPENDS ${target} wrapper.def wrapper)
-  list(APPEND WRAP_FILES ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
-  set(WRAP_FILES ${WRAP_FILES} PARENT_SCOPE)
-endfunction()
-
+# Add a data file to installation list with a mirror in build tree
+# Arguments:
+#   file     full path to file to mirror
+#   relative the relative base of file path in the build/install tree
+# Implicit arguments:
+#   CORE_SOURCE_DIR - root of source tree
+# On return:
+#   file is added to ${install_data} and mirrored in build tree
 function(copy_file_to_buildtree file relative)
   string(REPLACE "\(" "\\(" filename ${file})
   string(REPLACE "\)" "\\)" file2 ${filename})
@@ -62,6 +45,14 @@ function(copy_file_to_buildtree file relative)
   set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
+# add data files to installation list with a mirror in build tree.
+# reads list of files to install from a given list of text files.
+# Arguments:
+#   pattern globbing pattern for text files to read
+# Implicit arguments:
+#   CORE_SOURCE_DIR - root of source tree
+# On return:
+#   files are added to ${install_data} and mirrored in build tree
 function(copy_files_from_filelist_to_buildtree pattern)
   foreach(arg ${ARGN})
     list(APPEND pattern ${arg})
@@ -88,39 +79,7 @@ function(copy_files_from_filelist_to_buildtree pattern)
   set(install_data ${install_data} PARENT_SCOPE)
 endfunction()
 
-function(find_soname lib)
-  if(ARGV1)
-    set(liblow ${ARGV1})
-  else()
-    string(TOLOWER ${lib} liblow)
-  endif()
-  if(${lib}_LDFLAGS)
-    set(link_lib "${${lib}_LDFLAGS}")
-  else()
-    if(IS_ABSOLUTE "${${lib}_LIBRARIES}")
-      set(link_lib "${${lib}_LIBRARIES}")
-    else()
-      set(link_lib -l${${lib}_LIBRARIES})
-    endif()
-  endif()
-  execute_process(COMMAND ${CMAKE_C_COMPILER} -nostdlib -o /dev/null -Wl,-M ${link_lib} 
-                  COMMAND grep LOAD.*${liblow}
-                  ERROR_QUIET
-                  OUTPUT_VARIABLE ${lib}_FILENAME)
-  string(REPLACE "LOAD " "" ${lib}_FILENAME "${${lib}_FILENAME}")
-  string(STRIP "${${lib}_FILENAME}" ${lib}_FILENAME)
-  if(${lib}_FILENAME)
-    execute_process(COMMAND objdump -p ${${lib}_FILENAME}
-                    COMMAND grep SONAME.*${liblow}
-                    ERROR_QUIET
-                    OUTPUT_VARIABLE ${lib}_SONAME)
-    string(REPLACE "SONAME " "" ${lib}_SONAME ${${lib}_SONAME})
-    string(STRIP ${${lib}_SONAME} ${lib}_SONAME)
-    message(STATUS "${lib} soname: ${${lib}_SONAME}")
-    set(${lib}_SONAME ${${lib}_SONAME} PARENT_SCOPE)
-  endif()
-endfunction()
-
+# helper macro to set modified variables in parent scope
 macro(export_dep)
   set(SYSTEM_INCLUDES ${SYSTEM_INCLUDES} PARENT_SCOPE)
   set(DEPLIBS ${DEPLIBS} PARENT_SCOPE)
@@ -129,6 +88,11 @@ macro(export_dep)
   mark_as_advanced(${depup}_LIBRARIES)
 endmacro()
 
+# add a required dependency of main application
+# Arguments:
+#   dep name of find rule for dependency, used uppercased for variable prefix
+# On return:
+#   dependency added to ${SYSTEM_INCLUDES}, ${DEPLIBS} and ${DEP_DEFINES}
 function(core_require_dep dep)
   find_package(${dep} REQUIRED)
   string(TOUPPER ${dep} depup)
@@ -138,6 +102,11 @@ function(core_require_dep dep)
   export_dep()
 endfunction()
 
+# add a required dyloaded dependency of main application
+# Arguments:
+#   dep name of find rule for dependency, used uppercased for variable prefix
+# On return:
+#   dependency added to ${SYSTEM_INCLUDES}, ${dep}_SONAME is set up
 function(core_require_dyload_dep dep)
   find_package(${dep} REQUIRED)
   string(TOUPPER ${dep} depup)
@@ -147,6 +116,7 @@ function(core_require_dyload_dep dep)
   set(${depup}_SONAME ${${depup}_SONAME} PARENT_SCOPE)
 endfunction()
 
+# helper macro for optional deps
 macro(setup_enable_switch)
   string(TOUPPER ${dep} depup)
   if (ARGV1)
@@ -156,6 +126,11 @@ macro(setup_enable_switch)
   endif()
 endmacro()
 
+# add an optional dependency of main application
+# Arguments:
+#   dep name of find rule for dependency, used uppercased for variable prefix
+# On return:
+#   dependency optionally added to ${SYSTEM_INCLUDES}, ${DEPLIBS} and ${DEP_DEFINES}
 function(core_optional_dep dep)
   setup_enable_switch()
   if(${enable_switch})
@@ -172,6 +147,11 @@ function(core_optional_dep dep)
   endif()
 endfunction()
 
+# add an optional dyloaded dependency of main application
+# Arguments:
+#   dep name of find rule for dependency, used uppercased for variable prefix
+# On return:
+#   dependency optionally added to ${SYSTEM_INCLUDES}, ${DEP_DEFINES}, ${dep}_SONAME is set up
 function(core_optional_dyload_dep dep)
   setup_enable_switch()
   if(${enable_switch})
