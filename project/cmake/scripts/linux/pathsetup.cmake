@@ -32,4 +32,3 @@ list(APPEND final_message "Datadir: ${datadir}")
 
 set(PATH_DEFINES -DBIN_INSTALL_PATH=\"${libdir}/xbmc\"
                    -DINSTALL_PATH=\"${datarootdir}/xbmc\")
-
