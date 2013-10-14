@@ -1,0 +1,1 @@
+mad http://mirrors.xbmc.org/build-deps/sources/libmad-0.15.1b.tar.gz
