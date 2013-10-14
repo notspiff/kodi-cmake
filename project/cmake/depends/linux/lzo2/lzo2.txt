@@ -1,0 +1,1 @@
+lzo2 http://mirrors.xbmc.org/build-deps/sources/lzo-2.06.tar.gz
