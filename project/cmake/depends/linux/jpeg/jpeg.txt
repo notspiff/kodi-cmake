@@ -1,0 +1,1 @@
+jpeg http://mirrors.xbmc.org/build-deps/sources/jpegsrc.v8b.tar.gz
