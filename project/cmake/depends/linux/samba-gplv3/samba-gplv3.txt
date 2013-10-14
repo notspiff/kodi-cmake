@@ -1,0 +1,1 @@
+samba-gplv3 http://mirrors.xbmc.org/build-deps/sources/samba-3.6.12.tar.gz
