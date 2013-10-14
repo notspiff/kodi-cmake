@@ -1,0 +1,1 @@
+modplug http://mirrors.xbmc.org/build-deps/sources/libmodplug-0.8.7.tar.gz
