@@ -1,0 +1,27 @@
+--- plist/plutil/CMakeLists.txt.orig	2013-10-14 19:22:06.281208974 +0200
++++ plist/plutil/CMakeLists.txt	2013-10-14 19:22:22.953209771 +0200
+@@ -3,7 +3,7 @@
+ 	plutil.c)
+ 
+ ADD_EXECUTABLE(plutil ${plutil_SRC})
+-TARGET_LINK_LIBRARIES(plutil plist)
++TARGET_LINK_LIBRARIES(plutil plist z m)
+ SET_TARGET_PROPERTIES( plutil PROPERTIES VERSION ${PLUTIL_VERSION} )
+ 
+-INSTALL( TARGETS plutil RUNTIME DESTINATION bin COMPONENT plutil )
+\ No newline at end of file
++INSTALL( TARGETS plutil RUNTIME DESTINATION bin COMPONENT plutil )
+--- plist/test/CMakeLists.txt.orig	2013-10-14 19:23:49.769213920 +0200
++++ plist/test/CMakeLists.txt	2013-10-14 19:24:03.185214564 +0200
+@@ -7,9 +7,9 @@
+ SET(plist_cmp_SRC
+ 	plist_cmp.c)
+ ADD_EXECUTABLE(plist_test ${plist_test_SRC})
+-TARGET_LINK_LIBRARIES(plist_test plist)
++TARGET_LINK_LIBRARIES(plist_test plist z m)
+ ADD_EXECUTABLE(plist_cmp ${plist_cmp_SRC})
+-TARGET_LINK_LIBRARIES(plist_cmp plist)
++TARGET_LINK_LIBRARIES(plist_cmp plist z m)
+ 
+ INCLUDE(CTest)
+ 
