@@ -1,0 +1,1 @@
+xml2 http://mirrors.xbmc.org/build-deps/sources/libxml2-2.7.6.tar.gz
