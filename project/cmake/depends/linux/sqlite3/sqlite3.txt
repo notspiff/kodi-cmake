@@ -1,0 +1,1 @@
+sqlite3 http://mirrors.xbmc.org/build-deps/sources/sqlite-autoconf-3071000.tar.gz
