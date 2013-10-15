@@ -1,0 +1,15 @@
+set(ARCH_DEFINES -DTARGET_POSIX -DTARGET_LINUX -D_LINUX -DTARGET_ANDROID)
+set(SYSTEM_DEFINES -D__STDC_CONSTANT_MACROS -D_FILE_DEFINED
+                   -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64)
+if(WITH_ARCH)
+  set(ARCH ${WITH_ARCH})
+else()
+  if(CPU STREQUAL "armeabi-v7a")
+    set(ARCH arm-linux-androideabi)
+  else()
+    message(WARNING "unknown CPU: ${CPU}")
+  endif()
+endif()
+
+#set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
+#set(DEP_DEFINES -DLIRC_DEVICE=${LIRC_DEVICE})
