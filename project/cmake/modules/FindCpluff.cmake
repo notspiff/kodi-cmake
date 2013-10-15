@@ -1,15 +1,16 @@
-string(REPLACE ";" " " defines "${SYSTEM_DEFINES} -I${EXPAT_INCLUDE_DIR}")
+string(REPLACE ";" " " defines "${CMAKE_C_FLAGS} ${SYSTEM_DEFINES} -I${EXPAT_INCLUDE_DIR}")
 get_filename_component(expat_dir ${EXPAT_LIBRARY} PATH)
 set(ldflags "-L${expat_dir}")
 ExternalProject_ADD(libcpluff SOURCE_DIR ${CORE_SOURCE_DIR}/lib/cpluff
                     PREFIX ${CORE_BUILD_DIR}/cpluff
                     UPDATE_COMMAND ${UPDATE_COMMAND}
-                    CONFIGURE_COMMAND ${CORE_SOURCE_DIR}/lib/cpluff/configure
+                    CONFIGURE_COMMAND CC=${CMAKE_C_COMPILER} ${CORE_SOURCE_DIR}/lib/cpluff/configure
                                       --disable-nls
                                       --enable-static
                                       --disable-shared
                                       --with-pic
                                       --prefix=<INSTALL_DIR>
+                                      --host=${ARCH}
                                       CFLAGS=${defines}
                                       LDFLAGS=${ldflags})
 
