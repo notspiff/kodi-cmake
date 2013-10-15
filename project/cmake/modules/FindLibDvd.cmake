@@ -1,3 +1,4 @@
+string(REPLACE ";" " " defines "${CMAKE_C_FLAGS} ${SYSTEM_DEFINES}")
 if(ENABLE_DVDCSS)
   ExternalProject_ADD(dvdcss SOURCE_DIR ${CORE_SOURCE_DIR}/lib/libdvd/libdvdcss/
                       PREFIX ${CORE_BUILD_DIR}/libdvd
@@ -7,7 +8,10 @@ if(ENABLE_DVDCSS)
                                         --enable-static
                                         --disable-shared
                                         --with-pic
-                                        --prefix=<INSTALL_DIR>)
+                                        --prefix=<INSTALL_DIR>
+                                        --host=${ARCH}
+                                        "CC=${CMAKE_C_COMPILER}"
+                                        "CFLAGS=${defines}")
 
   core_link_library(${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd/lib/libdvdcss.a
                     system/players/dvdplayer/libdvdcss dvdcss)
@@ -21,12 +25,14 @@ endif(ENABLE_DVDCSS)
 ExternalProject_ADD(dvdread SOURCE_DIR ${CORE_SOURCE_DIR}/lib/libdvd/libdvdread/
                     PREFIX ${CORE_BUILD_DIR}/libdvd
                     UPDATE_COMMAND ${UPDATE_COMMAND}
-                    CONFIGURE_COMMAND <SOURCE_DIR>/configure
+                    CONFIGURE_COMMAND  <SOURCE_DIR>/configure
                                       --enable-static
                                       --disable-shared
                                       --with-pic
                                       --prefix=<INSTALL_DIR>
-                                      "CFLAGS=${DVDREAD_CFLAGS}")
+                                      --host=${ARCH}
+                                      "CC=${CMAKE_C_COMPILER}"
+                                      "CFLAGS=${defines} ${DVDREAD_CFLAGS}")
 if(ENABLE_DVDCSS)
   add_dependencies(dvdread dvdcss)
 endif()
@@ -34,18 +40,20 @@ endif()
 core_link_library(${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd/lib/libdvdread.a
                   system/players/dvdplayer/libdvdread dvdread)
 
-ExternalProject_ADD(dvdnav SOURCE_DIR ${CORE_SOURCE_DIR}/lib/libdvd/libdvdnav/
+ExternalProject_ADD(dvdnav SOURCE_DIR ${CORE_SOURCE_DIR}/lib/libdvd/libdvdnav
                     PREFIX ${CORE_BUILD_DIR}/libdvd
                     UPDATE_COMMAND ${UPDATE_COMMAND}
-                    CONFIGURE_COMMAND <SOURCE_DIR>/configure
+                    CONFIGURE_COMMAND  <SOURCE_DIR>/configure2
                                       --disable-shared
                                       --enable-static
                                       --with-pic
+                                      --host=${ARCH}
                                       --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd
                                       --with-dvdread-config=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd/bin/dvdread-config
-                                      "LDFLAGS=-L${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd/lib"
-                                      "CFLAGS=${DVDREAD_CFLAGS}"
-                                      "LIBS=-ldvdcss")
+                                      "LDFLAGS=${AC_LDFLAGS} -L${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd/lib"
+                                      "CFLAGS=${defines} ${DVDREAD_CFLAGS}"
+                                      "LIBS=-ldvdcss"
+                                      "CC=${CMAKE_C_COMPILER}")
 add_dependencies(dvdnav dvdread)
 core_link_library(${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/libdvd/lib/libdvdnav.a
                   system/players/dvdplayer/libdvdnav dvdnav)
