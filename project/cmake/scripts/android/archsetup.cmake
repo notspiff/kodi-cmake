@@ -11,5 +11,10 @@ else()
   endif()
 endif()
 
-#set(LIRC_DEVICE          "\"/dev/lircd\"" CACHE STRING "LIRC device to use")
-#set(DEP_DEFINES -DLIRC_DEVICE=${LIRC_DEVICE})
+set(FFMPEG_OPTS --enable-cross-compile --cpu=cortex-a9 --arch=arm --target-os=linux --enable-neon
+        --disable-vdpau --disable-vdpau --cc=${CMAKE_C_COMPILER} --host-cc=${CMAKE_C_COMPILER}
+        --strip=${CMAKE_STRIP})
+set(ENABLE_SDL OFF)
+set(ENABLE_X11 OFF)
+set(ENABLE_EGL ON)
+
