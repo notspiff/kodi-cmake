@@ -46,7 +46,8 @@ else()
                    --enable-runtime-cpudetect
                    --enable-pic
                    --custom-libname-with-major='$(FULLNAME)-$(LIBMAJOR)'-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
-                   --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg)
+                   --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg
+                   ${FFMPEG_OPTS})
 
   if(GNUTLS_FOUND)
     list(APPEND ffmpeg_conf --enable-gnutls)
