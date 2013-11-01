@@ -1,1 +1,1 @@
-pvr.demo https://github.com/wsnipex/pvr.demo 3f392119 # PVRADDONS;PVRDEMO OFF
+pvr.demo /home/akva/kode/xbmc-addons/pvr.demo 76ed2dc # PVRADDONS;PVRDEMO OFF
