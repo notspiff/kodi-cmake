@@ -1,1 +1,1 @@
-pvr.demo https://github.com/cptspiff/pvr.demo 0ec3f6ce # PVRADDONS;PVRDEMO OFF
+pvr.demo https://github.com/wsnipex/pvr.demo 3f392119 # PVRADDONS;PVRDEMO OFF
