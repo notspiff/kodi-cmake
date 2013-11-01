@@ -1,5 +1,9 @@
 # - Try to find Libsmbclient
 
+if(PKGCONFIG_FOUND)
+  pkg_check_modules(LIBSMBCLIENT smbclient)
+endif()
+
 if (LIBSMBCLIENT_LIBRARIES AND LIBSMBCLIENT_INCLUDE_DIRS)
   # in cache already
   set(LIBSMBCLIENT_FOUND TRUE)
