@@ -1,1 +1,1 @@
-visualization.goom /home/akva/kode/xbmc-addons/visualization.goom 7296c48 # GOOM OFF
+visualization.goom /home/akva/kode/xbmc-addons/visualization.goom fee7837 # GOOM OFF
