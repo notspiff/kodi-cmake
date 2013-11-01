@@ -1,1 +1,1 @@
-pvr.mythtv.cmyth https://github.com/cptspiff/pvr.mythtv.cmyth e030af792 # PVRADDONS;PVRMYTH OFF 
+pvr.mythtv.cmyth /home/akva/kode/xbmc-addons/pvr.mythtv.cmyth 1527b5a # PVRADDONS;PVRMYTH OFF 
