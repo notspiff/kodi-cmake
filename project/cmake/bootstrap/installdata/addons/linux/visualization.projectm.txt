@@ -1,1 +1,1 @@
-visualization.projectm https://github.com/cptspiff/visualization.projectm 9e1fe93
+visualization.projectm /home/akva/kode/xbmc-addons/visualization.projectm 9e1fe93
