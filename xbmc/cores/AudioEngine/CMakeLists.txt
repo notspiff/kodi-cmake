@@ -36,10 +36,7 @@ else()
                       Engines/ActiveAE/ActiveAEStream.cpp
                       Engines/ActiveAE/ActiveAESound.cpp
                       Engines/ActiveAE/ActiveAEResample.cpp
-                      Engines/ActiveAE/ActiveAEBuffer.cpp
-                      Engines/SoftAE/SoftAE.cpp
-                      Engines/SoftAE/SoftAEStream.cpp
-                      Engines/SoftAE/SoftAESound.cpp)
+                      Engines/ActiveAE/ActiveAEBuffer.cpp)
 endif()
 
 if(ALSA_FOUND)
