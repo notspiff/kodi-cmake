@@ -1,1 +1,1 @@
-visualization.fishbmc https://github.com/cptspiff/visualization.fishbmc 6143b4b35
+visualization.fishbmc /home/akva/kode/xbmc-addons/visualization.fishbmc 6143b4b35
