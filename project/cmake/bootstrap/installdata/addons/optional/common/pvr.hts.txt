@@ -1,1 +1,1 @@
-pvr.hts https://github.com/cptspiff/pvr.hts f724f8a4d # PVRADDONS;PVRHTS OFF
+pvr.hts /home/akva/kode/xbmc-addons/pvr.hts 7f764ba # PVRADDONS;PVRHTS OFF
