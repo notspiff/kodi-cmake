@@ -263,6 +263,14 @@ foreach(subdir ${build_dirs})
   list(GET subdir 0 id)
   list(GET subdir 1 url)
   list(GET subdir 2 hash)
+  set(shared 1)
+  set(install_prefix ${CMAKE_INSTALL_PREFIX})
+  set(install_command INSTALL_COMMAND "")
+  if(subdir MATCHES xbmc-platform)
+    set(shared 0)
+    set(install_prefix ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
+    set(install_command)
+  endif()
   if(BOOTSTRAP_IN_TREE)
     externalproject_add(${id}
                         GIT_REPOSITORY ${url}
@@ -270,20 +278,20 @@ foreach(subdir ${build_dirs})
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DBUILD_SHARED_LIBS=1
-                        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                        -DBUILD_SHARED_LIBS=${shared}
+                        -DCMAKE_INSTALL_PREFIX=${install_prefix}
                         -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
-                        INSTALL_COMMAND "")
+                        "${install_command}")
   else()
     externalproject_add(${id}
                         SOURCE_DIR ${BOOTSTRAP_DIR}/addons/${id}/src/${id}
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DBUILD_SHARED_LIBS=1
-                        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                        -DBUILD_SHARED_LIBS=${shared}
+                        -DCMAKE_INSTALL_PREFIX=${install_prefix}
                         -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
-                        INSTALL_COMMAND "")
+                        "${install_command}")
   endif()
   add_dependencies(${id} xbmc-platform)
 endforeach()
