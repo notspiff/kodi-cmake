@@ -7,7 +7,10 @@
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules (FLAC flac)
-else()
+  list(APPEND FLAC_INCLUDE_DIRS ${FLAC_INCLUDEDIR})
+endif()
+
+if(NOT FLAC_FOUND)
   find_path(FLAC_INCLUDE_DIRS FLAC/stream_decoder.h)
   find_library(FLAC_LIBRARIES FLAC)
 endif()
