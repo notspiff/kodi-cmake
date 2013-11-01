@@ -1,1 +1,1 @@
-pvr.mediaportal.tvserver https://github.com/cptspiff/pvr.mediaportal.tvserver af5a528a0 # PVRADDONS;PVRMEDIAPORTAL OFF
+pvr.mediaportal.tvserver /home/akva/kode/xbmc-addons/pvr.mediaportal.tvserver 72df38e # PVRADDONS;PVRMEDIAPORTAL OFF
