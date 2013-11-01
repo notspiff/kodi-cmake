@@ -1,1 +1,1 @@
-pvr.argustv https://github.com/wsnipex/pvr.argustv e36b5ed0 # PVRADDONS;PVRARGUSTV OFF 
+pvr.argustv /home/akva/kode/xbmc-addons/pvr.argustv 30f9e6a # PVRADDONS;PVRARGUSTV OFF 

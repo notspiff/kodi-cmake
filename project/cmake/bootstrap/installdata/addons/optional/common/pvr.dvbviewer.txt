@@ -1,1 +1,1 @@
-pvr.dvbviewer https://github.com/cptspiff/pvr.dvbviewer da233dd4 # PVRADDONS;PVRDVBVIEWER OFF
+pvr.dvbviewer /home/akva/kode/xbmc-addons/pvr.dvbviewer c6729fc # PVRADDONS;PVRDVBVIEWER OFF
