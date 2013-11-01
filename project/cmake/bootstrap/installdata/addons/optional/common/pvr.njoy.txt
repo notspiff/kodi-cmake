@@ -1,1 +1,1 @@
-pvr.njoy https://github.com/cptspiff/pvr.njoy fb166bda # PVRADDONS;PVRNJOY OFF
+pvr.njoy /home/akva/kode/xbmc-addons/pvr.njoy 45b706b # PVRADDONS;PVRNJOY OFF

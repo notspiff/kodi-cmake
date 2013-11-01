@@ -1,1 +1,1 @@
-pvr.nextpvr https://github.com/cptspiff/pvr.nextpvr fc0ea2f4 # PVRADDONS;PVRNEXTPVR OFF
+pvr.nextpvr /home/akva/kode/xbmc-addons/pvr.nextpvr 7b61902 # PVRADDONS;PVRNEXTPVR OFF
