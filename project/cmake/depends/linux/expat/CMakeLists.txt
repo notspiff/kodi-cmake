@@ -9,6 +9,7 @@ externalproject_add(expat
                     CONFIGURE_COMMAND <SOURCE_DIR>/configure 
                       --prefix=${OUTPUT_DIR}
                       --disable-shared
+                      CXXFLAGS=-fPIC CFLAGS=-fPIC
                     INSTALL_COMMAND ""
                     BUILD_IN_SOURCE 1)
                   
