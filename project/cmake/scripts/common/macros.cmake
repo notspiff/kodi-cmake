@@ -19,6 +19,15 @@ function(core_add_library name)
   endif()
 endfunction()
 
+# Add a test library, and add sources to list for gtest integration macros
+function(core_add_test_library name)
+  core_add_library(${name} 1)
+  foreach(src ${SOURCES})
+    set(test_sources ${CMAKE_CURRENT_SOURCE_DIR}/${src} ${test_sources} CACHE STRING "" FORCE)
+  endforeach()
+  set(test_archives ${test_archives} ${name} CACHE STRING "" FORCE)
+endfunction()
+
 # Add a data file to installation list with a mirror in build tree
 # Arguments:
 #   file     full path to file to mirror
