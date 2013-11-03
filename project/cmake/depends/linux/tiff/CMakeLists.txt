@@ -9,6 +9,7 @@ externalproject_add(tiff
                     CONFIGURE_COMMAND <SOURCE_DIR>/configure 
                       --prefix=${OUTPUT_DIR}
                       --disable-shared
+                      CFLAGS=-fPIC CXXFLAGS=-fPIC
                     INSTALL_COMMAND ""
                     BUILD_IN_SOURCE 1)
                   
