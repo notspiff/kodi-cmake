@@ -1,1 +1,1 @@
-pvr.demo /home/akva/kode/xbmc-addons/pvr.demo 76ed2dc # PVRADDONS;PVRDEMO OFF
+pvr.demo https://github.com/notspiff/pvr.demo 76ed2dc # PVRADDONS;PVRDEMO OFF
