@@ -6,6 +6,7 @@ set(SOURCES PlayListB4S.cpp
             PlayListURL.cpp
             PlayListWPL.cpp
             PlayListXML.cpp
-            SmartPlayList.cpp)
+            SmartPlayList.cpp
+            SmartPlaylistFileItemListModifier.cpp)
 
 core_add_library(playlists)
