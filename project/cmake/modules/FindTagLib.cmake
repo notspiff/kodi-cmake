@@ -14,6 +14,9 @@ if(NOT TAGLIB_FOUND)
   find_library(TAGLIB_LIBRARIES tag)
 endif()
 
+# Workaround broken .pc file
+list(APPEND TAGLIB_LIBRARIES ${ZLIB_LIBRARIES})
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(TagLib REQUIRED_VARS TAGLIB_INCLUDE_DIRS TAGLIB_LIBRARIES)
 
