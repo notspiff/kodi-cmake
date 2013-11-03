@@ -170,7 +170,11 @@ include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
 add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES} ${PATH_DEFINES})
 
 set(core_DEPENDS "" CACHE STRING "" FORCE)
+set(test_archives "" CACHE STRING "" FORCE)
+set(test_sources "" CACHE STRING "" FORCE)
 mark_as_advanced(core_DEPENDS)
+mark_as_advanced(test_archives)
+mark_as_advanced(test_sources)
 
 file(STRINGS ${PROJECT_SOURCE_DIR}/installdata/addon-bindings.txt bindings)
 foreach(binding ${bindings})
@@ -181,6 +185,7 @@ if(NOT BOOTSTRAP_DIR)
   set(BOOTSTRAP_IN_TREE 1)
 endif()
 add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap)
+add_subdirectory(${CORE_SOURCE_DIR}/lib/gtest ${CORE_BUILD_DIR}/gtest)
 
 # Subdirs
 core_add_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/common/*.txt
@@ -249,6 +254,13 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
+add_executable(xbmc-test ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
+target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
+                      ${DEPLIBS} ${CMAKE_DL_LIBS} )
+
+enable_testing()
+GTEST_ADD_TESTS(xbmc-test "" ${test_sources})
+
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
                 ${CORE_SOURCE_DIR}/project/cmake/scripts/common/xbmc-addon-helpers.cmake)
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
@@ -305,4 +317,3 @@ foreach(msg ${final_message})
   message(STATUS ${msg})
 endforeach()
 message("#-----------------------#")
-
