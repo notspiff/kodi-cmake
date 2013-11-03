@@ -3,6 +3,11 @@ project(xbmc-bootstrap)
 cmake_minimum_required(VERSION 2.8)
 
 include(ExternalProject)
+include(../scripts/common/managestring.cmake)
+if(NOT CORE_SYSTEM_NAME)
+  string(TOLOWER ${CMAKE_SYSTEM_NAME} CORE_SYSTEM_NAME)
+endif()
+set(xbmc-platform_ADDED OFF CACHE BOOL "" FORCE)
 
 find_package(Git REQUIRED)
 
@@ -47,7 +52,7 @@ function(add_addon_separate entry)
     if("${id}" MATCHES "^skin.")
       list(APPEND SKINS "${BOOTSTRAP_DIR}/addons/${id}\;${BOOTSTRAP_DIR}")
     elseif("${id}" MATCHES "^visualization\\." OR
-           "${id}" MATCHES "^screensavers?\\."
+           "${id}" MATCHES "^screensavers?\\." OR
            "${id}" MATCHES "^pvr\\.")
       list(APPEND build_dirs "${xbmc-platform_DEF}")
       list(REMOVE_DUPLICATES build_dirs)
@@ -66,9 +71,14 @@ function(add_addon_separate entry)
         list(APPEND build_dirs "${xbmc-platform_DEF}")
         list(REMOVE_DUPLICATES build_dirs)
       else()
-        add_git_cmake(${id} ${repo} ${hash} addons)
-        if(NOT TARGET xbmc-platform)
-          add_git_cmake(xbmc-platform "${xbmc-platform_DEF}")
+        add_git_cmake(${id} ${repo} ${hash} addons/compile)
+        if(NOT xbmc-platform_ADDED)
+          string_split(xbmc-platform_list " " ${xbmc-platform_DEF})
+          list(GET xbmc-platform_list 0 id)
+          list(GET xbmc-platform_list 1 repo)
+          list(GET xbmc-platform_list 2 hash)
+          add_git_cmake(${id} ${repo} ${hash} addons/compile)
+          set(xbmc-platform_ADDED 1 CACHE STRING "" FORCE)
         endif()
       endif()
     else()
@@ -209,9 +219,9 @@ file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs
 add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig swig.dir)
 
 set(autoconf_dirs lib/libdvd/libdvdcss
-                   lib/libdvd/libdvdread
-                   lib/libdvd/libdvdnav
-                   lib/cpluff)
+                  lib/libdvd/libdvdread
+                  lib/libdvd/libdvdnav
+                  lib/cpluff)
 
 foreach(dir ${autoconf_dirs})
   add_custom_command(OUTPUT ${CORE_SOURCE_DIR}/${dir}/config.h.in
