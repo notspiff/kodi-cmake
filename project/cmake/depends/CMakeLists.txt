@@ -93,6 +93,8 @@ foreach(file ${cmake_input_files})
     set(extraflags "")
     if(EXISTS ${dir}/flags.txt)
       file(STRINGS ${dir}/flags.txt extraflags)
+      string(REPLACE " " ";" extraflags ${extraflags})
+      set(extraflags "${extraflags}")
     endif()
     set(PATCH_COMMAND "")
     file(REMOVE ${CMAKE_BINARY_DIR}/build/${id}/tmp/patch.cmake)
@@ -121,11 +123,14 @@ foreach(file ${cmake_input_files})
     if(NOT TARGET ${id})
       externalproject_add(${id} URL ${url} 
                           PREFIX build/${id}
-                          CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                                     -DOUTPUT_DIR=${OUTPUT_DIR}
-                                     -DCMAKE_PREFIX_PATH=${OUTPUT_DIR}
-                                     -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}
-                                     ${extraflags}
+                          CONFIGURE_COMMAND PKG_CONFIG_PATH=${OUTPUT_DIR}/lib/pkgconfig 
+                                            ${CMAKE_COMMAND} 
+                                            ${CMAKE_BINARY_DIR}/build/${id}/src/${id}
+                                            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                                            -DOUTPUT_DIR=${OUTPUT_DIR}
+                                            -DCMAKE_PREFIX_PATH=${OUTPUT_DIR}
+                                            -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}
+                                            ${extraflags}
                           PATCH_COMMAND ${PATCH_COMMAND}
                           "${INSTALL_COMMAND}")
       list(LENGTH def deflength)
