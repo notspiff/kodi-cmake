@@ -3,6 +3,9 @@ project(xbmc)
 cmake_minimum_required(VERSION 2.8.8)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
+if(DEPENDS_DIR)
+  list(APPEND CMAKE_PREFIX_PATH ${DEPENDS_DIR})
+endif()
 
 enable_language(CXX)
 enable_language(C)
@@ -288,21 +291,24 @@ foreach(subdir ${build_dirs})
                         GIT_REPOSITORY ${url}
                         GIT_TAG ${hash}
                         PREFIX ${CORE_BUILD_DIR}/${id}
-                        CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DBUILD_SHARED_LIBS=${shared}
-                        -DCMAKE_INSTALL_PREFIX=${install_prefix}
-                        -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                        CONFIGURE_COMMAND PKG_CONFIG_PATH=${DEPENDS_DIR}/lib/pkgconfig
+                                          ${CMAKE_COMMAND} <SOURCE_DIR>
+                                          -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                                          -DBUILD_SHARED_LIBS=${shared}
+                                          -DCMAKE_INSTALL_PREFIX=${install_prefix}
+                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                                          -DBOOTSTRAP_IN_TREE=1
                         "${install_command}")
   else()
     externalproject_add(${id}
                         SOURCE_DIR ${BOOTSTRAP_DIR}/addons/compile/${id}/src/${id}
                         PREFIX ${CORE_BUILD_DIR}/${id}
-                        CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                        -DBUILD_SHARED_LIBS=${shared}
-                        -DCMAKE_INSTALL_PREFIX=${install_prefix}
-                        -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                        CONFIGURE_COMMAND PKG_CONFIG_PATH=${DEPENDS_DIR}/lib/pkgconfig
+                                          ${CMAKE_COMMAND} <SOURCE_DIR>
+                                          -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                                          -DBUILD_SHARED_LIBS=${shared}
+                                          -DCMAKE_INSTALL_PREFIX=${install_prefix}
+                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
                         "${install_command}")
   endif()
   add_dependencies(${id} xbmc-platform)
