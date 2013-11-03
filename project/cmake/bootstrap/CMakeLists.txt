@@ -37,7 +37,9 @@ function(add_git_cmake id repo rev prefix)
                       GIT_REPOSITORY ${repo}
                       PREFIX ${OUTPUT_DIR}/${prefix}/${id}
                       GIT_TAG ${hash}
-                      UPDATE_COMMAND ""
+                      UPDATE_COMMAND ${CMAKE_COMMAND}
+                                    -DROOT_DIR=${OUTPUT_DIR}/${prefix}/${id}/src/${id}
+                                    -P ${PROJECT_SOURCE_DIR}/installdata/bootstrap.cmake
                       CONFIGURE_COMMAND ""
                       BUILD_COMMAND ""
                       INSTALL_COMMAND "")
@@ -55,6 +57,7 @@ function(add_addon_separate entry)
            "${id}" MATCHES "^screensavers?\\." OR
            "${id}" MATCHES "^pvr\\.")
       list(APPEND build_dirs "${xbmc-platform_DEF}")
+      list(APPEND build_dirs "${id} ${repo} ${hash} build/${id}")
       list(REMOVE_DUPLICATES build_dirs)
     else()
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${id}
