@@ -10,6 +10,7 @@ set(SOURCES Application.cpp
             DbUrl.cpp
             DynamicDll.cpp
             FileItem.cpp
+            FileItemListModification.cpp
             GitRevision.cpp
             GUIInfoManager.cpp
             GUILargeTextureManager.cpp
