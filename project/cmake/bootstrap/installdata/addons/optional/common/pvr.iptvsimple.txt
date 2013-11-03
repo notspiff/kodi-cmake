@@ -1,1 +1,1 @@
-pvr.iptvsimple /home/akva/kode/xbmc-addons/pvr.iptvsimple d28a422 # PVRADDONS;PVRIPTVSIMPLE OFF
+pvr.iptvsimple https://github.com/notspiff/pvr.iptvsimple d28a422 # PVRADDONS;PVRIPTVSIMPLE OFF

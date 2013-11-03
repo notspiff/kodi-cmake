@@ -1,1 +1,1 @@
-pvr.vuplus /home/akva/kode/xbmc-addons/pvr.vuplus 303bbc1 # PVRADDONS;PVRVUPLUS OFF
+pvr.vuplus https://github.com/notspiff/pvr.vuplus 303bbc1 # PVRADDONS;PVRVUPLUS OFF
