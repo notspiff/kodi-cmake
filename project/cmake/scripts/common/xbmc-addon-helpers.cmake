@@ -106,3 +106,4 @@ endif()
 # Needed to quell warning about passed option being unused
 # when reconfigured
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH})
+set(BOOTSTRAP_IN_TREE ${BOOTSTRAP_IN_TREE})

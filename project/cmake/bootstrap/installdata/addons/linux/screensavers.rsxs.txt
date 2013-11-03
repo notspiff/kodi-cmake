@@ -1,1 +1,1 @@
-screensavers.rsxs /home/akva/kode/xbmc-addons/screensavers.rsxs d6c660
+screensavers.rsxs /home/akva/kode/xbmc-addons/screensavers.rsxs a31b9f8
