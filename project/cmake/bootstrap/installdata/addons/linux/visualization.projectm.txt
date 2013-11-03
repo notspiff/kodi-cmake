@@ -1,1 +1,1 @@
-visualization.projectm /home/akva/kode/xbmc-addons/visualization.projectm 71a9ba8
+visualization.projectm https://github.com/notspiff/visualization.projectm 859fe9f
