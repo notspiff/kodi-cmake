@@ -53,3 +53,20 @@ function(prepare_addon_env)
                  ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/xbmc/xbmc-config.cmake @ONLY)
   file(COPY ${cmake-files} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/xbmc)
 endfunction()
+
+# Get GTest tests as CMake tests.
+# Copied from FindGTest.cmake 
+# Thanks to Daniel Blezek <blezek@gmail.com> for the GTEST_ADD_TESTS code
+function(GTEST_ADD_TESTS executable extra_args)
+    if(NOT ARGN)
+        message(FATAL_ERROR "Missing ARGN: Read the documentation for GTEST_ADD_TESTS")
+    endif()
+    foreach(source ${ARGN})
+        file(READ "${source}" contents)
+        string(REGEX MATCHALL "TEST_?F?\\(([A-Za-z_0-9 ,]+)\\)" found_tests ${contents})
+        foreach(hit ${found_tests})
+            string(REGEX REPLACE ".*\\( *([A-Za-z_0-9]+), *([A-Za-z_0-9]+) *\\).*" "\\1.\\2" test_name ${hit})
+            add_test(${test_name} ${executable} --gtest_filter=${test_name} ${extra_args})
+        endforeach()
+    endforeach()
+endfunction()
