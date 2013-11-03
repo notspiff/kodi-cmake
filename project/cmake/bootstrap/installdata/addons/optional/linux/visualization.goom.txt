@@ -1,1 +1,1 @@
-visualization.goom /home/akva/kode/xbmc-addons/visualization.goom fee7837 # GOOM OFF
+visualization.goom https://github.com/notspiff/visualization.goom b0de32b # GOOM OFF
