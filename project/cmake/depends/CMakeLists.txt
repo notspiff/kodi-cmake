@@ -1,6 +1,5 @@
 project(xbmc-depends)
 
-
 function(add_internal id url inputfile)
   externalproject_add(${id}
                       URL ${url}
@@ -48,8 +47,11 @@ function(add_direct id url inputfile)
                                       -P ${PROJECT_SOURCE_DIR}/install.cmake)
 endfunction()
 
-
 cmake_minimum_required(VERSION 2.8)
+
+if(NOT CORE_SYSTEM_NAME)
+  string(TOLOWER ${CMAKE_SYSTEM_NAME} CORE_SYSTEM_NAME)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
@@ -64,7 +66,21 @@ if(NOT OUTPUT_DIR)
 endif()
 list(APPEND CMAKE_PREFIX_PATH ${OUTPUT_DIR})
 
-file(GLOB_RECURSE cmake_input_files linux/*.txt)
+file(GLOB_RECURSE cmake_input_files ${CORE_SYSTEM_NAME}/*.txt)
+file(GLOB_RECURSE cmake_input_files2 common/*.txt)
+list(APPEND cmake_input_files ${cmake_input_files2})
+if(BOOTSTRAP_DIR)
+  file(GLOB bootstrap_dirs ${BOOTSTRAP_DIR}/addons/compile/*)
+  foreach(dir ${bootstrap_dirs})
+    get_filename_component(id ${dir} NAME)
+    file(GLOB_RECURSE cmake_input_files2 ${dir}/src/${id}/depends/${CORE_SYSTEM_NAME}/*.txt)
+    file(GLOB_RECURSE cmake_input_files2 ${dir}/src/${id}/depends/common/*.txt)
+    foreach(file ${cmake_input_files2})
+      list(APPEND cmake_input_files ${file})
+    endforeach()
+  endforeach()
+endif()
+
 foreach(file ${cmake_input_files})
   if(NOT (file MATCHES CMakeLists.txt OR
   	  file MATCHES install.txt OR
@@ -102,19 +118,21 @@ foreach(file ${cmake_input_files})
     else()
       set(INSTALL_COMMAND "")
     endif()
-    externalproject_add(${id} URL ${url} 
-                        PREFIX build/${id}
-                        CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                                   -DOUTPUT_DIR=${OUTPUT_DIR}
-                                   -DCMAKE_PREFIX_PATH=${OUTPUT_DIR}
-				   -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}
-				   ${extraflags}
-                        PATCH_COMMAND ${PATCH_COMMAND}
-			"${INSTALL_COMMAND}")
-    list(LENGTH def deflength)
-    if(deflength GREATER 2)
-      list(GET def 2 deps)
-      add_dependencies(${id} ${deps})
+    if(NOT TARGET ${id})
+      externalproject_add(${id} URL ${url} 
+                          PREFIX build/${id}
+                          CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                                     -DOUTPUT_DIR=${OUTPUT_DIR}
+                                     -DCMAKE_PREFIX_PATH=${OUTPUT_DIR}
+                                     -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}
+                                     ${extraflags}
+                          PATCH_COMMAND ${PATCH_COMMAND}
+                          "${INSTALL_COMMAND}")
+      list(LENGTH def deflength)
+      if(deflength GREATER 2)
+        list(GET def 2 deps)
+        add_dependencies(${id} ${deps})
+      endif()
     endif()
   endif()
 endforeach()
