@@ -1,1 +1,1 @@
-screensavers.rsxs /home/akva/kode/xbmc-addons/screensavers.rsxs a31b9f8
+screensavers.rsxs https://github.com/notspiff/screensavers.rsxs 3c19884
