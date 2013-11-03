@@ -6,7 +6,7 @@ include(ExternalProject)
 externalproject_add(zlib
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}
                     UPDATE_COMMAND ""
-                    CONFIGURE_COMMAND <SOURCE_DIR>/configure 
+                    CONFIGURE_COMMAND CFLAGS=-fpic <SOURCE_DIR>/configure 
                       --prefix=${OUTPUT_DIR}
                       --static
                     INSTALL_COMMAND ""
