@@ -1,4 +1,5 @@
 set(SOURCES Database.cpp
+            DatabaseQuery.cpp
             dataset.cpp
             qry_dat.cpp
             sqlitedataset.cpp)

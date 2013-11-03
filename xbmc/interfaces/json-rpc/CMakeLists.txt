@@ -13,6 +13,7 @@ set(SOURCES AddonsOperations.cpp
             ProfilesOperations.cpp
             PVROperations.cpp
             SystemOperations.cpp
+            TextureOperations.cpp
             VideoLibrary.cpp
             XBMCOperations.cpp)
   
