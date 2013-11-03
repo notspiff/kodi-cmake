@@ -296,7 +296,7 @@ foreach(subdir ${build_dirs})
                         "${install_command}")
   else()
     externalproject_add(${id}
-                        SOURCE_DIR ${BOOTSTRAP_DIR}/addons/${id}/src/${id}
+                        SOURCE_DIR ${BOOTSTRAP_DIR}/addons/compile/${id}/src/${id}
                         PREFIX ${CORE_BUILD_DIR}/${id}
                         CMAKE_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                         -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
