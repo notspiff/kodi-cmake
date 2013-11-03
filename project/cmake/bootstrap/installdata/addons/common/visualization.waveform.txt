@@ -1,1 +1,1 @@
-visualization.waveform /home/akva/kode/xbmc-addons/visualization.waveform 0e6f01d5
+visualization.waveform https://github.com/notspiff/visualization.waveform 0e6f01d5
