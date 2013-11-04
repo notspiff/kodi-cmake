@@ -50,6 +50,4 @@ set(SOURCES TestAlarmClock.cpp
             TestXBMCTinyXML.cpp
             TestXMLUtils.cpp)
 
-include_directories(${CORE_SOURCE_DIR}/lib/gtest/include)
-
 core_add_test_library(utils_test)
