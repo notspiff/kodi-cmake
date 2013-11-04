@@ -68,6 +68,7 @@ set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
              ${CORE_SOURCE_DIR}/addons/library.xbmc.gui
              ${CORE_SOURCE_DIR}/addons/library.xbmc.pvr
              ${CORE_SOURCE_DIR}/lib
+             ${CORE_SOURCE_DIR}/lib/gtest/include
              ${CORE_SOURCE_DIR}/xbmc
              ${CORE_SOURCE_DIR}/xbmc/linux
              ${CORE_SOURCE_DIR}/xbmc/cores/dvdplayer
