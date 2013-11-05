@@ -8,7 +8,8 @@ set(SOURCES ActorProtocol.cpp
             BitstreamConverter.cpp
             BitstreamStats.cpp
             BooleanLogic.cpp
-            CharsetConverter.cpp
+            CharsetConverter.cpp 
+            CharsetDetection.cpp
             CPUInfo.cpp
             Crc32.cpp
             CryptThreading.cpp
