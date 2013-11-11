@@ -1,5 +1,6 @@
 set(SOURCES BaseRenderer.cpp
             OverlayRenderer.cpp
+            OverlayRendererGUI.cpp
             OverlayRendererUtil.cpp
             RenderCapture.cpp
             RenderFlags.cpp
