@@ -7,6 +7,7 @@ xbmc/dialogs                    dialogs
 xbmc/epg                        epg
 xbmc/guilib                     guilib
 xbmc/input                      input
+xbmc/listproviders              listproviders
 xbmc/pictures                   pictures
 xbmc/playlists                  playlists
 xbmc/powermanagement            powermanagement
