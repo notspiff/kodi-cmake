@@ -7,7 +7,6 @@ set(SOURCES DVDAudio.cpp
             DVDMessageTracker.cpp
             DVDOverlayContainer.cpp
             DVDOverlayRenderer.cpp
-            DVDPerformanceCounter.cpp
             DVDPlayerAudio.cpp
             DVDPlayer.cpp
             DVDPlayerSubtitle.cpp
