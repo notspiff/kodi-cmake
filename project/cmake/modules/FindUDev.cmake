@@ -19,4 +19,4 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(UDev DEFAULT_MSG UDEV_INCLUDE_DIRS UDEV_LIBRARIES)
 
 mark_as_advanced(UDEV_INCLUDE_DIRS UDEV_LIBRARIES)
-list(APPEND UDEV_DEFINITIONS -DUSE_LIBUDEV=1)
+list(APPEND UDEV_DEFINITIONS -DHAVE_LIBUDEV=1)
