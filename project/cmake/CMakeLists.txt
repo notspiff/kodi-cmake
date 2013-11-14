@@ -42,6 +42,7 @@ if(UNIX)
   option(ENABLE_EGL         "Enable EGL?" OFF)
   option(ENABLE_VAAPI       "Enable VAAPI support?" ON)
   option(ENABLE_VDPAU       "Enable VDPAU support?" ON)
+  option(ENABLE_OPTICAL     "Enable optical support?" ON)
 endif()
 # System options
 option(WITH_ARCH              "build with given arch" OFF)
@@ -149,6 +150,11 @@ endif()
 
 if(ENABLE_NONFREE)
   list(APPEND DEP_DEFINES "-DHAVE_XBMC_NONFREE=1")
+endif()
+
+if(ENABLE_OPTICAL)
+  list(APPEND DEP_DEFINES -DHAS_DVD_DRIVE)
+  core_require_dep(Cdio)
 endif()
 
 core_optional_dep(Shairplay ENABLE_AIRTUNES)
