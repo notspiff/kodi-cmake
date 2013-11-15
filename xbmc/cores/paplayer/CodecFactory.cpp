@@ -21,7 +21,6 @@
 #include "system.h"
 #include "CodecFactory.h"
 #include "OGGcodec.h"
-#include "ModplugCodec.h"
 #include "NSFCodec.h"
 #ifdef HAS_SPC_CODEC
 #include "SPCCodec.h"
@@ -81,21 +80,6 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
     return new DVDPlayerCodec();
   else if (fileType == "wv")
     return new DVDPlayerCodec();
-  else if (fileType == "669"  ||  fileType == "abc" ||
-           fileType == "amf"  ||  fileType == "ams" ||
-           fileType == "dbm"  ||  fileType == "dmf" ||
-           fileType == "dsm"  ||  fileType == "far" ||
-           fileType == "it"   ||  fileType == "j2b" ||
-           fileType == "mdl"  ||  fileType == "med" ||
-           fileType == "mod"  ||  fileType == "itgz"||
-           fileType == "mt2"  ||  fileType == "mtm" ||
-           fileType == "okt"  ||  fileType == "pat" ||
-           fileType == "psm"  ||  fileType == "ptm" ||
-           fileType == "s3m"  ||  fileType == "stm" ||
-           fileType == "ult"  ||  fileType == "umx" ||
-           fileType == "xm"   || fileType == "mdgz" ||
-           fileType == "s3gz" || fileType == "xmgz")
-    return new ModplugCodec();
   else if (fileType == "nsf" || fileType == "nsfstream")
     return new NSFCodec();
 #ifdef HAS_SPC_CODEC
