@@ -50,7 +50,10 @@
 #include "FileItem.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
+#include "addons/AddonManager.h"
+#include "addons/AudioDecoder.h"
 
+using namespace ADDON;
 using namespace XFILE;
 using namespace PLAYLIST;
 using namespace std;
@@ -79,6 +82,22 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
 
     delete pDir;
     return NULL;
+  }
+  VECADDONS codecs;
+  CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
+  for (size_t i=0;i<codecs.size();++i)
+  {
+    boost::shared_ptr<CAudioDecoder> dec(boost::static_pointer_cast<CAudioDecoder>(codecs[i]));
+    if (!strExtension.empty() && dec->HasTracks() &&
+        dec->GetExtensions().find(strExtension) != std::string::npos)
+    {
+      CAudioDecoder* result = new CAudioDecoder(*dec);
+      static_cast<AudioDecoderDll&>(*result).Create();
+      if (result->ContainsFiles(url))
+        return result;
+      delete result;
+      return NULL;
+    }
   }
   if (url.IsFileType("nsf") && CFile::Exists(url))
   {

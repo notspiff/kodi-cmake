@@ -1,4 +1,5 @@
 addons/xbmc.addon/*
+addons/xbmc.audiodecoder/*
 addons/xbmc.codec/*
 addons/xbmc.core/*
 addons/xbmc.debug/*
