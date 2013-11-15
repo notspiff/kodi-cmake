@@ -4,7 +4,6 @@ set(SOURCES ADPCMCodec.cpp
             CodecFactory.cpp
             DVDPlayerCodec.cpp
             FLACcodec.cpp
-            ModplugCodec.cpp
             MP3codec.cpp
             NSFCodec.cpp
             OggCallback.cpp
