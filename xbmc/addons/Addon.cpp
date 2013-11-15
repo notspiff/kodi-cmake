@@ -397,6 +397,7 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_WEB_INTERFACE:
       case ADDON_SERVICE:
       case ADDON_REPOSITORY:
+      case ADDON_AUDIODECODER:
       case ADDON_AUDIOENCODER:
       case ADDON_CONTEXT_ITEM:
       case ADDON_AUDIODECODER:

@@ -85,7 +85,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   }
 
 #ifdef HAS_FILESYSTEM
-  
   if (pItem->IsRSS())
     return new CRSSDirectory();
 
