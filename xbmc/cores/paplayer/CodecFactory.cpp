@@ -37,9 +37,25 @@
 #include "DVDPlayerCodec.h"
 #include "PCMCodec.h"
 #include "utils/StringUtils.h"
+#include "addons/AddonManager.h"
+#include "addons/AudioDecoder.h"
+
+using namespace ADDON;
 
 ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
 {
+  VECADDONS codecs;
+  CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
+  for (size_t i=0;i<codecs.size();++i)
+  {
+    boost::shared_ptr<CAudioDecoder> dec(boost::static_pointer_cast<CAudioDecoder>(codecs[i]));
+    if (dec->GetExtensions().find("."+strFileType) != std::string::npos)
+    {
+      CAudioDecoder* result = new CAudioDecoder(*dec);
+      static_cast<AudioDecoderDll&>(*result).Create();
+      return result;
+    }
+  }
   if (strFileType.Equals("mp3") || strFileType.Equals("mp2"))
     return new DVDPlayerCodec();
   else if (strFileType.Equals("pcm") || strFileType.Equals("l16"))
@@ -114,6 +130,22 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
 ICodec* CodecFactory::CreateCodecDemux(const CStdString& strFile, const CStdString& strContent, unsigned int filecache)
 {
   CURL urlFile(strFile);
+
+  if (!strContent.empty())
+  {
+    VECADDONS codecs;
+    CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
+    for (size_t i=0;i<codecs.size();++i)
+    {
+      boost::shared_ptr<CAudioDecoder> dec(boost::static_pointer_cast<CAudioDecoder>(codecs[i]));
+      if (dec->GetMimetypes().find(strContent) != std::string::npos)
+      {
+        CAudioDecoder* result = new CAudioDecoder(*dec);
+        static_cast<AudioDecoderDll&>(*result).Create();
+        return result;
+      }
+    }
+  }
   if( strContent.Equals("audio/mpeg")
   ||  strContent.Equals("audio/mpeg3")
   ||  strContent.Equals("audio/mp3") )
