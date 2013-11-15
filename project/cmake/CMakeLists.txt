@@ -16,7 +16,6 @@ option(ENABLE_DVDCSS      "Enable libdvdcss support?" ON)
 option(ENABLE_UPNP        "Enable UPnP support?" ON)
 option(ENABLE_NONFREE     "Enable non-free components?" ON)
 option(ENABLE_MICROHTTPD  "Enable MicroHttpd webserver?" ON)
-option(ENABLE_LAME        "Enable LAME mp3 encoder?" ON)
 option(ENABLE_MYSQLCLIENT "Enable MySql support?" ON)
 option(ENABLE_AVAHI       "Enable Avahi support?" ON)
 option(ENABLE_RTMP        "Enable RTMP support?" ON)
@@ -100,7 +99,7 @@ set(required_dyload Curl MAD Modplug ASS Mpeg2
                     Ogg Vorbis VorbisEnc VorbisFile LibDvd)
 
 # Optional, dyloaded deps
-set(dyload_optional Lame RTMP CEC Bluray
+set(dyload_optional RTMP CEC Bluray
                     AfpClient Plist NFS)
 
 # Required by shared objects we link
