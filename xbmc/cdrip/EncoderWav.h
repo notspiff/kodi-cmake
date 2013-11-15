@@ -41,18 +41,19 @@ typedef struct
 }
 WAVHDR, *PWAVHDR, *LPWAVHDR;
 
-class CEncoderWav : public CEncoder
+class CEncoderWav : public IEncoder
 {
 public:
   CEncoderWav();
   virtual ~CEncoderWav() {}
-  bool Init(const char* strFile, int iInChannels, int iInRate, int iInBits);
-  int Encode(int nNumBytesRead, uint8_t* pbtStream);
+  bool Init();
+  int Encode(int nNumBytesRead, uint8_t* pbtStream, uint8_t* buffer);
+  int Flush(uint8_t* buffer);
   bool Close();
   void AddTag(int key, const char* value);
 
 private:
-  bool WriteWavHeader();
+  bool first;
 
   int m_iBytesWritten;
 };

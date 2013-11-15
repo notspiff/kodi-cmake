@@ -25,52 +25,55 @@
 CEncoderWav::CEncoderWav()
 {
   m_iBytesWritten = 0;
+  first = true;
 }
 
-bool CEncoderWav::Init(const char* strFile, int iInChannels, int iInRate, int iInBits)
+bool CEncoderWav::Init()
 {
   m_iBytesWritten = 0;
 
   // we only accept 2 / 44100 / 16 atm
-  if (iInChannels != 2 || iInRate != 44100 || iInBits != 16) return false;
-
-  // set input stream information and open the file
-  if (!CEncoder::Init(strFile, iInChannels, iInRate, iInBits)) return false;
+  if (m_iInChannels != 2 || 
+      m_iInSampleRate != 44100 ||
+      m_iInBitsPerSample != 16)
+    return false;
 
   // write dummy header file
-  WAVHDR dummyheader;
-  memset(&dummyheader, 0, sizeof(dummyheader));
-  FileWrite(&dummyheader, sizeof(dummyheader));
+  first = true;
 
   return true;
 }
 
-int CEncoderWav::Encode(int nNumBytesRead, BYTE* pbtStream)
+int CEncoderWav::Encode(int nNumBytesRead, uint8_t* pbtStream, uint8_t* buffer)
 {
-  // write stream to file (no conversion needed at this time)
-  if (FileWrite(pbtStream, nNumBytesRead) == -1)
+  int extra=0;
+  if (first)
   {
-    CLog::Log(LOGERROR, "Error writing buffer to file");
-    return 0;
+    memset(buffer, 0, sizeof(WAVHDR));
+    buffer += sizeof(WAVHDR);
+    first = false;
+    extra = sizeof(WAVHDR);
   }
 
+  memcpy(buffer, pbtStream, nNumBytesRead);
   m_iBytesWritten += nNumBytesRead;
-  return 1;
+
+  return nNumBytesRead+extra;
+}
+
+int CEncoderWav::Flush(uint8_t* buffer)
+{
+  return 0;
 }
 
 bool CEncoderWav::Close()
 {
-  WriteWavHeader();
-  FileClose();
-  return true;
-}
-
-bool CEncoderWav::WriteWavHeader()
-{
   WAVHDR wav;
   int bps = 1;
 
-  if (!m_file) return false;
+  XFILE::CFile file;
+  if (!file.OpenForWrite(m_strFile))
+    return false;
 
   memcpy(wav.riff, "RIFF", 4);
   wav.len = m_iBytesWritten + 44 - 8;
@@ -87,8 +90,8 @@ bool CEncoderWav::WriteWavHeader()
   wav.dwDataLen = m_iBytesWritten;
 
   // write header to beginning of stream
-  m_file->Seek(0, FILE_BEGIN);
-  FileWrite(&wav, sizeof(wav));
+  file.Seek(0, FILE_BEGIN);
+  file.Write(&wav, sizeof(wav));
 
   return true;
 }
