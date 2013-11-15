@@ -19,7 +19,6 @@ set(SOURCES ActorProtocol.cpp
             Environment.cpp
             Fanart.cpp
             fastmemcpy.c
-            fastmemcpy-arm.S
             FileOperationJob.cpp
             FileUtils.cpp
             fstrcmp.c
@@ -75,6 +74,10 @@ set(SOURCES ActorProtocol.cpp
             XMLUtils.cpp)
 
 
-enable_language(ASM)
+if(ARM)
+ enable_language(ASM)
+ list(APPEND SOURCES fastmemcpy-arm.S)
+endif()
+
 core_add_library(utils)
 add_dependencies(utils libcpluff ffmpeg)
