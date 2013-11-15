@@ -23,9 +23,7 @@
 #include "TagLoaderTagLib.h"
 #include "MusicInfoTagLoaderCDDA.h"
 #include "MusicInfoTagLoaderShn.h"
-#ifdef HAS_MOD_PLAYER
-#include "cores/ModPlayer.h"
-#endif
+#include "MusicInfoTagLoaderWav.h"
 #include "MusicInfoTagLoaderNSF.h"
 #include "MusicInfoTagLoaderSPC.h"
 #include "MusicInfoTagLoaderYM.h"
