@@ -9,6 +9,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             AddonManager.cpp
             AddonStatusHandler.cpp
             AddonVersion.cpp
+            AudioDecoder.cpp
             AudioEncoder.cpp
             GUIDialogAddonInfo.cpp
             GUIDialogAddonSettings.cpp

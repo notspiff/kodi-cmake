@@ -55,6 +55,7 @@ function(add_addon_separate entry)
       list(APPEND SKINS "${BOOTSTRAP_DIR}/addons/${id}\;${BOOTSTRAP_DIR}")
     elseif("${id}" MATCHES "^visualization\\." OR
            "${id}" MATCHES "^screensavers?\\." OR
+           "${id}" MATCHES "^audiodecoder?\\." OR
            "${id}" MATCHES "^audioencoder?\\." OR
            "${id}" MATCHES "^pvr\\.")
       list(APPEND build_dirs "${xbmc-platform_DEF}")
@@ -69,6 +70,7 @@ function(add_addon_separate entry)
   else()
     if("${id}" MATCHES "^visualization\\." OR
        "${id}" MATCHES "^screensavers?\\." OR
+       "${id}" MATCHES "^audiodecoder?\\." OR
        "${id}" MATCHES "^audioencoder?\\." OR
        "${id}" MATCHES "^pvr\\.")
       if(BOOTSTRAP_IN_TREE)
