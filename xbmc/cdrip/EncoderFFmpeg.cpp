@@ -35,13 +35,19 @@
 #include "utils/log.h"
 #include "settings/Settings.h"
 #include "utils/URIUtils.h"
+#include "addons/AddonManager.h"
 
 /* AV_PKT_FLAG_KEY was named PKT_FLAG_KEY in older versions of libavcodec */
 #ifndef AV_PKT_FLAG_KEY
 #define AV_PKT_FLAG_KEY PKT_FLAG_KEY
 #endif
 
+using namespace ADDON;
+
+struct NullDeleter {template<typename T> void operator()(T*) {} };
+
 CEncoderFFmpeg::CEncoderFFmpeg():
+  CEncoder(boost::shared_ptr<IEncoder>(this, NullDeleter())),
   m_Format    (NULL),
   m_CodecCtx  (NULL),
   m_SwrCtx    (NULL),
@@ -58,6 +64,10 @@ CEncoderFFmpeg::CEncoderFFmpeg():
 
 bool CEncoderFFmpeg::Init(const char* strFile, int iInChannels, int iInRate, int iInBits)
 {
+  /* set input stream information and open the file */
+  if (!CEncoder::Init(strFile, iInChannels, iInRate, iInBits))
+    return false;
+
   if (!m_dllAvUtil.Load() || !m_dllAvCodec.Load() || !m_dllAvFormat.Load() || !m_dllSwResample.Load()) return false;
   m_dllAvFormat.av_register_all();
   m_dllAvCodec.avcodec_register_all();
@@ -86,7 +96,12 @@ bool CEncoderFFmpeg::Init(const char* strFile, int iInChannels, int iInRate, int
     return false;
   }
 
-  m_Format->bit_rate = CSettings::Get().GetInt("audiocds.bitrate") * 1000;
+  AddonPtr addon;
+  CAddonMgr::Get().GetAddon(CSettings::Get().GetString("audiocds.encoder"), addon);
+  if (addon)
+  {
+    m_Format->bit_rate = (128+32*strtol(addon->GetSetting("bitrate").c_str(), NULL, 10))*1000;
+  }
 
   /* add a stream to it */
   m_Stream = m_dllAvFormat.avformat_new_stream(m_Format, codec);
@@ -206,21 +221,6 @@ bool CEncoderFFmpeg::Init(const char* strFile, int iInChannels, int iInRate, int
     m_dllAvCodec.avcodec_fill_audio_frame(m_ResampledFrame, iInChannels, m_OutFormat, m_ResampledBuffer, m_ResampledBufferSize, 0);
   }
 
-  /* set input stream information and open the file */
-  if (!CEncoder::Init(strFile, iInChannels, iInRate, iInBits))
-  {
-    CLog::Log(LOGERROR, "CEncoderFFmpeg::Init - Failed to call CEncoder::Init");
-    if (m_ResampledFrame ) m_dllAvCodec.avcodec_free_frame(&m_ResampledFrame);
-    if (m_ResampledBuffer) m_dllAvUtil.av_freep(&m_ResampledBuffer);
-    if (m_SwrCtx)          m_dllSwResample.swr_free(&m_SwrCtx);
-    m_dllAvCodec.avcodec_free_frame(&m_BufferFrame);
-    m_dllAvUtil.av_freep(&m_Buffer);
-    m_dllAvUtil.av_freep(&m_Stream);
-    m_dllAvUtil.av_freep(&m_Format->pb);
-    m_dllAvUtil.av_freep(&m_Format);
-    return false;
-  }
-
   /* set the tags */
   SetTag("album"       , m_strAlbum);
   SetTag("album_artist", m_strArtist);
@@ -271,7 +271,7 @@ int64_t CEncoderFFmpeg::avio_seek_callback(void *opaque, int64_t offset, int whe
   return enc->FileSeek(offset, whence);
 }
 
-int CEncoderFFmpeg::Encode(int nNumBytesRead, BYTE* pbtStream)
+int CEncoderFFmpeg::Encode(int nNumBytesRead, uint8_t* pbtStream)
 {
   while(nNumBytesRead > 0)
   {
@@ -336,7 +336,7 @@ bool CEncoderFFmpeg::WriteFrame()
   return true;
 }
 
-bool CEncoderFFmpeg::Close()
+bool CEncoderFFmpeg::CloseEncode()
 {
   if (m_Format) {
     /* if there is anything still in the buffer */

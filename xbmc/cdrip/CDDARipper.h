@@ -21,6 +21,7 @@
  *
  */
 
+#include "utils/StdString.h"
 #include "Encoder.h"
 #include "utils/JobManager.h"
 
