@@ -17,3 +17,6 @@ addons/screensaver.xbmc.builtin.dim/*
 addons/screensaver.xbmc.builtin.black/*
 addons/script.module.pil/*
 addons/script.module.pysqlite/*
+addons/audioencoder.xbmc.builtin.aac/*
+addons/audioencoder.xbmc.builtin.wav/*
+addons/audioencoder.xbmc.builtin.wma/*

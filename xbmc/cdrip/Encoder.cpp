@@ -21,6 +21,7 @@
 #include "Encoder.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
+#include <string.h>
 
 CEncoder::CEncoder(boost::shared_ptr<IEncoder> encoder)
 {
