@@ -21,14 +21,13 @@
 #include "Encoder.h"
 #include "filesystem/File.h"
 #include "utils/log.h"
+#include "addons/AddonManager.h"
 
-CEncoder::CEncoder()
+CEncoder::CEncoder(boost::shared_ptr<IEncoder> encoder)
 {
   m_file = NULL;
   m_dwWriteBufferPointer = 0;
-  m_iInChannels = 0;
-  m_iInSampleRate = 0;
-  m_iInBitsPerSample = 0;
+  m_impl = encoder;
 }
 
 CEncoder::~CEncoder()
@@ -41,18 +40,19 @@ bool CEncoder::Init(const char* strFile, int iInChannels, int iInRate, int iInBi
   if (strFile == NULL) return false;
 
   m_dwWriteBufferPointer = 0;
-  m_strFile = strFile;
+  m_impl->m_strFile = strFile;
 
-  m_iInChannels = iInChannels;
-  m_iInSampleRate = iInRate;
-  m_iInBitsPerSample = iInBits;
+  m_impl->m_iInChannels = iInChannels;
+  m_impl->m_iInSampleRate = iInRate;
+  m_impl->m_iInBitsPerSample = iInBits;
 
   if (!FileCreate(strFile))
   {
     CLog::Log(LOGERROR, "Error: Cannot open file: %s", strFile);
     return false;
   }
-  return true;
+
+  return m_impl->Init();
 }
 
 bool CEncoder::FileCreate(const char* filename)
@@ -150,4 +150,39 @@ int CEncoder::FlushStream()
   m_dwWriteBufferPointer = 0;
 
   return iResult;
+}
+
+int CEncoder::Encode(int nNumBytesRead, uint8_t* pbtStream)
+{
+  int iBytes = m_impl->Encode(nNumBytesRead, pbtStream, m_buffer);
+
+  if (iBytes < 0)
+  {
+    CLog::Log(LOGERROR, "Internal encoder error: %i", iBytes);
+    return 0;
+  }
+
+  if (WriteStream(m_buffer, iBytes) != iBytes)
+  {
+    CLog::Log(LOGERROR, "Error writing buffer to file");
+    return 0;
+  }
+
+  return 1;
+}
+
+bool CEncoder::CloseEncode()
+{
+  int iBytes = m_impl->Flush(m_buffer);
+  if (iBytes < 0)
+  {
+    CLog::Log(LOGERROR, "Internal encoder error: %i", iBytes);
+    return false;
+  }
+
+  WriteStream(m_buffer, iBytes);
+  FlushStream();
+  FileClose();
+
+  return m_impl->Close();
 }

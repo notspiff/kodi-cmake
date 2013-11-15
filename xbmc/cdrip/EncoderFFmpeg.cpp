@@ -35,13 +35,19 @@
 #include "utils/log.h"
 #include "settings/Settings.h"
 #include "utils/URIUtils.h"
+#include "addons/AddonManager.h"
 
 /* AV_PKT_FLAG_KEY was named PKT_FLAG_KEY in older versions of libavcodec */
 #ifndef AV_PKT_FLAG_KEY
 #define AV_PKT_FLAG_KEY PKT_FLAG_KEY
 #endif
 
+using namespace ADDON;
+
+struct NullDeleter {template<typename T> void operator()(T*) {} };
+
 CEncoderFFmpeg::CEncoderFFmpeg():
+  CEncoder(boost::shared_ptr<IEncoder>(this, NullDeleter())),
   m_Format    (NULL),
   m_CodecCtx  (NULL),
   m_SwrCtx    (NULL),
@@ -82,7 +88,12 @@ bool CEncoderFFmpeg::Init(const char* strFile, int iInChannels, int iInRate, int
     return false;
   }
 
-  m_Format->bit_rate = CSettings::Get().GetInt("audiocds.bitrate") * 1000;
+  AddonPtr addon;
+  CAddonMgr::Get().GetAddon(CSettings::Get().GetString("audiocds.encoder"), addon);
+  if (addon)
+  {
+    m_Format->bit_rate = (128+32*strtol(addon->GetSetting("bitrate").c_str(), NULL, 10))*1000;
+  }
 
   /* add a stream to it */
   m_Stream = avformat_new_stream(m_Format, codec);
@@ -267,7 +278,7 @@ int64_t CEncoderFFmpeg::avio_seek_callback(void *opaque, int64_t offset, int whe
   return enc->FileSeek(offset, whence);
 }
 
-int CEncoderFFmpeg::Encode(int nNumBytesRead, BYTE* pbtStream)
+int CEncoderFFmpeg::Encode(int nNumBytesRead, uint8_t* pbtStream)
 {
   while(nNumBytesRead > 0)
   {
@@ -332,7 +343,7 @@ bool CEncoderFFmpeg::WriteFrame()
   return true;
 }
 
-bool CEncoderFFmpeg::Close()
+bool CEncoderFFmpeg::CloseEncode()
 {
   if (m_Format) {
     /* if there is anything still in the buffer */
