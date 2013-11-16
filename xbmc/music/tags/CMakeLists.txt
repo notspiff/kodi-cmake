@@ -8,7 +8,6 @@ set(SOURCES MusicInfoTag.cpp
             MusicInfoTagLoaderShn.cpp
             MusicInfoTagLoaderSPC.cpp
             MusicInfoTagLoaderWav.cpp
-            MusicInfoTagLoaderYM.cpp
             TagLibVFSStream.cpp
             TagLoaderTagLib.cpp)
 

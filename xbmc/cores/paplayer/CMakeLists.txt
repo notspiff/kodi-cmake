@@ -14,8 +14,7 @@ set(SOURCES ADPCMCodec.cpp
             SPCCodec.cpp
             TimidityCodec.cpp
             VGMCodec.cpp
-            WAVcodec.cpp
-            YMCodec.cpp)
+            WAVcodec.cpp)
 
 core_add_library(paplayer)
 add_dependencies(paplayer ffmpeg)
