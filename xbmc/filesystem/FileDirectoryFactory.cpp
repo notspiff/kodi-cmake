@@ -25,7 +25,6 @@
 #include "FileDirectoryFactory.h"
 #ifdef HAS_FILESYSTEM
 #include "OGGFileDirectory.h"
-#include "NSFFileDirectory.h"
 #include "SIDFileDirectory.h"
 #include "ASAPFileDirectory.h"
 #include "UDFDirectory.h"
@@ -101,16 +100,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CStdString& strPath, CFileIt
       delete result;
       return NULL;
     }
-  }
-  if (strExtension.Equals(".nsf") && CFile::Exists(strPath))
-  {
-    IFileDirectory* pDir=new CNSFFileDirectory;
-    //  Has the nsf file more than one track?
-    if (pDir->ContainsFiles(strPath))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
   }
   if (strExtension.Equals(".sid") && CFile::Exists(strPath))
   {
