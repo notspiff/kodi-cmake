@@ -28,7 +28,6 @@
 #endif
 #include "SIDCodec.h"
 #include "VGMCodec.h"
-#include "YMCodec.h"
 #include "TimidityCodec.h"
 #ifdef HAS_ASAP_CODEC
 #include "ASAPCodec.h"
@@ -90,8 +89,6 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
     return new SIDCodec();
   else if (VGMCodec::IsSupportedFormat(strFileType))
     return new VGMCodec();
-  else if (strFileType.Equals("ym"))
-    return new YMCodec();
   else if (strFileType.Equals("wma"))
     return new DVDPlayerCodec();
   else if (strFileType.Equals("aiff") || strFileType.Equals("aif"))
