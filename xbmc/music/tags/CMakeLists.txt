@@ -4,7 +4,6 @@ set(SOURCES MusicInfoTag.cpp
             MusicInfoTagLoaderDatabase.cpp
             MusicInfoTagLoaderFactory.cpp
             MusicInfoTagLoaderMidi.cpp
-            MusicInfoTagLoaderNSF.cpp
             MusicInfoTagLoaderShn.cpp
             MusicInfoTagLoaderSPC.cpp
             MusicInfoTagLoaderWav.cpp
