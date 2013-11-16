@@ -26,7 +26,6 @@
 #include "MusicInfoTagLoaderWav.h"
 #include "MusicInfoTagLoaderNSF.h"
 #include "MusicInfoTagLoaderSPC.h"
-#include "MusicInfoTagLoaderYM.h"
 #include "MusicInfoTagLoaderDatabase.h"
 #include "MusicInfoTagLoaderASAP.h"
 #include "MusicInfoTagLoaderMidi.h"
@@ -113,11 +112,6 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const std::string&
   else if (strExtension == "spc")
   {
     CMusicInfoTagLoaderSPC *pTagLoader = new CMusicInfoTagLoaderSPC();
-    return (IMusicInfoTagLoader*)pTagLoader;
-  }
-  else if (strExtension == "ym")
-  {
-    CMusicInfoTagLoaderYM *pTagLoader = new CMusicInfoTagLoaderYM();
     return (IMusicInfoTagLoader*)pTagLoader;
   }
 #ifdef HAS_ASAP_CODEC
