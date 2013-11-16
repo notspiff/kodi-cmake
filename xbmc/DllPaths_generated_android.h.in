@@ -56,7 +56,6 @@
 #define DLL_PATH_MID_CODEC     "libtimidity-@ARCH@.so"
 #define DLL_PATH_MODULE_CODEC  "libdumb-@ARCH@.so"
 #define DLL_PATH_MPC_CODEC     "libmpcdec-@ARCH@.so"
-#define DLL_PATH_NSF_CODEC     "libnosefart-@ARCH@.so"
 #define DLL_PATH_SID_CODEC     "libsidplay2-@ARCH@.so"
 #define DLL_PATH_SPC_CODEC     "libSNESAPU-@ARCH@.so"
 #define DLL_PATH_VGM_CODEC     "libvgmstream-@ARCH@.so"
