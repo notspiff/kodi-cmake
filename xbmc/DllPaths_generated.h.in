@@ -53,7 +53,6 @@
 #define DLL_PATH_MID_CODEC     "special://xbmcbin/system/players/paplayer/timidity-@ARCH@.so"
 #define DLL_PATH_MODULE_CODEC  "special://xbmcbin/system/players/paplayer/dumb-@ARCH@.so"
 #define DLL_PATH_MPC_CODEC     "special://xbmcbin/system/players/paplayer/libmpcdec-@ARCH@.so"
-#define DLL_PATH_NSF_CODEC     "special://xbmcbin/system/players/paplayer/nosefart-@ARCH@.so"
 #define DLL_PATH_SID_CODEC     "special://xbmcbin/system/players/paplayer/libsidplay2-@ARCH@.so"
 #define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU-@ARCH@.so"
 #define DLL_PATH_VGM_CODEC     "special://xbmcbin/system/players/paplayer/vgmstream-@ARCH@.so"

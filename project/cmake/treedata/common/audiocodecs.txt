@@ -1,4 +1,3 @@
-lib/nosefart                 nosefart
 lib/libsidplay2              sidplay2
 lib/timidity                 timidity
 lib/vgmstream                vgmstream
