@@ -40,7 +40,6 @@
 #define DLL_PATH_FLAC_CODEC    "special://xbmcbin/system/players/paplayer/libFLAC.dll"
 #define DLL_PATH_MAD_CODEC     "special://xbmcbin/system/players/dvdplayer/libmad.dll"
 #define DLL_PATH_MID_CODEC     "special://xbmcbin/system/players/paplayer/timidity.dll"
-#define DLL_PATH_NSF_CODEC     "special://xbmcbin/system/players/paplayer/nosefart.dll"
 #define DLL_PATH_OGG_CODEC     "special://xbmcbin/system/players/paplayer/vorbisfile.dll"
 #define DLL_PATH_SID_CODEC     "special://xbmcbin/system/players/paplayer/libsidplay2.dll"
 #define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU.dll"

@@ -22,7 +22,6 @@
 #include "CodecFactory.h"
 #include "MP3codec.h"
 #include "OGGcodec.h"
-#include "NSFCodec.h"
 #ifdef HAS_SPC_CODEC
 #include "SPCCodec.h"
 #endif
@@ -79,8 +78,6 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
     return new DVDPlayerCodec();
   else if (strFileType.Equals("wv"))
     return new DVDPlayerCodec();
-  else if (strFileType.Equals("nsf") || strFileType.Equals("nsfstream"))
-    return new NSFCodec();
 #ifdef HAS_SPC_CODEC
   else if (strFileType.Equals("spc"))
     return new SPCCodec();
