@@ -44,7 +44,6 @@
 #define DLL_PATH_SID_CODEC     "special://xbmcbin/system/players/paplayer/libsidplay2.dll"
 #define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU.dll"
 #define DLL_PATH_VGM_CODEC     "special://xbmcbin/system/players/paplayer/vgmstream.dll"
-#define DLL_PATH_YM_CODEC      "special://xbmcbin/system/players/paplayer/stsoundlibrary.dll"
 
 /* dvdplayer */
 #define DLL_PATH_LIBASS        "special://xbmcbin/system/players/dvdplayer/libass.dll"
