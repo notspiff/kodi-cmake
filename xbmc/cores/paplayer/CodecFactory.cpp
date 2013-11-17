@@ -117,4 +117,3 @@ ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::st
     return dvdcodec;
   }
 }
-
