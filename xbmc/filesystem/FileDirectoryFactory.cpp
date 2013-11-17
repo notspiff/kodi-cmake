@@ -25,7 +25,6 @@
 #include "FileDirectoryFactory.h"
 #ifdef HAS_FILESYSTEM
 #include "OGGFileDirectory.h"
-#include "SIDFileDirectory.h"
 #include "ASAPFileDirectory.h"
 #include "UDFDirectory.h"
 #include "RSSDirectory.h"
@@ -97,16 +96,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       delete result;
       return NULL;
     }
-  }
-  if (url.IsFileType("sid") && CFile::Exists(url))
-  {
-    IFileDirectory* pDir=new CSIDFileDirectory;
-    //  Has the sid file more than one track?
-    if (pDir->ContainsFiles(url))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
   }
 #ifdef HAS_ASAP_CODEC
   if (ASAPCodec::IsSupportedFormat(url.GetFileType()) && CFile::Exists(url))
