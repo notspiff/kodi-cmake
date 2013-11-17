@@ -24,7 +24,6 @@
 #include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
 #ifdef HAS_FILESYSTEM
-#include "OGGFileDirectory.h"
 #include "ASAPFileDirectory.h"
 #include "UDFDirectory.h"
 #include "RSSDirectory.h"
@@ -71,19 +70,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CStdString& strPath, CFileIt
   StringUtils::ToLower(strExtension);
 
 #ifdef HAS_FILESYSTEM
-  if ((strExtension.Equals(".ogg") || strExtension.Equals(".oga")) && CFile::Exists(strPath))
-  {
-    IFileDirectory* pDir=new COGGFileDirectory;
-    //  Has the ogg file more than one bitstream?
-    if (pDir->ContainsFiles(strPath))
-    {
-      return pDir; // treat as directory
-    }
-
-    delete pDir;
-    return NULL;
-  }
-
   VECADDONS codecs;
   CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
   for (size_t i=0;i<codecs.size();++i)

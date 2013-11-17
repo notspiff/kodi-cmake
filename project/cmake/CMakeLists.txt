@@ -95,8 +95,7 @@ set(optional_deps MicroHttpd MySqlClient SSH
                   PulseAudio VDPAU VAAPI)
 
 # Required, dyloaded deps
-set(required_dyload Curl MAD ASS Mpeg2
-                    Ogg Vorbis VorbisEnc VorbisFile LibDvd)
+set(required_dyload Curl MAD ASS Mpeg2 LibDvd)
 
 # Optional, dyloaded deps
 set(dyload_optional RTMP CEC Bluray
