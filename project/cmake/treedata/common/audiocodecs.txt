@@ -1,4 +1,3 @@
-lib/libsidplay2              sidplay2
 lib/timidity                 timidity
 lib/vgmstream                vgmstream
 lib/xbadpcm                  xbadpcm
