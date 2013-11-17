@@ -135,10 +135,6 @@ foreach(dep ${required_dyload})
   core_require_dyload_dep(${dep})
 endforeach()
 
-# Need a special case due to upper case lib name
-find_package(FLAC REQUIRED)
-find_soname(FLAC FLAC)
-
 foreach(dep ${dyload_optional})
   core_optional_dyload_dep(${dep})
 endforeach()
