@@ -53,7 +53,6 @@ set(SOURCES AddonsDirectory.cpp
             NFSDirectory.cpp
             NFSFile.cpp
             NptXbmcFile.cpp
-            OGGFileDirectory.cpp
             PipeFile.cpp
             PipesManager.cpp
             PlaylistDirectory.cpp
