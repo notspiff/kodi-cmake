@@ -68,8 +68,6 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
     return new DVDPlayerCodec();
   else if (strFileType.Equals("mka"))
     return new DVDPlayerCodec();
-  else if (strFileType.Equals("flac"))
-    return new DVDPlayerCodec();
   else if (strFileType.Equals("wav"))
     return new DVDPlayerCodec();
   else if (strFileType.Equals("dts") || strFileType.Equals("ac3") ||
@@ -146,12 +144,6 @@ ICodec* CodecFactory::CreateCodecDemux(const CStdString& strFile, const CStdStri
   {
     // audio/x-xbmc-pcm this is the used codec for AirTunes
     // (apples audio only streaming)
-    DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
-    dvdcodec->SetContentType(strContent);
-    return dvdcodec;
-  }
-  else if (strContent.Equals("audio/flac") || strContent.Equals("audio/x-flac") || strContent.Equals("application/x-flac"))
-  {
     DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
     dvdcodec->SetContentType(strContent);
     return dvdcodec;
