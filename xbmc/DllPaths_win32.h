@@ -39,7 +39,6 @@
 #define DLL_PATH_ASAP_CODEC    "special://xbmcbin/system/players/paplayer/xbmc_asap.dll"
 #define DLL_PATH_MAD_CODEC     "special://xbmcbin/system/players/dvdplayer/libmad.dll"
 #define DLL_PATH_MID_CODEC     "special://xbmcbin/system/players/paplayer/timidity.dll"
-#define DLL_PATH_OGG_CODEC     "special://xbmcbin/system/players/paplayer/vorbisfile.dll"
 #define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU.dll"
 #define DLL_PATH_VGM_CODEC     "special://xbmcbin/system/players/paplayer/vgmstream.dll"
 
@@ -59,10 +58,6 @@
 #define DLL_PATH_LIBPOSTPROC   "special://xbmcbin/system/players/dvdplayer/postproc-52.dll"
 #define DLL_PATH_LIBSWSCALE    "special://xbmcbin/system/players/dvdplayer/swscale-2.dll"
 #define DLL_PATH_LIBSWRESAMPLE "special://xbmcbin/system/players/dvdplayer/swresample-0.dll"
-
-/* cdrip */
-#define DLL_PATH_OGG           "special://xbmcbin/system/cdrip/ogg.dll"
-#define DLL_PATH_VORBIS        "special://xbmcbin/system/cdrip/vorbis.dll"
 
 /* libbluray */
 #define DLL_PATH_LIBBLURAY     "special://xbmcbin/system/players/dvdplayer/libbluray.dll"
