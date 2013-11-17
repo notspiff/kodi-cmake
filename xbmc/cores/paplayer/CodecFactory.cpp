@@ -24,7 +24,6 @@
 #ifdef HAS_SPC_CODEC
 #include "SPCCodec.h"
 #endif
-#include "SIDCodec.h"
 #include "VGMCodec.h"
 #include "TimidityCodec.h"
 #ifdef HAS_ASAP_CODEC
@@ -80,8 +79,6 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
   else if (fileType == "spc")
     return new SPCCodec();
 #endif
-  else if (fileType == "sid" || fileType == "sidstream")
-    return new SIDCodec();
   else if (VGMCodec::IsSupportedFormat(strFileType))
     return new VGMCodec();
   else if (fileType == "wma")

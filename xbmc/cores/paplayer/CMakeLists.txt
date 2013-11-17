@@ -8,7 +8,6 @@ set(SOURCES ADPCMCodec.cpp
             OGGcodec.cpp
             PAPlayer.cpp
             PCMCodec.cpp
-            SIDCodec.cpp
             SPCCodec.cpp
             TimidityCodec.cpp
             VGMCodec.cpp
