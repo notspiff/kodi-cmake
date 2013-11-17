@@ -37,7 +37,6 @@
 /* paplayer */
 #define DLL_PATH_ADPCM_CODEC   "special://xbmcbin/system/players/paplayer/adpcm.dll"
 #define DLL_PATH_ASAP_CODEC    "special://xbmcbin/system/players/paplayer/xbmc_asap.dll"
-#define DLL_PATH_FLAC_CODEC    "special://xbmcbin/system/players/paplayer/libFLAC.dll"
 #define DLL_PATH_MID_CODEC     "special://xbmcbin/system/players/paplayer/timidity.dll"
 #define DLL_PATH_OGG_CODEC     "special://xbmcbin/system/players/paplayer/vorbisfile.dll"
 #define DLL_PATH_SID_CODEC     "special://xbmcbin/system/players/paplayer/libsidplay2.dll"
