@@ -72,7 +72,6 @@ set(SOURCES AddonsDirectory.cpp
             SFTPDirectory.cpp
             SFTPFile.cpp
             ShoutcastFile.cpp
-            SIDFileDirectory.cpp
             SlingboxDirectory.cpp
             SlingboxFile.cpp
             SmartPlaylistDirectory.cpp
