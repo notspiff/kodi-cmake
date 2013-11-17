@@ -4,8 +4,6 @@ set(SOURCES ADPCMCodec.cpp
             CodecFactory.cpp
             DVDPlayerCodec.cpp
             MP3codec.cpp
-            OggCallback.cpp
-            OGGcodec.cpp
             PAPlayer.cpp
             PCMCodec.cpp
             SPCCodec.cpp
