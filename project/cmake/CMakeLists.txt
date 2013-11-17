@@ -234,7 +234,6 @@ core_link_library(hdhomerun system/hdhomerun)
 core_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/paplayer)
-core_link_library(sidplay2 system/players/paplayer/libsidplay2)
 core_link_library(xbadpcm system/players/paplayer/adpcm)
 core_link_library(vgmstream system/players/paplayer/vgmstream)
 core_link_library(timidity
