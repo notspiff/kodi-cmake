@@ -68,8 +68,6 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
     return new DVDPlayerCodec();
   else if (fileType == "mka")
     return new DVDPlayerCodec();
-  else if (fileType == "flac")
-    return new DVDPlayerCodec();
   else if (fileType == "wav")
     return new DVDPlayerCodec();
   else if (fileType == "dts" || fileType == "ac3" ||
@@ -160,12 +158,6 @@ ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::st
   {
     // audio/x-xbmc-pcm this is the used codec for AirTunes
     // (apples audio only streaming)
-    DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
-    dvdcodec->SetContentType(content);
-    return dvdcodec;
-  }
-  else if (content == "audio/flac" || content == "audio/x-flac" || content == "application/x-flac")
-  {
     DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
     dvdcodec->SetContentType(content);
     return dvdcodec;
