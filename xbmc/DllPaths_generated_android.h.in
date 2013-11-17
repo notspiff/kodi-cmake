@@ -61,7 +61,6 @@
 #define DLL_PATH_VGM_CODEC     "libvgmstream-@ARCH@.so"
 #define DLL_PATH_WAVPACK_CODEC "@WAVPACK_SONAME@"
 
-#define DLL_PATH_FLAC_CODEC    "@FLAC_SONAME@"
 #define DLL_PATH_OGG_CODEC     "@VORBISFILE_SONAME@"
 
 /* dvdplayer */
