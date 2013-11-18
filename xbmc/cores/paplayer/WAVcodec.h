@@ -21,7 +21,6 @@
 #pragma once
 #include "ICodec.h"
 #include "CachingCodec.h"
-#include "ADPCMCodec.h"
 
 class WAVCodec : public CachingCodec
 {
