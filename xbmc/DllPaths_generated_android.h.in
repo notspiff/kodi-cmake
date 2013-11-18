@@ -57,7 +57,6 @@
 #define DLL_PATH_MODULE_CODEC  "libdumb-@ARCH@.so"
 #define DLL_PATH_MPC_CODEC     "libmpcdec-@ARCH@.so"
 #define DLL_PATH_SPC_CODEC     "libSNESAPU-@ARCH@.so"
-#define DLL_PATH_VGM_CODEC     "libvgmstream-@ARCH@.so"
 #define DLL_PATH_WAVPACK_CODEC "@WAVPACK_SONAME@"
 
 /* dvdplayer */
