@@ -1,7 +1,6 @@
 set(SOURCES AddonsDirectory.cpp
             AFPDirectory.cpp
             AFPFile.cpp
-            ASAPFileDirectory.cpp
             CacheStrategy.cpp
             CDDADirectory.cpp
             CDDAFile.cpp
