@@ -25,14 +25,9 @@
 #include "MusicInfoTagLoaderShn.h"
 #include "MusicInfoTagLoaderWav.h"
 #include "MusicInfoTagLoaderDatabase.h"
-#include "MusicInfoTagLoaderASAP.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
-
-#ifdef HAS_ASAP_CODEC
-#include "cores/paplayer/ASAPCodec.h"
-#endif
 
 #include "addons/AddonManager.h"
 #include "addons/AudioDecoder.h"
@@ -111,13 +106,6 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const std::string&
     CMusicInfoTagLoaderWAV *pTagLoader = new CMusicInfoTagLoaderWAV();
     return (IMusicInfoTagLoader*)pTagLoader;
   }
-#ifdef HAS_ASAP_CODEC
-  else if (ASAPCodec::IsSupportedFormat(strExtension) || strExtension == "asapstream")
-  {
-    CMusicInfoTagLoaderASAP *pTagLoader = new CMusicInfoTagLoaderASAP();
-    return (IMusicInfoTagLoader*)pTagLoader;
-  }
-#endif
 
   return NULL;
 }

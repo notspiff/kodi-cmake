@@ -1,5 +1,4 @@
 set(SOURCES MusicInfoTag.cpp
-            MusicInfoTagLoaderASAP.cpp
             MusicInfoTagLoaderCDDA.cpp
             MusicInfoTagLoaderDatabase.cpp
             MusicInfoTagLoaderFactory.cpp
