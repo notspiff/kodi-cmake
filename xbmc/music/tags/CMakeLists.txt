@@ -3,7 +3,6 @@ set(SOURCES MusicInfoTag.cpp
             MusicInfoTagLoaderCDDA.cpp
             MusicInfoTagLoaderDatabase.cpp
             MusicInfoTagLoaderFactory.cpp
-            MusicInfoTagLoaderMidi.cpp
             MusicInfoTagLoaderShn.cpp
             MusicInfoTagLoaderSPC.cpp
             MusicInfoTagLoaderWav.cpp
