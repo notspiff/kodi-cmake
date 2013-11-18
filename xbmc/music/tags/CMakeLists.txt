@@ -11,3 +11,5 @@ set(SOURCES MusicInfoTag.cpp
             TagLoaderTagLib.cpp)
 
 core_add_library(music_tags)
+
+add_dependencies(music_tags libcpluff)
