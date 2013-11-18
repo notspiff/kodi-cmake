@@ -21,9 +21,6 @@
 #include "system.h"
 #include "CodecFactory.h"
 #include "MP3codec.h"
-#ifdef HAS_ASAP_CODEC
-#include "ASAPCodec.h"
-#endif
 #include "URL.h"
 #include "DVDPlayerCodec.h"
 #include "PCMCodec.h"
@@ -73,10 +70,6 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
     return new DVDPlayerCodec();
   else if (strFileType.Equals("aiff") || strFileType.Equals("aif"))
     return new DVDPlayerCodec();
-#ifdef HAS_ASAP_CODEC
-  else if (ASAPCodec::IsSupportedFormat(strFileType) || strFileType.Equals("asapstream"))
-    return new ASAPCodec();
-#endif
   else if (strFileType.Equals("tta"))
     return new DVDPlayerCodec();
   else if (strFileType.Equals("tak"))
