@@ -27,7 +27,6 @@
 #include "MusicInfoTagLoaderSPC.h"
 #include "MusicInfoTagLoaderDatabase.h"
 #include "MusicInfoTagLoaderASAP.h"
-#include "MusicInfoTagLoaderMidi.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
@@ -120,11 +119,6 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const std::string&
     return (IMusicInfoTagLoader*)pTagLoader;
   }
 #endif
-  else if ( TimidityCodec::IsSupportedFormat( strExtension ) )
-  {
-    CMusicInfoTagLoaderMidi * pTagLoader = new CMusicInfoTagLoaderMidi();
-    return (IMusicInfoTagLoader*)pTagLoader;
-  }
 
   return NULL;
 }
