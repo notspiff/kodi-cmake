@@ -37,7 +37,6 @@
 /* paplayer */
 #define DLL_PATH_ADPCM_CODEC   "special://xbmcbin/system/players/paplayer/adpcm.dll"
 #define DLL_PATH_ASAP_CODEC    "special://xbmcbin/system/players/paplayer/xbmc_asap.dll"
-#define DLL_PATH_MID_CODEC     "special://xbmcbin/system/players/paplayer/timidity.dll"
 #define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU.dll"
 
 /* dvdplayer */

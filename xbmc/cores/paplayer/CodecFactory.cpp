@@ -23,8 +23,6 @@
 #ifdef HAS_SPC_CODEC
 #include "SPCCodec.h"
 #endif
-#include "VGMCodec.h"
-#include "TimidityCodec.h"
 #ifdef HAS_ASAP_CODEC
 #include "ASAPCodec.h"
 #endif
@@ -83,8 +81,6 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
     return new DVDPlayerCodec();
   else if (strFileType.Equals("xwav"))
     return new DVDPlayerCodec();
-  else if (TimidityCodec::IsSupportedFormat(strFileType))
-    return new TimidityCodec();
 #ifdef HAS_ASAP_CODEC
   else if (ASAPCodec::IsSupportedFormat(strFileType) || strFileType.Equals("asapstream"))
     return new ASAPCodec();
