@@ -106,6 +106,7 @@ ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::st
     {
       return dvdcodec;
     }
+    delete dvdcodec;
 
     dvdcodec = new DVDPlayerCodec();
     dvdcodec->SetContentType(content);
