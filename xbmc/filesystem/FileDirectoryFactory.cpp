@@ -67,6 +67,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
 
   std::string strExtension=URIUtils::GetExtension(url);
   StringUtils::ToLower(strExtension);
+
   VECADDONS codecs;
   CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
   for (size_t i=0;i<codecs.size();++i)
@@ -84,14 +85,12 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
     }
   }
 
-#ifdef HAS_FILESYSTEM
   if (pItem->IsRSS())
     return new CRSSDirectory();
 
   if (pItem->IsDiscImage())
     return new CUDFDirectory();
 
-#endif
 #if defined(TARGET_ANDROID)
   if (url.IsFileType("apk"))
   {
