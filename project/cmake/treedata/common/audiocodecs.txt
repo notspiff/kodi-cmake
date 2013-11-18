@@ -1,2 +1,1 @@
-lib/timidity                 timidity
 lib/xbadpcm                  xbadpcm
