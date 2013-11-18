@@ -78,8 +78,6 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
   else if (fileType == "spc")
     return new SPCCodec();
 #endif
-  else if (VGMCodec::IsSupportedFormat(strFileType))
-    return new VGMCodec();
   else if (fileType == "wma")
     return new DVDPlayerCodec();
   else if (fileType == "aiff" || fileType == "aif")

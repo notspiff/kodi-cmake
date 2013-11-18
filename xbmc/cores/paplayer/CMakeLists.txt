@@ -8,7 +8,6 @@ set(SOURCES ADPCMCodec.cpp
             PCMCodec.cpp
             SPCCodec.cpp
             TimidityCodec.cpp
-            VGMCodec.cpp
             WAVcodec.cpp)
 
 core_add_library(paplayer)
