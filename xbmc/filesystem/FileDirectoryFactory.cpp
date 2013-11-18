@@ -24,10 +24,8 @@
 #include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
 #ifdef HAS_FILESYSTEM
-#include "ASAPFileDirectory.h"
 #include "UDFDirectory.h"
 #include "RSSDirectory.h"
-#include "cores/paplayer/ASAPCodec.h"
 #endif
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarDirectory.h"
@@ -86,18 +84,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CStdString& strPath, CFileIt
       return NULL;
     }
   }
-#ifdef HAS_ASAP_CODEC
-  if (ASAPCodec::IsSupportedFormat(strExtension) && CFile::Exists(strPath))
-  {
-    IFileDirectory* pDir=new CASAPFileDirectory;
-    //  Has the asap file more than one track?
-    if (pDir->ContainsFiles(strPath))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
-  }
-#endif
 
   if (pItem->IsRSS())
     return new CRSSDirectory();
