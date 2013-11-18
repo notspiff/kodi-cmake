@@ -34,9 +34,6 @@
 #define DLL_PATH_LIBSHAIRPLAY  "special://xbmcbin/system/airplay/libshairplay-1.dll"
 #define DLL_PATH_LIBCEC        "special://xbmcbin/system/libcec.dll"
 
-/* paplayer */
-#define DLL_PATH_ASAP_CODEC    "special://xbmcbin/system/players/paplayer/xbmc_asap.dll"
-
 /* dvdplayer */
 #define DLL_PATH_LIBASS        "special://xbmcbin/system/players/dvdplayer/libass.dll"
 #define DLL_PATH_LIBMPEG2      "special://xbmcbin/system/players/dvdplayer/libmpeg2-0.dll"
