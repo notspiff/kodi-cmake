@@ -47,7 +47,6 @@
 
 /* paplayer */
 #define DLL_PATH_AAC_CODEC     "libAACCodec-@ARCH@.so"
-#define DLL_PATH_ADPCM_CODEC   "libadpcm-@ARCH@.so"
 #define DLL_PATH_ADPLUG_CODEC  "libadplug-@ARCH@.so"
 #define DLL_PATH_APE_CODEC     "libMACDll-@ARCH@.so"
 #define DLL_PATH_ASAP_CODEC    "libxbmc_asap-@ARCH@.so"
