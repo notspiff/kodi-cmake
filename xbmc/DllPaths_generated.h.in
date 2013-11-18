@@ -54,7 +54,6 @@
 #define DLL_PATH_MODULE_CODEC  "special://xbmcbin/system/players/paplayer/dumb-@ARCH@.so"
 #define DLL_PATH_MPC_CODEC     "special://xbmcbin/system/players/paplayer/libmpcdec-@ARCH@.so"
 #define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU-@ARCH@.so"
-#define DLL_PATH_VGM_CODEC     "special://xbmcbin/system/players/paplayer/vgmstream-@ARCH@.so"
 #define DLL_PATH_WAVPACK_CODEC "@WAVPACK_SONAME@"
 
 /* dvdplayer */
