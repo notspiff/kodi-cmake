@@ -12,6 +12,7 @@ enable_language(C)
 
 # general
 option(VERBOSE            "Enable verbose output?" OFF)
+option(ENABLE_TESTS       "Enable tests?" ON)
 option(ENABLE_DVDCSS      "Enable libdvdcss support?" ON)
 option(ENABLE_UPNP        "Enable UPnP support?" ON)
 option(ENABLE_NONFREE     "Enable non-free components?" ON)
@@ -255,12 +256,13 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
-add_executable(xbmc-test ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
-target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
-                      ${DEPLIBS} ${CMAKE_DL_LIBS} )
-
-enable_testing()
-GTEST_ADD_TESTS(xbmc-test "" ${test_sources})
+if(ENABLE_TESTS)
+  add_executable(xbmc-test ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
+  target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
+                        ${DEPLIBS} ${CMAKE_DL_LIBS})
+  enable_testing()
+  gtest_add_tests(xbmc-test "" ${test_sources})
+endif()
 
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
                 ${CORE_SOURCE_DIR}/project/cmake/scripts/common/xbmc-addon-helpers.cmake)
