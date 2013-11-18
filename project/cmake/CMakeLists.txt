@@ -235,9 +235,6 @@ core_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/paplayer)
 core_link_library(xbadpcm system/players/paplayer/adpcm)
-core_link_library(timidity
-                  system/players/paplayer/timidity "export"
-                  ${CORE_SOURCE_DIR}/lib/timidity/exports.def)
 
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
 core_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
