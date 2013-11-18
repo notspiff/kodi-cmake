@@ -1,6 +1,5 @@
-set(SOURCES ADPCMCodec.cpp
+set(SOURCES AudioDecoder.cpp
             ASAPCodec.cpp
-            AudioDecoder.cpp
             CodecFactory.cpp
             DVDPlayerCodec.cpp
             MP3codec.cpp

@@ -233,9 +233,6 @@ core_link_library(exif system/libexif)
 core_link_library(hdhomerun system/hdhomerun)
 core_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/paplayer)
-core_link_library(xbadpcm system/players/paplayer/adpcm)
-
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
 core_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
 core_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
