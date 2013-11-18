@@ -72,8 +72,6 @@ ICodec* CodecFactory::CreateCodec(const CStdString& strFileType)
     return new DVDPlayerCodec();
   else if (strFileType.Equals("aiff") || strFileType.Equals("aif"))
     return new DVDPlayerCodec();
-  else if (strFileType.Equals("xwav"))
-    return new DVDPlayerCodec();
 #ifdef HAS_ASAP_CODEC
   else if (ASAPCodec::IsSupportedFormat(strFileType) || strFileType.Equals("asapstream"))
     return new ASAPCodec();
@@ -155,6 +153,7 @@ ICodec* CodecFactory::CreateCodecDemux(const CStdString& strFile, const CStdStri
     {
       return dvdcodec;
     }
+    delete dvdcodec;
 
     dvdcodec = new DVDPlayerCodec();
     dvdcodec->SetContentType(strContent);

@@ -35,7 +35,6 @@
 #define DLL_PATH_LIBCEC        "special://xbmcbin/system/libcec.dll"
 
 /* paplayer */
-#define DLL_PATH_ADPCM_CODEC   "special://xbmcbin/system/players/paplayer/adpcm.dll"
 #define DLL_PATH_ASAP_CODEC    "special://xbmcbin/system/players/paplayer/xbmc_asap.dll"
 
 /* dvdplayer */
