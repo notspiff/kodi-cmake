@@ -4,7 +4,6 @@ set(SOURCES MusicInfoTag.cpp
             MusicInfoTagLoaderDatabase.cpp
             MusicInfoTagLoaderFactory.cpp
             MusicInfoTagLoaderShn.cpp
-            MusicInfoTagLoaderSPC.cpp
             MusicInfoTagLoaderWav.cpp
             TagLibVFSStream.cpp
             TagLoaderTagLib.cpp)

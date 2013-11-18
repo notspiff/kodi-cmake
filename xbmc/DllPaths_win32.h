@@ -38,7 +38,6 @@
 #define DLL_PATH_ADPCM_CODEC   "special://xbmcbin/system/players/paplayer/adpcm.dll"
 #define DLL_PATH_ASAP_CODEC    "special://xbmcbin/system/players/paplayer/xbmc_asap.dll"
 #define DLL_PATH_MAD_CODEC     "special://xbmcbin/system/players/dvdplayer/libmad.dll"
-#define DLL_PATH_SPC_CODEC     "special://xbmcbin/system/players/paplayer/SNESAPU.dll"
 
 /* dvdplayer */
 #define DLL_PATH_LIBASS        "special://xbmcbin/system/players/dvdplayer/libass.dll"
