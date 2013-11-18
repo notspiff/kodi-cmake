@@ -20,9 +20,6 @@
 
 #include "system.h"
 #include "CodecFactory.h"
-#ifdef HAS_SPC_CODEC
-#include "SPCCodec.h"
-#endif
 #ifdef HAS_ASAP_CODEC
 #include "ASAPCodec.h"
 #endif
@@ -72,10 +69,6 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
     return new DVDPlayerCodec();
   else if (fileType == "wv")
     return new DVDPlayerCodec();
-#ifdef HAS_SPC_CODEC
-  else if (fileType == "spc")
-    return new SPCCodec();
-#endif
   else if (fileType == "wma")
     return new DVDPlayerCodec();
   else if (fileType == "aiff" || fileType == "aif")
