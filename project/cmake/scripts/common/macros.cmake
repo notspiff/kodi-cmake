@@ -21,6 +21,9 @@ endfunction()
 
 # Add a test library, and add sources to list for gtest integration macros
 function(core_add_test_library name)
+  if(NOT ENABLE_TESTS)
+    return()
+  endif()
   core_add_library(${name} 1)
   foreach(src ${SOURCES})
     set(test_sources ${CMAKE_CURRENT_SOURCE_DIR}/${src} ${test_sources} CACHE STRING "" FORCE)
