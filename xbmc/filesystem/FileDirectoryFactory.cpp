@@ -24,10 +24,8 @@
 #include "utils/URIUtils.h"
 #include "FileDirectoryFactory.h"
 #ifdef HAS_FILESYSTEM
-#include "ASAPFileDirectory.h"
 #include "UDFDirectory.h"
 #include "RSSDirectory.h"
-#include "cores/paplayer/ASAPCodec.h"
 #endif
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarDirectory.h"
@@ -67,7 +65,9 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   if (url.IsProtocol("stack")) // disqualify stack as we need to work with each of the parts instead
     return NULL;
 
-#ifdef HAS_FILESYSTEM
+  std::string strExtension=URIUtils::GetExtension(url);
+  StringUtils::ToLower(strExtension);
+
   VECADDONS codecs;
   CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
   for (size_t i=0;i<codecs.size();++i)
@@ -84,18 +84,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       return NULL;
     }
   }
-#ifdef HAS_ASAP_CODEC
-  if (ASAPCodec::IsSupportedFormat(url.GetFileType()) && CFile::Exists(url))
-  {
-    IFileDirectory* pDir=new CASAPFileDirectory;
-    //  Has the asap file more than one track?
-    if (pDir->ContainsFiles(url))
-      return pDir; // treat as directory
-
-    delete pDir;
-    return NULL;
-  }
-#endif
 
   if (pItem->IsRSS())
     return new CRSSDirectory();
@@ -103,7 +91,6 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   if (pItem->IsDiscImage())
     return new CUDFDirectory();
 
-#endif
 #if defined(TARGET_ANDROID)
   if (url.IsFileType("apk"))
   {

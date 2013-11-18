@@ -1,5 +1,4 @@
 set(SOURCES AudioDecoder.cpp
-            ASAPCodec.cpp
             CodecFactory.cpp
             DVDPlayerCodec.cpp
             MP3codec.cpp
