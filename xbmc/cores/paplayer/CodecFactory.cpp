@@ -20,9 +20,6 @@
 
 #include "system.h"
 #include "CodecFactory.h"
-#ifdef HAS_ASAP_CODEC
-#include "ASAPCodec.h"
-#endif
 #include "URL.h"
 #include "DVDPlayerCodec.h"
 #include "utils/StringUtils.h"
@@ -73,10 +70,6 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
     return new DVDPlayerCodec();
   else if (fileType == "aiff" || fileType == "aif")
     return new DVDPlayerCodec();
-#ifdef HAS_ASAP_CODEC
-  else if (ASAPCodec::IsSupportedFormat(strFileType) || fileType == "asapstream")
-    return new ASAPCodec();
-#endif
   else if (fileType == "tta")
     return new DVDPlayerCodec();
   else if (fileType == "tak")
