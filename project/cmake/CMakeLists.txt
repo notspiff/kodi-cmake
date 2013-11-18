@@ -294,6 +294,7 @@ foreach(subdir ${build_dirs})
                         CONFIGURE_COMMAND PKG_CONFIG_PATH=${DEPENDS_DIR}/lib/pkgconfig
                                           ${CMAKE_COMMAND} <SOURCE_DIR>
                                           -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                                          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                                           -DBUILD_SHARED_LIBS=${shared}
                                           -DCMAKE_INSTALL_PREFIX=${install_prefix}
                                           -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
@@ -306,6 +307,7 @@ foreach(subdir ${build_dirs})
                         CONFIGURE_COMMAND PKG_CONFIG_PATH=${DEPENDS_DIR}/lib/pkgconfig
                                           ${CMAKE_COMMAND} <SOURCE_DIR>
                                           -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                                          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                                           -DBUILD_SHARED_LIBS=${shared}
                                           -DCMAKE_INSTALL_PREFIX=${install_prefix}
                                           -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
