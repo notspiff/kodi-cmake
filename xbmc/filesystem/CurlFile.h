@@ -23,6 +23,7 @@
 #include "utils/RingBuffer.h"
 #include <map>
 #include "utils/HttpHeader.h"
+#include "utils/StdString.h"
 
 namespace XCURL
 {
@@ -59,7 +60,7 @@ namespace XFILE
       virtual unsigned int Read(void* lpBuf, int64_t uiBufSize)  { return m_state->Read(lpBuf, uiBufSize); }
       virtual int Write(const void* lpBuf, int64_t uiBufSize);
       virtual CStdString GetMimeType()                           { return m_state->m_httpheader.GetMimeType(); }
-      virtual CStdString GetContent()                            { return GetMimeType(); }
+      virtual std::string GetContent()                           { return GetMimeType(); }
       virtual int IoControl(EIoControl request, void* param);
       virtual std::string GetContentCharset(void)                { return GetServerReportedCharset(); }
 
