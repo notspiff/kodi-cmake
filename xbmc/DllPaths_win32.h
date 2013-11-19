@@ -34,9 +34,6 @@
 #define DLL_PATH_LIBSHAIRPLAY  "special://xbmcbin/system/airplay/libshairplay-1.dll"
 #define DLL_PATH_LIBCEC        "special://xbmcbin/system/libcec.dll"
 
-/* paplayer */
-#define DLL_PATH_MAD_CODEC     "special://xbmcbin/system/players/dvdplayer/libmad.dll"
-
 /* dvdplayer */
 #define DLL_PATH_LIBASS        "special://xbmcbin/system/players/dvdplayer/libass.dll"
 #define DLL_PATH_LIBMAD        "special://xbmcbin/system/players/dvdplayer/libmad.dll"
