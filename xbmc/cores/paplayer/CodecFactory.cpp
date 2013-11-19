@@ -44,42 +44,8 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
       return result;
     }
   }
-  if (fileType == "mp3" || fileType == "mp2")
-    return new DVDPlayerCodec();
-  else if (fileType == "pcm" || fileType == "l16")
-    return new DVDPlayerCodec();
-  else if (fileType == "ape" || fileType == "mac")
-    return new DVDPlayerCodec();
-  else if (fileType == "cdda")
-    return new DVDPlayerCodec();
-  else if (fileType == "mpc" || fileType == "mp+" || fileType == "mpp")
-    return new DVDPlayerCodec();
-  else if (fileType == "shn")
-    return new DVDPlayerCodec();
-  else if (fileType == "mka")
-    return new DVDPlayerCodec();
-  else if (fileType == "wav")
-    return new DVDPlayerCodec();
-  else if (fileType == "dts" || fileType == "ac3" ||
-           fileType == "m4a" || fileType == "aac" ||
-           fileType == "pvr")
-    return new DVDPlayerCodec();
-  else if (fileType == "wv")
-    return new DVDPlayerCodec();
-  else if (fileType == "wma")
-    return new DVDPlayerCodec();
-  else if (fileType == "aiff" || fileType == "aif")
-    return new DVDPlayerCodec();
-  else if (fileType == "tta")
-    return new DVDPlayerCodec();
-  else if (fileType == "tak")
-    return new DVDPlayerCodec();
-  else if (fileType == "opus")
-    return new DVDPlayerCodec();
-  else if (fileType == "dff" || fileType == "dsf")
-    return new DVDPlayerCodec();
 
-  return NULL;
+  return new DVDPlayerCodec();
 }
 
 ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::string& strContent, unsigned int filecache)
@@ -102,15 +68,7 @@ ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::st
       }
     }
   }
-  if( content == "audio/mpeg"
-  ||  content == "audio/mpeg3"
-  ||  content == "audio/mp3" )
-  {
-    DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
-    dvdcodec->SetContentType(content);
-    return dvdcodec;
-  }
-  else if (StringUtils::StartsWith(content, "audio/l16"))
+  if (StringUtils::StartsWithNoCase(strContent, "audio/l16"))
   {
     DVDPlayerCodec *pCodec = new DVDPlayerCodec;
     pCodec->SetContentType(content);
@@ -133,13 +91,6 @@ ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::st
     DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
     dvdcodec->SetContentType(content);
     return dvdcodec;
-  }
-
-  if (urlFile.IsProtocol("shout"))
-  {
-    DVDPlayerCodec *dvdcodec = new DVDPlayerCodec();
-    dvdcodec->SetContentType("audio/mp3");
-    return dvdcodec; // if we got this far with internet radio - content-type was wrong. gamble on mp3.
   }
 
   if (urlFile.IsFileType("wav") ||
