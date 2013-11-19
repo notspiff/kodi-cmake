@@ -1,7 +1,6 @@
 set(SOURCES AudioDecoder.cpp
             CodecFactory.cpp
             DVDPlayerCodec.cpp
-            MP3codec.cpp
             PAPlayer.cpp
             PCMCodec.cpp
             WAVcodec.cpp)
