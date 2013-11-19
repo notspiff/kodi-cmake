@@ -21,6 +21,7 @@
 
 #include "threads/CriticalSection.h"
 #include "threads/Thread.h"
+#include "utils/StdString.h"
 
 typedef struct cmyth_ringbuf   *cmyth_ringbuf_t;
 typedef struct cmyth_conn      *cmyth_conn_t;
