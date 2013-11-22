@@ -65,9 +65,6 @@
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarFile.h"
 #endif
-#ifdef HAS_FILESYSTEM_SFTP
-#include "SFTPFile.h"
-#endif
 #ifdef HAS_FILESYSTEM_NFS
 #include "NFSFile.h"
 #endif
@@ -173,9 +170,6 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
     ||  strProtocol == "rss") return new CCurlFile();
     else if (strProtocol == "http" ||  strProtocol == "https") return new CHTTPFile();
     else if (strProtocol == "dav" || strProtocol == "davs") return new CDAVFile();
-#ifdef HAS_FILESYSTEM_SFTP
-    else if (strProtocol == "sftp" || strProtocol == "ssh") return new CSFTPFile();
-#endif
     else if (strProtocol == "shout") return new CShoutcastFile();
     else if (strProtocol == "tuxbox") return new CTuxBoxFile();
     else if (strProtocol == "hdhomerun") return new CHomeRunFile();
