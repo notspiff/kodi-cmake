@@ -842,7 +842,9 @@ msgctxt "#203"
 msgid "Plot outline"
 msgstr ""
 
-#empty string with id 204
+msgctxt "#204"
+msgid "Virtual filesystems"
+msgstr ""
 
 #: xbmc/playlists/SmartPlaylist.cpp
 msgctxt "#205"

@@ -25,6 +25,7 @@
 #include "utils/StringUtils.h"
 #include "utils/JobManager.h"
 #include "threads/SingleLock.h"
+#include "VFSEntry.h"
 #include "FileItem.h"
 #include "LangInfo.h"
 #include "settings/AdvancedSettings.h"
@@ -116,6 +117,7 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
     case ADDON_PVRDLL:
     case ADDON_AUDIODECODER:
     case ADDON_AUDIOENCODER:
+    case ADDON_VFS:
       { // begin temporary platform handling for Dlls
         // ideally platforms issues will be handled by C-Pluff
         // this is not an attempt at a solution
@@ -166,6 +168,8 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
           return AddonPtr(new CAudioDecoder(props));
         else if (type == ADDON_AUDIOENCODER)
           return AddonPtr(new CAudioEncoder(props));
+        else if (type == ADDON_VFS)
+          return AddonPtr(new CVFSEntry(props));
         else
           return AddonPtr(new CScreenSaver(props));
       }
@@ -683,6 +687,8 @@ AddonPtr CAddonMgr::AddonFromProps(AddonProps& addonProps)
       return AddonPtr(new CAudioDecoder(addonProps));
     case ADDON_AUDIOENCODER:
       return AddonPtr(new CAudioEncoder(addonProps));
+    case ADDON_VFS:
+      return AddonPtr(new CVFSEntry(addonProps));
     case ADDON_REPOSITORY:
       return AddonPtr(new CRepository(addonProps));
     default:
