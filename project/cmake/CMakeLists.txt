@@ -87,7 +87,7 @@ set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
                   JPEG Lzo2 Fribidi TagLib FFMPEG Boost)
 
 # Optional dependencies
-set(optional_deps MicroHttpd MySqlClient SSH
+set(optional_deps MicroHttpd MySqlClient
                   Alsa UDev Dbus Avahi Wayland
                   PulseAudio VDPAU VAAPI)
 
