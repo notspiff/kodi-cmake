@@ -53,6 +53,7 @@ namespace ADDON
     ADDON_SERVICE,
     ADDON_AUDIODECODER,
     ADDON_AUDIOENCODER,
+    ADDON_VFS,
     ADDON_VIDEO, // virtual addon types
     ADDON_AUDIO,
     ADDON_IMAGE,

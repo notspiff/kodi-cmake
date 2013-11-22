@@ -55,9 +55,10 @@ function(add_addon_separate entry)
       list(APPEND SKINS "${BOOTSTRAP_DIR}/addons/${id}\;${BOOTSTRAP_DIR}")
     elseif("${id}" MATCHES "^visualization\\." OR
            "${id}" MATCHES "^screensavers?\\." OR
-           "${id}" MATCHES "^audiodecoder?\\." OR
-           "${id}" MATCHES "^audioencoder?\\." OR
-           "${id}" MATCHES "^pvr\\.")
+           "${id}" MATCHES "^audiodecoder\\." OR
+           "${id}" MATCHES "^audioencoder\\." OR
+           "${id}" MATCHES "^pvr\\." OR
+           "${id}" MATCHES "^vfs\\.")
       list(APPEND build_dirs "${xbmc-platform_DEF}")
       list(APPEND build_dirs "${id} ${repo} ${hash} build/${id}")
       list(REMOVE_DUPLICATES build_dirs)
@@ -70,9 +71,10 @@ function(add_addon_separate entry)
   else()
     if("${id}" MATCHES "^visualization\\." OR
        "${id}" MATCHES "^screensavers?\\." OR
-       "${id}" MATCHES "^audiodecoder?\\." OR
-       "${id}" MATCHES "^audioencoder?\\." OR
-       "${id}" MATCHES "^pvr\\.")
+       "${id}" MATCHES "^audiodecoder\\." OR
+       "${id}" MATCHES "^audioencoder\\." OR
+       "${id}" MATCHES "^pvr\\." OR
+       "${id}" MATCHES "^vfs\\.")
       if(BOOTSTRAP_IN_TREE)
         list(APPEND build_dirs "${id} ${repo} ${hash}")
         list(APPEND build_dirs "${xbmc-platform_DEF}")
