@@ -21,6 +21,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             ScreenSaver.cpp
             Service.cpp
             Skin.cpp
+            VFSEntry.cpp
             Visualisation.cpp)
 
 core_add_library(addons)
