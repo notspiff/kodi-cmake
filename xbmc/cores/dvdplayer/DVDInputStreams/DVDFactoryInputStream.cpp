@@ -41,12 +41,33 @@
 #include "storage/MediaManager.h"
 #include "URL.h"
 #include "filesystem/File.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
+
+using namespace ADDON;
 
 
 CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IDVDPlayer* pPlayer, const std::string& file, const std::string& content)
 {
   CFileItem item(file.c_str(), false);
+
+  CURL url(file);
+  std::string strProtocol = url.GetProtocol();
+  StringUtils::ToLower(strProtocol);
+
+  if (!strProtocol.empty())
+  {
+    VECADDONS addons;
+    CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
+    for (size_t i=0;i<addons.size();++i)
+    {
+      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      if (vfs->HasLiveTV() && vfs->GetProtocols().find(strProtocol) != std::string::npos)
+        return new CDVDInputStreamTV();
+    }
+  }
 
   if(item.IsDiscImage())
   {
