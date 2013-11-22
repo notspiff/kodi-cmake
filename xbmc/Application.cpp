@@ -3006,9 +3006,6 @@ void CApplication::Stop(int exitCode)
     g_RarManager.ClearCache(true);
 #endif
 
-#ifdef HAS_FILESYSTEM_SFTP
-    CSFTPSessionManager::DisconnectAllSessions();
-#endif
     CVFSEntryManager::Get().DisconnectAll();
 
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
@@ -4674,9 +4671,6 @@ void CApplication::ProcessSlow()
   gNfsConnection.CheckIfIdle();
 #endif
 
-#ifdef HAS_FILESYSTEM_SFTP
-  CSFTPSessionManager::ClearOutIdleSessions();
-#endif
   CVFSEntryManager::Get().ClearOutIdle();
 
   g_mediaManager.ProcessEvents();
@@ -5305,10 +5299,6 @@ void CApplication::CloseNetworkShares()
   
 #ifdef HAS_FILESYSTEM_NFS
   gNfsConnection.Deinit();
-#endif
-
-#ifdef HAS_FILESYSTEM_SFTP
-  CSFTPSessionManager::DisconnectAllSessions();
 #endif
   CVFSEntryManager::Get().DisconnectAll();
 }
