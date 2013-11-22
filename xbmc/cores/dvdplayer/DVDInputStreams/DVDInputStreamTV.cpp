@@ -22,7 +22,11 @@
 #include "pvr/channels/PVRChannel.h"
 #include "filesystem/SlingboxFile.h"
 #include "URL.h"
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
+#include "utils/StringUtils.h"
 
+using namespace ADDON;
 using namespace XFILE;
 
 CDVDInputStreamTV::CDVDInputStreamTV() : CDVDInputStream(DVDSTREAM_TYPE_TV)
@@ -47,14 +51,42 @@ bool CDVDInputStreamTV::Open(const char* strFile, const std::string& content)
 {
   if (!CDVDInputStream::Open(strFile, content)) return false;
 
-  if (strncmp(strFile, "sling://", 8) == 0)
+  CURL url(strFile);
+  std::string strProtocol = url.GetProtocol();
+  StringUtils::ToLower(strProtocol);
+  if (!strProtocol.empty())
   {
-    m_pFile       = new CSlingboxFile();
-    m_pLiveTV     = ((CSlingboxFile*)m_pFile)->GetLiveTV();
-    m_pRecordable = NULL;
+    VECADDONS addons;
+    CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
+    for (size_t i=0;i<addons.size();++i)
+    {
+      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      if (vfs->HasLiveTV() && vfs->GetProtocols().find(strProtocol) != std::string::npos)
+      {
+        CVFSEntryILiveTVWrapper* wrap = new CVFSEntryILiveTVWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
+        m_pFile = wrap;
+        m_pLiveTV = wrap;
+        m_pRecordable = NULL;
+      }
+    }
   }
 
-  CURL url(strFile);
+  if (!m_pFile)
+  {
+    if(strncmp(strFile, "vtp://", 6) == 0)
+    {
+      m_pFile       = new CVTPFile();
+      m_pLiveTV     = ((CVTPFile*)m_pFile)->GetLiveTV();
+      m_pRecordable = NULL;
+    }
+    else if (strncmp(strFile, "sling://", 8) == 0)
+    {
+      m_pFile       = new CSlingboxFile();
+      m_pLiveTV     = ((CSlingboxFile*)m_pFile)->GetLiveTV();
+      m_pRecordable = NULL;
+    }
+  }
+
   // open file in binary mode
   if (!m_pFile->Open(url))
   {

@@ -124,6 +124,7 @@
 #ifdef HAS_FILESYSTEM_SFTP
 #include "filesystem/SFTPFile.h"
 #endif
+#include "addons/VFSEntry.h"
 #include "PartyModeManager.h"
 #ifdef HAS_VIDEO_PLAYBACK
 #include "cores/VideoRenderers/RenderManager.h"
@@ -2612,6 +2613,7 @@ void CApplication::Stop(int exitCode)
 #ifdef HAS_FILESYSTEM_SFTP
     CSFTPSessionManager::DisconnectAllSessions();
 #endif
+    CVFSEntryManager::Get().DisconnectAll();
 
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
     smb.Deinit();
@@ -4256,6 +4258,7 @@ void CApplication::ProcessSlow()
 #ifdef HAS_FILESYSTEM_SFTP
   CSFTPSessionManager::ClearOutIdleSessions();
 #endif
+  CVFSEntryManager::Get().ClearOutIdle();
 
   g_mediaManager.ProcessEvents();
 
@@ -4886,6 +4889,7 @@ void CApplication::CloseNetworkShares()
 #ifdef HAS_FILESYSTEM_SFTP
   CSFTPSessionManager::DisconnectAllSessions();
 #endif
+  CVFSEntryManager::Get().DisconnectAll();
 }
 
 void CApplication::RegisterActionListener(IActionListener *listener)
