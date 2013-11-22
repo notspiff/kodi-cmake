@@ -36,7 +36,12 @@
 #include "storage/MediaManager.h"
 #include "URL.h"
 #include "filesystem/File.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
+
+using namespace ADDON;
 
 
 CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IDVDPlayer* pPlayer, const std::string& file, const std::string& content, bool contentlookup)
@@ -44,6 +49,10 @@ CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IDVDPlayer* pPlayer, 
   CFileItem item(file.c_str(), false);
 
   item.SetMimeType(content);
+
+  CURL url(file);
+  std::string strProtocol = url.GetProtocol();
+  StringUtils::ToLower(strProtocol);
 
   if(item.IsDiscImage())
   {
