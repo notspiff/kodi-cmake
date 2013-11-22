@@ -102,6 +102,7 @@ static const TypeMapping types[] =
    {"kodi.resource.images",              ADDON_RESOURCE_IMAGES,     24035, "DefaultAddonImages.png" },
    {"kodi.resource.language",            ADDON_RESOURCE_LANGUAGE,   24026, "DefaultAddonLanguage.png" },
    {"kodi.resource.uisounds",            ADDON_RESOURCE_UISOUNDS,   24006, "DefaultAddonUISounds.png" },
+   {"kodi.vfs",                          ADDON_VFS,                   204,  "DefaultAddonVfs.png" },
    {"kodi.adsp",                         ADDON_ADSPDLL,             24135, "DefaultAddonAudioDSP.png" },
   };
 
@@ -412,6 +413,8 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_SERVICE:
       case ADDON_REPOSITORY:
       case ADDON_CONTEXT_ITEM:
+      case ADDON_AUDIODECODER:
+      case ADDON_VFS:
         m_strLibName = CAddonMgr::GetInstance().GetExtValue(extension->configuration, "@library");
         break;
       default:

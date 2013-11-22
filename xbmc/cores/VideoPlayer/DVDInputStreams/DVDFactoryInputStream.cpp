@@ -36,14 +36,25 @@
 #include "storage/MediaManager.h"
 #include "URL.h"
 #include "filesystem/File.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
+
+using namespace ADDON;
 
 
 CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IVideoPlayer* pPlayer, CFileItem fileitem)
 {
   std::string file = fileitem.GetPath();
 
-  if (fileitem.IsDiscImage())
+  item.SetMimeType(content);
+
+  CURL url(file);
+  std::string strProtocol = url.GetProtocol();
+  StringUtils::ToLower(strProtocol);
+
+  if(item.IsDiscImage())
   {
 #ifdef HAVE_LIBBLURAY
     CURL url("udf://");
