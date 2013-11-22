@@ -47,6 +47,7 @@
 #include "URL.h"
 #include "addons/AddonManager.h"
 #include "addons/AudioDecoder.h"
+#include "addons/VFSEntry.h"
 
 using namespace ADDON;
 using namespace XFILE;
@@ -81,6 +82,35 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
       if (result->ContainsFiles(url))
         return result;
       delete result;
+      return NULL;
+    }
+  }
+
+  CAddonMgr::Get().GetAddons(ADDON_VFS, codecs);
+  for (size_t i=0;i<codecs.size();++i)
+  {
+    boost::shared_ptr<CVFSEntry> dec(boost::static_pointer_cast<CVFSEntry>(codecs[i]));
+    if (!strExtension.empty() && dec->HasFileDirectories() &&
+        dec->GetExtensions().find(strExtension) != std::string::npos)
+    {
+      CVFSEntryIFileDirectoryWrapper* wrap = new CVFSEntryIFileDirectoryWrapper(CVFSEntryManager::Get().GetAddon(dec->ID()));
+      if (wrap->ContainsFiles(strPath))
+      {
+        if (wrap->m_items.Size() == 1)
+        {
+          // one STORED file - collapse it down
+          *pItem = *wrap->m_items[0];
+        }
+        else
+        { // compressed or more than one file -> create a dir
+          pItem->SetPath(wrap->m_items.GetPath());
+          return wrap;
+        }
+      }
+      else
+        pItem->m_bIsFolder = true;
+
+      delete wrap;
       return NULL;
     }
   }
