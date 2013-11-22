@@ -24,7 +24,6 @@ option(ENABLE_BLURAY      "Enable BluRay support?" ON)
 option(ENABLE_AFPCLIENT   "Enable AFP support?" ON)
 option(ENABLE_PLIST       "Enable AirPlay support?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
-option(ENABLE_SSH         "Enable SSH support?" ON)
 option(ENABLE_NFS         "Enable NFS support?" ON)
 option(ENABLE_GNUTLS      "Enable gnutls support?" ON)
 option(ENABLE_EXTERNAL_FFMPEG "Enable external ffmpeg?" OFF)
@@ -91,7 +90,7 @@ set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
                   JPEG Lzo2 Fribidi SampleRate TagLib FFMPEG)
 
 # Optional dependencies
-set(optional_deps MicroHttpd MySqlClient SSH
+set(optional_deps MicroHttpd MySqlClient
                   Alsa UDev Dbus Avahi Wayland
                   PulseAudio VDPAU VAAPI)
 
