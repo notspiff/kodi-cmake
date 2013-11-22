@@ -113,6 +113,10 @@
 #if defined(TARGET_ANDROID)
 #include "AndroidAppDirectory.h"
 #endif
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
+
+using namespace ADDON;
 
 using namespace XFILE;
 
@@ -134,6 +138,18 @@ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
     return pDir;
 
   CStdString strProtocol = url.GetProtocol();
+
+  if (!strProtocol.empty())
+  {
+    VECADDONS addons;
+    CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
+    for (size_t i=0;i<addons.size();++i)
+    {
+      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      if (vfs->HasDirectories() && vfs->GetProtocols().find(strProtocol) != std::string::npos)
+        return new CVFSEntryIDirectoryWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
+    }
+  }
 
   if (strProtocol.size() == 0 || strProtocol == "file") return new CHDDirectory();
   if (strProtocol == "special") return new CSpecialProtocolDirectory();
