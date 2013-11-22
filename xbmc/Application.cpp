@@ -123,9 +123,6 @@
 #ifdef HAS_FILESYSTEM_AFP
 #include "filesystem/AFPFile.h"
 #endif
-#ifdef HAS_FILESYSTEM_SFTP
-#include "filesystem/SFTPFile.h"
-#endif
 #include "addons/VFSEntry.h"
 #include "PartyModeManager.h"
 #ifdef HAS_VIDEO_PLAYBACK
@@ -3575,9 +3572,6 @@ void CApplication::Stop(int exitCode)
     g_RarManager.ClearCache(true);
 #endif
 
-#ifdef HAS_FILESYSTEM_SFTP
-    CSFTPSessionManager::DisconnectAllSessions();
-#endif
     CVFSEntryManager::Get().DisconnectAll();
 
     CLog::Log(LOGNOTICE, "unload skin");
@@ -5169,9 +5163,6 @@ void CApplication::ProcessSlow()
   gAfpConnection.CheckIfIdle();
 #endif
 
-#ifdef HAS_FILESYSTEM_SFTP
-  CSFTPSessionManager::ClearOutIdleSessions();
-#endif
   CVFSEntryManager::Get().ClearOutIdle();
 
   g_mediaManager.ProcessEvents();
@@ -5865,8 +5856,5 @@ void CApplication::CloseNetworkShares()
   gAfpConnection.Deinit();
 #endif
   
-#ifdef HAS_FILESYSTEM_SFTP
-  CSFTPSessionManager::DisconnectAllSessions();
-#endif
   CVFSEntryManager::Get().DisconnectAll();
 }
