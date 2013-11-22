@@ -118,6 +118,10 @@
 #if defined(TARGET_ANDROID)
 #include "AndroidAppDirectory.h"
 #endif
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
+
+using namespace ADDON;
 
 using namespace XFILE;
 
@@ -242,6 +246,18 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
 #ifdef HAVE_LIBBLURAY
       if (url.IsProtocol("bluray")) return new CBlurayDirectory();
 #endif
+  }
+
+  if (!url.GetProtocol().empty())
+  {
+    VECADDONS addons;
+    CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
+    for (size_t i=0;i<addons.size();++i)
+    {
+      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      if (vfs->HasDirectories() && vfs->GetProtocols().find(url.GetProtocol()) != std::string::npos)
+        return new CVFSEntryIDirectoryWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
+    }
   }
 
   CLog::Log(LOGWARNING, "%s - %sunsupported protocol(%s) in %s", __FUNCTION__, networkAvailable ? "" : "Network down or ", url.GetProtocol().c_str(), url.GetRedacted().c_str() );
