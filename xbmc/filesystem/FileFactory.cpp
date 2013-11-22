@@ -103,7 +103,10 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "network/WakeOnAccess.h"
+#include "addons/VFSEntry.h"
+#include "addons/AddonManager.h"
 
+using namespace ADDON;
 using namespace XFILE;
 
 CFileFactory::CFileFactory()
@@ -124,6 +127,21 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
 {
   if (!CWakeOnAccess::Get().WakeUpHost(url))
     return NULL;
+
+  std::string strProtocol = url.GetProtocol();
+  StringUtils::ToLower(strProtocol);
+
+  if (!strProtocol.empty())
+  {
+    VECADDONS addons;
+    CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
+    for (size_t i=0;i<addons.size();++i)
+    {
+      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      if (vfs->HasFiles() && vfs->GetProtocols().find(strProtocol) != std::string::npos)
+        return new CVFSEntryIFileWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
+    }
+  }
 
 #if defined(TARGET_ANDROID)
   if (url.IsProtocol("apk")) return new CAPKFile();
