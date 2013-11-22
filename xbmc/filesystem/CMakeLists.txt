@@ -67,8 +67,6 @@ set(SOURCES AddonsDirectory.cpp
             RTVFile.cpp
             SAPDirectory.cpp
             SAPFile.cpp
-            SFTPDirectory.cpp
-            SFTPFile.cpp
             ShoutcastFile.cpp
             SlingboxDirectory.cpp
             SlingboxFile.cpp
