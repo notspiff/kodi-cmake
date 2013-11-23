@@ -49,8 +49,6 @@ set(SOURCES AddonsDirectory.cpp
             MythDirectory.cpp
             MythFile.cpp
             MythSession.cpp
-            NFSDirectory.cpp
-            NFSFile.cpp
             NptXbmcFile.cpp
             PipeFile.cpp
             PipesManager.cpp
