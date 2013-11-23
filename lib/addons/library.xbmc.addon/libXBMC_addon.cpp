@@ -117,6 +117,14 @@ DLLEXPORT char* XBMC_get_dvd_menu_language(void *hdl, void* cb)
   return ((CB_AddOnLib*)cb)->GetDVDMenuLanguage(((AddonCB*)hdl)->addonData);
 }
 
+DLLEXPORT char* XBMC_dns_lookup(void *hdl, void* cb, const char* url)
+{
+  if (cb == NULL)
+    return NULL;
+
+  return ((CB_AddOnLib*)cb)->DNSLookup(((AddonCB*)hdl)->addonData, url);
+}
+
 DLLEXPORT void XBMC_free_string(void* hdl, void* cb, char* str)
 {
   if (cb == NULL)
