@@ -65,9 +65,6 @@
 #ifdef HAS_FILESYSTEM_RAR
 #include "RarFile.h"
 #endif
-#ifdef HAS_FILESYSTEM_NFS
-#include "NFSFile.h"
-#endif
 #ifdef HAS_FILESYSTEM_AFP
 #include "AFPFile.h"
 #endif
@@ -199,9 +196,6 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
 #endif
 #ifdef HAS_PVRCLIENTS
     else if (strProtocol == "pvr") return new CPVRFile();
-#endif
-#ifdef HAS_FILESYSTEM_NFS
-    else if (strProtocol == "nfs") return new CNFSFile();
 #endif
 #ifdef HAS_FILESYSTEM_AFP
     else if (strProtocol == "afp") return new CAFPFile();
