@@ -39,9 +39,10 @@ public:
   static bool GetAddonSetting(void *addonData, const char *strSettingName, void *settingValue);
   static void QueueNotification(void *addonData, const queue_msg_t type, const char *strMessage);
   static bool WakeOnLan(const char *mac);
-  static const char* UnknownToUTF8(const char *strSource);
-  static const char* GetLocalizedString(const void* addonData, long dwCode);
-  static const char* GetDVDMenuLanguage(const void* addonData);
+  static char* UnknownToUTF8(const char *strSource);
+  static char* GetLocalizedString(const void* addonData, long dwCode);
+  static char* GetDVDMenuLanguage(const void* addonData);
+  static char* DNSLookup(const void* addonData, const char* url);
   static void FreeString(const void* addonData, const char* str);
 
   // file operations
