@@ -61,10 +61,6 @@
   #define HAS_FILESYSTEM_SMB
 #endif
 
-#ifdef HAVE_LIBNFS
-  #define HAS_FILESYSTEM_NFS
-#endif
-
 #ifdef HAVE_LIBPLIST
   #define HAS_AIRPLAY
 #endif

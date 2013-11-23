@@ -95,8 +95,6 @@
 #ifdef HAS_ZEROCONF
 #include "ZeroconfDirectory.h"
 #endif
-#ifdef HAS_FILESYSTEM_NFS
-#include "NFSDirectory.h"
 #endif
 #ifdef HAVE_LIBBLURAY
 #include "BlurayDirectory.h"
@@ -211,9 +209,6 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
 #endif
 #ifdef HAS_ZEROCONF
     if (url.IsProtocol("zeroconf")) return new CZeroconfDirectory();
-#endif
-#ifdef HAS_FILESYSTEM_NFS
-    if (url.IsProtocol("nfs")) return new CNFSDirectory();
 #endif
 #ifdef HAVE_LIBBLURAY
       if (url.IsProtocol("bluray")) return new CBlurayDirectory();

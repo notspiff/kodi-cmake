@@ -118,9 +118,6 @@
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
 #include "filesystem/SMBDirectory.h"
 #endif
-#ifdef HAS_FILESYSTEM_NFS
-#include "filesystem/NFSFile.h"
-#endif
 #endif
 #include "addons/VFSEntry.h"
 #include "PartyModeManager.h"
@@ -4246,10 +4243,6 @@ void CApplication::ProcessSlow()
   smb.CheckIfIdle();
 #endif
 
-#ifdef HAS_FILESYSTEM_NFS
-  gNfsConnection.CheckIfIdle();
-#endif
-
   CVFSEntryManager::Get().ClearOutIdle();
 
   g_mediaManager.ProcessEvents();
@@ -4874,9 +4867,6 @@ void CApplication::CloseNetworkShares()
   smb.Deinit();
 #endif
   
-#ifdef HAS_FILESYSTEM_NFS
-  gNfsConnection.Deinit();
-#endif
   CVFSEntryManager::Get().DisconnectAll();
 }
 
