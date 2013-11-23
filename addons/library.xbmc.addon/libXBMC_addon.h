@@ -182,6 +182,10 @@ namespace ADDON
         dlsym(m_libXBMC_addon, "XBMC_get_dvd_menu_language");
       if (XBMC_get_dvd_menu_language == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
 
+      XBMC_dns_lookup = (char* (*)(void* HANDLE, void* CB, const char* url))
+        dlsym(m_libXBMC_addon, "XBMC_dns_lookup");
+      if (XBMC_dns_lookup == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
+
       XBMC_open_file = (void* (*)(void* HANDLE, void* CB, const char* strFileName, unsigned int flags))
         dlsym(m_libXBMC_addon, "XBMC_open_file");
       if (XBMC_open_file == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
@@ -333,6 +337,15 @@ namespace ADDON
       return XBMC_get_localized_string(m_Handle, m_Callbacks, dwCode);
     }
 
+    /*!
+     * @brief Lookup URL in DNS cache
+     * @param dwCode The code of the message to get.
+     * @return The message. Must be freed by calling FreeString() when done.
+     */
+    char* DNSLookup(const char* url)
+    {
+      return XBMC_dns_lookup(m_Handle, m_Callbacks, url);
+    }
 
     /*!
      * @brief Get the DVD menu language.
@@ -567,6 +580,7 @@ namespace ADDON
     char* (*XBMC_unknown_to_utf8)(void *HANDLE, void* CB, const char* str);
     char* (*XBMC_get_localized_string)(void *HANDLE, void* CB, int dwCode);
     char* (*XBMC_get_dvd_menu_language)(void *HANDLE, void* CB);
+    char* (*XBMC_dns_lookup)(void *HANDLE, void* CB, const char* url);
     void (*XBMC_free_string)(void *HANDLE, void* CB, char* str);
     void* (*XBMC_open_file)(void *HANDLE, void* CB, const char* strFileName, unsigned int flags);
     void* (*XBMC_open_file_for_write)(void *HANDLE, void* CB, const char* strFileName, bool bOverWrite);

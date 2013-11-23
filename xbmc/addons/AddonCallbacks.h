@@ -40,8 +40,8 @@ typedef bool (*AddOnGetSetting)(void *addonData, const char *settingName, void *
 typedef char* (*AddOnUnknownToUTF8)(const char *sourceDest);
 typedef char* (*AddOnGetLocalizedString)(const void* addonData, long dwCode);
 typedef char* (*AddOnGetDVDMenuLanguage)(const void* addonData);
+typedef char* (*AddOnDNSLookup)(const void* addonData, const char* url);
 typedef void (*AddOnFreeString)(const void* addonData, char* str);
-
 typedef void* (*AddOnOpenFile)(const void* addonData, const char* strFileName, unsigned int flags);
 typedef void* (*AddOnOpenFileForWrite)(const void* addonData, const char* strFileName, bool bOverWrite);
 typedef ssize_t (*AddOnReadFile)(const void* addonData, void* file, void* lpBuf, size_t uiBufSize);
@@ -71,6 +71,7 @@ typedef struct CB_AddOn
   AddOnUnknownToUTF8      UnknownToUTF8;
   AddOnGetLocalizedString GetLocalizedString;
   AddOnGetDVDMenuLanguage GetDVDMenuLanguage;
+  AddOnDNSLookup          DNSLookup;
   AddOnFreeString         FreeString;
 
   AddOnOpenFile           OpenFile;
