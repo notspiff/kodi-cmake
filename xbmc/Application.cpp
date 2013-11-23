@@ -120,9 +120,6 @@
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
 #include "filesystem/SMBDirectory.h"
 #endif
-#ifdef HAS_FILESYSTEM_NFS
-#include "filesystem/NFSFile.h"
-#endif
 #ifdef HAS_FILESYSTEM_AFP
 #include "filesystem/AFPFile.h"
 #endif
@@ -4512,10 +4509,6 @@ void CApplication::ProcessSlow()
   smb.CheckIfIdle();
 #endif
 
-#ifdef HAS_FILESYSTEM_NFS
-  gNfsConnection.CheckIfIdle();
-#endif
-
 #ifdef HAS_FILESYSTEM_AFP
   gAfpConnection.CheckIfIdle();
 #endif
@@ -5183,10 +5176,6 @@ void CApplication::CloseNetworkShares()
 
 #if defined(HAS_FILESYSTEM_SMB) && !defined(TARGET_WINDOWS)
   smb.Deinit();
-#endif
-  
-#ifdef HAS_FILESYSTEM_NFS
-  gNfsConnection.Deinit();
 #endif
   
 #ifdef HAS_FILESYSTEM_AFP

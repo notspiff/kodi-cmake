@@ -24,7 +24,6 @@ option(ENABLE_BLURAY      "Enable BluRay support?" ON)
 option(ENABLE_AFPCLIENT   "Enable AFP support?" ON)
 option(ENABLE_PLIST       "Enable AirPlay support?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
-option(ENABLE_NFS         "Enable NFS support?" ON)
 option(ENABLE_GNUTLS      "Enable gnutls support?" ON)
 option(ENABLE_EXTERNAL_FFMPEG "Enable external ffmpeg?" OFF)
 option(ENABLE_EXTERNAL_LIBAV "Enable external libav?" OFF)
@@ -99,7 +98,7 @@ set(required_dyload Curl MAD ASS Mpeg2 LibDvd)
 
 # Optional, dyloaded deps
 set(dyload_optional RTMP CEC Bluray
-                    AfpClient Plist NFS)
+                    AfpClient Plist)
 
 # Required by shared objects we link
 set(required_dep_libs Jasper PNG TIFF EXPAT)
