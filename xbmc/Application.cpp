@@ -4572,10 +4572,6 @@ void CApplication::ProcessSlow()
   smb.CheckIfIdle();
 #endif
 
-#ifdef HAS_FILESYSTEM_NFS
-  gNfsConnection.CheckIfIdle();
-#endif
-
   CVFSEntryManager::Get().ClearOutIdle();
 
   g_mediaManager.ProcessEvents();
@@ -5219,9 +5215,6 @@ void CApplication::CloseNetworkShares()
   smb.Deinit();
 #endif
   
-#ifdef HAS_FILESYSTEM_NFS
-  gNfsConnection.Deinit();
-#endif
   CVFSEntryManager::Get().DisconnectAll();
 }
 
