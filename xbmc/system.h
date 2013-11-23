@@ -66,10 +66,6 @@
   #define HAS_FILESYSTEM_SMB
 #endif
 
-#ifdef HAVE_LIBNFS
-  #define HAS_FILESYSTEM_NFS
-#endif
-
 #ifdef HAVE_LIBAFPCLIENT
   #define HAS_FILESYSTEM_AFP
 #endif

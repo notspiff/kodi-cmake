@@ -98,9 +98,6 @@
 #ifdef HAS_ZEROCONF
 #include "ZeroconfDirectory.h"
 #endif
-#ifdef HAS_FILESYSTEM_NFS
-#include "NFSDirectory.h"
-#endif
 #ifdef HAS_FILESYSTEM_AFP
 #include "AFPDirectory.h"
 #endif
@@ -230,9 +227,6 @@ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
 #endif
 #ifdef HAS_ZEROCONF
     if (strProtocol == "zeroconf") return new CZeroconfDirectory();
-#endif
-#ifdef HAS_FILESYSTEM_NFS
-    if (strProtocol == "nfs") return new CNFSDirectory();
 #endif
 #ifdef HAS_FILESYSTEM_AFP
       if (strProtocol == "afp") return new CAFPDirectory();
