@@ -28,6 +28,7 @@
 #include "filesystem/Directory.h"
 #include "utils/URIUtils.h"
 #include "FileItem.h"
+#include "network/DNSNameCache.h"
 #include "network/Network.h"
 #include "utils/CharsetConverter.h"
 #include "utils/StringUtils.h"
@@ -51,6 +52,7 @@ CAddonCallbacksAddon::CAddonCallbacksAddon(CAddon* addon)
   m_callbacks->UnknownToUTF8      = UnknownToUTF8;
   m_callbacks->GetLocalizedString = GetLocalizedString;
   m_callbacks->GetDVDMenuLanguage = GetDVDMenuLanguage;
+  m_callbacks->DNSLookup          = DNSLookup;
   m_callbacks->FreeString         = FreeString;
 
   m_callbacks->OpenFile           = OpenFile;
@@ -291,6 +293,21 @@ char* CAddonCallbacksAddon::GetDVDMenuLanguage(const void* addonData)
   CStdString string = g_langInfo.GetDVDMenuLanguage();
 
   char* buffer = strdup(string.c_str());
+  return buffer;
+}
+
+char* CAddonCallbacksAddon::DNSLookup(const void* addonData, const char* url)
+{
+  CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
+  if (!helper)
+    return NULL;
+
+  std::string string;
+
+  CDNSNameCache::Lookup(url, string);
+  char* buffer = NULL;
+  if (!string.empty())
+    buffer = strdup(string.c_str());
   return buffer;
 }
 
