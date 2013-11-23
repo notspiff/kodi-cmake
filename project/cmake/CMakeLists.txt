@@ -96,7 +96,7 @@ set(required_dyload Curl ASS Mpeg2 LibDvd)
 
 # Optional, dyloaded deps
 set(dyload_optional RTMP CEC Bluray
-                    AfpClient Plist NFS)
+                    AfpClient Plist)
 
 # Required by shared objects we link
 set(required_dep_libs Jasper PNG TIFF EXPAT)
