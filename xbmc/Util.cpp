@@ -51,9 +51,6 @@
 #include "filesystem/MultiPathDirectory.h"
 #include "filesystem/SpecialProtocol.h"
 #include "filesystem/RSSDirectory.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "filesystem/RarManager.h"
-#endif
 #ifdef HAS_UPNP
 #include "filesystem/UPnPDirectory.h"
 #endif
@@ -1817,19 +1814,31 @@ int CUtil::ScanArchiveForAssociatedItems(const std::string& strArchivePath,
   }
   else
   {
-#ifdef HAS_FILESYSTEM_RAR
+    //TODO
     // get _ALL_files in the rar, even those located in subdirectories because we set the bMask to false.
     // so now we dont have to find any subdirs anymore, all files in the rar is checked.
-    if (!g_RarManager.GetFilesInRar(ItemList, strArchivePath, false, ""))
-      return false;
-#else
-    return false;
-#endif
+    CURL rarPath = URIUtils::CreateArchivePath("rar",CURL(strArchivePath),"");
+    GetRecursiveListing(rarPath.Get(), ItemList, "", true);
   }
-  for (int it = 0; it < ItemList.Size(); ++it)
+  for (int it= 0 ; it <ItemList.Size();++it)
   {
-    std::string strPathInRar = ItemList[it]->GetPath();
-    std::string strExt = URIUtils::GetExtension(strPathInRar);
+   std::string strPathInRar = ItemList[it]->GetPath();
+   std::string strExt = URIUtils::GetExtension(strPathInRar);
+   
+   CLog::Log(LOGDEBUG, "ScanArchiveForSubtitles:: Found file %s", strPathInRar.c_str());
+   // always check any embedded rar archives
+   // checking for embedded rars, I moved this outside the sub_ext[] loop. We only need to check this once for each file.
+   if (URIUtils::IsRAR(strPathInRar) || URIUtils::IsZIP(strPathInRar))
+   {
+    CURL urlRar;
+    CURL pathToUrl(strArchivePath);
+    if (strExt == ".rar")
+      urlRar = URIUtils::CreateArchivePath("rar", pathToUrl, strPathInRar);
+    else
+      urlRar = URIUtils::CreateArchivePath("zip", pathToUrl, strPathInRar);
+    ScanArchiveForSubtitles(urlRar.Get(), strMovieFileNameNoExt, vecSubtitles);
+   }
+   // done checking if this is a rar-in-rar
 
     // checking for embedded archives
     if (URIUtils::IsArchive(strPathInRar))
