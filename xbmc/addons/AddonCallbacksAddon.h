@@ -43,6 +43,7 @@ public:
   static char* GetLocalizedString(const void* addonData, long dwCode);
   static char* GetDVDMenuLanguage(const void* addonData);
   static char* DNSLookup(const void* addonData, const char* url);
+  static char* URLEncode(const void* addonData, const char* url);
   static void FreeString(const void* addonData, char* str);
 
   // file operations
