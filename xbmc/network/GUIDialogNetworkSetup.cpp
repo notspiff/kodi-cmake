@@ -136,12 +136,12 @@ void CGUIDialogNetworkSetup::OnInitWindow()
   pSpin->AddLabel(g_localizeStrings.Get(20174), NET_PROTOCOL_DAAP);
   pSpin->AddLabel(g_localizeStrings.Get(20175), NET_PROTOCOL_UPNP);
   pSpin->AddLabel(g_localizeStrings.Get(20304), NET_PROTOCOL_RSS);
-#ifdef HAS_FILESYSTEM_NFS
+//#ifdef HAS_FILESYSTEM_NFS
   pSpin->AddLabel(g_localizeStrings.Get(20259), NET_PROTOCOL_NFS);
-#endif
-#ifdef HAS_FILESYSTEM_SFTP
+//#endif
+//#ifdef HAS_FILESYSTEM_SFTP
   pSpin->AddLabel(g_localizeStrings.Get(20260), NET_PROTOCOL_SFTP);
-#endif
+//#endif
 #ifdef HAS_FILESYSTEM_AFP
   pSpin->AddLabel(g_localizeStrings.Get(20261), NET_PROTOCOL_AFP);
 #endif
