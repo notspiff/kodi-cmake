@@ -132,15 +132,15 @@ void CGUIDialogNetworkSetup::OnInitWindow()
   labels.push_back(make_pair(g_localizeStrings.Get(20174), NET_PROTOCOL_DAAP));
   labels.push_back(make_pair(g_localizeStrings.Get(20175), NET_PROTOCOL_UPNP));
   labels.push_back(make_pair(g_localizeStrings.Get(20304), NET_PROTOCOL_RSS));
-#ifdef HAS_FILESYSTEM_NFS
+//#ifdef HAS_FILESYSTEM_NFS
   labels.push_back(make_pair(g_localizeStrings.Get(20259), NET_PROTOCOL_NFS));
-#endif
-#ifdef HAS_FILESYSTEM_SFTP
+//#endif
+//#ifdef HAS_FILESYSTEM_SFTP
   labels.push_back(make_pair(g_localizeStrings.Get(20260), NET_PROTOCOL_SFTP));
-#endif
-#ifdef HAS_FILESYSTEM_AFP
+//#endif
+//#ifdef HAS_FILESYSTEM_AFP
   labels.push_back(make_pair(g_localizeStrings.Get(20261), NET_PROTOCOL_AFP));
-#endif
+//#endif
 
   SET_CONTROL_LABELS(CONTROL_PROTOCOL, m_protocol, &labels);
   UpdateButtons();
