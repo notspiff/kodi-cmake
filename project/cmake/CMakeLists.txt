@@ -15,7 +15,6 @@ option(VERBOSE            "Enable verbose output?" OFF)
 option(ENABLE_TESTS       "Enable tests?" ON)
 option(ENABLE_DVDCSS      "Enable libdvdcss support?" ON)
 option(ENABLE_UPNP        "Enable UPnP support?" ON)
-option(ENABLE_NONFREE     "Enable non-free components?" ON)
 option(ENABLE_MICROHTTPD  "Enable MicroHttpd webserver?" ON)
 option(ENABLE_MYSQLCLIENT "Enable MySql support?" ON)
 option(ENABLE_AVAHI       "Enable Avahi support?" ON)
@@ -139,10 +138,6 @@ endforeach()
 
 if(ENABLE_UPNP)
   list(APPEND DEP_DEFINES "-DUSE_UPNP=1")
-endif()
-
-if(ENABLE_NONFREE)
-  list(APPEND DEP_DEFINES "-DHAVE_XBMC_NONFREE=1")
 endif()
 
 if(ENABLE_OPTICAL)
