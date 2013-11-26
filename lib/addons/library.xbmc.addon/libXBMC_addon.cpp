@@ -125,6 +125,14 @@ DLLEXPORT char* XBMC_dns_lookup(void *hdl, void* cb, const char* url)
   return ((CB_AddOnLib*)cb)->DNSLookup(((AddonCB*)hdl)->addonData, url);
 }
 
+DLLEXPORT char* XBMC_url_encode(void *hdl, void* cb, const char* url)
+{
+  if (cb == NULL)
+    return NULL;
+
+  return ((CB_AddOnLib*)cb)->URLEncode(((AddonCB*)hdl)->addonData, url);
+}
+
 DLLEXPORT void XBMC_free_string(void* hdl, void* cb, char* str)
 {
   if (cb == NULL)
