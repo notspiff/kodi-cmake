@@ -73,9 +73,6 @@
 #include "pvr/recordings/PVRRecording.h"
 
 #include "filesystem/PluginDirectory.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "filesystem/RarManager.h"
-#endif
 #include "filesystem/ZipManager.h"
 
 #include "guilib/GUIWindowManager.h"
@@ -611,14 +608,14 @@ int CBuiltins::Execute(const std::string& execString)
 
     URIUtils::AddSlashAtEnd(strDestDirect);
 
-    if (URIUtils::IsZIP(params[0]))
-      g_ZipManager.ExtractArchive(params[0],strDestDirect);
-#ifdef HAS_FILESYSTEM_RAR
-    else if (URIUtils::IsRAR(params[0]))
-      g_RarManager.ExtractArchive(params[0],strDestDirect);
-#endif
-    else
-      CLog::Log(LOGERROR, "Extract, No archive given");
+    CFileItemList items;
+    CFileItemPtr ptr(new CFileItem());
+    CURL archpath = URIUtils::CreateArchivePath(URIUtils::GetExtension(params[0]).substr(1), CURL(params[0]), "");
+    ptr->SetURL(archpath);
+    ptr->Select(true);
+    CFileOperationJob job(CFileOperationJob::ActionCopy, items, strDestDirect);
+    if (!job.DoWork())
+      CLog::Log(LOGERROR, "XBMC.Extract, Error extracting archive");
   }
   else if (execute == "runplugin")
   {
