@@ -21,8 +21,6 @@
 #include "ApplicationBuiltins.h"
 
 #include "Application.h"
-#include "filesystem/RarManager.h"
-#include "filesystem/ZipManager.h"
 #include "messaging/ApplicationMessenger.h"
 #include "interfaces/AnnouncementManager.h"
 #include "network/Network.h"
@@ -55,14 +53,14 @@ static int Extract(const std::vector<std::string>& params)
 
     URIUtils::AddSlashAtEnd(strDestDirect);
 
-    if (URIUtils::IsZIP(params[0]))
-      g_ZipManager.ExtractArchive(params[0],strDestDirect);
-#ifdef HAS_FILESYSTEM_RAR
-    else if (URIUtils::IsRAR(params[0]))
-      g_RarManager.ExtractArchive(params[0],strDestDirect);
-#endif
-    else
-      CLog::Log(LOGERROR, "Extract, No archive given");
+    CFileItemList items;
+    CFileItemPtr ptr(new CFileItem());
+    CURL archpath = URIUtils::CreateArchivePath(URIUtils::GetExtension(params[0]).substr(1), CURL(params[0]), "");
+    ptr->SetURL(archpath);
+    ptr->Select(true);
+    CFileOperationJob job(CFileOperationJob::ActionCopy, items, strDestDirect);
+    if (!job.DoWork())
+      CLog::Log(LOGERROR, "XBMC.Extract, Error extracting archive");
 
   return 0;
 }
