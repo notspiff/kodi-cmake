@@ -62,9 +62,6 @@
 #include "APKFile.h"
 #endif
 #include "ZipFile.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "RarFile.h"
-#endif
 #ifdef HAS_FILESYSTEM_AFP
 #include "AFPFile.h"
 #endif
@@ -134,14 +131,6 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
   if (strProtocol == "apk") return new CAPKFile();
 #endif
   if (strProtocol == "zip") return new CZipFile();
-  else if (strProtocol == "rar")
-  {
-#ifdef HAS_FILESYSTEM_RAR
-    return new CRarFile();
-#else
-    CLog::Log(LOGWARNING, "%s - Compiled without non-free, rar support is disabled", __FUNCTION__);
-#endif
-  }
   else if (strProtocol == "musicdb") return new CMusicDatabaseFile();
   else if (strProtocol == "videodb") return NULL;
   else if (strProtocol == "special") return new CSpecialProtocolFile();

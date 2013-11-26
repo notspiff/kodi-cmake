@@ -85,9 +85,6 @@
 #include "APKDirectory.h"
 #endif
 #include "ZipDirectory.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "RarDirectory.h"
-#endif
 #include "TuxBoxDirectory.h"
 #include "HDHomeRunDirectory.h"
 #include "SlingboxDirectory.h"
@@ -161,14 +158,6 @@ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
   if (strProtocol == "apk") return new CAPKDirectory();
 #endif
   if (strProtocol == "zip") return new CZipDirectory();
-  if (strProtocol == "rar") 
-  {
-#ifdef HAS_FILESYSTEM_RAR
-    return new CRarDirectory();
-#else
-    CLog::Log(LOGWARNING, "%s - Compiled without non-free, rar support is disabled", __FUNCTION__);
-#endif
-  }
   if (strProtocol == "multipath") return new CMultiPathDirectory();
   if (strProtocol == "stack") return new CStackDirectory();
   if (strProtocol == "playlistmusic") return new CPlaylistDirectory();
