@@ -43,9 +43,6 @@
 #include "input/SDLJoystick.h"
 #endif
 
-#if defined(HAS_FILESYSTEM_RAR)
-#include "filesystem/RarManager.h"
-#endif
 #include "filesystem/ZipManager.h"
 
 #ifdef TARGET_RASPBERRY_PI
@@ -81,9 +78,6 @@
   CRBP               g_RBP;
 #endif
 
-#ifdef HAS_FILESYSTEM_RAR
-  CRarManager g_RarManager;
-#endif
   CZipManager g_ZipManager;
 
   CDataCacheCore g_dataCacheCore;
