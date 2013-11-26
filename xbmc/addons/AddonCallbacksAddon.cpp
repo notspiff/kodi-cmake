@@ -33,6 +33,7 @@
 #include "utils/CharsetConverter.h"
 #include "utils/StringUtils.h"
 #include "cores/dvdplayer/DVDCodecs/DVDCodecs.h"
+#include "URL.h"
 
 using namespace XFILE;
 
@@ -53,6 +54,7 @@ CAddonCallbacksAddon::CAddonCallbacksAddon(CAddon* addon)
   m_callbacks->GetLocalizedString = GetLocalizedString;
   m_callbacks->GetDVDMenuLanguage = GetDVDMenuLanguage;
   m_callbacks->DNSLookup          = DNSLookup;
+  m_callbacks->URLEncode          = URLEncode;
   m_callbacks->FreeString         = FreeString;
 
   m_callbacks->OpenFile           = OpenFile;
@@ -311,9 +313,22 @@ char* CAddonCallbacksAddon::DNSLookup(const void* addonData, const char* url)
   return buffer;
 }
 
+char* CAddonCallbacksAddon::URLEncode(const void* addonData, const char* url)
+{
+  CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
+  if (!helper)
+    return NULL;
+
+  std::string string = CURL::Encode(url);
+  char* buffer = NULL;
+  if (!string.empty())
+    buffer = strdup(string.c_str());
+  return buffer;
+}
+
 void CAddonCallbacksAddon::FreeString(const void* addonData, char* str)
 {
-  delete[] str;
+  free(str);
 }
 
 void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileName, unsigned int flags)
