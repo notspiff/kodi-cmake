@@ -57,9 +57,6 @@ set(SOURCES AddonsDirectory.cpp
             PluginDirectory.cpp
             PVRDirectory.cpp
             PVRFile.cpp
-            RarDirectory.cpp
-            RarFile.cpp
-            RarManager.cpp
             RSSDirectory.cpp
             RTVDirectory.cpp
             RTVFile.cpp
