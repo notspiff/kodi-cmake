@@ -67,9 +67,6 @@
 #include "cores/IPlayer.h"
 
 #include "filesystem/PluginDirectory.h"
-#ifdef HAS_FILESYSTEM_RAR
-#include "filesystem/RarManager.h"
-#endif
 #include "filesystem/ZipManager.h"
 
 #include "guilib/GUIWindowManager.h"
@@ -522,14 +519,16 @@ int CBuiltins::Execute(const CStdString& execString)
 
     URIUtils::AddSlashAtEnd(strDestDirect);
 
-    if (URIUtils::IsZIP(params[0]))
-      g_ZipManager.ExtractArchive(params[0],strDestDirect);
-#ifdef HAS_FILESYSTEM_RAR
-    else if (URIUtils::IsRAR(params[0]))
-      g_RarManager.ExtractArchive(params[0],strDestDirect);
-#endif
-    else
-      CLog::Log(LOGERROR, "XBMC.Extract, No archive given");
+
+    CFileItemList items;
+    CFileItemPtr ptr(new CFileItem());
+    CStdString archpath;
+    URIUtils::CreateArchivePath(archpath, URIUtils::GetExtension(archpath).substr(1), params[0], "");
+    ptr->SetPath(archpath);
+    ptr->Select(true);
+    CFileOperationJob job(CFileOperationJob::ActionCopy, items, strDestDirect);
+    if (!job.DoWork())
+      CLog::Log(LOGERROR, "XBMC.Extract, Error extracting archive");
   }
   else if (execute.Equals("runplugin"))
   {
