@@ -23,7 +23,6 @@
 #include "filesystem/VTPFile.h"
 #include "pvr/channels/PVRChannel.h"
 #include "filesystem/VTPFile.h"
-#include "filesystem/SlingboxFile.h"
 #include "URL.h"
 #include "addons/VFSEntry.h"
 #include "addons/AddonManager.h"
@@ -80,12 +79,6 @@ bool CDVDInputStreamTV::Open(const char* strFile, const std::string& content)
     {
       m_pFile       = new CVTPFile();
       m_pLiveTV     = ((CVTPFile*)m_pFile)->GetLiveTV();
-      m_pRecordable = NULL;
-    }
-    else if (strncmp(strFile, "sling://", 8) == 0)
-    {
-      m_pFile       = new CSlingboxFile();
-      m_pLiveTV     = ((CSlingboxFile*)m_pFile)->GetLiveTV();
       m_pRecordable = NULL;
     }
     else
