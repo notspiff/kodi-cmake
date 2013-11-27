@@ -52,6 +52,8 @@ public:
   virtual bool CanFilterAdvanced() { return m_canFilterAdvanced; }
   virtual bool IsFiltered();
 
+  virtual bool UseFileDirectories() { return true; }
+
 protected:
   virtual void LoadAdditionalTags(TiXmlElement *root);
   CGUIControl *GetFirstFocusableControl(int id);
