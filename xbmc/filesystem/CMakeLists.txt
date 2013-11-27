@@ -54,8 +54,6 @@ set(SOURCES AddonsDirectory.cpp
             SAPDirectory.cpp
             SAPFile.cpp
             ShoutcastFile.cpp
-            SlingboxDirectory.cpp
-            SlingboxFile.cpp
             SmartPlaylistDirectory.cpp
             SMBDirectory.cpp
             SMBFile.cpp
