@@ -666,7 +666,7 @@ bool CGUIMediaWindow::GetDirectory(const std::string &strDirectory, CFileItemLis
     if (strDirectory.empty())
       SetupShares();
 
-    if (!m_rootDir.GetDirectory(pathToUrl, items))
+    if (!m_rootDir.GetDirectory(pathToUrl, items, UseFileDirectories()))
       return false;
 
     // took over a second, and not normally cached, so cache it
@@ -1238,7 +1238,7 @@ void CGUIMediaWindow::SetHistoryForPath(const std::string& strDirectory)
     URIUtils::RemoveSlashAtEnd(strPath);
 
     CFileItemList items;
-    m_rootDir.GetDirectory(CURL(), items);
+    m_rootDir.GetDirectory(CURL(), items, UseFileDirectories());
 
     m_history.ClearPathHistory();
 
