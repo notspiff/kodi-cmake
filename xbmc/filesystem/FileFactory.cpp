@@ -79,7 +79,6 @@
 #include "TuxBoxFile.h"
 #include "UDFFile.h"
 #include "MythFile.h"
-#include "HDHomeRunFile.h"
 #include "ImageFile.h"
 #include "Application.h"
 #include "URL.h"
@@ -157,7 +156,6 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
     else if (strProtocol == "dav" || strProtocol == "davs") return new CDAVFile();
     else if (strProtocol == "shout") return new CShoutcastFile();
     else if (strProtocol == "tuxbox") return new CTuxBoxFile();
-    else if (strProtocol == "hdhomerun") return new CHomeRunFile();
     else if (strProtocol == "myth") return new CMythFile();
     else if (strProtocol == "cmyth") return new CMythFile();
 /*#ifdef HAS_FILESYSTEM_SMB
