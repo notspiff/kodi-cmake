@@ -72,7 +72,6 @@
 #include "SpecialProtocolFile.h"
 #include "MultiPathFile.h"
 #include "UDFFile.h"
-#include "HDHomeRunFile.h"
 #include "ImageFile.h"
 #include "ResourceFile.h"
 #include "Application.h"
@@ -155,7 +154,6 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
     else if (url.IsProtocol("http") ||  url.IsProtocol("https")) return new CHTTPFile();
     else if (url.IsProtocol("dav") || url.IsProtocol("davs")) return new CDAVFile();
     else if (url.IsProtocol("shout")) return new CShoutcastFile();
-    else if (url.IsProtocol("hdhomerun")) return new CHomeRunFile();
 #ifdef HAS_FILESYSTEM_SMB
 #ifdef TARGET_WINDOWS
     else if (url.IsProtocol("smb")) return new CWin32SMBFile();
