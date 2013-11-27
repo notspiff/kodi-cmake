@@ -91,7 +91,6 @@
 #endif
 #include "ZipDirectory.h"
 #include "TuxBoxDirectory.h"
-#include "HDHomeRunDirectory.h"
 #include "MythDirectory.h"
 #include "FileItem.h"
 #include "URL.h"
@@ -196,7 +195,6 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
 #ifdef HAS_UPNP
     if (url.IsProtocol("upnp")) return new CUPnPDirectory();
 #endif
-    if (url.IsProtocol("hdhomerun")) return new CHomeRunDirectory();
     if (url.IsProtocol("myth")) return new CMythDirectory();
     if (url.IsProtocol("cmyth")) return new CMythDirectory();
     if (url.IsProtocol("rss")) return new CRSSDirectory();
