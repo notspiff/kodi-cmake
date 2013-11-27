@@ -53,6 +53,8 @@ public:
   virtual bool IsFiltered();
   virtual bool IsSameStartFolder(const std::string &dir);
 
+  virtual bool UseFileDirectories() { return true; }
+
 protected:
   virtual void LoadAdditionalTags(TiXmlElement *root);
   CGUIControl *GetFirstFocusableControl(int id);
