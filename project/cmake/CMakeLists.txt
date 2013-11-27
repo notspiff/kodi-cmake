@@ -228,7 +228,6 @@ set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
 
 core_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
 core_link_library(exif system/libexif)
-core_link_library(hdhomerun system/hdhomerun)
 
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
 core_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
