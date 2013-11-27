@@ -1,3 +1,2 @@
 lib/libhdhomerun             hdhomerun
 lib/libRTV                   rtv
-lib/SlingboxLib              slingbox

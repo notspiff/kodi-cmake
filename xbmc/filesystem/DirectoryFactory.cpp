@@ -87,7 +87,6 @@
 #include "ZipDirectory.h"
 #include "TuxBoxDirectory.h"
 #include "HDHomeRunDirectory.h"
-#include "SlingboxDirectory.h"
 #include "MythDirectory.h"
 #include "FileItem.h"
 #include "URL.h"
@@ -198,7 +197,6 @@ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
     if (strProtocol == "upnp") return new CUPnPDirectory();
 #endif
     if (strProtocol == "hdhomerun") return new CHomeRunDirectory();
-    if (strProtocol == "sling") return new CSlingboxDirectory();
     if (strProtocol == "myth") return new CMythDirectory();
     if (strProtocol == "cmyth") return new CMythDirectory();
     if (strProtocol == "rss") return new CRSSDirectory();
