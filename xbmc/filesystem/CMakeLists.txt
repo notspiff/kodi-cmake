@@ -78,9 +78,6 @@ set(SOURCES AddonsDirectory.cpp
             UPnPFile.cpp
             VideoDatabaseDirectory.cpp
             VirtualDirectory.cpp
-            VTPDirectory.cpp
-            VTPFile.cpp
-            VTPSession.cpp
             ZeroconfDirectory.cpp
             ZipDirectory.cpp
             ZipFile.cpp
