@@ -59,9 +59,6 @@
 #include "PluginDirectory.h"
 #ifdef HAS_FILESYSTEM
 #include "ISO9660Directory.h"
-#ifdef HAS_FILESYSTEM_RTV
-#include "RTVDirectory.h"
-#endif
 #ifdef HAS_FILESYSTEM_DAAP
 #include "DAAPDirectory.h"
 #endif
@@ -184,9 +181,6 @@ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
 #ifdef HAS_FILESYSTEM
 #ifdef HAS_FILESYSTEM_DAAP
     if (strProtocol == "daap") return new CDAAPDirectory();
-#endif
-#ifdef HAS_FILESYSTEM_RTV
-    if (strProtocol == "rtv") return new CRTVDirectory();
 #endif
 #endif
 #ifdef HAS_UPNP
