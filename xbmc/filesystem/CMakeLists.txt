@@ -56,8 +56,6 @@ set(SOURCES AddonsDirectory.cpp
             PVRDirectory.cpp
             PVRFile.cpp
             RSSDirectory.cpp
-            RTVDirectory.cpp
-            RTVFile.cpp
             SAPDirectory.cpp
             SAPFile.cpp
             ShoutcastFile.cpp
