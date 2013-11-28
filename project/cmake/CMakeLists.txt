@@ -19,7 +19,6 @@ option(ENABLE_MYSQLCLIENT "Enable MySql support?" ON)
 option(ENABLE_AVAHI       "Enable Avahi support?" ON)
 option(ENABLE_RTMP        "Enable RTMP support?" ON)
 option(ENABLE_BLURAY      "Enable BluRay support?" ON)
-option(ENABLE_AFPCLIENT   "Enable AFP support?" ON)
 option(ENABLE_PLIST       "Enable AirPlay support?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
 option(ENABLE_CEC         "Enable CEC support?" ON)
@@ -94,8 +93,7 @@ set(optional_deps MicroHttpd MySqlClient
 set(required_dyload Curl ASS Mpeg2 LibDvd)
 
 # Optional, dyloaded deps
-set(dyload_optional RTMP CEC Bluray
-                    AfpClient Plist)
+set(dyload_optional RTMP CEC Bluray Plist)
 
 # Required by shared objects we link
 set(required_dep_libs Jasper PNG TIFF EXPAT)

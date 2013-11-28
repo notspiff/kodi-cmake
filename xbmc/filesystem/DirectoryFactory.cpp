@@ -85,7 +85,6 @@
 #ifdef HAS_ZEROCONF
 #include "ZeroconfDirectory.h"
 #endif
-#endif
 #ifdef HAVE_LIBBLURAY
 #include "BlurayDirectory.h"
 #endif
