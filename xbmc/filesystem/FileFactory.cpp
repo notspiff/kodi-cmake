@@ -52,9 +52,6 @@
 #ifdef HAS_FILESYSTEM_SAP
 #include "SAPFile.h"
 #endif
-#ifdef HAS_FILESYSTEM_VTP
-#include "VTPFile.h"
-#endif
 #ifdef HAS_PVRCLIENTS
 #include "PVRFile.h"
 #endif
@@ -175,9 +172,6 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
 #endif
 #ifdef HAS_FILESYSTEM_SAP
     else if (strProtocol == "sap") return new CSAPFile();
-#endif
-#ifdef HAS_FILESYSTEM_VTP
-    else if (strProtocol == "vtp") return new CVTPFile();
 #endif
 #ifdef HAS_PVRCLIENTS
     else if (strProtocol == "pvr") return new CPVRFile();
