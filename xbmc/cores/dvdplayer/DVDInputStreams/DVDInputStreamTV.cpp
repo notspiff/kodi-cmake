@@ -20,9 +20,7 @@
 
 #include "DVDInputStreamTV.h"
 #include "filesystem/MythFile.h"
-#include "filesystem/VTPFile.h"
 #include "pvr/channels/PVRChannel.h"
-#include "filesystem/VTPFile.h"
 #include "URL.h"
 #include "addons/VFSEntry.h"
 #include "addons/AddonManager.h"
@@ -75,18 +73,9 @@ bool CDVDInputStreamTV::Open(const char* strFile, const std::string& content)
 
   if (!m_pFile)
   {
-    if(strncmp(strFile, "vtp://", 6) == 0)
-    {
-      m_pFile       = new CVTPFile();
-      m_pLiveTV     = ((CVTPFile*)m_pFile)->GetLiveTV();
-      m_pRecordable = NULL;
-    }
-    else
-    {
-      m_pFile       = new CMythFile();
-      m_pLiveTV     = ((CMythFile*)m_pFile)->GetLiveTV();
-      m_pRecordable = ((CMythFile*)m_pFile)->GetRecordable();
-    }
+    m_pFile       = new CMythFile();
+    m_pLiveTV     = ((CMythFile*)m_pFile)->GetLiveTV();
+    m_pRecordable = ((CMythFile*)m_pFile)->GetRecordable();
   }
 
   // open file in binary mode
