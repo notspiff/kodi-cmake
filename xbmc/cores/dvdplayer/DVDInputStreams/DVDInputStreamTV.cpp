@@ -70,16 +70,6 @@ bool CDVDInputStreamTV::Open(const char* strFile, const std::string& content)
     }
   }
 
-  if (!m_pFile)
-  {
-    if(strncmp(strFile, "vtp://", 6) == 0)
-    {
-      m_pFile       = new CVTPFile();
-      m_pLiveTV     = ((CVTPFile*)m_pFile)->GetLiveTV();
-      m_pRecordable = NULL;
-    }
-  }
-
   // open file in binary mode
   if (!m_pFile->Open(url))
   {
