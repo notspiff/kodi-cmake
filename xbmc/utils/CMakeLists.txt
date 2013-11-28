@@ -67,6 +67,7 @@ set(SOURCES ActorProtocol.cpp
             TuxBoxUtil.cpp
             URIUtils.cpp
             UrlOptions.cpp
+            Utf8Utils.cpp
             Variant.cpp
             Vector.cpp
             Weather.cpp
