@@ -15766,3 +15766,15 @@ msgstr ""
 msgctxt "#37045"
 msgid "%s and %s"
 msgstr ""
+
+#. Removing import of (media type plural) from (media provider name)
+#: xbmc/media/import/repositories/VideoImportRepository.cpp
+msgctxt "#37046"
+msgid "Removing import of %s from %s..."
+msgstr ""
+
+#. Removing (media provider name)
+#: xbmc/media/import/repositories/VideoImportRepository.cpp
+msgctxt "#37047"
+msgid "Removing %s..."
+msgstr ""
