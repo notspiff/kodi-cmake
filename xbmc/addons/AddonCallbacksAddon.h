@@ -22,6 +22,7 @@
 #include "AddonCallbacks.h"
 
 struct VFSDirEntry;
+struct VFSURL;
 
 namespace ADDON
 {
@@ -46,6 +47,7 @@ public:
   static char* GetDVDMenuLanguage(const void* addonData);
   static char* DNSLookup(const void* addonData, const char* url);
   static char* URLEncode(const void* addonData, const char* url);
+  static bool AuthenticateURL(const void* addonData, VFSURL* url);
   static void FreeString(const void* addonData, char* str);
 
   // file operations

@@ -38,6 +38,7 @@ typedef intptr_t ssize_t;
 #endif // TARGET_WINDOWS
 
 struct VFSDirEntry;
+struct VFSURL;
 
 typedef void (*AddOnLogCallback)(void *addonData, const ADDON::addon_log_t loglevel, const char *msg);
 typedef void (*AddOnQueueNotification)(void *addonData, const ADDON::queue_msg_t type, const char *msg);
@@ -48,6 +49,7 @@ typedef char* (*AddOnGetLocalizedString)(const void* addonData, long dwCode);
 typedef char* (*AddOnGetDVDMenuLanguage)(const void* addonData);
 typedef char* (*AddOnDNSLookup)(const void* addonData, const char* url);
 typedef char* (*AddOnURLEncode)(const void* addonData, const char* url);
+typedef bool  (*AddOnAuthenticateURL)(const void* addonData, VFSURL* url);
 typedef void (*AddOnFreeString)(const void* addonData, char* str);
 typedef void* (*AddOnOpenFile)(const void* addonData, const char* strFileName, unsigned int flags);
 typedef void* (*AddOnOpenFileForWrite)(const void* addonData, const char* strFileName, bool bOverWrite);
@@ -82,6 +84,7 @@ typedef struct CB_AddOn
   AddOnGetDVDMenuLanguage GetDVDMenuLanguage;
   AddOnDNSLookup          DNSLookup;
   AddOnURLEncode          URLEncode;
+  AddOnAuthenticateURL    AuthenticateURL;
   AddOnFreeString         FreeString;
 
   AddOnOpenFile           OpenFile;
