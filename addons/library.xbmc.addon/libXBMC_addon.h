@@ -27,6 +27,8 @@
 #include <stdint.h>
 #include <stdarg.h>
 
+struct VFSURL;
+
 #ifdef _WIN32                   // windows
 #ifndef _SSIZE_T_DEFINED
 typedef intptr_t      ssize_t;
@@ -195,6 +197,10 @@ namespace ADDON
       XBMC_url_encode = (char* (*)(void* HANDLE, void* CB, const char* url))
         dlsym(m_libXBMC_addon, "XBMC_url_encode");
       if (XBMC_url_encode == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
+
+      XBMC_authenticate_url = (bool (*)(void* HANDLE, void* CB, VFSURL* url))
+        dlsym(m_libXBMC_addon, "XBMC_authenticate_url");
+      if (XBMC_authenticate_url == NULL) { fprintf(stderr, "Unable to assign function %s\n", dlerror()); return false; }
 
       XBMC_open_file = (void* (*)(void* HANDLE, void* CB, const char* strFileName, unsigned int flags))
         dlsym(m_libXBMC_addon, "XBMC_open_file");
@@ -365,6 +371,16 @@ namespace ADDON
     char* URLEncode(const char* url)
     {
       return XBMC_url_encode(m_Handle, m_Callbacks, url);
+    }
+
+    /*!
+     * @brief Authenticate an URL
+     * @param dwCode The code of the message to get.
+     * @return The message. Must be freed by calling FreeString() when done.
+     */
+    bool AuthenticateURL(VFSURL* url)
+    {
+      return XBMC_authenticate_url(m_Handle, m_Callbacks, url);
     }
 
     /*!
@@ -602,6 +618,7 @@ namespace ADDON
     char* (*XBMC_get_dvd_menu_language)(void *HANDLE, void* CB);
     char* (*XBMC_dns_lookup)(void *HANDLE, void* CB, const char* url);
     char* (*XBMC_url_encode)(void *HANDLE, void* CB, const char* url);
+    bool  (*XBMC_authenticate_url)(void *HANDLE, void* CB, VFSURL* url);
     void (*XBMC_free_string)(void *HANDLE, void* CB, char* str);
     void* (*XBMC_open_file)(void *HANDLE, void* CB, const char* strFileName, unsigned int flags);
     void* (*XBMC_open_file_for_write)(void *HANDLE, void* CB, const char* strFileName, bool bOverWrite);

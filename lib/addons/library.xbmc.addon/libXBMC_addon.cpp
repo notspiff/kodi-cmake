@@ -133,6 +133,14 @@ DLLEXPORT char* XBMC_url_encode(void *hdl, void* cb, const char* url)
   return ((CB_AddOnLib*)cb)->URLEncode(((AddonCB*)hdl)->addonData, url);
 }
 
+DLLEXPORT bool XBMC_authenticate_url(void *hdl, void* cb, VFSURL* url)
+{
+  if (cb == NULL)
+    return false;
+
+  return ((CB_AddOnLib*)cb)->AuthenticateURL(((AddonCB*)hdl)->addonData, url);
+}
+
 DLLEXPORT void XBMC_free_string(void* hdl, void* cb, char* str)
 {
   if (cb == NULL)

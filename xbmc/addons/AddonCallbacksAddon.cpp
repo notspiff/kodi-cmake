@@ -34,6 +34,7 @@
 #include "utils/XMLUtils.h"
 #include "include/kodi_vfs_types.h"
 #include "VFSEntry.h"
+#include "PasswordManager.h"
 
 using namespace XFILE;
 
@@ -55,6 +56,7 @@ CAddonCallbacksAddon::CAddonCallbacksAddon(CAddon* addon)
   m_callbacks->GetDVDMenuLanguage = GetDVDMenuLanguage;
   m_callbacks->DNSLookup          = DNSLookup;
   m_callbacks->URLEncode          = URLEncode;
+  m_callbacks->AuthenticateURL    = AuthenticateURL;
   m_callbacks->FreeString         = FreeString;
 
   m_callbacks->OpenFile           = OpenFile;
@@ -330,6 +332,24 @@ char* CAddonCallbacksAddon::URLEncode(const void* addonData, const char* url)
   if (!string.empty())
     buffer = strdup(string.c_str());
   return buffer;
+}
+
+bool CAddonCallbacksAddon::AuthenticateURL(const void* addonData, VFSURL* url)
+{
+  CAddonCallbacks* helper = (CAddonCallbacks*) addonData;
+  if (!helper)
+    return false;
+
+  CURL url2(url->url);
+
+  bool result = CPasswordManager::GetInstance().AuthenticateURL(url2);
+  if (result)
+  {
+    url->username = strdup(url2.GetUserName().c_str());
+    url->password = strdup(url2.GetPassWord().c_str());
+  }
+
+  return result;
 }
 
 void CAddonCallbacksAddon::FreeString(const void* addonData, char* str)
