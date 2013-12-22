@@ -835,11 +835,15 @@ void CGUIWindowVideoNav::GetContextButtons(int itemNumber, CContextButtons &butt
       VIDEO::SScanSettings settings;
       GetScraperForItem(item.get(), info, settings);
 
-      if (info && info->Content() == CONTENT_TVSHOWS)
+      if ((info && info->Content() == CONTENT_TVSHOWS) ||
+        (item->IsVideoDb() &&
+         (item->GetVideoContentType() == VIDEODB_CONTENT_TVSHOWS || item->GetVideoContentType() == VIDEODB_CONTENT_EPISODES)))
         buttons.Add(CONTEXT_BUTTON_INFO, item->m_bIsFolder ? 20351 : 20352);
-      else if (info && info->Content() == CONTENT_MUSICVIDEOS)
+      else if ((info && info->Content() == CONTENT_MUSICVIDEOS) ||
+               (item->IsVideoDb() && item->GetVideoContentType() == VIDEODB_CONTENT_MUSICVIDEOS))
         buttons.Add(CONTEXT_BUTTON_INFO,20393);
-      else if (info && info->Content() == CONTENT_MOVIES)
+      else if ((info && info->Content() == CONTENT_MOVIES) ||
+               (item->IsVideoDb() && item->GetVideoContentType() == VIDEODB_CONTENT_MOVIES))
         buttons.Add(CONTEXT_BUTTON_INFO, 13346);
 
       // can we update the database?
