@@ -514,6 +514,7 @@ public:
   enum CACHE_TYPE { CACHE_NEVER = 0, CACHE_IF_SLOW, CACHE_ALWAYS };
 
   CFileItemList();
+  CFileItemList(const CFileItemList &other);
   CFileItemList(const CStdString& strPath);
   virtual ~CFileItemList();
   virtual void Archive(CArchive& ar);

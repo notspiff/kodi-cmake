@@ -1617,6 +1617,11 @@ CFileItemList::CFileItemList()
   m_replaceListing = false;
 }
 
+CFileItemList::CFileItemList(const CFileItemList &other)
+{
+  Copy(other, true);
+}
+
 CFileItemList::CFileItemList(const CStdString& strPath) : CFileItem(strPath, true)
 {
   m_fastLookup = false;
