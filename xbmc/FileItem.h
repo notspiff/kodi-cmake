@@ -550,6 +550,7 @@ public:
 
   CFileItemList();
   explicit CFileItemList(const std::string& strPath);
+  CFileItemList(const CFileItemList &other);
   virtual ~CFileItemList();
   virtual void Archive(CArchive& ar);
   CFileItemPtr operator[] (int iItem);
