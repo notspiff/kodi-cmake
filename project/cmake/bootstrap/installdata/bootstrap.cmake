@@ -1,6 +1,6 @@
 if(EXISTS ${ROOT_DIR}/bootstrap/autoreconf.txt)
   file(STRINGS ${ROOT_DIR}/bootstrap/autoreconf.txt dirs)
   foreach(dir ${dirs})
-    execute_process(COMMAND autoreconf -vif WORKING_DIRECTORY ${ROOT_DIR}/${dir})
+    execute_process(COMMAND ${AUTORECONF_EXECUTABLE} -vif WORKING_DIRECTORY ${ROOT_DIR}/${dir})
   endforeach()
 endif()

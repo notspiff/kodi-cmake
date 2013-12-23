@@ -9,7 +9,10 @@ if(NOT CORE_SYSTEM_NAME)
 endif()
 set(xbmc-platform_ADDED OFF CACHE BOOL "" FORCE)
 
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
+
 find_package(Git REQUIRED)
+find_package(AutoConf REQUIRED)
 
 function(add_git_copy id repo rev prefix)
   externalproject_add(${id}
@@ -23,6 +26,9 @@ function(add_git_copy id repo rev prefix)
   set(exclude "PATTERN .git EXCLUDE")
   if("${id}" MATCHES "^skin." AND BOOTSTRAP_IN_TREE)
     set(exclude "${exclude} PATTERN media EXCLUDE")
+  endif()
+  if(BUILDTOOLS)
+    add_dependencies(${id} ${BUILDTOOLS})
   endif()
   file(WRITE ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
        "FILE(COPY build/${id}/src/${id}
@@ -43,6 +49,9 @@ function(add_git_cmake id repo rev prefix)
                       CONFIGURE_COMMAND ""
                       BUILD_COMMAND ""
                       INSTALL_COMMAND "")
+  if(BUILDTOOLS)
+    add_dependencies(${id} ${BUILDTOOLS})
+  endif()
 endfunction()
 
 function(add_addon_separate entry)
@@ -234,7 +243,7 @@ set(autoconf_dirs lib/libdvd/libdvdcss
 
 foreach(dir ${autoconf_dirs})
   add_custom_command(OUTPUT ${CORE_SOURCE_DIR}/${dir}/config.h.in
-                     COMMAND autoreconf -vif WORKING_DIRECTORY ${CORE_SOURCE_DIR}/${dir})
+                     COMMAND ${AUTORECONF_EXECUTABLE} -vif WORKING_DIRECTORY ${CORE_SOURCE_DIR}/${dir})
   list(APPEND SOURCES ${CORE_SOURCE_DIR}/${dir}/config.h.in)
 endforeach()
 
