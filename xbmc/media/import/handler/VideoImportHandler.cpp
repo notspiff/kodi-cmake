@@ -124,8 +124,10 @@ bool CVideoImportHandler::Compare(const CFileItem *originalItem, const CFileItem
 
   if (allMetadata)
   {
+    /* TODO
     if (originalItem->GetArt() != newItem->GetArt())
       return false;
+    */
 
     if (originalItem->GetVideoInfoTag()->Equals(*newItem->GetVideoInfoTag(), true))
       return true;
