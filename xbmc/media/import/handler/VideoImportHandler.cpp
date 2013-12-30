@@ -252,8 +252,10 @@ bool CVideoImportHandler::Compare(const CFileItem *originalItem, const CFileItem
 
   if (allMetadata)
   {
+    /* TODO: stupid artwork can mismatch if the IP of the source is dynamic
     if (originalItem->GetArt() != newItem->GetArt())
       return false;
+    */
 
     if (originalItem->GetVideoInfoTag()->Equals(*newItem->GetVideoInfoTag(), true))
       return true;
