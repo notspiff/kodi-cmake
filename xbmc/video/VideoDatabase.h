@@ -473,6 +473,7 @@ public:
   void DeleteMovie(const CStdString& strFilenameAndPath, bool bKeepId = false, int idMovie = -1);
   void DeleteTvShow(int idTvShow, bool bKeepId = false);
   void DeleteTvShow(const CStdString& strPath, bool bKeepId = false, int idTvShow = -1);
+  void DeleteSeason(int idSeason);
   void DeleteEpisode(int idEpisode, bool bKeepId = false);
   void DeleteEpisode(const CStdString& strFilenameAndPath, int idEpisode = -1, bool bKeepId = false);
   void DeleteMusicVideo(int idMusicVideo, bool bKeepId = false);
@@ -742,6 +743,7 @@ public:
   bool GetMoviesByWhere(const CStdString& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   bool GetSetsByWhere(const CStdString& strBaseDir, const Filter &filter, CFileItemList& items, bool ignoreSingleMovieSets = false);
   bool GetTvShowsByWhere(const CStdString& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
+  bool GetSeasonsByWhere(const CStdString& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription());
   bool GetEpisodesByWhere(const CStdString& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   bool GetMusicVideosByWhere(const CStdString &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   

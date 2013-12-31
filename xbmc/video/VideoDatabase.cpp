@@ -440,6 +440,45 @@ void CVideoDatabase::CreateViews()
                                      "GROUP BY tvshow.idShow;", VIDEODB_ID_TV_PARENTPATHID));
   m_pDS->exec(tvshowview.c_str());
 
+  CLog::Log(LOGINFO, "create seasonview");
+  m_pDS->exec("DROP VIEW IF EXISTS seasonview");
+  CStdString seasonview = PrepareSQL("CREATE VIEW seasonview AS SELECT "
+                                     "  seasons.*, "
+                                     "  path.strPath AS strPath,"
+                                     "  tvshowview.c%02d AS showTitle,"
+                                     "  tvshowview.c%02d AS plot,"
+                                     "  tvshowview.c%02d AS premiered,"
+                                     "  tvshowview.c%02d AS genre,"
+                                     "  tvshowview.c%02d AS strStudio,"
+                                     "  tvshowview.c%02d AS mpaa,"
+                                     "  count(DISTINCT episodeview.idEpisode) AS episodes,"
+                                     "  count(files.playCount) AS playCount,"
+                                     "  sources.identifier AS strSource,"
+                                     "  COUNT(files.enabled) AS enabled,"
+                                     "  importsPath.strPath AS importPath "
+                                     "FROM seasons"
+                                     "  JOIN tvshowview ON"
+                                     "    tvshowview.idShow = seasons.idShow"
+                                     "  JOIN episodeview ON"
+                                     "    episodeview.idShow = seasons.idShow AND episodeview.c%02d = seasons.season"
+                                     "  JOIN files ON"
+                                     "    files.idFile = episodeview.idFile"
+                                     "  JOIN tvshowlinkpath ON"
+                                     "    tvshowlinkpath.idShow = tvshowview.idShow"
+                                     "  JOIN path ON"
+                                     "    path.idPath = tvshowlinkpath.idPath"
+                                     "  LEFT JOIN imports ON"
+                                     "    imports.idPath = tvshowview.c%02d AND imports.mediaType = 'episode'"
+                                     "  LEFT JOIN sources ON"
+                                     "    sources.idSource = imports.idSource"
+                                     "  LEFT JOIN path AS importsPath ON"
+                                     "    importsPath.idPath = imports.idPath "
+                                     "GROUP BY seasons.idSeason",
+                                     VIDEODB_ID_TV_TITLE, VIDEODB_ID_TV_PLOT, VIDEODB_ID_TV_PREMIERED,
+                                     VIDEODB_ID_TV_GENRE, VIDEODB_ID_TV_STUDIOS, VIDEODB_ID_TV_MPAA,
+                                     VIDEODB_ID_EPISODE_SEASON, VIDEODB_ID_TV_PARENTPATHID);
+  m_pDS->exec(seasonview.c_str());
+
   CLog::Log(LOGINFO, "create musicvideoview");
   m_pDS->exec("CREATE VIEW musicvideoview AS SELECT"
               "  musicvideo.*,"
@@ -3754,6 +3793,24 @@ void CVideoDatabase::DeleteTvShow(const CStdString& strPath, bool bKeepId /* = f
   }
 }
 
+void CVideoDatabase::DeleteSeason(int idSeason)
+{
+  if (idSeason < 0)
+    return;
+
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL)
+      return;
+
+    ExecuteQuery(PrepareSQL("DELETE FROM seasons WHERE idSeason = %i", idSeason));
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%i) failed", __FUNCTION__, idSeason);
+  }
+}
+
 void CVideoDatabase::DeleteEpisode(int idEpisode, bool bKeepId /* = false */)
 {
   if (idEpisode < 0)
@@ -6311,6 +6368,46 @@ bool CVideoDatabase::GetStackedTvShowList(int idShow, CStdString& strIn) const
 
 bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& items, int idActor, int idDirector, int idGenre, int idYear, int idShow, bool getLinkedMovies /* = true */)
 {
+  // parse the base path to get additional filters
+  CVideoDbUrl videoUrl;
+  if (!videoUrl.FromString(strBaseDir))
+    return false;
+
+  if (idShow != -1)
+    videoUrl.AddOption("tvshowid", idShow);
+  if (idActor != -1)
+    videoUrl.AddOption("actorid", idActor);
+  else if (idDirector != -1)
+    videoUrl.AddOption("directorid", idDirector);
+  else if (idGenre != -1)
+    videoUrl.AddOption("genreid", idGenre);
+  else if (idYear != -1)
+    videoUrl.AddOption("year", idYear);
+
+  if (!GetSeasonsByWhere(videoUrl.ToString(), Filter(), items, false))
+    return false;
+
+  // now add any linked movies
+  if (getLinkedMovies && idShow != -1)
+  {
+    CStdString strIn = PrepareSQL("= %i", idShow);
+    GetStackedTvShowList(idShow, strIn);
+
+    Filter movieFilter;
+    movieFilter.join = PrepareSQL("join movielinktvshow on movielinktvshow.idMovie=movieview.idMovie");
+    movieFilter.where = PrepareSQL("movielinktvshow.idShow %s", strIn.c_str());
+    CFileItemList movieItems;
+    GetMoviesByWhere("videodb://movies/titles/", movieFilter, movieItems);
+
+    if (movieItems.Size() > 0)
+      items.Append(movieItems);
+  }
+
+  return true;
+}
+
+bool CVideoDatabase::GetSeasonsByWhere(const CStdString& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath /* = true */, const SortDescription &sortDescription /* = SortDescription() */)
+{
   try
   {
     if (NULL == m_pDB.get()) return false;
@@ -6321,81 +6418,30 @@ bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& 
     if (!videoUrl.FromString(strBaseDir))
       return false;
 
-    CStdString strIn = PrepareSQL("= %i", idShow);
-    GetStackedTvShowList(idShow, strIn);
+    CStdString strSQL = "SELECT * FROM seasonview ";
 
-    CStdString strSQL = PrepareSQL("SELECT episodeview.c%02d, "
-                                          "path.strPath, "
-                                          "tvshowview.c%02d, tvshowview.c%02d, tvshowview.c%02d, tvshowview.c%02d, tvshowview.c%02d, tvshowview.c%02d, "
-                                          "seasons.idSeason, "
-                                          "count(1), count(files.playCount) "
-                                          "FROM episodeview ", VIDEODB_ID_EPISODE_SEASON, VIDEODB_ID_TV_TITLE, VIDEODB_ID_TV_PLOT, VIDEODB_ID_TV_PREMIERED, VIDEODB_ID_TV_GENRE, VIDEODB_ID_TV_STUDIOS, VIDEODB_ID_TV_MPAA);
-    
-    Filter filter;
-    filter.join = PrepareSQL("JOIN tvshowview ON tvshowview.idShow = episodeview.idShow "
-                             "JOIN seasons ON (seasons.idShow = tvshowview.idShow AND seasons.season = episodeview.c%02d) "
-                             "JOIN files ON files.idFile = episodeview.idFile "
-                             "JOIN tvshowlinkpath ON tvshowlinkpath.idShow = tvshowview.idShow "
-                             "JOIN path ON path.idPath = tvshowlinkpath.idPath", VIDEODB_ID_EPISODE_SEASON);
-    filter.where = PrepareSQL("tvshowview.idShow %s", strIn.c_str());
-    filter.group = PrepareSQL("episodeview.c%02d", VIDEODB_ID_EPISODE_SEASON);
-
-    videoUrl.AddOption("tvshowid", idShow);
-
-    if (idActor != -1)
-      videoUrl.AddOption("actorid", idActor);
-    else if (idDirector != -1)
-      videoUrl.AddOption("directorid", idDirector);
-    else if (idGenre != -1)
-      videoUrl.AddOption("genreid", idGenre);
-    else if (idYear != -1)
-      videoUrl.AddOption("year", idYear);
-
-    if (!BuildSQL(strBaseDir, strSQL, filter, strSQL, videoUrl))
+    Filter extFilter = filter;
+    if (!BuildSQL(strBaseDir, strSQL, extFilter, strSQL, videoUrl))
       return false;
 
     int iRowsFound = RunQuery(strSQL);
     if (iRowsFound <= 0)
       return iRowsFound == 0;
 
-    // show titles, plots, day of premiere, studios and mpaa ratings will be the same
-    CStdString showTitle = m_pDS->fv(2).get_asString();
-    CStdString showPlot = m_pDS->fv(3).get_asString();
-    CStdString showPremiered = m_pDS->fv(4).get_asString();
-    CStdString showStudio = m_pDS->fv(6).get_asString();
-    CStdString showMPAARating = m_pDS->fv(7).get_asString();
-
-    if (CProfilesManager::Get().GetMasterProfile().getLockMode() != LOCK_MODE_EVERYONE && !g_passwordManager.bMasterUser)
+    set< std::pair<int, int> > mapSeasons;
+    while (!m_pDS->eof())
     {
-      map<int, CSeason> mapSeasons;
-      map<int, CSeason>::iterator it;
-      while (!m_pDS->eof())
-      {
-        int iSeason = m_pDS->fv(0).get_asInt();
-        it = mapSeasons.find(iSeason);
-        // check path
-        if (!g_passwordManager.IsDatabasePathUnlocked(CStdString(m_pDS->fv("path.strPath").get_asString()),*CMediaSourceSettings::Get().GetSources("video")))
-        {
-          m_pDS->next();
-          continue;
-        }
-        if (it == mapSeasons.end())
-        {
-          CSeason season;
-          season.path = m_pDS->fv(1).get_asString();
-          season.genre = StringUtils::Split(m_pDS->fv(5).get_asString(), g_advancedSettings.m_videoItemSeparator);
-          season.id = m_pDS->fv(8).get_asInt();
-          season.numEpisodes = m_pDS->fv(9).get_asInt();
-          season.numWatched = m_pDS->fv(10).get_asInt();
-          mapSeasons.insert(make_pair(iSeason, season));
-        }
-        m_pDS->next();
-      }
-      m_pDS->close();
+      int id = m_pDS->fv(0).get_asInt();
+      int showId = m_pDS->fv(1).get_asInt();
+      int iSeason = m_pDS->fv(2).get_asInt();
+      std::string path = m_pDS->fv(3).get_asString();
 
-      for (it=mapSeasons.begin();it != mapSeasons.end();++it)
+      if (mapSeasons.find(std::make_pair(showId, iSeason)) == mapSeasons.end() &&
+         (CProfilesManager::Get().GetMasterProfile().getLockMode() == LOCK_MODE_EVERYONE || g_passwordManager.bMasterUser ||
+          g_passwordManager.IsDatabasePathUnlocked(path, *CMediaSourceSettings::Get().GetSources("video"))))
       {
-        int iSeason = it->first;
+        mapSeasons.insert(std::make_pair(showId, iSeason));
+
         CStdString strLabel;
         if (iSeason == 0)
           strLabel = g_localizeStrings.Get(20381);
@@ -6404,66 +6450,31 @@ bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& 
         CFileItemPtr pItem(new CFileItem(strLabel));
 
         CVideoDbUrl itemUrl = videoUrl;
-        CStdString strDir = StringUtils::Format("%ld/", it->first);
+        CStdString strDir;
+        if (appendFullShowPath)
+          strDir += StringUtils::Format("%d/", showId);
+        strDir += StringUtils::Format("%d/", iSeason);
         itemUrl.AppendPath(strDir);
         pItem->SetPath(itemUrl.ToString());
 
-        pItem->m_bIsFolder=true;
+        pItem->m_bIsFolder = true;
         pItem->GetVideoInfoTag()->m_strTitle = strLabel;
         pItem->GetVideoInfoTag()->m_iSeason = iSeason;
-        pItem->GetVideoInfoTag()->m_iDbId = it->second.id;
+        pItem->GetVideoInfoTag()->m_iDbId = id;
         pItem->GetVideoInfoTag()->m_type = MediaTypeSeason;
-        pItem->GetVideoInfoTag()->m_strPath = it->second.path;
-        pItem->GetVideoInfoTag()->m_genre = it->second.genre;
-        pItem->GetVideoInfoTag()->m_studio = StringUtils::Split(showStudio, g_advancedSettings.m_videoItemSeparator);
-        pItem->GetVideoInfoTag()->m_strMPAARating = showMPAARating;
-        pItem->GetVideoInfoTag()->m_iIdShow = idShow;
-        pItem->GetVideoInfoTag()->m_strShowTitle = showTitle;
-        pItem->GetVideoInfoTag()->m_strPlot = showPlot;
-        pItem->GetVideoInfoTag()->m_premiered.SetFromDBDate(showPremiered);
-        pItem->GetVideoInfoTag()->m_iEpisode = it->second.numEpisodes;
-        pItem->SetProperty("totalepisodes", it->second.numEpisodes);
-        pItem->SetProperty("numepisodes", it->second.numEpisodes); // will be changed later to reflect watchmode setting
-        pItem->SetProperty("watchedepisodes", it->second.numWatched);
-        pItem->SetProperty("unwatchedepisodes", it->second.numEpisodes - it->second.numWatched);
-        if (iSeason == 0) pItem->SetProperty("isspecial", true);
-        pItem->GetVideoInfoTag()->m_playCount = (it->second.numEpisodes == it->second.numWatched) ? 1 : 0;
-        pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, (pItem->GetVideoInfoTag()->m_playCount > 0) && (pItem->GetVideoInfoTag()->m_iEpisode > 0));
-        items.Add(pItem);
-      }
-    }
-    else
-    {
-      while (!m_pDS->eof())
-      {
-        int iSeason = m_pDS->fv(0).get_asInt();
-        CStdString strLabel;
-        if (iSeason == 0)
-          strLabel = g_localizeStrings.Get(20381);
-        else
-          strLabel = StringUtils::Format(g_localizeStrings.Get(20358), iSeason);
-        CFileItemPtr pItem(new CFileItem(strLabel));
+        pItem->GetVideoInfoTag()->m_strPath = path;
+        pItem->GetVideoInfoTag()->m_genre = StringUtils::Split(m_pDS->fv(7).get_asString(), g_advancedSettings.m_videoItemSeparator);
+        pItem->GetVideoInfoTag()->m_studio = StringUtils::Split(m_pDS->fv(8).get_asString(), g_advancedSettings.m_videoItemSeparator);
+        pItem->GetVideoInfoTag()->m_strMPAARating = m_pDS->fv(9).get_asString();
+        pItem->GetVideoInfoTag()->m_iIdShow = showId;
+        pItem->GetVideoInfoTag()->m_strShowTitle = m_pDS->fv(4).get_asString();
+        pItem->GetVideoInfoTag()->m_strPlot = m_pDS->fv(5).get_asString();
+        pItem->GetVideoInfoTag()->m_premiered.SetFromDBDate(m_pDS->fv(6).get_asString());
+        if (pItem->GetVideoInfoTag()->m_premiered.IsValid())
+          pItem->GetVideoInfoTag()->m_iYear = pItem->GetVideoInfoTag()->m_premiered.GetYear();
 
-        CVideoDbUrl itemUrl = videoUrl;
-        CStdString strDir = StringUtils::Format("%ld/", iSeason);
-        itemUrl.AppendPath(strDir);
-        pItem->SetPath(itemUrl.ToString());
-
-        pItem->m_bIsFolder=true;
-        pItem->GetVideoInfoTag()->m_strTitle = strLabel;
-        pItem->GetVideoInfoTag()->m_iSeason = iSeason;
-        pItem->GetVideoInfoTag()->m_iDbId = m_pDS->fv(8).get_asInt();
-        pItem->GetVideoInfoTag()->m_type = MediaTypeSeason;
-        pItem->GetVideoInfoTag()->m_strPath = m_pDS->fv(1).get_asString();
-        pItem->GetVideoInfoTag()->m_genre = StringUtils::Split(m_pDS->fv(5).get_asString(), g_advancedSettings.m_videoItemSeparator);
-        pItem->GetVideoInfoTag()->m_studio = StringUtils::Split(showStudio, g_advancedSettings.m_videoItemSeparator);
-        pItem->GetVideoInfoTag()->m_strMPAARating = showMPAARating;
-        pItem->GetVideoInfoTag()->m_iIdShow = idShow;
-        pItem->GetVideoInfoTag()->m_strShowTitle = showTitle;
-        pItem->GetVideoInfoTag()->m_strPlot = showPlot;
-        pItem->GetVideoInfoTag()->m_premiered.SetFromDBDate(showPremiered);
-        int totalEpisodes = m_pDS->fv(9).get_asInt();
-        int watchedEpisodes = m_pDS->fv(10).get_asInt();
+        int totalEpisodes = m_pDS->fv(10).get_asInt();
+        int watchedEpisodes = m_pDS->fv(11).get_asInt();
         pItem->GetVideoInfoTag()->m_iEpisode = totalEpisodes;
         pItem->SetProperty("totalepisodes", totalEpisodes);
         pItem->SetProperty("numepisodes", totalEpisodes); // will be changed later to reflect watchmode setting
@@ -6472,24 +6483,16 @@ bool CVideoDatabase::GetSeasonsNav(const CStdString& strBaseDir, CFileItemList& 
         if (iSeason == 0) pItem->SetProperty("isspecial", true);
         pItem->GetVideoInfoTag()->m_playCount = (totalEpisodes == watchedEpisodes) ? 1 : 0;
         pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, (pItem->GetVideoInfoTag()->m_playCount > 0) && (pItem->GetVideoInfoTag()->m_iEpisode > 0));
+
+        pItem->GetVideoInfoTag()->m_strSource = m_pDS->fv(12).get_asString();
+        pItem->SetEnabled(m_pDS->fv(13).get_asBool());
+
         items.Add(pItem);
-        m_pDS->next();
       }
-      m_pDS->close();
-    }
 
-    // now add any linked movies
-    if (getLinkedMovies)
-    {
-      Filter movieFilter;
-      movieFilter.join  = PrepareSQL("join movielinktvshow on movielinktvshow.idMovie=movieview.idMovie");
-      movieFilter.where = PrepareSQL("movielinktvshow.idShow %s", strIn.c_str());
-      CFileItemList movieItems;
-      GetMoviesByWhere("videodb://movies/titles/", movieFilter, movieItems);
-
-      if (movieItems.Size() > 0)
-        items.Append(movieItems);
+      m_pDS->next();
     }
+    m_pDS->close();
 
     return true;
   }
@@ -10226,38 +10229,47 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
     }
     else if (itemType == "seasons")
     {
+      option = options.find("tvshowid");
+      if (option != options.end())
+      {
+        int idShow = (int)option->second.asInteger();
+        CStdString strIn = PrepareSQL("= %i", idShow);
+        GetStackedTvShowList(idShow, strIn);
+        filter.AppendWhere(PrepareSQL("seasonview.idShow %s", strIn.c_str()));
+      }
+
       option = options.find("genreid");
       if (option != options.end())
       {
-        filter.AppendJoin(PrepareSQL("join genrelinktvshow on genrelinktvshow.idShow = tvshowview.idShow"));
+        filter.AppendJoin(PrepareSQL("join genrelinktvshow on genrelinktvshow.idShow = seasonview.idShow"));
         filter.AppendWhere(PrepareSQL("genrelinktvshow.idGenre = %i", (int)option->second.asInteger()));
       }
 
       option = options.find("directorid");
       if (option != options.end())
       {
-        filter.AppendJoin(PrepareSQL("join directorlinktvshow on directorlinktvshow.idShow = tvshowview.idShow"));
+        filter.AppendJoin(PrepareSQL("join directorlinktvshow on directorlinktvshow.idShow = seasonview.idShow"));
         filter.AppendWhere(PrepareSQL("directorlinktvshow.idDirector = %i", (int)option->second.asInteger()));
       }
       
       option = options.find("year");
       if (option != options.end())
-        filter.AppendWhere(PrepareSQL("tvshowview.c%02d like '%%%i%%'", VIDEODB_ID_TV_PREMIERED, (int)option->second.asInteger()));
+        filter.AppendWhere(PrepareSQL("seasonview.premiered like '%%%i%%'", (int)option->second.asInteger()));
 
       option = options.find("actorid");
       if (option != options.end())
       {
-        filter.AppendJoin(PrepareSQL("join actorlinktvshow on actorlinktvshow.idShow = tvshowview.idShow"));
+        filter.AppendJoin(PrepareSQL("join actorlinktvshow on actorlinktvshow.idShow = seasonview.idShow"));
         filter.AppendWhere(PrepareSQL("actorlinktvshow.idActor = %i", (int)option->second.asInteger()));
       }
 
       option = options.find("source");
       if (option != options.end())
-        filter.AppendWhere(PrepareSQL("episodeview.strSource = '%s'", option->second.asString().c_str()));
+        filter.AppendWhere(PrepareSQL("seasonview.strSource = '%s'", option->second.asString().c_str()));
 
       option = options.find("import");
       if (option != options.end())
-        filter.AppendWhere(PrepareSQL("episodeview.importPath = '%s'", option->second.asString().c_str()));
+        filter.AppendWhere(PrepareSQL("seasonview.importPath = '%s'", option->second.asString().c_str()));
     }
     else if (itemType == "episodes")
     {
