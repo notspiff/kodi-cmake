@@ -90,6 +90,9 @@
 #define PLT_FILTER_MASK_LASTPLAYBACK                NPT_UINT64_C(0x0000000200000000)
 #define PLT_FILTER_MASK_PLAYCOUNT                   NPT_UINT64_C(0x0000000400000000)
 
+#define PLT_FILTER_MASK_EPISODE_COUNT               NPT_UINT64_C(0x0000010000000000)
+#define PLT_FILTER_MASK_EPISODE_SEASON              NPT_UINT64_C(0x0000020000000000)
+
 #define PLT_FILTER_FIELD_TITLE                      "dc:title"
 #define PLT_FILTER_FIELD_CREATOR                    "dc:creator"
 #define PLT_FILTER_FIELD_DATE                       "dc:date"
@@ -129,6 +132,9 @@
 #define PLT_FILTER_FIELD_RES_BITSPERSAMPLE          "res@bitsPerSample"
 #define PLT_FILTER_FIELD_RES_NRAUDIOCHANNELS        "res@nrAudioChannels"
 #define PLT_FILTER_FIELD_RES_SAMPLEFREQUENCY        "res@sampleFrequency"
+
+#define PLT_FILTER_FIELD_EPISODE_COUNT              "upnp:episodeCount"
+#define PLT_FILTER_FIELD_EPISODE_SEASON             "upnp:episodeSeason"
 
 extern const char* didl_header;
 extern const char* didl_footer;
