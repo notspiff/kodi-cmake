@@ -72,7 +72,8 @@ set(SOURCES ActorProtocol.cpp
             Vector.cpp
             Weather.cpp
             XBMCTinyXML.cpp
-            XMLUtils.cpp)
+            XMLUtils.cpp
+            XSLTUtils.cpp)
 
 
 if(ARM)
