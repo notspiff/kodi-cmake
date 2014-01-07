@@ -27,6 +27,7 @@
 #include "xbmc/IFileTypes.h"
 #else
 #include "filesystem/IFileTypes.h"
+#include "PlatformDefs.h"
 #endif
 
 extern "C"
@@ -54,7 +55,7 @@ extern "C"
     char* path;              //!< item path
     int num_props;           //!< Number of properties attached to item
     VFSProperty* properties; //!< Properties
-    uint64_t mtime;          //!< Mtime for file represented by item
+    FILETIME mtime;          //!< Mtime for file represented by item
     bool folder;             //!< Item is a folder
     uint64_t size;           //!< Size of file represented by item
   };
@@ -71,6 +72,29 @@ extern "C"
     const char* password;
     const char* redacted;
     const char* sharename;
+  };
+
+  struct VFSCallbacks
+  {
+    //! \brief Require keyboard input
+    //! \param heading The heading of the keyboard dialog
+    //! \param input A pointer to the resulting string. Must be free'd by caller.
+    //! \return True if input was received, false otherwise
+    bool (__cdecl* GetKeyboardInput)(void* ctx, const char* heading, char** input);
+
+    //! \brief Display an error dialog
+    //! \param heading The heading of the error dialog
+    //! \param line1 The first line of the error dialog
+    //! \param line2 The second line of the error dialog. Can be NULL
+    //! \param line3 The third line of the error dialog. Can be NULL
+    void (__cdecl* SetErrorDialog)(void* ctx, const char* heading, const char* line1, const char* line2, const char* line3);
+
+    //! \brief Prompt the user for authentication of a URL
+    //! \param url The URL
+    void (__cdecl* RequireAuthentication)(void* ctx, const char* url);
+
+    //! \brief The context to be passed to the callbacks
+    void* ctx;
   };
 
   struct VFSEntry
@@ -205,11 +229,13 @@ extern "C"
     //! \param url The URL of the directory
     //! \param entries The entries in the directory
     //! \param num_entries Number of entries in the directory
+    //! \param callbacks A callback structure
     //! \return Context for the directory listing
     //! \sa IDirectory::GetDirectory
     void* (__cdecl* GetDirectory) (VFSURL* url,
                                    VFSDirEntry** entries,
-                                   int* num_entries);
+                                   int* num_entries,
+                                   VFSCallbacks* callbacks);
 
     //! \brief Free up resources after listing a directory
     void (__cdecl* FreeDirectory) (void* ctx);
