@@ -56,14 +56,14 @@ namespace ADDON
     bool Delete(const CURL& url);
     bool Rename(const CURL& url, const CURL& url2);
 
-    bool GetDirectory(const CStdString& strPath, CFileItemList& items);
+    bool GetDirectory(const CURL& url, CFileItemList& items, void* ctx);
     bool DirectoryExists(const CURL& url);
     bool RemoveDirectory(const CURL& url);
     bool CreateDirectory(const CURL& url);
     void ClearOutIdle();
     void DisconnectAll();
 
-    bool ContainsFiles(const std::string& path, CFileItemList& items);
+    bool ContainsFiles(const CURL& path, CFileItemList& items);
 
     bool NextChannel(void* ctx, bool preview);
     bool PrevChannel(void* ctx, bool preview);
@@ -138,10 +138,23 @@ namespace ADDON
     CVFSEntryIDirectoryWrapper(VFSEntryPtr ptr);
     virtual ~CVFSEntryIDirectoryWrapper() {}
 
-    virtual bool GetDirectory(const CStdString& strPath, CFileItemList& items);
-    virtual bool Exists(const char* strPath);
-    virtual bool Remove(const char* strPath);
-    virtual bool Create(const char* strPath);
+    virtual bool GetDirectory(const CURL& strPath, CFileItemList& items);
+    virtual bool Exists(const CURL& strPath);
+    virtual bool Remove(const CURL& strPath);
+    virtual bool Create(const CURL& strPath);
+
+    static bool DoGetKeyboardInput(void* context, const char* heading,
+                                   char** input);
+    bool GetKeyboardInput2(const char* heading, char** input);
+
+    static void DoSetErrorDialog(void* ctx, const char* heading,
+                                 const char* line1, const char* line2,
+                                 const char* line3);
+    void SetErrorDialog2(const char* heading, const char* line1,
+                         const char* line2, const char* line3);
+
+    static void DoRequireAuthentication(void* ctx, const char* url);
+    void RequireAuthentication2(const CURL& url);
   protected:
     VFSEntryPtr m_addon;
   };
@@ -152,29 +165,29 @@ namespace ADDON
   public:
     CVFSEntryIFileDirectoryWrapper(VFSEntryPtr ptr) : CVFSEntryIDirectoryWrapper(ptr) {}
 
-    bool ContainsFiles(const CStdString& strPath)
+    bool ContainsFiles(const CURL& url)
     {
-      return m_addon->ContainsFiles(strPath, m_items);
+      return m_addon->ContainsFiles(url, m_items);
     }
 
-    bool GetDirectory(const CStdString& strPath, CFileItemList& items)
+    bool GetDirectory(const CURL& url, CFileItemList& items)
     {
-      return CVFSEntryIDirectoryWrapper::GetDirectory(strPath, items);
+      return CVFSEntryIDirectoryWrapper::GetDirectory(url, items);
     }
 
-    bool Exists(const char* strPath)
+    bool Exists(const CURL& url)
     {
-      return CVFSEntryIDirectoryWrapper::Exists(strPath);
+      return CVFSEntryIDirectoryWrapper::Exists(url);
     }
 
-    bool Remove(const char* strPath)
+    bool Remove(const CURL& url)
     {
-      return CVFSEntryIDirectoryWrapper::Remove(strPath);
+      return CVFSEntryIDirectoryWrapper::Remove(url);
     }
 
-    bool Create(const char* strPath)
+    bool Create(const CURL& url)
     {
-      return CVFSEntryIDirectoryWrapper::Create(strPath);
+      return CVFSEntryIDirectoryWrapper::Create(url);
     }
 
     CFileItemList m_items;
