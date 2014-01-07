@@ -94,7 +94,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
         dec->GetExtensions().find(strExtension) != std::string::npos)
     {
       CVFSEntryIFileDirectoryWrapper* wrap = new CVFSEntryIFileDirectoryWrapper(CVFSEntryManager::Get().GetAddon(dec->ID()));
-      if (wrap->ContainsFiles(strPath))
+      if (wrap->ContainsFiles(url))
       {
         if (wrap->m_items.Size() == 1)
         {
