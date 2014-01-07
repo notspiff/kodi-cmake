@@ -56,7 +56,7 @@ namespace ADDON
     bool Delete(const CURL& url);
     bool Rename(const CURL& url, const CURL& url2);
 
-    bool GetDirectory(const CStdString& strPath, CFileItemList& items);
+    bool GetDirectory(const CStdString& strPath, CFileItemList& items, void* ctx);
     bool DirectoryExists(const CURL& url);
     bool RemoveDirectory(const CURL& url);
     bool CreateDirectory(const CURL& url);
@@ -142,6 +142,19 @@ namespace ADDON
     virtual bool Exists(const char* strPath);
     virtual bool Remove(const char* strPath);
     virtual bool Create(const char* strPath);
+
+    static bool DoGetKeyboardInput(void* context, const char* heading,
+                                   char** input);
+    bool GetKeyboardInput2(const char* heading, char** input);
+
+    static void DoSetErrorDialog(void* ctx, const char* heading,
+                                 const char* line1, const char* line2,
+                                 const char* line3);
+    void SetErrorDialog2(const char* heading, const char* line1,
+                         const char* line2, const char* line3);
+
+    static void DoRequireAuthentication(void* ctx, const char* url);
+    void RequireAuthentication2(const char* url);
   protected:
     VFSEntryPtr m_addon;
   };
