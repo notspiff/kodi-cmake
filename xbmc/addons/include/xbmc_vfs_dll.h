@@ -85,7 +85,8 @@ extern "C"
   bool CreateDirectory(VFSURL* url);
 
   //! \copydoc VFSEntry::GetDirectory
-  void* GetDirectory(VFSURL* url, VFSDirEntry** entries, int* num_entries);
+  void* GetDirectory(VFSURL* url, VFSDirEntry** entries, int* num_entries,
+                     VFSCallbacks* callbacks);
 
   //! \copydoc VFSEntry::FreeDirectory
   void FreeDirectory(void* ctx);
