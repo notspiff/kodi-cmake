@@ -44,10 +44,7 @@ if(ALSA_FOUND)
 endif()
 
 if(PULSEAUDIO_FOUND)
-  list(APPEND SOURCES Engines/PulseAE/PulseAE.cpp
-                      Engines/PulseAE/PulseAEStream.cpp
-                      Engines/PulseAE/PulseAESound.cpp)
-  add_definitions(-D__STDC_LIMIT_MACROS)
+  list(APPEND SOURCES Sinks/AESinkPULSE.cpp)
 endif()
 
 if(WIN32)
