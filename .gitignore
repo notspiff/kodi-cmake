@@ -615,6 +615,9 @@ lib/cpluff/stamp-h1
 # /xbmc/main/
 /xbmc/main/Makefile
 
+# /xbmc/media/import/
+/xbmc/media/import/Makefile
+
 # /xbmc/music/
 /xbmc/music/karaoke/Makefile
 
