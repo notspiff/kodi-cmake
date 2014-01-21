@@ -172,6 +172,8 @@
 #include "settings/windows/GUIWindowSettings.h"
 #include "windows/GUIWindowFileManager.h"
 #include "settings/windows/GUIWindowSettingsCategory.h"
+#include "media/import/dialogs/GUIDialogMediaImportInfo.h"
+#include "media/import/windows/GUIWindowMediaSourceBrowser.h"
 #include "music/windows/GUIWindowMusicPlaylist.h"
 #include "music/windows/GUIWindowMusicSongs.h"
 #include "music/windows/GUIWindowMusicNav.h"
@@ -1447,6 +1449,9 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIWindowScreensaver);
     g_windowManager.Add(new CGUIWindowWeather);
     g_windowManager.Add(new CGUIWindowStartup);
+
+    g_windowManager.Add(new CGUIWindowMediaSourceBrowser);
+    g_windowManager.Add(new CGUIDialogMediaImportInfo);
 
     /* window id's 3000 - 3100 are reserved for python */
 
