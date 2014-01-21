@@ -2492,7 +2492,12 @@ msgctxt "#577"
 msgid "Date Taken"
 msgstr ""
 
-#empty strings from id 578 to 579
+#: xbmc/media/import/windows/GUIViewStateMediaSourceBrowser.cpp
+msgctxt "#578"
+msgid "Last synced"
+msgstr ""
+
+#empty string with id 579
 
 msgctxt "#580"
 msgid "Sort direction"
@@ -16614,19 +16619,19 @@ msgctxt "#39004"
 msgid "Import"
 msgstr ""
 
-#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
 msgctxt "#39005"
 msgid "Media types available for import:"
 msgstr ""
 
-#. (media type plural), (media type plural) (in combination with #37044)
-#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+#. (media type plural), (media type plural) (in combination with #39007)
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
 msgctxt "#39006"
 msgid "%s, %s"
 msgstr ""
 
-#. (media type plural) and (media type plural) (in combination with #37043)
-#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+#. (media type plural) and (media type plural) (in combination with #39006)
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
 msgctxt "#39007"
 msgid "%s and %s"
 msgstr ""
@@ -16697,3 +16702,75 @@ msgstr ""
 msgctxt "#39018"
 msgid "Retrieving %s..."
 msgstr ""
+
+# strings from id 39019 to 39099 reserved for media import
+
+#. Retrieving (media type plural)...
+#: xbmc/media/import/windows/GUIViewStateMediaSourceBrowser.cpp
+msgctxt "#39100"
+msgid "Media providers"
+msgstr ""
+
+#. Retrieving (media type plural)...
+#: xbmc/media/import/windows/GUIViewStateMediaSourceBrowser.cpp
+msgctxt "#39101"
+msgid "Media imports"
+msgstr ""
+
+# strings from id 39101 to 39199 reserved for media import GUI integration
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39200"
+msgid "Media provider information"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39201"
+msgid "Media import information"
+msgstr ""
+
+#strings from 39202 to 39249 are reserved for media import GUI info
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39250"
+msgid "Synchronisation"
+msgstr ""
+
+#strings from 39251 to 39299 are reserved for media import settings
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39300"
+msgid "Update imported media items"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39301"
+msgid "Update playback-related metadata"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39302"
+msgid "Update metadata on the media provider"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39303"
+msgid "Update playback-related metadata on the media provider"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39304"
+msgid "Start synchronisation"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39305"
+msgid "Automatically"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39306"
+msgid "Manually"
+msgstr ""
+
+# strings from id 39306 to 39399 reserved for media import settings

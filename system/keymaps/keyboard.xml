@@ -585,4 +585,15 @@
       <f4>Blue</f4>
     </keyboard>
   </Addon>
+  <MediaSourceBrowser>
+    <keyboard>
+      <delete>Delete</delete>
+      <i>Info</i>
+    </keyboard>
+  </MediaSourceBrowser>
+  <MediaImportInformation>
+    <keyboard>
+      <i>Back</i>
+    </keyboard>
+  </MediaImportInformation>
 </keymap>

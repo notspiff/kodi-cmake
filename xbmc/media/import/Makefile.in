@@ -1,6 +1,7 @@
 SRCS= MediaImport.cpp \
       MediaImportManager.cpp \
       MediaImportTaskProcessorJob.cpp \
+      dialogs/GUIDialogMediaImportInfo.cpp \
       handler/EpisodeImportHandler.cpp \
       handler/MovieImportHandler.cpp \
       handler/MusicVideoImportHandler.cpp \
@@ -17,6 +18,8 @@ SRCS= MediaImport.cpp \
       task/MediaImportSourceRegistrationTask.cpp \
       task/MediaImportSynchronisationTask.cpp \
       task/MediaImportUpdateTask.cpp \
+      windows/GUIViewStateMediaSourceBrowser.cpp \
+      windows/GUIWindowMediaSourceBrowser.cpp \
 
 LIB=media-import.a
 

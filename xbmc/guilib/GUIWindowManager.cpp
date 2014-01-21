@@ -74,6 +74,8 @@
 #include "music/dialogs/GUIDialogMusicOverlay.h"
 #include "video/dialogs/GUIDialogVideoOverlay.h"
 
+#include "media/import/dialogs/GUIDialogMediaImportInfo.h"
+#include "media/import/windows/GUIWindowMediaSourceBrowser.h"
 
 // Dialog includes
 #include "music/dialogs/GUIDialogMusicOSD.h"
@@ -295,6 +297,9 @@ void CGUIWindowManager::CreateWindows()
   Add(new CGUIWindowScreensaver);
   Add(new CGUIWindowWeather);
   Add(new CGUIWindowStartup);
+
+  Add(new CGUIWindowMediaSourceBrowser);
+  Add(new CGUIDialogMediaImportInfo);
 }
 
 bool CGUIWindowManager::DestroyWindows()
