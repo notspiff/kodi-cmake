@@ -136,3 +136,12 @@
 // Sent to text field to support 'input method'
 #define GUI_MSG_INPUT_TEXT            GUI_MSG_USER + 37
 #define GUI_MSG_INPUT_TEXT_EDIT       GUI_MSG_USER + 38
+
+// Sent to CGUIWindowMediaSourceBrowser
+#define GUI_MSG_SOURCE_ADDED          GUI_MSG_USER + 39
+#define GUI_MSG_SOURCE_UPDATED        GUI_MSG_USER + 40
+#define GUI_MSG_SOURCE_REMOVED        GUI_MSG_USER + 41
+#define GUI_MSG_SOURCE_ACTIVE_CHANGED GUI_MSG_USER + 42
+#define GUI_MSG_IMPORT_ADDED          GUI_MSG_USER + 43
+#define GUI_MSG_IMPORT_UPDATED        GUI_MSG_USER + 44
+#define GUI_MSG_IMPORT_REMOVED        GUI_MSG_USER + 45

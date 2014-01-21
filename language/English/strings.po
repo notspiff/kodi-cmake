@@ -15638,3 +15638,61 @@ msgstr ""
 msgctxt "#37024"
 msgid "Select this if the audio out connection only supports multichannel audio as Dolby Digital 5.1, this allows multichannel audio such as AAC5.1 or FLAC5.1 to be listened to in 5.1 surround sound. Note - Not recommended on Pi as this requires a lot of CPU."
 msgstr ""
+
+#empty strings from id 37025 to 37034
+
+#. Retrieving media items from (media provider name)
+#: xbmc/media/import/task/MediaImportRetrievalTask.cpp
+msgctxt "#37035"
+msgid "Retrieving media items from %s..."
+msgstr ""
+
+#. Synchronising media items from (media provider name)
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#37036"
+msgid "Synchronising media items from %s..."
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#37037"
+msgid "New media provider detected"
+msgstr ""
+
+#. No importer found for (media provider name)
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#37038"
+msgid "No importer found for %s..."
+msgstr ""
+
+#. Would you like to import media items from (media provider name)?
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#37039"
+msgid "Would you like to import media items from %s?"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#37040"
+msgid "Ignore"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#37041"
+msgid "Import"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#37042"
+msgid "Media types available for import:"
+msgstr ""
+
+#. (media type plural), (media type plural) (in combination with #37045)
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#37044"
+msgid "%s, %s"
+msgstr ""
+
+#. (media type plural) and (media type plural) (in combination with #37044)
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#37045"
+msgid "%s and %s"
+msgstr ""
