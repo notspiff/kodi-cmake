@@ -240,6 +240,7 @@ add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
 if(ENABLE_TESTS)
+  copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
   add_executable(xbmc-test ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
   target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
                         ${DEPLIBS} ${CMAKE_DL_LIBS})
