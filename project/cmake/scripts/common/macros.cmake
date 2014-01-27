@@ -35,6 +35,7 @@ endfunction()
 # Arguments:
 #   file     full path to file to mirror
 #   relative the relative base of file path in the build/install tree
+#   give another parameter to exclude from install target
 # Implicit arguments:
 #   CORE_SOURCE_DIR - root of source tree
 # On return:
@@ -53,14 +54,17 @@ function(copy_file_to_buildtree file relative)
     endif()
     add_custom_command(TARGET export-files COMMAND ${CMAKE_COMMAND} -E copy_if_different "${file2}" "${CMAKE_CURRENT_BINARY_DIR}/${file3}")
   endif()
-  list(APPEND install_data ${file3})
-  set(install_data ${install_data} PARENT_SCOPE)
+  if(NOT ARGN)
+    list(APPEND install_data ${file3})
+    set(install_data ${install_data} PARENT_SCOPE)
+  endif()
 endfunction()
 
 # add data files to installation list with a mirror in build tree.
 # reads list of files to install from a given list of text files.
 # Arguments:
 #   pattern globbing pattern for text files to read
+#   give another parameter to exclude from installation target
 # Implicit arguments:
 #   CORE_SOURCE_DIR - root of source tree
 # On return:
@@ -83,7 +87,7 @@ function(copy_files_from_filelist_to_buildtree pattern)
       foreach(dir ${fstrings})
         file(GLOB_RECURSE files RELATIVE ${CORE_SOURCE_DIR} ${CORE_SOURCE_DIR}/${dir})
         foreach(file ${files})
-          copy_file_to_buildtree(${CORE_SOURCE_DIR}/${file} ${CORE_SOURCE_DIR})
+          copy_file_to_buildtree("${CORE_SOURCE_DIR}/${file}" "${CORE_SOURCE_DIR}" "${ARGN}")
         endforeach()
       endforeach()
     endforeach()
