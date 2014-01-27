@@ -51,10 +51,15 @@ install(CODE "file(STRINGS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs 
                   file(INSTALL \${file} DESTINATION ${datarootdir}/xbmc/\${dir})
                 endforeach()
               endforeach()")
+if(NOT "$ENV{DESTDIR}" STREQUAL "")
+  set(DESTDIR ${CMAKE_BINARY_DIR}/$ENV{DESTDIR})
+endif()
 foreach(subdir ${build_dirs})
-  string(REPLACE " " ";" subdir ${subdir})
-  list(GET subdir 0 id)
-  install(CODE "execute_process(COMMAND make -C ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src/${id}-build install)")
+  if(NOT subdir MATCHES xbmc-platform)
+    string(REPLACE " " ";" subdir ${subdir})
+    list(GET subdir 0 id)
+    install(CODE "execute_process(COMMAND make -C ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/${id}/src/${id}-build install DESTDIR=${DESTDIR})")
+  endif()
 endforeach()
 
 install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
