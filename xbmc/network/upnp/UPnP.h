@@ -32,6 +32,7 @@ class PLT_MediaObject;
 class PLT_MediaItemResource;
 class CFileItem;
 class CBookmark;
+class CUPnPMediaImporter;
 
 namespace UPNP
 {
@@ -93,6 +94,7 @@ private:
     CRendererReferenceHolder*   m_RendererHolder;
     CCtrlPointReferenceHolder*  m_CtrlPointHolder;
 
+    CUPnPMediaImporter*         m_mediaImporter;
 
     static CUPnP* upnp;
 };

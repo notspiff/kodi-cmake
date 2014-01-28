@@ -15411,7 +15411,27 @@ msgctxt "#36548"
 msgid "Limits resolution of GUI to save memory. Does not affect video playback. Use 1080 for unlimited. Requires restart."
 msgstr ""
 
-#empty strings from id 36549 to 36599
+#: system/settings/settings.xml
+msgctxt "#36549"
+msgid "Import media items from UPnP servers"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#36550"
+msgid "Shows a popup for every new UPnP server available and asks whether to import media items available into the local library. It is possible to choose which media items to import and which not. The imported items appear in the library like any other media item except that it can only be played if the UPnP server they were imported from is available."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#36551"
+msgid "Ignore incompatible UPnP servers"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#36552"
+msgid "For the UPnP import to be able to import specific media items the UPnP server must support the UPnP Search functionality (ContentDirectory:Search). Otherwise all available items are imported for every media item to import. Therefore this option should only be enabled if only items of a single media item are imported from a UPnP server which doesn't support the UPnP Search functionality."
+msgstr ""
+
+#empty strings from id 36553 to 36599
 #reserved strings 365XX
 
 #. Description of settings category "Music -> Library" with label #14022
@@ -15753,6 +15773,12 @@ msgstr ""
 #: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
 msgctxt "#37042"
 msgid "Media types available for import:"
+msgstr ""
+
+#. Retrieving (media type plural)...
+#: xbmc/network/upnp/UPnPMediaImporter.cpp
+msgctxt "#37043"
+msgid "Retrieving %s..."
 msgstr ""
 
 #. (media type plural), (media type plural) (in combination with #37045)

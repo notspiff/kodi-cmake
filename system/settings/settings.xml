@@ -2034,6 +2034,21 @@
           <control type="toggle" />
         </setting>
       </group>
+      <group id="2">
+        <setting id="services.upnpimport" type="boolean" label="36549" help="36550">
+          <level>1</level>
+          <default>true</default>
+          <control type="toggle" />
+        </setting>
+        <setting id="services.upnpimportcompatibleonly" type="boolean" parent="services.upnpimport" label="36551" help="36552">
+          <level>1</level>
+          <default>true</default>
+          <dependencies>
+            <dependency type="enable" setting="services.upnpimport">true</dependency>
+          </dependencies>
+          <control type="toggle" />
+        </setting>
+      </group>
     </category>
     <category id="webserver" label="33101" help="36327">
       <requirement>HAS_WEB_SERVER</requirement>
