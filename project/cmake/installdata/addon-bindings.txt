@@ -17,6 +17,7 @@ xbmc/addons/include/xbmc_vfs_types.h
 xbmc/addons/include/xbmc_vis_dll.h
 xbmc/addons/include/xbmc_vis_types.h
 xbmc/addons/include/xbmc_stream_utils.hpp
+xbmc/addons/include/xbmc_codec_descriptor.hpp
 addons/library.xbmc.addon/libXBMC_addon.h
 addons/library.xbmc.gui/libXBMC_gui.h
 addons/library.xbmc.pvr/libXBMC_pvr.h
