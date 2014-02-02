@@ -142,7 +142,7 @@ void CVideoDatabase::CreateTables()
   m_pDS->exec("CREATE TABLE sources ( idSource integer primary key, identifier text NOT NULL, name text NOT NULL, availableMediaTypes text NOT NULL)");
 
   CLog::Log(LOGINFO, "create imports table");
-  m_pDS->exec("CREATE TABLE imports ( idImport integer primary key, idPath integer NOT NULL, idSource integer NOT NULL, mediaType text NOT NULL, lastSync text)");
+  m_pDS->exec("CREATE TABLE imports ( idImport integer primary key, idPath integer NOT NULL, idSource integer NOT NULL, mediaType text NOT NULL, lastSync text, settings text)");
 
   CLog::Log(LOGINFO, "create tvshow table");
   columns = "CREATE TABLE tvshow ( idShow integer primary key";
@@ -437,7 +437,7 @@ void CVideoDatabase::CreateViews()
                                      "    sources.idSource=imports.idSource "
                                      "  LEFT JOIN path AS importsPath ON"
                                      "    importsPath.idPath = imports.idPath "
-                                     "GROUP BY tvshow.idShow;", VIDEODB_ID_TV_PARENTPATHID));
+                                     "GROUP BY tvshow.idShow;", VIDEODB_ID_TV_PARENTPATHID);
   m_pDS->exec(tvshowview.c_str());
 
   CLog::Log(LOGINFO, "create seasonview");
@@ -723,7 +723,7 @@ int CVideoDatabase::AddPath(const CStdString& strPath, const CStdString &strDate
 
     strSQL = PrepareSQL("INSERT INTO path (idPath, strPath, strContent, strScraper, dateAdded) VALUES (NULL, '%s', '', '', ", strPath1.c_str());
     if (!strDateAdded.empty())
-      strSQL += PrepareSQL("'%s'", strDateAdded);
+      strSQL += PrepareSQL("'%s'", strDateAdded.c_str());
     else
       strSQL += "NULL";
     strSQL += ")";
@@ -864,246 +864,64 @@ void CVideoDatabase::RemoveSource(const std::string& sourceIdentifier, CGUIDialo
         sourceIdentifier.empty())
       return;
 
+    if (progress != NULL)
+    {
+      progress->StartModal();
+      progress->ShowProgressBar(true);
+    }
+
     BeginTransaction();
 
     int idSource = GetSourceId(sourceIdentifier);
     if (idSource <= 0)
-      return;
-
-    if (progress != NULL)
     {
-      if (progress->IsCanceled())
+      RollbackTransaction();
+      return;
+    }
+
+    bool result = true;
+    std::vector<CMediaImport> imports = GetImports();
+    for (std::vector<CMediaImport>::const_iterator itImport = imports.begin(); itImport != imports.end(); ++itImport)
+    {
+      if (progress != NULL && progress->IsCanceled())
       {
         RollbackTransaction();
         return;
       }
 
-      progress->SetLine(0, "Deleting movies..."); // TODO: localization
-      progress->SetPercentage(0);
-      progress->StartModal();
-      progress->ShowProgressBar(true);
+      if (itImport->GetSource().GetIdentifier() == sourceIdentifier)
+      {
+        if (!RemoveImport(*itImport, progress, false))
+        {
+          result = false;
+          break;
+        }
+      }
     }
 
-    std::string deleteFileIds, deletePathIds;
-    // delete all movies imported from the source
-    strSQL = PrepareSQL("SELECT movieview.idMovie, movieview.idFile, path.idPath, movieview.c00 FROM movieview "
-                        "JOIN files ON files.idFile = movieview.idFile "
-                        "JOIN path ON path.idPath = files.idPath "
-                        "WHERE movieview.strSource = '%s'", sourceIdentifier.c_str());
-    m_pDS2->query(strSQL);
-    int total = m_pDS2->num_rows();
-    int index = 0;
-    while (!m_pDS2->eof())
+    if (result)
     {
+      // delete source
+      strSQL = PrepareSQL("DELETE FROM sources WHERE idSource = %d", idSource);
+      m_pDS->exec(strSQL);
+
       if (progress != NULL)
       {
-        if (progress->IsCanceled())
-        {
-          progress->Close();
-          RollbackTransaction();
-          return;
-        }
-        progress->SetLine(1, m_pDS2->fv(3).get_asString());
-        progress->SetPercentage((index * 100) / total);
+        progress->SetPercentage(100);
         progress->Progress();
       }
 
-      DeleteMovie(m_pDS2->fv(0).get_asInt(), false);
-      deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
-      deletePathIds += m_pDS2->fv(2).get_asString() + ",";
+      CommitTransaction();
 
-      index += 1;
-      m_pDS2->next();
+      Compress(false);
+      CUtil::DeleteVideoDatabaseDirectoryCache();
     }
-    m_pDS2->close();
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(0);
-      progress->SetLine(0, "Deleting episodes..."); // TODO: localization
-      progress->Progress();
-    }
-
-    // get all file and path IDs for episodes imported from the source
-    strSQL = PrepareSQL("SELECT episodeview.idFile, path.idPath, episodeview.c00 FROM episodeview "
-                        "JOIN files ON files.idFile = episodeview.idFile "
-                        "JOIN path ON path.idPath = files.idPath "
-                        "WHERE episodeview.strSource = '%s'", sourceIdentifier.c_str());
-    m_pDS2->query(strSQL);
-    total = m_pDS2->num_rows();
-    index = 0;
-    while (!m_pDS2->eof())
-    {
-      if (progress != NULL)
-      {
-        if (progress->IsCanceled())
-        {
-          progress->Close();
-          RollbackTransaction();
-          return;
-        }
-        progress->SetLine(1, m_pDS2->fv(2).get_asString());
-        progress->SetPercentage((index * 100) / total);
-        progress->Progress();
-      }
-
-      deleteFileIds += m_pDS2->fv(0).get_asString() + ",";
-      deletePathIds += m_pDS2->fv(1).get_asString() + ",";
-
-      index += 1;
-      m_pDS2->next();
-    }
-    m_pDS2->close();
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(0);
-      progress->SetLine(0, "Deleting tvshows..."); // TODO: localization
-      progress->Progress();
-    }
-
-    // delete all tvshows, seasons and episodes imported from the source
-    strSQL = PrepareSQL("SELECT tvshowview.idShow, path.idPath, tvshowview.c00 FROM tvshowview "
-                        "JOIN tvshowlinkpath ON tvshowlinkpath.idShow = tvshowview.idShow "
-                        "JOIN path ON path.idPath = tvshowlinkpath.idPath "
-                        "WHERE tvshowview.strSource = '%s'", sourceIdentifier.c_str());
-    m_pDS2->query(strSQL);
-    total = m_pDS2->num_rows();
-    index = 0;
-    while (!m_pDS2->eof())
-    {
-      if (progress != NULL)
-      {
-        if (progress->IsCanceled())
-        {
-          progress->Close();
-          RollbackTransaction();
-          return;
-        }
-        progress->SetLine(1, m_pDS2->fv(2).get_asString());
-        progress->SetPercentage((index * 100) / total);
-        progress->Progress();
-      }
-
-      DeleteTvShow(m_pDS2->fv(0).get_asInt(), false);
-      deletePathIds += m_pDS2->fv(1).get_asString() + ",";
-
-      index += 1;
-      m_pDS2->next();
-    }
-    m_pDS2->close();
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(0);
-      progress->SetLine(0, "Deleting musicvideos..."); // TODO: localization
-      progress->Progress();
-    }
-
-    // delete all musicvideos imported from the source
-    strSQL = PrepareSQL("SELECT musicvideoview.idMVideo, musicvideoview.idFile, path.idPath, musicvideoview.c00 FROM musicvideoview "
-                        "JOIN files ON files.idFile = musicvideoview.idFile "
-                        "JOIN path ON path.idPath = files.idPath "
-                        "WHERE musicvideoview.strSource = '%s'", sourceIdentifier.c_str());
-    m_pDS2->query(strSQL);
-    total = m_pDS2->num_rows();
-    index = 0;
-    while (!m_pDS2->eof())
-    {
-      if (progress != NULL)
-      {
-        if (progress->IsCanceled())
-        {
-          progress->Close();
-          RollbackTransaction();
-          return;
-        }
-        progress->SetLine(1, m_pDS2->fv(3).get_asString());
-        progress->SetPercentage((index * 100) / total);
-        progress->Progress();
-      }
-
-      DeleteMusicVideo(m_pDS2->fv(0).get_asInt(), false);
-      deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
-      deletePathIds += m_pDS2->fv(2).get_asString() + ",";
-
-      index += 1;
-      m_pDS2->next();
-    }
-    m_pDS2->close();
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(0);
-      progress->SetText("Cleaning up..."); // TODO: localization
-      progress->Progress();
-    }
-    
-    // delete source, import and media item paths
-    StringUtils::TrimRight(deleteFileIds, ",");
-    StringUtils::TrimRight(deletePathIds, ",");
-    strSQL = PrepareSQL("DELETE FROM path WHERE path.strPath = '%s' OR "
-                        "path.idPath IN (%s) OR EXISTS "
-                        "(SELECT 1 FROM path AS importPath "
-                         "JOIN imports ON importPath.idPath = imports.idPath "
-                         "WHERE importPath.idPath = path.idPath AND imports.idSource = %d) OR EXISTS "
-                        "(SELECT 1 FROM files "
-                         "JOIN path AS filesPath ON filesPath.idPath = files.idPath "
-                         "WHERE filesPath.idPath = path.idPath AND files.idFile IN (%s))",
-                        sourceIdentifier.c_str(), deletePathIds.c_str(), idSource, deleteFileIds.c_str());
-    m_pDS->exec(strSQL);
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(30);
-      progress->Progress();
-    }
-
-    // delete files imported from the source
-    strSQL = PrepareSQL("DELETE FROM files WHERE files.idFile IN (%s)", deleteFileIds.c_str());
-    m_pDS->exec(strSQL);
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(55);
-      progress->Progress();
-    }
-
-    // delete artwork
-    strSQL = PrepareSQL("DELETE FROM art WHERE media_type = 'source' AND media_id = %d", idSource);
-    m_pDS->exec(strSQL);
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(70);
-      progress->Progress();
-    }
-
-    // delete imports
-    strSQL = PrepareSQL("DELETE FROM imports WHERE idSource = %d", idSource);
-    m_pDS->exec(strSQL);
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(85);
-      progress->Progress();
-    }
-
-    // delete source
-    strSQL = PrepareSQL("DELETE FROM sources WHERE idSource = %d", idSource);
-    m_pDS->exec(strSQL);
-
-    if (progress != NULL)
-    {
-      progress->SetPercentage(100);
-      progress->Progress();
-    }
-
-    CommitTransaction();
+    else
+      RollbackTransaction();
   }
   catch (...)
   {
-    CLog::Log(LOGERROR, "%s unable to RemoveSource (%s)", __FUNCTION__, strSQL.c_str());
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, strSQL.c_str());
     RollbackTransaction();
   }
 
@@ -1120,14 +938,16 @@ std::vector<CMediaImport> CVideoDatabase::GetImports()
     if (m_pDB.get() == NULL || m_pDS.get() == NULL)
       return imports;
 
-    strSQL = PrepareSQL("SELECT path.strPath, sources.identifier, imports.mediaType, imports.lastSync FROM imports "
+    strSQL = PrepareSQL("SELECT path.strPath, sources.identifier, imports.mediaType, imports.lastSync, imports.settings FROM imports "
                         "JOIN path ON path.idPath = imports.idPath "
                         "JOIN sources ON sources.idSource = imports.idSource");
     m_pDS->query(strSQL.c_str());
     while (!m_pDS->eof())
     {
       CDateTime lastSynced; lastSynced.SetFromDBDateTime(m_pDS->fv(3).get_asString());
-      imports.push_back(CMediaImport(m_pDS->fv(0).get_asString(), m_pDS->fv(1).get_asString(), m_pDS->fv(2).get_asString(), lastSynced));
+      CMediaImport import(m_pDS->fv(0).get_asString(), m_pDS->fv(2).get_asString(), m_pDS->fv(1).get_asString(), lastSynced);
+      import.GetSettings().Deserialize(m_pDS->fv(4).get_asString());
+      imports.push_back(import);
 
       m_pDS->next();
     }
@@ -1168,9 +988,9 @@ int CVideoDatabase::AddImport(const CMediaImport &import)
     if (idImport > 0)
       return idImport;
     
-    strSQL = PrepareSQL("INSERT INTO imports (idImport, idPath, idSource, mediaType, lastSync) values(NULL, %d, %d, '%s', '%s')",
+    strSQL = PrepareSQL("INSERT INTO imports (idImport, idPath, idSource, mediaType, settings) values(NULL, %d, %d, '%s', '%s')",
                         idPath, idSource, import.GetMediaType().c_str(),
-                        CDateTime().GetCurrentDateTime().GetAsDBDateTime().c_str());
+                        import.GetSettings().Serialize().c_str());
     m_pDS->exec(strSQL.c_str());
 
     return (int)m_pDS->lastinsertid();
@@ -1196,9 +1016,9 @@ bool CVideoDatabase::SetDetailsForImport(const CMediaImport &import)
     if (idImport <= 0)
       return false;
     
-    strSQL = PrepareSQL("UPDATE imports SET mediaType = '%s', lastSync = '%s' WHERE idImport = %d",
+    strSQL = PrepareSQL("UPDATE imports SET mediaType = '%s', lastSync = '%s', settings='%s' WHERE idImport = %d",
                         import.GetMediaType().c_str(), import.GetLastSynced().GetAsDBDateTime().c_str(),
-                        idImport);
+                        import.GetSettings().Serialize().c_str(), idImport);
     m_pDS->exec(strSQL.c_str());
 
     return true;
@@ -1238,37 +1058,354 @@ void CVideoDatabase::UpdateImportLastSynced(const CMediaImport &import, const CD
   }
 }
 
-void CVideoDatabase::RemoveImport(const CMediaImport &import, CGUIDialogProgress *progress /* = NULL */)
+bool CVideoDatabase::RemoveImport(const CMediaImport &import, CGUIDialogProgress *progress /* = NULL */, bool standalone /* = true */)
 {
   if (import.GetPath().empty() || import.GetMediaType().empty() ||
       import.GetMediaType().empty())
-    return;
+    return false;
 
-  RemoveImport(GetImportId(import), progress);
-}
-
-void CVideoDatabase::RemoveImport(int idImport, CGUIDialogProgress *progress /* = NULL */)
-{
-  if (idImport <= 0)
-    return;
-
+  bool result = false;
   CStdString strSQL = "";
   try
   {
-    if (m_pDB.get() == NULL || m_pDS.get() == NULL)
-      return;
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL || m_pDS2.get() == NULL)
+      return false;
 
+    if (standalone)
+    {
+      if (progress != NULL)
+      {
+        progress->StartModal();
+        progress->ShowProgressBar(true);
+      }
+
+      BeginTransaction();
+    }
+
+    int idImport = GetImportId(import);
+    if (idImport <= 0)
+    {
+      if (standalone)
+        RollbackTransaction();
+      return false;
+    }
+    
+    std::string deleteFileIds, deletePathIds;
+    int total, index;
+
+    MediaType mediaType = import.GetMediaType();
+    if (mediaType == MediaTypeMovie)
+    {
+      if (progress != NULL)
+      {
+        if (progress->IsCanceled())
+        {
+          if (standalone)
+            RollbackTransaction();
+          return false;
+        }
+      
+        progress->SetLine(0, "Deleting movies..."); // TODO: localization
+        progress->SetPercentage(0);
+      }
+
+      // delete all movies imported from the import
+      strSQL = PrepareSQL("SELECT movie.idMovie, movie.idFile, path.idPath, movie.c%02d FROM movie "
+                          "JOIN files ON files.idFile = movie.idFile "
+                          "JOIN path ON path.idPath = files.idPath "
+                          "JOIN imports ON imports.idImport = files.idImport AND imports.mediaType = 'movie' "
+                          "WHERE imports.idImport = %d", VIDEODB_ID_TITLE, idImport);
+      m_pDS2->query(strSQL);
+      total = m_pDS2->num_rows();
+      index = 0;
+      while (!m_pDS2->eof())
+      {
+        if (progress != NULL)
+        {
+          if (progress->IsCanceled())
+          {
+            progress->Close();
+            if (standalone)
+              RollbackTransaction();
+            return false;
+          }
+
+          progress->SetLine(1, m_pDS2->fv(3).get_asString());
+          progress->SetPercentage((index * 100) / total);
+          progress->Progress();
+        }
+
+        DeleteMovie(m_pDS2->fv(0).get_asInt(), false);
+        deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
+        deletePathIds += m_pDS2->fv(2).get_asString() + ",";
+
+        index += 1;
+        m_pDS2->next();
+      }
+      m_pDS2->close();
+    }
+    else if (mediaType == MediaTypeTvShow)
+    {
+      if (progress != NULL)
+      {
+        progress->SetPercentage(0);
+        progress->SetLine(0, "Deleting tv shows..."); // TODO: localization
+        progress->Progress();
+      }
+
+      // delete all tvshows imported from the import
+      strSQL = PrepareSQL("SELECT tvshow.idShow, path.idPath, tvshow.c%02d FROM tvshow "
+                          "JOIN tvshowlinkpath ON tvshowlinkpath.idShow = tvshow.idShow "
+                          "JOIN path ON path.idPath = tvshowlinkpath.idPath "
+                          "JOIN imports ON imports.idPath = tvshow.c%02d "
+                          "WHERE imports.idImport = %d "
+                          "GROUP BY tvshow.idShow", VIDEODB_ID_TV_TITLE, VIDEODB_ID_TV_PARENTPATHID, idImport);
+      m_pDS2->query(strSQL);
+      total = m_pDS2->num_rows();
+      index = 0;
+      while (!m_pDS2->eof())
+      {
+        if (progress != NULL)
+        {
+          if (progress->IsCanceled())
+          {
+            progress->Close();
+            if (standalone)
+              RollbackTransaction();
+            return false;
+          }
+
+          progress->SetLine(1, m_pDS2->fv(2).get_asString());
+          progress->SetPercentage((index * 100) / total);
+          progress->Progress();
+        }
+
+        DeleteTvShow(m_pDS2->fv(0).get_asInt(), false, false);
+        deletePathIds += m_pDS2->fv(1).get_asString() + ",";
+        
+        index += 1;
+        m_pDS2->next();
+      }
+      m_pDS2->close();
+    }
+    else if (mediaType == MediaTypeSeason)
+    {
+      if (progress != NULL)
+      {
+        progress->SetPercentage(0);
+        progress->SetLine(0, "Deleting seasons..."); // TODO: localization
+        progress->Progress();
+      }
+      
+      // delete all seasons imported from the import
+      strSQL = PrepareSQL("SELECT seasons.idSeason, seasons.season, tvshow.c%02d FROM seasons "
+                          "JOIN imports ON imports.idImport = %d "
+                          "LEFT JOIN tvshow ON tvshow.idShow = seasons.idShow "
+                          "GROUP BY seasons.idSeason", VIDEODB_ID_TV_TITLE, idImport);
+      m_pDS2->query(strSQL);
+      total = m_pDS2->num_rows();
+      index = 0;
+      while (!m_pDS2->eof())
+      {
+        if (progress != NULL)
+        {
+          if (progress->IsCanceled())
+          {
+            progress->Close();
+            if (standalone)
+              RollbackTransaction();
+            return false;
+          }
+
+          std::string showTitle = m_pDS2->fv(2).get_asString();
+          if (!showTitle.empty())
+            progress->SetLine(1, m_pDS2->fv(2).get_asString() + ": Season " + m_pDS2->fv(1).get_asString()); // TODO: localization
+          else
+            progress->SetLine(1, "Season " + m_pDS2->fv(1).get_asString()); // TODO: localization
+          progress->SetPercentage((index * 100) / total);
+          progress->Progress();
+        }
+
+        DeleteSeason(m_pDS2->fv(0).get_asInt());
+        
+        index += 1;
+        m_pDS2->next();
+      }
+      m_pDS2->close();
+    }
+    else if (mediaType == MediaTypeEpisode)
+    {
+      if (progress != NULL)
+      {
+        progress->SetPercentage(0);
+        progress->SetLine(0, "Deleting episodes..."); // TODO: localization
+        progress->Progress();
+      }
+
+      // get all file and path IDs for episodes imported from the import
+      strSQL = PrepareSQL("SELECT episode.idEpisode, episode.idFile, path.idPath, path.strPath, files.strFilename, episode.c%02d, tvshow.c%02d FROM episode "
+                          "JOIN files ON files.idFile = episode.idFile "
+                          "JOIN path ON path.idPath = files.idPath "
+                          "JOIN imports ON imports.idImport = files.idImport AND imports.mediaType = 'episode' "
+                          "LEFT JOIN tvshow ON tvshow.idShow = episode.idShow "
+                          "WHERE imports.idImport = %d", VIDEODB_ID_EPISODE_TITLE, VIDEODB_ID_TV_TITLE, idImport);
+      m_pDS2->query(strSQL);
+      total = m_pDS2->num_rows();
+      index = 0;
+      while (!m_pDS2->eof())
+      {
+        if (progress != NULL)
+        {
+          if (progress->IsCanceled())
+          {
+            progress->Close();
+            if (standalone)
+              RollbackTransaction();
+            return false;
+          }
+
+          std::string showTitle = m_pDS2->fv(6).get_asString();
+          if (!showTitle.empty())
+            progress->SetLine(1, showTitle + ": " + m_pDS2->fv(5).get_asString()); // TODO: localization
+          else
+            progress->SetLine(1, m_pDS2->fv(5).get_asString()); // TODO: localization
+          progress->SetPercentage((index * 100) / total);
+          progress->Progress();
+        }
+
+        CStdString strFilenameAndPath;
+        std::string strPath = m_pDS2->fv(3).get_asString();
+        std::string strFileName = m_pDS2->fv(4).get_asString();
+        ConstructPath(strFilenameAndPath, strPath, strFileName);
+        DeleteEpisode(strFilenameAndPath, m_pDS2->fv(0).get_asInt(), false);
+
+        deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
+        deletePathIds += m_pDS2->fv(2).get_asString() + ",";
+
+        index += 1;
+        m_pDS2->next();
+      }
+      m_pDS2->close();
+    }
+    else if (mediaType == MediaTypeMusicVideo)
+    {
+      if (progress != NULL)
+      {
+        progress->SetPercentage(0);
+        progress->SetLine(0, "Deleting musicvideos..."); // TODO: localization
+        progress->Progress();
+      }
+
+      // delete all musicvideos imported from the import
+      strSQL = PrepareSQL("SELECT musicvideo.idMVideo, musicvideo.idFile, path.idPath, musicvideo.c%02d FROM musicvideo "
+                          "JOIN files ON files.idFile = musicvideo.idFile "
+                          "JOIN path ON path.idPath = files.idPath "
+                          "JOIN imports ON imports.idImport = files.idImport AND imports.mediaType = 'musicvideo' "
+                          "WHERE imports.idImport = %d", VIDEODB_ID_MUSICVIDEO_TITLE, idImport);
+      m_pDS2->query(strSQL);
+      total = m_pDS2->num_rows();
+      index = 0;
+      while (!m_pDS2->eof())
+      {
+        if (progress != NULL)
+        {
+          if (progress->IsCanceled())
+          {
+            progress->Close();
+            if (standalone)
+              RollbackTransaction();
+            return false;
+          }
+
+          progress->SetLine(1, m_pDS2->fv(3).get_asString());
+          progress->SetPercentage((index * 100) / total);
+          progress->Progress();
+        }
+
+        DeleteMusicVideo(m_pDS2->fv(0).get_asInt(), false);
+        deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
+        deletePathIds += m_pDS2->fv(2).get_asString() + ",";
+
+        index += 1;
+        m_pDS2->next();
+      }
+      m_pDS2->close();
+    }
+    else
+    {
+      if (standalone)
+        RollbackTransaction();
+      return false;
+    }
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(0);
+      progress->SetText("Cleaning up..."); // TODO: localization
+      progress->Progress();
+    }
+    
+    // delete source, import and media item paths
+    StringUtils::TrimRight(deleteFileIds, ",");
+    StringUtils::TrimRight(deletePathIds, ",");
+    strSQL = PrepareSQL("DELETE FROM path WHERE path.idPath IN (%s) OR EXISTS "
+                        "(SELECT 1 FROM path AS importPath "
+                         "JOIN imports ON importPath.idPath = imports.idPath "
+                         "WHERE importPath.idPath = path.idPath AND imports.idImport = %d AND "
+                         "NOT EXISTS(SELECT 1 FROM imports WHERE imports.idImport != %d AND imports.idPath = importPath.idPath)) "
+                        "OR EXISTS (SELECT 1 FROM files "
+                         "JOIN path AS filesPath ON filesPath.idPath = files.idPath "
+                         "WHERE filesPath.idPath = path.idPath AND files.idFile IN (%s))",
+                        deletePathIds.c_str(), idImport, idImport, deleteFileIds.c_str());
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(45);
+      progress->Progress();
+    }
+
+    // delete files imported from the source
+    strSQL = PrepareSQL("DELETE FROM files WHERE files.idFile IN (%s)", deleteFileIds.c_str());
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(75);
+      progress->Progress();
+    }
+
+    // delete imports
     strSQL = PrepareSQL("DELETE FROM imports WHERE idImport = %d", idImport);
     m_pDS->exec(strSQL);
 
-    // TODO: remove items/files/paths belonging to that import
+    if (progress != NULL)
+    {
+      progress->SetPercentage(100);
+      progress->Progress();
+    }
 
-    m_pDS->close();
+    if (standalone)
+    {
+      CommitTransaction();
+
+      Compress(false);
+      CUtil::DeleteVideoDatabaseDirectoryCache();
+    }
+    result = true;
   }
   catch (...)
   {
-    CLog::Log(LOGERROR, "%s unable to RemoveImport (%s)", __FUNCTION__, strSQL.c_str());
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, strSQL.c_str());
+    if (standalone)
+      RollbackTransaction();
+    result = false;
   }
+
+  if (progress != NULL && standalone)
+    progress->Close();
+
+  return result;
 }
 
 bool CVideoDatabase::SetImportForItem(const std::string& strFileNameAndPath, const CMediaImport &import)
@@ -1298,7 +1435,7 @@ bool CVideoDatabase::SetImportForItem(const std::string& strFileNameAndPath, con
   }
   catch (...)
   {
-    CLog::Log(LOGERROR, "%s unable to SetImportForPath (%s)", __FUNCTION__, strSQL.c_str());
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, strSQL.c_str());
   }
   return false;
 }
@@ -1332,9 +1469,7 @@ void CVideoDatabase::SetImportItemsEnabled(bool enabled, const CMediaImport &imp
     if (idImport <= 0)
       return;
 
-    sql = PrepareSQL("UPDATE files SET enabled = %d "
-                     "WHERE files.idImport = %d", enabled ? 1 : 0, idImport);
-
+    sql = PrepareSQL("UPDATE files SET enabled = %d WHERE files.idImport = %d", enabled ? 1 : 0, idImport);
     if (!import.GetMediaType().empty())
       sql += PrepareSQL(" AND EXISTS (SELECT 1 FROM imports WHERE imports.idImport = %d AND imports.mediaType = '%s')", idImport, import.GetMediaType().c_str());
 
@@ -1361,8 +1496,7 @@ void CVideoDatabase::SetImportItemEnabled(const std::string& strFileNameAndPath,
     if (idFile <= 0)
       return;
 
-    sql = PrepareSQL("UPDATE files SET enabled = %d "
-                     "WHERE files.idFile = %d AND idImport IS NOT NULL", enabled ? 1 : 0, idFile);
+    sql = PrepareSQL("UPDATE files SET enabled = %d WHERE files.idFile = %d AND idImport IS NOT NULL", enabled ? 1 : 0, idFile);
     m_pDS->exec(sql.c_str());
   }
   catch (...)
@@ -3720,7 +3854,7 @@ void CVideoDatabase::DeleteMovie(const CStdString& strFilenameAndPath, bool bKee
   }
 }
 
-void CVideoDatabase::DeleteTvShow(int idTvShow, bool bKeepId /* = false */)
+void CVideoDatabase::DeleteTvShow(int idTvShow, bool bKeepId /* = false */, bool deleteChildren /* = true */)
 {
   if (idTvShow < 0)
     return;
@@ -3728,10 +3862,10 @@ void CVideoDatabase::DeleteTvShow(int idTvShow, bool bKeepId /* = false */)
   CStdString path;
   GetFilePathById(idTvShow, path, VIDEODB_CONTENT_TVSHOWS);
   if (!path.empty())
-    DeleteTvShow(path, bKeepId, idTvShow);
+    DeleteTvShow(path, bKeepId, idTvShow, deleteChildren);
 }
 
-void CVideoDatabase::DeleteTvShow(const CStdString& strPath, bool bKeepId /* = false */, int idTvShow /* = -1 */)
+void CVideoDatabase::DeleteTvShow(const CStdString& strPath, bool bKeepId /* = false */, int idTvShow /* = -1 */, bool deleteChildren /* = true */)
 {
   try
   {
@@ -3746,23 +3880,30 @@ void CVideoDatabase::DeleteTvShow(const CStdString& strPath, bool bKeepId /* = f
 
     BeginTransaction();
 
-    CStdString strSQL=PrepareSQL("select episode.idEpisode,path.strPath,files.strFileName from episode,path,files where episode.idShow=%i and episode.idFile=files.idFile and files.idPath=path.idPath",idTvShow);
-    m_pDS->query(strSQL.c_str());
-    while (!m_pDS->eof())
+    CStdString strSQL;
+    if (deleteChildren)
     {
-      CStdString strFilenameAndPath;
-      CStdString strPath = m_pDS->fv("path.strPath").get_asString();
-      CStdString strFileName = m_pDS->fv("files.strFilename").get_asString();
-      ConstructPath(strFilenameAndPath, strPath, strFileName);
-      DeleteEpisode(strFilenameAndPath, m_pDS->fv(0).get_asInt(), bKeepId);
-      m_pDS->next();
+      strSQL=PrepareSQL("select episode.idEpisode,path.strPath,files.strFileName from episode,path,files where episode.idShow=%i and episode.idFile=files.idFile and files.idPath=path.idPath",idTvShow);
+      m_pDS2->query(strSQL.c_str());
+      while (!m_pDS2->eof())
+      {
+        CStdString strFilenameAndPath;
+        CStdString strPath = m_pDS2->fv("path.strPath").get_asString();
+        CStdString strFileName = m_pDS2->fv("files.strFilename").get_asString();
+        ConstructPath(strFilenameAndPath, strPath, strFileName);
+        DeleteEpisode(strFilenameAndPath, m_pDS2->fv(0).get_asInt(), bKeepId);
+        m_pDS2->next();
+      }
+      m_pDS2->close();
     }
-    m_pDS->close();
 
     DeleteDetailsForTvShow(strPath, idTvShow);
 
-    strSQL=PrepareSQL("delete from seasons where idShow=%i", idTvShow);
-    m_pDS->exec(strSQL.c_str());
+    if (deleteChildren)
+    {
+      strSQL=PrepareSQL("delete from seasons where idShow=%i", idTvShow);
+      m_pDS->exec(strSQL.c_str());
+    }
 
     // keep tvshow table and movielink table so we can update data in place
     if (!bKeepId)
@@ -4243,6 +4384,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* cons
   CStdString strFileName = record->at(VIDEODB_DETAILS_MOVIE_FILE).get_asString();
   ConstructPath(details.m_strFileNameAndPath,details.m_strPath,strFileName);
   details.m_strSource = record->at(VIDEODB_DETAILS_MOVIE_SOURCE).get_asString();
+  details.m_strImportPath = record->at(VIDEODB_DETAILS_MOVIE_IMPORTPATH).get_asString();
   details.m_playCount = record->at(VIDEODB_DETAILS_MOVIE_PLAYCOUNT).get_asInt();
   details.m_lastPlayed.SetFromDBDateTime(record->at(VIDEODB_DETAILS_MOVIE_LASTPLAYED).get_asString());
   details.m_dateAdded.SetFromDBDateTime(record->at(VIDEODB_DETAILS_MOVIE_DATEADDED).get_asString());
@@ -4309,6 +4451,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
   details.m_type = MediaTypeTvShow;
   details.m_strPath = record->at(VIDEODB_DETAILS_TVSHOW_PATH).get_asString();
   details.m_strSource = record->at(VIDEODB_DETAILS_TVSHOW_SOURCE).get_asString();
+  details.m_strImportPath = record->at(VIDEODB_DETAILS_TVSHOW_IMPORTPATH).get_asString();
   details.m_dateAdded.SetFromDBDateTime(record->at(VIDEODB_DETAILS_TVSHOW_DATEADDED).get_asString());
   details.m_lastPlayed.SetFromDBDateTime(record->at(VIDEODB_DETAILS_TVSHOW_LASTPLAYED).get_asString());
   details.m_iEpisode = record->at(VIDEODB_DETAILS_TVSHOW_NUM_EPISODES).get_asInt();
@@ -4375,6 +4518,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* co
   details.m_iFileId = record->at(VIDEODB_DETAILS_FILEID).get_asInt();
   details.m_strPath = record->at(VIDEODB_DETAILS_EPISODE_PATH).get_asString();
   details.m_strSource = record->at(VIDEODB_DETAILS_EPISODE_SOURCE).get_asString();
+  details.m_strImportPath = record->at(VIDEODB_DETAILS_EPISODE_IMPORTPATH).get_asString();
   CStdString strFileName = record->at(VIDEODB_DETAILS_EPISODE_FILE).get_asString();
   ConstructPath(details.m_strFileNameAndPath,details.m_strPath,strFileName);
   details.m_playCount = record->at(VIDEODB_DETAILS_EPISODE_PLAYCOUNT).get_asInt();
@@ -4434,6 +4578,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(const dbiplus::sql_record*
   details.m_iFileId = record->at(VIDEODB_DETAILS_FILEID).get_asInt();
   details.m_strPath = record->at(VIDEODB_DETAILS_MUSICVIDEO_PATH).get_asString();
   details.m_strSource = record->at(VIDEODB_DETAILS_MUSICVIDEO_SOURCE).get_asString();
+  details.m_strImportPath = record->at(VIDEODB_DETAILS_MUSICVIDEO_IMPORTPATH).get_asString();
   CStdString strFileName = record->at(VIDEODB_DETAILS_MUSICVIDEO_FILE).get_asString();
   ConstructPath(details.m_strFileNameAndPath,details.m_strPath,strFileName);
   details.m_playCount = record->at(VIDEODB_DETAILS_MUSICVIDEO_PLAYCOUNT).get_asInt();
@@ -5170,19 +5315,19 @@ void CVideoDatabase::UpdateTables(int iVersion)
   }
   if (iVersion < 77)
     m_pDS->exec("ALTER TABLE streamdetails ADD strStereoMode text");
-  if (iVersion < 78)
+  if (iVersion < 79)
   { // add enabled flag and idImport to files table and new tables source and imports
     m_pDS->exec("ALTER TABLE files ADD enabled bool NOT NULL DEFAULT 1");
     m_pDS->exec("ALTER TABLE files ADD idImport integer");
 
     m_pDS->exec("CREATE TABLE sources ( idSource integer primary key, identifier text NOT NULL, name text NOT NULL, availableMediaTypes text NOT NULL)");
-    m_pDS->exec("CREATE TABLE imports ( idImport integer primary key, idPath integer NOT NULL, idSource integer NOT NULL, mediaType text NOT NULL, lastSync text)");
+    m_pDS->exec("CREATE TABLE imports ( idImport integer primary key, idPath integer NOT NULL, idSource integer NOT NULL, mediaType text NOT NULL, lastSync text, settings text)");
   }
 }
 
 int CVideoDatabase::GetSchemaVersion() const
 {
-  return 78;
+  return 79;
 }
 
 bool CVideoDatabase::LookupByFolders(const CStdString &path, bool shows)
@@ -6485,6 +6630,7 @@ bool CVideoDatabase::GetSeasonsByWhere(const CStdString& strBaseDir, const Filte
         pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, (pItem->GetVideoInfoTag()->m_playCount > 0) && (pItem->GetVideoInfoTag()->m_iEpisode > 0));
 
         pItem->GetVideoInfoTag()->m_strSource = m_pDS->fv(12).get_asString();
+        pItem->GetVideoInfoTag()->m_strImportPath = m_pDS->fv(14).get_asString();
         pItem->SetEnabled(m_pDS->fv(13).get_asBool());
 
         items.Add(pItem);

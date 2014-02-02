@@ -83,6 +83,7 @@ namespace VIDEO
 #define VIDEODB_DETAILS_MOVIE_RESUME_TIME       VIDEODB_MAX_COLUMNS + 10
 #define VIDEODB_DETAILS_MOVIE_TOTAL_TIME        VIDEODB_MAX_COLUMNS + 11
 #define VIDEODB_DETAILS_MOVIE_ENABLED           VIDEODB_MAX_COLUMNS + 12
+#define VIDEODB_DETAILS_MOVIE_IMPORTPATH        VIDEODB_MAX_COLUMNS + 13
 
 #define VIDEODB_DETAILS_EPISODE_TVSHOW_ID       VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_EPISODE_FILE            VIDEODB_MAX_COLUMNS + 3
@@ -100,6 +101,7 @@ namespace VIDEO
 #define VIDEODB_DETAILS_EPISODE_TOTAL_TIME      VIDEODB_MAX_COLUMNS + 15
 #define VIDEODB_DETAILS_EPISODE_SEASON_ID       VIDEODB_MAX_COLUMNS + 16
 #define VIDEODB_DETAILS_EPISODE_ENABLED         VIDEODB_MAX_COLUMNS + 17
+#define VIDEODB_DETAILS_EPISODE_IMPORTPATH      VIDEODB_MAX_COLUMNS + 18
 
 #define VIDEODB_DETAILS_TVSHOW_PATH             VIDEODB_MAX_COLUMNS + 1
 #define VIDEODB_DETAILS_TVSHOW_SOURCE           VIDEODB_MAX_COLUMNS + 2
@@ -109,6 +111,7 @@ namespace VIDEO
 #define VIDEODB_DETAILS_TVSHOW_NUM_WATCHED      VIDEODB_MAX_COLUMNS + 6
 #define VIDEODB_DETAILS_TVSHOW_NUM_SEASONS      VIDEODB_MAX_COLUMNS + 7
 #define VIDEODB_DETAILS_TVSHOW_ENABLED          VIDEODB_MAX_COLUMNS + 8
+#define VIDEODB_DETAILS_TVSHOW_IMPORTPATH       VIDEODB_MAX_COLUMNS + 9
 
 #define VIDEODB_DETAILS_MUSICVIDEO_FILE         VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_MUSICVIDEO_PATH         VIDEODB_MAX_COLUMNS + 3
@@ -119,6 +122,7 @@ namespace VIDEO
 #define VIDEODB_DETAILS_MUSICVIDEO_RESUME_TIME  VIDEODB_MAX_COLUMNS + 8
 #define VIDEODB_DETAILS_MUSICVIDEO_TOTAL_TIME   VIDEODB_MAX_COLUMNS + 9
 #define VIDEODB_DETAILS_MUSICVIDEO_ENABLED      VIDEODB_MAX_COLUMNS + 10
+#define VIDEODB_DETAILS_MUSICVIDEO_IMPORTPATH   VIDEODB_MAX_COLUMNS + 11
 
 #define VIDEODB_TYPE_STRING 1
 #define VIDEODB_TYPE_INT 2
@@ -471,8 +475,8 @@ public:
 
   void DeleteMovie(int idMovie, bool bKeepId = false);
   void DeleteMovie(const CStdString& strFilenameAndPath, bool bKeepId = false, int idMovie = -1);
-  void DeleteTvShow(int idTvShow, bool bKeepId = false);
-  void DeleteTvShow(const CStdString& strPath, bool bKeepId = false, int idTvShow = -1);
+  void DeleteTvShow(int idTvShow, bool bKeepId = false, bool deleteChildren = true);
+  void DeleteTvShow(const CStdString& strPath, bool bKeepId = false, int idTvShow = -1, bool deleteChildren = true);
   void DeleteSeason(int idSeason);
   void DeleteEpisode(int idEpisode, bool bKeepId = false);
   void DeleteEpisode(const CStdString& strFilenameAndPath, int idEpisode = -1, bool bKeepId = false);
@@ -696,12 +700,7 @@ public:
   /*! \brief Remove the import with the given path from the database
    \param path Path of the import
    */
-  void RemoveImport(const CMediaImport& import, CGUIDialogProgress *progress = NULL);
-
-  /*! \brief Remove the import with the given ID from the database
-   \param idImport ID of the import
-   */
-  void RemoveImport(int idImport, CGUIDialogProgress *progress = NULL);
+  bool RemoveImport(const CMediaImport& import, CGUIDialogProgress *progress = NULL, bool standalone = true);
 
   /*! \brief Set the import of a path
    \param strFileNameAndPath File of the item belonging to the import
