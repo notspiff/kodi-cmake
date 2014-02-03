@@ -23,7 +23,6 @@
 #include "TagLoaderTagLib.h"
 #include "MusicInfoTagLoaderCDDA.h"
 #include "MusicInfoTagLoaderShn.h"
-#include "MusicInfoTagLoaderWav.h"
 #include "MusicInfoTagLoaderDatabase.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
@@ -99,11 +98,6 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const std::string&
   else if (strExtension == "shn")
   {
     CMusicInfoTagLoaderSHN *pTagLoader = new CMusicInfoTagLoaderSHN();
-    return (IMusicInfoTagLoader*)pTagLoader;
-  }
-  else if (strExtension == "wav")
-  {
-    CMusicInfoTagLoaderWAV *pTagLoader = new CMusicInfoTagLoaderWAV();
     return (IMusicInfoTagLoader*)pTagLoader;
   }
 
