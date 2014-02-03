@@ -239,6 +239,15 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
+# For generating the doxy
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+  configure_file(${CORE_SOURCE_DIR}/doxygen_resources/Doxyfile.doxy ${CORE_BUILD_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/${CORE_BUILD_DIR}/Doxyfile
+                    WORKING_DIRECTORY ${CORE_SOURCE_DIR}/doxygen_resources
+                    COMMENT "Generating API documentation" VERBATIM)
+endif()
+
 if(ENABLE_TESTS)
   copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
   add_executable(xbmc-test ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
