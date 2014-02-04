@@ -18,6 +18,11 @@ if(ENABLE_EXTERNAL_FFMPEG OR ENABLE_EXTERNAL_LIBAV)
 
   mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES FFMPEG_DEFINITIONS)
 else()
+  if(ENABLE_STATIC_FFMPEG)
+    set(FFMPEG_TYPES --enable-static --disable-shared)
+  else()
+    set(FFMPEG_TYPES --enable-shared --disable-static)
+  endif()
   set(ffmpeg_conf ${CORE_SOURCE_DIR}/lib/ffmpeg/configure
                    --disable-muxers
                    --enable-muxer=spdif
@@ -34,8 +39,7 @@ else()
                    --disable-ffplay
                    --disable-ffmpeg
                    --disable-crystalhd
-                   --enable-shared
-                   --disable-static
+                   ${FFMPEG_TYPES}
                    --disable-doc
                    --enable-postproc
                    --enable-gpl
@@ -60,14 +64,22 @@ else()
   ExternalProject_ADD(ffmpeg SOURCE_DIR ${CORE_SOURCE_DIR}/lib/ffmpeg
                       PREFIX ${CORE_BUILD_DIR}/ffmpeg
                       CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
-  set(ffmpeg_libs avcodec-54 avformat-54 avfilter-3
-                  avutil-52 swscale-2 swresample-0 postproc-52)
-  foreach(lib ${ffmpeg_libs})
-    add_custom_command(TARGET ffmpeg POST_BUILD
-                       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX} ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
-    install(PROGRAMS ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
-            DESTINATION lib/xbmc/system/players/dvdplayer)
-  endforeach()
+  if(ENABLE_STATIC_FFMPEG)
+    find_package(BZip2 REQUIRED)
+    list(APPEND FFMPEG_DEFINITIONS -DUSE_STATIC_FFMPEG=1)
+    list(APPEND FFMPEG_LIBRARIES -L${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib
+                                  avformat avcodec avfilter avutil swscale swresample
+                                  postproc ${BZIP2_LIBRARIES})
+  else()
+    set(ffmpeg_libs avcodec-54 avformat-54 avfilter-3
+                    avutil-52 swscale-2 swresample-0 postproc-52)
+    foreach(lib ${ffmpeg_libs})
+      add_custom_command(TARGET ffmpeg POST_BUILD
+                         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX} ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX})
+      install(PROGRAMS ${CMAKE_BINARY_DIR}/system/players/dvdplayer/${lib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
+              DESTINATION lib/xbmc/system/players/dvdplayer)
+    endforeach()
+  endif()
 
   set(FFMPEG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/include)
 endif()
