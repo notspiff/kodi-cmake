@@ -104,6 +104,8 @@ public:
   CStdString m_strPlot;
   CScraperUrl m_strPictureURL;
   CStdString m_strTitle;
+  CStdString m_strSource;
+  CStdString m_strImportPath;
   CStdString m_strSortTitle;
   CStdString m_strVotes;
   std::vector<std::string> m_artist;

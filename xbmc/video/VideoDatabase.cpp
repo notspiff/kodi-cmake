@@ -59,6 +59,8 @@
 #include "video/VideoDbUrl.h"
 #include "playlists/SmartPlayList.h"
 #include "utils/GroupUtils.h"
+#include "media/import/MediaImport.h"
+#include "media/import/MediaImportSource.h"
 
 using namespace std;
 using namespace dbiplus;
@@ -134,7 +136,13 @@ void CVideoDatabase::CreateTables()
   m_pDS->exec("CREATE TABLE path ( idPath integer primary key, strPath text, strContent text, strScraper text, strHash text, scanRecursive integer, useFolderNames bool, strSettings text, noUpdate bool, exclude bool, dateAdded text)");
 
   CLog::Log(LOGINFO, "create files table");
-  m_pDS->exec("CREATE TABLE files ( idFile integer primary key, idPath integer, strFilename text, playCount integer, lastPlayed text, dateAdded text)");
+  m_pDS->exec("CREATE TABLE files ( idFile integer primary key, idPath integer, strFilename text, playCount integer, lastPlayed text, dateAdded text, enabled bool NOT NULL DEFAULT 1, idImport integer)");
+
+  CLog::Log(LOGINFO, "create sources table");
+  m_pDS->exec("CREATE TABLE sources ( idSource integer primary key, identifier text NOT NULL, name text NOT NULL, availableMediaTypes text NOT NULL)");
+
+  CLog::Log(LOGINFO, "create imports table");
+  m_pDS->exec("CREATE TABLE imports ( idImport integer primary key, idPath integer NOT NULL, idSource integer NOT NULL, mediaType text NOT NULL, lastSync text)");
 
   CLog::Log(LOGINFO, "create tvshow table");
   columns = "CREATE TABLE tvshow ( idShow integer primary key";
@@ -253,6 +261,12 @@ void CVideoDatabase::CreateAnalytics()
   m_pDS->exec("CREATE UNIQUE INDEX ix_stacktimes ON stacktimes ( idFile )\n");
   m_pDS->exec("CREATE INDEX ix_path ON path ( strPath(255) )");
   m_pDS->exec("CREATE INDEX ix_files ON files ( idPath, strFilename(255) )");
+  m_pDS->exec("CREATE INDEX ix_files_enabled ON files (enabled)");
+  m_pDS->exec("CREATE INDEX ix_files_import ON files (idImport)");
+
+  m_pDS->exec("CREATE INDEX ix_sources ON sources ( identifier(255) )");
+  m_pDS->exec("CREATE INDEX ix_imports_path ON imports ( idPath )");
+  m_pDS->exec("CREATE INDEX ix_imports_mediatype ON imports ( mediaType )");
 
   m_pDS->exec("CREATE UNIQUE INDEX ix_genrelinkmovie_1 ON genrelinkmovie ( idGenre, idMovie)\n");
   m_pDS->exec("CREATE UNIQUE INDEX ix_genrelinkmovie_2 ON genrelinkmovie ( idMovie, idGenre)\n");
@@ -361,6 +375,7 @@ void CVideoDatabase::CreateViews()
                                       "  episode.*,"
                                       "  files.strFileName AS strFileName,"
                                       "  path.strPath AS strPath,"
+                                      "  sources.identifier AS strSource,"
                                       "  files.playCount AS playCount,"
                                       "  files.lastPlayed AS lastPlayed,"
                                       "  files.dateAdded AS dateAdded,"
@@ -371,7 +386,9 @@ void CVideoDatabase::CreateViews()
                                       "  tvshow.c%02d AS strShowPath, "
                                       "  bookmark.timeInSeconds AS resumeTimeInSeconds, "
                                       "  bookmark.totalTimeInSeconds AS totalTimeInSeconds, "
-                                      "  seasons.idSeason AS idSeason "
+                                      "  seasons.idSeason AS idSeason, "
+                                      "  files.enabled AS enabled,"
+                                      "  importsPath.strPath AS importPath "
                                       "FROM episode"
                                       "  JOIN files ON"
                                       "    files.idFile=episode.idFile"
@@ -382,18 +399,29 @@ void CVideoDatabase::CreateViews()
                                       "  JOIN path ON"
                                       "    files.idPath=path.idPath"
                                       "  LEFT JOIN bookmark ON"
-                                      "    bookmark.idFile=episode.idFile AND bookmark.type=1", VIDEODB_ID_TV_TITLE, VIDEODB_ID_TV_STUDIOS, VIDEODB_ID_TV_PREMIERED, VIDEODB_ID_TV_MPAA, VIDEODB_ID_TV_BASEPATH, VIDEODB_ID_EPISODE_SEASON);
+                                      "    bookmark.idFile=episode.idFile AND bookmark.type=1"
+                                      "  LEFT JOIN imports ON"
+                                      "    imports.idImport=files.idImport AND imports.mediaType = 'episode'"
+                                      "  LEFT JOIN sources ON"
+                                      "    sources.idSource=imports.idSource"
+                                      "  LEFT JOIN path AS importsPath ON"
+                                      "    importsPath.idPath = imports.idPath",
+                                      VIDEODB_ID_TV_TITLE, VIDEODB_ID_TV_STUDIOS, VIDEODB_ID_TV_PREMIERED, VIDEODB_ID_TV_MPAA, VIDEODB_ID_TV_BASEPATH,
+                                      VIDEODB_ID_EPISODE_SEASON);
   m_pDS->exec(episodeview.c_str());
 
   CLog::Log(LOGINFO, "create tvshowview");
   CStdString tvshowview = PrepareSQL("CREATE VIEW tvshowview AS SELECT "
                                      "  tvshow.*,"
                                      "  path.strPath AS strPath,"
+                                     "  sources.identifier AS strSource,"
                                      "  path.dateAdded AS dateAdded,"
                                      "  MAX(files.lastPlayed) AS lastPlayed,"
                                      "  NULLIF(COUNT(episode.c12), 0) AS totalCount,"
                                      "  COUNT(files.playCount) AS watchedcount,"
-                                     "  NULLIF(COUNT(DISTINCT(episode.c12)), 0) AS totalSeasons "
+                                     "  NULLIF(COUNT(DISTINCT(episode.c12)), 0) AS totalSeasons, "
+                                     "  COUNT(files.enabled) AS enabled,"
+                                     "  importsPath.strPath AS importPath "
                                      "FROM tvshow"
                                      "  LEFT JOIN tvshowlinkpath ON"
                                      "    tvshowlinkpath.idShow=tvshow.idShow"
@@ -402,8 +430,14 @@ void CVideoDatabase::CreateViews()
                                      "  LEFT JOIN episode ON"
                                      "    episode.idShow=tvshow.idShow"
                                      "  LEFT JOIN files ON"
-                                     "    files.idFile=episode.idFile "
-                                     "GROUP BY tvshow.idShow;");
+                                     "    files.idFile=episode.idFile"
+                                     "  LEFT JOIN imports ON"
+                                     "    imports.idPath=tvshow.c%02d AND imports.mediaType = 'episode'"
+                                     "  LEFT JOIN sources ON"
+                                     "    sources.idSource=imports.idSource "
+                                     "  LEFT JOIN path AS importsPath ON"
+                                     "    importsPath.idPath = imports.idPath "
+                                     "GROUP BY tvshow.idShow;", VIDEODB_ID_TV_PARENTPATHID));
   m_pDS->exec(tvshowview.c_str());
 
   CLog::Log(LOGINFO, "create musicvideoview");
@@ -411,18 +445,27 @@ void CVideoDatabase::CreateViews()
               "  musicvideo.*,"
               "  files.strFileName as strFileName,"
               "  path.strPath as strPath,"
+              "  sources.identifier AS strSource,"
               "  files.playCount as playCount,"
               "  files.lastPlayed as lastPlayed,"
               "  files.dateAdded as dateAdded, "
               "  bookmark.timeInSeconds AS resumeTimeInSeconds, "
-              "  bookmark.totalTimeInSeconds AS totalTimeInSeconds "
+              "  bookmark.totalTimeInSeconds AS totalTimeInSeconds, "
+              "  files.enabled AS enabled,"
+              "  importsPath.strPath AS importPath "
               "FROM musicvideo"
               "  JOIN files ON"
               "    files.idFile=musicvideo.idFile"
               "  JOIN path ON"
               "    path.idPath=files.idPath"
               "  LEFT JOIN bookmark ON"
-              "    bookmark.idFile=musicvideo.idFile AND bookmark.type=1");
+              "    bookmark.idFile=musicvideo.idFile AND bookmark.type=1"
+              "  LEFT JOIN imports ON"
+              "    imports.idImport=files.idImport AND imports.mediaType = 'musicvideo'"
+              "  LEFT JOIN sources ON"
+              "    sources.idSource=imports.idSource"
+              "  LEFT JOIN path AS importsPath ON"
+              "    importsPath.idPath = imports.idPath");
 
   CLog::Log(LOGINFO, "create movieview");
   m_pDS->exec("CREATE VIEW movieview AS SELECT"
@@ -430,11 +473,14 @@ void CVideoDatabase::CreateViews()
               "  sets.strSet AS strSet,"
               "  files.strFileName AS strFileName,"
               "  path.strPath AS strPath,"
+              "  sources.identifier AS strSource,"
               "  files.playCount AS playCount,"
               "  files.lastPlayed AS lastPlayed, "
               "  files.dateAdded AS dateAdded, "
               "  bookmark.timeInSeconds AS resumeTimeInSeconds, "
-              "  bookmark.totalTimeInSeconds AS totalTimeInSeconds "
+              "  bookmark.totalTimeInSeconds AS totalTimeInSeconds, "
+              "  files.enabled AS enabled,"
+              "  importsPath.strPath AS importPath "
               "FROM movie"
               "  LEFT JOIN sets ON"
               "    sets.idSet = movie.idSet"
@@ -443,7 +489,13 @@ void CVideoDatabase::CreateViews()
               "  JOIN path ON"
               "    path.idPath=files.idPath"
               "  LEFT JOIN bookmark ON"
-              "    bookmark.idFile=movie.idFile AND bookmark.type=1");
+              "    bookmark.idFile=movie.idFile AND bookmark.type=1"
+              "  LEFT JOIN imports ON"
+              "    imports.idImport=files.idImport AND imports.mediaType = 'movie'"
+              "  LEFT JOIN sources ON"
+              "    sources.idSource=imports.idSource"
+              "  LEFT JOIN path AS importsPath ON"
+              "    importsPath.idPath = imports.idPath");
 }
 
 //********************************************************************************************************************************
@@ -630,11 +682,13 @@ int CVideoDatabase::AddPath(const CStdString& strPath, const CStdString &strDate
 
     URIUtils::AddSlashAtEnd(strPath1);
 
-    // only set dateadded if we got one
+    strSQL = PrepareSQL("INSERT INTO path (idPath, strPath, strContent, strScraper, dateAdded) VALUES (NULL, '%s', '', '', ", strPath1.c_str());
     if (!strDateAdded.empty())
-      strSQL=PrepareSQL("insert into path (idPath, strPath, strContent, strScraper, dateAdded) values (NULL,'%s','','', '%s')", strPath1.c_str(), strDateAdded.c_str());
+      strSQL += PrepareSQL("'%s'", strDateAdded);
     else
-      strSQL=PrepareSQL("insert into path (idPath, strPath, strContent, strScraper) values (NULL,'%s','','')", strPath1.c_str());
+      strSQL += "NULL";
+    strSQL += ")";
+
     m_pDS->exec(strSQL.c_str());
     idPath = (int)m_pDS->lastinsertid();
     return idPath;
@@ -644,6 +698,638 @@ int CVideoDatabase::AddPath(const CStdString& strPath, const CStdString &strDate
     CLog::Log(LOGERROR, "%s unable to addpath (%s)", __FUNCTION__, strSQL.c_str());
   }
   return -1;
+}
+
+std::vector<CMediaImportSource> CVideoDatabase::GetSources()
+{
+  std::vector<CMediaImportSource> sources;
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL)
+      return sources;
+
+    strSQL = PrepareSQL("SELECT sources.*, art.url, MAX(imports.lastSync) AS lastSync FROM sources "
+                        "LEFT JOIN art ON art.media_type = 'source' AND art.media_id = sources.idSource "
+                        "LEFT JOIN imports ON imports.idSource = sources.idSource "
+                        "GROUP BY sources.idSource");
+    m_pDS->query(strSQL.c_str());
+    while (!m_pDS->eof())
+    {
+      std::vector<MediaType> vecMediaTypes;
+      std::string strMediaTypes = m_pDS->fv(3).get_asString();
+      if (!strMediaTypes.empty())
+        vecMediaTypes = StringUtils::Split(strMediaTypes, ",");
+      std::set<MediaType> availableMediaTypes(vecMediaTypes.begin(), vecMediaTypes.end());
+      CDateTime lastSynced; lastSynced.SetFromDBDateTime(m_pDS->fv(5).get_asString());
+      sources.push_back(CMediaImportSource(m_pDS->fv(1).get_asString(), m_pDS->fv(2).get_asString(), m_pDS->fv(4).get_asString(), availableMediaTypes, lastSynced));
+
+      m_pDS->next();
+    }
+    m_pDS->close();
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to GetSources (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return sources;
+}
+
+int CVideoDatabase::AddSource(const CMediaImportSource &source)
+{
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+      source.GetIdentifier().empty() || source.GetFriendlyName().empty())
+      return -1;
+
+    strSQL = PrepareSQL("SELECT idSource FROM sources WHERE identifier='%s'", source.GetIdentifier().c_str());
+
+    m_pDS->query(strSQL.c_str());
+    if (m_pDS->num_rows() > 0)
+    {
+      int idSource = m_pDS->fv(0).get_asInt();
+      m_pDS->close();
+
+      return idSource;
+    }
+    m_pDS->close();
+    
+    std::vector<MediaType> vecAvailableMediaTypes(source.GetAvailableMediaTypes().begin(), source.GetAvailableMediaTypes().end());
+    strSQL = PrepareSQL("INSERT INTO sources (idSource, identifier, name, availableMediaTypes) values(NULL, '%s', '%s', '%s')",
+                        source.GetIdentifier().c_str(), source.GetFriendlyName().c_str(),
+                        StringUtils::Join(vecAvailableMediaTypes, ",").c_str());
+    m_pDS->exec(strSQL.c_str());
+
+    int idSource = (int)m_pDS->lastinsertid();
+    if (idSource > 0 && !source.GetIconUrl().empty())
+      SetArtForItem(idSource, "source", "thumb", source.GetIconUrl());
+
+    return idSource;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to AddSource (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return -1;
+}
+
+bool CVideoDatabase::SetDetailsForSource(const CMediaImportSource &source)
+{
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        source.GetIdentifier().empty() || source.GetFriendlyName().empty())
+      return false;
+
+    strSQL = PrepareSQL("SELECT idSource FROM sources WHERE identifier='%s'", source.GetIdentifier().c_str());
+
+    m_pDS->query(strSQL.c_str());
+    if (m_pDS->num_rows() != 1)
+    {
+      m_pDS->close();
+      return false;
+    }
+
+    int idSource = m_pDS->fv(0).get_asInt();
+    m_pDS->close();
+    
+    std::vector<MediaType> vecAvailableMediaTypes(source.GetAvailableMediaTypes().begin(), source.GetAvailableMediaTypes().end());
+    strSQL = PrepareSQL("UPDATE sources SET name='%s', availableMediaTypes='%s' WHERE idSource=%d",
+                        source.GetFriendlyName().c_str(),
+                        StringUtils::Join(vecAvailableMediaTypes, ",").c_str(),
+                        idSource);
+    m_pDS->exec(strSQL.c_str());
+
+    std::string oldIcon = GetArtForItem(idSource, "source", "thumb");
+    if (source.GetIconUrl().compare(oldIcon) != 0)
+      SetArtForItem(idSource, "source", "thumb", source.GetIconUrl());
+
+    return true;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to SetDetailsForSource (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return false;
+}
+
+void CVideoDatabase::RemoveSource(const std::string& sourceIdentifier, CGUIDialogProgress *progress /* = NULL */)
+{
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        sourceIdentifier.empty())
+      return;
+
+    BeginTransaction();
+
+    int idSource = GetSourceId(sourceIdentifier);
+    if (idSource <= 0)
+      return;
+
+    if (progress != NULL)
+    {
+      if (progress->IsCanceled())
+      {
+        RollbackTransaction();
+        return;
+      }
+
+      progress->SetLine(0, "Deleting movies..."); // TODO: localization
+      progress->SetPercentage(0);
+      progress->StartModal();
+      progress->ShowProgressBar(true);
+    }
+
+    std::string deleteFileIds, deletePathIds;
+    // delete all movies imported from the source
+    strSQL = PrepareSQL("SELECT movieview.idMovie, movieview.idFile, path.idPath, movieview.c00 FROM movieview "
+                        "JOIN files ON files.idFile = movieview.idFile "
+                        "JOIN path ON path.idPath = files.idPath "
+                        "WHERE movieview.strSource = '%s'", sourceIdentifier.c_str());
+    m_pDS2->query(strSQL);
+    int total = m_pDS2->num_rows();
+    int index = 0;
+    while (!m_pDS2->eof())
+    {
+      if (progress != NULL)
+      {
+        if (progress->IsCanceled())
+        {
+          progress->Close();
+          RollbackTransaction();
+          return;
+        }
+        progress->SetLine(1, m_pDS2->fv(3).get_asString());
+        progress->SetPercentage((index * 100) / total);
+        progress->Progress();
+      }
+
+      DeleteMovie(m_pDS2->fv(0).get_asInt(), false);
+      deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
+      deletePathIds += m_pDS2->fv(2).get_asString() + ",";
+
+      index += 1;
+      m_pDS2->next();
+    }
+    m_pDS2->close();
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(0);
+      progress->SetLine(0, "Deleting episodes..."); // TODO: localization
+      progress->Progress();
+    }
+
+    // get all file and path IDs for episodes imported from the source
+    strSQL = PrepareSQL("SELECT episodeview.idFile, path.idPath, episodeview.c00 FROM episodeview "
+                        "JOIN files ON files.idFile = episodeview.idFile "
+                        "JOIN path ON path.idPath = files.idPath "
+                        "WHERE episodeview.strSource = '%s'", sourceIdentifier.c_str());
+    m_pDS2->query(strSQL);
+    total = m_pDS2->num_rows();
+    index = 0;
+    while (!m_pDS2->eof())
+    {
+      if (progress != NULL)
+      {
+        if (progress->IsCanceled())
+        {
+          progress->Close();
+          RollbackTransaction();
+          return;
+        }
+        progress->SetLine(1, m_pDS2->fv(2).get_asString());
+        progress->SetPercentage((index * 100) / total);
+        progress->Progress();
+      }
+
+      deleteFileIds += m_pDS2->fv(0).get_asString() + ",";
+      deletePathIds += m_pDS2->fv(1).get_asString() + ",";
+
+      index += 1;
+      m_pDS2->next();
+    }
+    m_pDS2->close();
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(0);
+      progress->SetLine(0, "Deleting tvshows..."); // TODO: localization
+      progress->Progress();
+    }
+
+    // delete all tvshows, seasons and episodes imported from the source
+    strSQL = PrepareSQL("SELECT tvshowview.idShow, path.idPath, tvshowview.c00 FROM tvshowview "
+                        "JOIN tvshowlinkpath ON tvshowlinkpath.idShow = tvshowview.idShow "
+                        "JOIN path ON path.idPath = tvshowlinkpath.idPath "
+                        "WHERE tvshowview.strSource = '%s'", sourceIdentifier.c_str());
+    m_pDS2->query(strSQL);
+    total = m_pDS2->num_rows();
+    index = 0;
+    while (!m_pDS2->eof())
+    {
+      if (progress != NULL)
+      {
+        if (progress->IsCanceled())
+        {
+          progress->Close();
+          RollbackTransaction();
+          return;
+        }
+        progress->SetLine(1, m_pDS2->fv(2).get_asString());
+        progress->SetPercentage((index * 100) / total);
+        progress->Progress();
+      }
+
+      DeleteTvShow(m_pDS2->fv(0).get_asInt(), false);
+      deletePathIds += m_pDS2->fv(1).get_asString() + ",";
+
+      index += 1;
+      m_pDS2->next();
+    }
+    m_pDS2->close();
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(0);
+      progress->SetLine(0, "Deleting musicvideos..."); // TODO: localization
+      progress->Progress();
+    }
+
+    // delete all musicvideos imported from the source
+    strSQL = PrepareSQL("SELECT musicvideoview.idMVideo, musicvideoview.idFile, path.idPath, musicvideoview.c00 FROM musicvideoview "
+                        "JOIN files ON files.idFile = musicvideoview.idFile "
+                        "JOIN path ON path.idPath = files.idPath "
+                        "WHERE musicvideoview.strSource = '%s'", sourceIdentifier.c_str());
+    m_pDS2->query(strSQL);
+    total = m_pDS2->num_rows();
+    index = 0;
+    while (!m_pDS2->eof())
+    {
+      if (progress != NULL)
+      {
+        if (progress->IsCanceled())
+        {
+          progress->Close();
+          RollbackTransaction();
+          return;
+        }
+        progress->SetLine(1, m_pDS2->fv(3).get_asString());
+        progress->SetPercentage((index * 100) / total);
+        progress->Progress();
+      }
+
+      DeleteMusicVideo(m_pDS2->fv(0).get_asInt(), false);
+      deleteFileIds += m_pDS2->fv(1).get_asString() + ",";
+      deletePathIds += m_pDS2->fv(2).get_asString() + ",";
+
+      index += 1;
+      m_pDS2->next();
+    }
+    m_pDS2->close();
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(0);
+      progress->SetText("Cleaning up..."); // TODO: localization
+      progress->Progress();
+    }
+    
+    // delete source, import and media item paths
+    StringUtils::TrimRight(deleteFileIds, ",");
+    StringUtils::TrimRight(deletePathIds, ",");
+    strSQL = PrepareSQL("DELETE FROM path WHERE path.strPath = '%s' OR "
+                        "path.idPath IN (%s) OR EXISTS "
+                        "(SELECT 1 FROM path AS importPath "
+                         "JOIN imports ON importPath.idPath = imports.idPath "
+                         "WHERE importPath.idPath = path.idPath AND imports.idSource = %d) OR EXISTS "
+                        "(SELECT 1 FROM files "
+                         "JOIN path AS filesPath ON filesPath.idPath = files.idPath "
+                         "WHERE filesPath.idPath = path.idPath AND files.idFile IN (%s))",
+                        sourceIdentifier.c_str(), deletePathIds.c_str(), idSource, deleteFileIds.c_str());
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(30);
+      progress->Progress();
+    }
+
+    // delete files imported from the source
+    strSQL = PrepareSQL("DELETE FROM files WHERE files.idFile IN (%s)", deleteFileIds.c_str());
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(55);
+      progress->Progress();
+    }
+
+    // delete artwork
+    strSQL = PrepareSQL("DELETE FROM art WHERE media_type = 'source' AND media_id = %d", idSource);
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(70);
+      progress->Progress();
+    }
+
+    // delete imports
+    strSQL = PrepareSQL("DELETE FROM imports WHERE idSource = %d", idSource);
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(85);
+      progress->Progress();
+    }
+
+    // delete source
+    strSQL = PrepareSQL("DELETE FROM sources WHERE idSource = %d", idSource);
+    m_pDS->exec(strSQL);
+
+    if (progress != NULL)
+    {
+      progress->SetPercentage(100);
+      progress->Progress();
+    }
+
+    CommitTransaction();
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to RemoveSource (%s)", __FUNCTION__, strSQL.c_str());
+    RollbackTransaction();
+  }
+
+  if (progress != NULL)
+    progress->Close();
+}
+
+std::vector<CMediaImport> CVideoDatabase::GetImports()
+{
+  std::vector<CMediaImport> imports;
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL)
+      return imports;
+
+    strSQL = PrepareSQL("SELECT path.strPath, sources.identifier, imports.mediaType, imports.lastSync FROM imports "
+                        "JOIN path ON path.idPath = imports.idPath "
+                        "JOIN sources ON sources.idSource = imports.idSource");
+    m_pDS->query(strSQL.c_str());
+    while (!m_pDS->eof())
+    {
+      CDateTime lastSynced; lastSynced.SetFromDBDateTime(m_pDS->fv(3).get_asString());
+      imports.push_back(CMediaImport(m_pDS->fv(0).get_asString(), m_pDS->fv(1).get_asString(), m_pDS->fv(2).get_asString(), lastSynced));
+
+      m_pDS->next();
+    }
+    m_pDS->close();
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to GetImports (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return imports;
+}
+
+int CVideoDatabase::AddImport(const CMediaImport &import)
+{
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        import.GetPath().empty() || import.GetSource().GetIdentifier().empty() ||
+        import.GetMediaType().empty())
+      return -1;
+
+    // check if the necessary source exists
+    int idSource = GetSourceId(import.GetSource().GetIdentifier());
+    if (idSource <= 0)
+      return -1;
+
+    // make sure the necessary path exists
+    int idPath = GetPathId(import.GetPath());
+    if (idPath <= 0)
+    {
+      idPath = AddPath(import.GetPath());
+      if (idPath <= 0)
+        return -1;
+    }
+
+    int idImport = GetImportId(idPath, import.GetMediaType(), idSource);
+    if (idImport > 0)
+      return idImport;
+    
+    strSQL = PrepareSQL("INSERT INTO imports (idImport, idPath, idSource, mediaType, lastSync) values(NULL, %d, %d, '%s', '%s')",
+                        idPath, idSource, import.GetMediaType().c_str(),
+                        CDateTime().GetCurrentDateTime().GetAsDBDateTime().c_str());
+    m_pDS->exec(strSQL.c_str());
+
+    return (int)m_pDS->lastinsertid();
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to AddImport (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return -1;
+}
+
+bool CVideoDatabase::SetDetailsForImport(const CMediaImport &import)
+{
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        import.GetPath().empty() || import.GetSource().GetIdentifier().empty() ||
+        import.GetMediaType().empty())
+      return false;
+
+    int idImport = GetImportId(import);
+    if (idImport <= 0)
+      return false;
+    
+    strSQL = PrepareSQL("UPDATE imports SET mediaType = '%s', lastSync = '%s' WHERE idImport = %d",
+                        import.GetMediaType().c_str(), import.GetLastSynced().GetAsDBDateTime().c_str(),
+                        idImport);
+    m_pDS->exec(strSQL.c_str());
+
+    return true;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to SetDetailsForImport (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return false;
+}
+
+void CVideoDatabase::UpdateImportLastSynced(const CMediaImport &import, const CDateTime &lastSynced /* = CDateTime() */)
+{
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        import.GetPath().empty() || import.GetMediaType().empty() ||
+        import.GetMediaType().empty())
+      return;
+
+    int idImport = GetImportId(import);
+    if (idImport <= 0)
+      return;
+
+    CDateTime syncDate = lastSynced;
+    if (!syncDate.IsValid())
+      syncDate = CDateTime::GetCurrentDateTime();
+
+    strSQL = PrepareSQL("UPDATE imports SET lastSync = '%s' WHERE idImport = %d", syncDate.GetAsDBDateTime().c_str(), idImport);
+    m_pDS->exec(strSQL);
+    m_pDS->close();
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to UpdateImportLastSynced (%s)", __FUNCTION__, strSQL.c_str());
+  }
+}
+
+void CVideoDatabase::RemoveImport(const CMediaImport &import, CGUIDialogProgress *progress /* = NULL */)
+{
+  if (import.GetPath().empty() || import.GetMediaType().empty() ||
+      import.GetMediaType().empty())
+    return;
+
+  RemoveImport(GetImportId(import), progress);
+}
+
+void CVideoDatabase::RemoveImport(int idImport, CGUIDialogProgress *progress /* = NULL */)
+{
+  if (idImport <= 0)
+    return;
+
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL)
+      return;
+
+    strSQL = PrepareSQL("DELETE FROM imports WHERE idImport = %d", idImport);
+    m_pDS->exec(strSQL);
+
+    // TODO: remove items/files/paths belonging to that import
+
+    m_pDS->close();
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to RemoveImport (%s)", __FUNCTION__, strSQL.c_str());
+  }
+}
+
+bool CVideoDatabase::SetImportForItem(const std::string& strFileNameAndPath, const CMediaImport &import)
+{
+  if (strFileNameAndPath.empty() ||
+      import.GetPath().empty() || import.GetMediaType().empty() ||
+      import.GetMediaType().empty())
+    return false;
+
+  CStdString strSQL = "";
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL)
+      return false;
+
+    int idFile = GetFileId(strFileNameAndPath);
+    if (idFile <= 0)
+      return false;
+
+    int idImport = GetImportId(import);
+    if (idImport <= 0)
+      return false;
+
+    strSQL = PrepareSQL("UPDATE files SET idImport = %d WHERE idFile = %d", idImport, idFile);
+    m_pDS->exec(strSQL);
+    return true;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s unable to SetImportForPath (%s)", __FUNCTION__, strSQL.c_str());
+  }
+  return false;
+}
+
+void CVideoDatabase::SetImportItemsEnabled(bool enabled)
+{
+  string sql;
+  try
+  {
+    if (NULL == m_pDB.get() || NULL == m_pDS.get())
+      return;
+
+    sql = PrepareSQL("UPDATE files SET enabled = %d WHERE files.idImport IS NOT NULL", enabled ? 1 : 0);
+    m_pDS->exec(sql.c_str());
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, sql.c_str());
+  }
+}
+
+void CVideoDatabase::SetImportItemsEnabled(bool enabled, const CMediaImport &import)
+{
+  string sql;
+  try
+  {
+    if (NULL == m_pDB.get() || NULL == m_pDS.get())
+      return;
+
+    int idImport = GetImportId(import);
+    if (idImport <= 0)
+      return;
+
+    sql = PrepareSQL("UPDATE files SET enabled = %d "
+                     "WHERE files.idImport = %d", enabled ? 1 : 0, idImport);
+
+    if (!import.GetMediaType().empty())
+      sql += PrepareSQL(" AND EXISTS (SELECT 1 FROM imports WHERE imports.idImport = %d AND imports.mediaType = '%s')", idImport, import.GetMediaType().c_str());
+
+    m_pDS->exec(sql.c_str());
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, sql.c_str());
+  }
+}
+
+void CVideoDatabase::SetImportItemEnabled(const std::string& strFileNameAndPath, bool enabled)
+{
+  if (strFileNameAndPath.empty())
+    return;
+
+  string sql;
+  try
+  {
+    if (NULL == m_pDB.get() || NULL == m_pDS.get())
+      return;
+
+    int idFile = GetFileId(strFileNameAndPath);
+    if (idFile <= 0)
+      return;
+
+    sql = PrepareSQL("UPDATE files SET enabled = %d "
+                     "WHERE files.idFile = %d AND idImport IS NOT NULL", enabled ? 1 : 0, idFile);
+    m_pDS->exec(sql.c_str());
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, sql.c_str());
+  }
 }
 
 bool CVideoDatabase::GetPathHash(const CStdString &path, CStdString &hash)
@@ -923,6 +1609,95 @@ int CVideoDatabase::GetFileId(const CFileItem &item)
   if (item.IsVideoDb() && item.HasVideoInfoTag())
     return GetFileId(item.GetVideoInfoTag()->m_strFileNameAndPath);
   return GetFileId(item.GetPath());
+}
+
+int CVideoDatabase::GetSourceId(const std::string& sourceIdentifier)
+{
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        sourceIdentifier.empty())
+      return -1;
+
+
+    CStdString strSQL = PrepareSQL("SELECT idSource FROM sources WHERE identifier='%s'", sourceIdentifier.c_str());
+    m_pDS->query(strSQL.c_str());
+    if (m_pDS->num_rows() > 0)
+    {
+      int idSource = m_pDS->fv(0).get_asInt();
+      m_pDS->close();
+      return idSource;
+    }
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%s) failed", __FUNCTION__, sourceIdentifier.c_str());
+  }
+  return -1;
+}
+
+int CVideoDatabase::GetImportId(const std::string& path, const MediaType& mediaType, const std::string &sourceIdentifier /* = "" */)
+{
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        path.empty() || mediaType.empty())
+      return -1;
+    
+    int idPath = GetPathId(path);
+    if (idPath <= 0)
+      return -1;
+
+    int idSource = -1;
+    if (!sourceIdentifier.empty())
+    {
+      idSource = GetSourceId(sourceIdentifier);
+      if (idSource <= 0)
+        return -1;
+    }
+
+    return GetImportId(idPath, mediaType, idSource);
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%s, %s, %s) failed", __FUNCTION__, path.c_str(), mediaType.c_str(), sourceIdentifier.c_str());
+  }
+  return -1;
+}
+
+int CVideoDatabase::GetImportId(const CMediaImport& import)
+{
+  return GetImportId(import.GetPath(), import.GetMediaType(), import.GetSource().GetIdentifier());
+}
+
+int CVideoDatabase::GetImportId(int idPath, const MediaType& mediaType, int idSource /* = -1 */)
+{
+  try
+  {
+    if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+        idPath <= 0)
+      return -1;
+
+    CStdString strSQL = PrepareSQL("SELECT idImport FROM imports WHERE idPath = %d AND mediaType = '%s'", idPath, mediaType.c_str());
+    if (idSource > 0)
+      strSQL += PrepareSQL(" AND idSource = %d", idSource);
+
+    m_pDS->query(strSQL.c_str());
+    if (m_pDS->num_rows() != 1)
+    {
+      m_pDS->close();
+      return -1;
+    }
+
+    int idImport = m_pDS->fv(0).get_asInt();
+    m_pDS->close();
+    return idImport;
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s (%d, %s, %d) failed", __FUNCTION__, idPath, mediaType.c_str(), idSource);
+  }
+  return -1;
 }
 
 //********************************************************************************************************************************
@@ -2146,7 +2921,7 @@ int CVideoDatabase::SetDetailsForTvShow(const CStdString& strPath, const CVideoI
       DeleteDetailsForTvShow(strPath, idTvShow);
     else
     {
-      idTvShow = AddTvShow(strPath);
+      idTvShow = AddTvShow(strPath, details.m_dateAdded);
       if (idTvShow < 0)
       {
         RollbackTransaction();
@@ -2256,7 +3031,7 @@ int CVideoDatabase::SetDetailsForEpisode(const CStdString& strFilenameAndPath, c
       // only add a new episode if we don't already have a valid idEpisode
       // (DeleteEpisode is called with bKeepId == true so the episode won't
       // be removed from the episode table)
-      idEpisode = AddEpisode(idShow,strFilenameAndPath,details.m_dateAdded);
+      idEpisode = AddEpisode(idShow,strFilenameAndPath, details.m_dateAdded);
       if (idEpisode < 0)
       {
         RollbackTransaction();
@@ -2933,16 +3708,17 @@ void CVideoDatabase::DeleteTvShow(const CStdString& strPath, bool bKeepId /* = f
     BeginTransaction();
 
     CStdString strSQL=PrepareSQL("select episode.idEpisode,path.strPath,files.strFileName from episode,path,files where episode.idShow=%i and episode.idFile=files.idFile and files.idPath=path.idPath",idTvShow);
-    m_pDS2->query(strSQL.c_str());
-    while (!m_pDS2->eof())
+    m_pDS->query(strSQL.c_str());
+    while (!m_pDS->eof())
     {
       CStdString strFilenameAndPath;
-      CStdString strPath = m_pDS2->fv("path.strPath").get_asString();
-      CStdString strFileName = m_pDS2->fv("files.strFilename").get_asString();
+      CStdString strPath = m_pDS->fv("path.strPath").get_asString();
+      CStdString strFileName = m_pDS->fv("files.strFilename").get_asString();
       ConstructPath(strFilenameAndPath, strPath, strFileName);
-      DeleteEpisode(strFilenameAndPath, m_pDS2->fv(0).get_asInt(), bKeepId);
-      m_pDS2->next();
+      DeleteEpisode(strFilenameAndPath, m_pDS->fv(0).get_asInt(), bKeepId);
+      m_pDS->next();
     }
+    m_pDS->close();
 
     DeleteDetailsForTvShow(strPath, idTvShow);
 
@@ -3409,6 +4185,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMovie(const dbiplus::sql_record* cons
   details.m_strPath = record->at(VIDEODB_DETAILS_MOVIE_PATH).get_asString();
   CStdString strFileName = record->at(VIDEODB_DETAILS_MOVIE_FILE).get_asString();
   ConstructPath(details.m_strFileNameAndPath,details.m_strPath,strFileName);
+  details.m_strSource = record->at(VIDEODB_DETAILS_MOVIE_SOURCE).get_asString();
   details.m_playCount = record->at(VIDEODB_DETAILS_MOVIE_PLAYCOUNT).get_asInt();
   details.m_lastPlayed.SetFromDBDateTime(record->at(VIDEODB_DETAILS_MOVIE_LASTPLAYED).get_asString());
   details.m_dateAdded.SetFromDBDateTime(record->at(VIDEODB_DETAILS_MOVIE_DATEADDED).get_asString());
@@ -3474,6 +4251,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
   details.m_iDbId = idTvShow;
   details.m_type = MediaTypeTvShow;
   details.m_strPath = record->at(VIDEODB_DETAILS_TVSHOW_PATH).get_asString();
+  details.m_strSource = record->at(VIDEODB_DETAILS_TVSHOW_SOURCE).get_asString();
   details.m_dateAdded.SetFromDBDateTime(record->at(VIDEODB_DETAILS_TVSHOW_DATEADDED).get_asString());
   details.m_lastPlayed.SetFromDBDateTime(record->at(VIDEODB_DETAILS_TVSHOW_LASTPLAYED).get_asString());
   details.m_iEpisode = record->at(VIDEODB_DETAILS_TVSHOW_NUM_EPISODES).get_asInt();
@@ -3506,6 +4284,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForTvShow(const dbiplus::sql_record* con
 
   if (item != NULL)
   {
+    item->SetEnabled(record->at(VIDEODB_DETAILS_TVSHOW_ENABLED).get_asBool());
     item->m_dateTime = details.m_premiered;
     item->SetProperty("totalseasons", record->at(VIDEODB_DETAILS_TVSHOW_NUM_SEASONS).get_asInt());
     item->SetProperty("totalepisodes", details.m_iEpisode);
@@ -3538,6 +4317,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForEpisode(const dbiplus::sql_record* co
   details.m_type = MediaTypeEpisode;
   details.m_iFileId = record->at(VIDEODB_DETAILS_FILEID).get_asInt();
   details.m_strPath = record->at(VIDEODB_DETAILS_EPISODE_PATH).get_asString();
+  details.m_strSource = record->at(VIDEODB_DETAILS_EPISODE_SOURCE).get_asString();
   CStdString strFileName = record->at(VIDEODB_DETAILS_EPISODE_FILE).get_asString();
   ConstructPath(details.m_strFileNameAndPath,details.m_strPath,strFileName);
   details.m_playCount = record->at(VIDEODB_DETAILS_EPISODE_PLAYCOUNT).get_asInt();
@@ -3596,6 +4376,7 @@ CVideoInfoTag CVideoDatabase::GetDetailsForMusicVideo(const dbiplus::sql_record*
   
   details.m_iFileId = record->at(VIDEODB_DETAILS_FILEID).get_asInt();
   details.m_strPath = record->at(VIDEODB_DETAILS_MUSICVIDEO_PATH).get_asString();
+  details.m_strSource = record->at(VIDEODB_DETAILS_MUSICVIDEO_SOURCE).get_asString();
   CStdString strFileName = record->at(VIDEODB_DETAILS_MUSICVIDEO_FILE).get_asString();
   ConstructPath(details.m_strFileNameAndPath,details.m_strPath,strFileName);
   details.m_playCount = record->at(VIDEODB_DETAILS_MUSICVIDEO_PLAYCOUNT).get_asInt();
@@ -4332,6 +5113,14 @@ void CVideoDatabase::UpdateTables(int iVersion)
   }
   if (iVersion < 77)
     m_pDS->exec("ALTER TABLE streamdetails ADD strStereoMode text");
+  if (iVersion < 78)
+  { // add enabled flag and idImport to files table and new tables source and imports
+    m_pDS->exec("ALTER TABLE files ADD enabled bool NOT NULL DEFAULT 1");
+    m_pDS->exec("ALTER TABLE files ADD idImport integer");
+
+    m_pDS->exec("CREATE TABLE sources ( idSource integer primary key, identifier text NOT NULL, name text NOT NULL, availableMediaTypes text NOT NULL)");
+    m_pDS->exec("CREATE TABLE imports ( idImport integer primary key, idPath integer NOT NULL, idSource integer NOT NULL, mediaType text NOT NULL, lastSync text)");
+  }
 }
 
 int CVideoDatabase::GetSchemaVersion() const
@@ -5936,6 +6725,7 @@ bool CVideoDatabase::GetMoviesByWhere(const CStdString& strBaseDir, const Filter
         itemUrl.AppendPath(path);
         pItem->SetPath(itemUrl.ToString());
 
+        pItem->SetEnabled(record->at(VIDEODB_DETAILS_MOVIE_ENABLED).get_asBool());
         pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED,movie.m_playCount > 0);
         items.Add(pItem);
       }
@@ -6362,6 +7152,7 @@ bool CVideoDatabase::GetEpisodesByWhere(const CStdString& strBaseDir, const Filt
         itemUrl.AppendPath(path);
         pItem->SetPath(itemUrl.ToString());
 
+        pItem->SetEnabled(record->at(VIDEODB_DETAILS_EPISODE_ENABLED).get_asBool());
         pItem->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, movie.m_playCount > 0);
         pItem->m_dateTime = movie.m_firstAired;
         pItem->GetVideoInfoTag()->m_iYear = pItem->m_dateTime.GetYear();
@@ -7205,6 +7996,7 @@ bool CVideoDatabase::GetMusicVideosByWhere(const CStdString &baseDir, const Filt
         itemUrl.AppendPath(path);
         item->SetPath(itemUrl.ToString());
 
+        item->SetEnabled(record->at(VIDEODB_DETAILS_MUSICVIDEO_ENABLED).get_asBool());
         item->SetOverlayImage(CGUIListItem::ICON_OVERLAY_UNWATCHED, musicvideo.m_playCount > 0);
         items.Add(item);
       }
@@ -8164,6 +8956,8 @@ std::vector<int> CVideoDatabase::CleanMediaType(const std::string &mediaType, co
     sql += "JOIN tvshow ON tvshow.idShow = episode.idShow ";
 
   sql += PrepareSQL("JOIN path as parentPath ON parentPath.idPath = %s "
+                    "LEFT JOIN imports ON imports.idPath = parentPath.idPath "
+                    "LEFT JOIN sources ON sources.idSource = imports.idSource "
                     "WHERE %s.idFile IN (%s)",
                     parentPathIdField.c_str(),
                     table.c_str(), cleanableFileIDs.c_str());
@@ -9342,6 +10136,14 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
       filter.AppendJoin(PrepareSQL("join taglinks on taglinks.idMedia = movieview.idMovie AND taglinks.media_type = 'movie' join tag on tag.idTag = taglinks.idTag"));
       filter.AppendWhere(PrepareSQL("tag.strTag like '%s'", option->second.asString().c_str()));
     }
+
+    option = options.find("source");
+    if (option != options.end())
+      filter.AppendWhere(PrepareSQL("movieview.strSource = '%s'", option->second.asString().c_str()));
+
+    option = options.find("import");
+    if (option != options.end())
+      filter.AppendWhere(PrepareSQL("movieview.importPath = '%s'", option->second.asString().c_str()));
   }
   else if (type == "tvshows")
   {
@@ -9413,6 +10215,14 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
         filter.AppendJoin(PrepareSQL("join taglinks on taglinks.idMedia = tvshowview.idShow AND taglinks.media_type = 'tvshow' join tag on tag.idTag = taglinks.idTag"));
         filter.AppendWhere(PrepareSQL("tag.strTag like '%s'", option->second.asString().c_str()));
       }
+
+      option = options.find("source");
+      if (option != options.end())
+        filter.AppendWhere(PrepareSQL("tvshowview.strSource = '%s'", option->second.asString().c_str()));
+
+      option = options.find("import");
+      if (option != options.end())
+        filter.AppendWhere(PrepareSQL("tvshowview.importPath = '%s'", option->second.asString().c_str()));
     }
     else if (itemType == "seasons")
     {
@@ -9440,6 +10250,14 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
         filter.AppendJoin(PrepareSQL("join actorlinktvshow on actorlinktvshow.idShow = tvshowview.idShow"));
         filter.AppendWhere(PrepareSQL("actorlinktvshow.idActor = %i", (int)option->second.asInteger()));
       }
+
+      option = options.find("source");
+      if (option != options.end())
+        filter.AppendWhere(PrepareSQL("episodeview.strSource = '%s'", option->second.asString().c_str()));
+
+      option = options.find("import");
+      if (option != options.end())
+        filter.AppendWhere(PrepareSQL("episodeview.importPath = '%s'", option->second.asString().c_str()));
     }
     else if (itemType == "episodes")
     {
@@ -9547,6 +10365,14 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
           filter.AppendWhere(PrepareSQL("actors.strActor = %s", option->second.asString().c_str()));
         }
       }
+
+      option = options.find("source");
+      if (option != options.end())
+        filter.AppendWhere(PrepareSQL("episodeview.strSource = '%s'", option->second.asString().c_str()));
+
+      option = options.find("import");
+      if (option != options.end())
+        filter.AppendWhere(PrepareSQL("episodeview.importPath = '%s'", option->second.asString().c_str()));
     }
   }
   else if (type == "musicvideos")
@@ -9633,6 +10459,14 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
       filter.AppendJoin(PrepareSQL("join taglinks on taglinks.idMedia = musicvideoview.idMVideo AND taglinks.media_type = 'musicvideo' join tag on tag.idTag = taglinks.idTag"));
       filter.AppendWhere(PrepareSQL("tag.strTag like '%s'", option->second.asString().c_str()));
     }
+
+    option = options.find("source");
+    if (option != options.end())
+      filter.AppendWhere(PrepareSQL("musicvideoview.strSource = '%s'", option->second.asString().c_str()));
+
+    option = options.find("import");
+    if (option != options.end())
+      filter.AppendWhere(PrepareSQL("musicvideoview.importPath = '%s'", option->second.asString().c_str()));
   }
   else
     return false;
