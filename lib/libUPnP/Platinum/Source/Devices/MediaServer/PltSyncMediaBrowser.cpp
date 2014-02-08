@@ -172,9 +172,9 @@ PLT_SyncMediaBrowser::OnSearchResult(NPT_Result               res,
 |   PLT_SyncMediaBrowser::OnGetSearchCapabilitiesResult
 +---------------------------------------------------------------------*/
 void
-PLT_SyncMediaBrowser::OnGetSearchCapabilitiesResult(NPT_Result               res, 
-                                                    PLT_DeviceDataReference& device, 
-                                                    NPT_String               searchCapabilities, 
+PLT_SyncMediaBrowser::OnGetSearchCapabilitiesResult(NPT_Result               res,
+                                                    PLT_DeviceDataReference& device,
+                                                    NPT_String               searchCapabilities,
                                                     void*                    userdata)
 {
   NPT_COMPILER_UNUSED(device);

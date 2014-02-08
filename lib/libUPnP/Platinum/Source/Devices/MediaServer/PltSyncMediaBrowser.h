@@ -111,9 +111,9 @@ public:
                                 PLT_DeviceDataReference& device, 
                                 PLT_BrowseInfo*          info, 
                                 void*                    userdata);
-    virtual void OnGetSearchCapabilitiesResult(NPT_Result               res, 
-                                               PLT_DeviceDataReference& device, 
-                                               NPT_String               searchCapabilities, 
+    virtual void OnGetSearchCapabilitiesResult(NPT_Result               res,
+                                               PLT_DeviceDataReference& device,
+                                               NPT_String               searchCapabilities,
                                                void*                    userdata);
 
     // methods

@@ -93,9 +93,9 @@ public:
         void*                    /*userdata*/) {}
 
 	virtual void OnGetSearchCapabilitiesResult(
-        NPT_Result               /*res*/, 
-        PLT_DeviceDataReference& /*device*/, 
-        NPT_String               /*searchCapabilities*/, 
+        NPT_Result               /*res*/,
+        PLT_DeviceDataReference& /*device*/,
+        NPT_String               /*searchCapabilities*/,
         void*                    /*userdata*/) {}
 };
 
@@ -156,10 +156,10 @@ protected:
                                         PLT_ActionReference&     action, 
                                         void*                    userdata);
 
-    virtual NPT_Result OnGetSearchCapabilitiesResponse(NPT_Result               res, 
-                                                       PLT_DeviceDataReference& device, 
-                                                       PLT_ActionReference&     action, 
-                                                       void*                    userdata);
+  virtual NPT_Result OnGetSearchCapabilitiesResponse(NPT_Result               res,
+                                                      PLT_DeviceDataReference& device,
+                                                      PLT_ActionReference&     action,
+                                                      void*                    userdata);
     
 protected:
     PLT_CtrlPointReference                m_CtrlPoint;
