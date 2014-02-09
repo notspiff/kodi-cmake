@@ -465,6 +465,7 @@ const infomap listitem_labels[]= {{ "enabled",          LISTITEM_ENABLED },
                                   { "filenameandpath",  LISTITEM_FILENAME_AND_PATH },
                                   { "fileextension",    LISTITEM_FILE_EXTENSION },
                                   { "date",             LISTITEM_DATE },
+                                  { "datetime",         LISTITEM_DATETIME },
                                   { "size",             LISTITEM_SIZE },
                                   { "rating",           LISTITEM_RATING },
                                   { "ratingandvotes",   LISTITEM_RATING_AND_VOTES },
@@ -4571,6 +4572,10 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, CStdSt
       return item->GetPVRTimerInfoTag()->Summary();
     if (item->m_dateTime.IsValid())
       return item->m_dateTime.GetAsLocalizedDate();
+    break;
+  case LISTITEM_DATETIME:
+    if (item->m_dateTime.IsValid())
+      return item->m_dateTime.GetAsLocalizedDateTime();
     break;
   case LISTITEM_SIZE:
     if (!item->m_bIsFolder || item->m_dwSize)
