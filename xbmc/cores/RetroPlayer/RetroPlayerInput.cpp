@@ -25,8 +25,18 @@
 
 #include <string.h>
 
-#define RETRO_ARRAY_LENGTH(x) (sizeof((x)) / sizeof((x)[0]))
-#define RETRO_ABS(X) ((X) >= 0 ? (X) : (-(X)))
+/**
+ * Digital axis commands act like buttons, but we don't want the IDs to intersect.
+ */
+#define DIGITAL_AXIS_MASK  1000 // use decimal, easier to recover from the logs
+
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(x)  (sizeof((x)) / sizeof((x)[0]))
+#endif
+
+#ifndef ABS
+#define ABS(X) ((X) >= 0 ? (X) : (-(X)))
+#endif
 
 #define RETRO_ANALOG_MIN -0x8000
 #define RETRO_ANALOG_MAX  0x7fff
@@ -49,7 +59,7 @@ void CRetroPlayerInput::Reset()
 
 int16_t CRetroPlayerInput::GetInput(unsigned port, unsigned device, unsigned index, unsigned id)
 {
-  if (port < GAMEPAD_MAX_CONTROLLERS)
+  if (port < ARRAY_SIZE(m_joypadState))
   {
     device &= RETRO_DEVICE_MASK;
 
@@ -114,7 +124,7 @@ int16_t CRetroPlayerInput::GetInput(unsigned port, unsigned device, unsigned ind
 void CRetroPlayerInput::ProcessKeyDown(unsigned int controllerID, uint32_t key, const CAction &action)
 {
   int id = TranslateActionID(action.GetID());
-  if (0 <= id && id < (int)(RETRO_ARRAY_LENGTH(m_joypadState[0])))
+  if (0 <= id && id < (int)(ARRAY_SIZE(m_joypadState[0])))
   {
     CLog::Log(LOGDEBUG, "-> RetroPlayerInput: Keyboard=%u, key down=%u, Action %s, id=%d",
       controllerID, key, action.GetName().c_str(), id);
@@ -143,7 +153,7 @@ void CRetroPlayerInput::ProcessKeyUp(unsigned int controllerID, uint32_t key)
 void CRetroPlayerInput::ProcessButtonDown(unsigned int controllerID, unsigned int buttonID, const CAction &action)
 {
   int id = TranslateActionID(action.GetID());
-  if (0 <= id && id < (int)(RETRO_ARRAY_LENGTH(m_joypadState[0])))
+  if (0 <= id && id < (int)(ARRAY_SIZE(m_joypadState[0])))
   {
     // Got to always add 1 for cosmetics (to match keymap.xml)
     CLog::Log(LOGDEBUG, "-> RetroPlayerInput: Controller=%u, button down=%u, Action %s, id=%d",
@@ -168,10 +178,20 @@ void CRetroPlayerInput::ProcessButtonUp(unsigned int controllerID, unsigned int 
   }
 }
 
+void CRetroPlayerInput::ProcessDigitalAxisDown(unsigned int controllerID, unsigned int buttonID, const CAction &action)
+{
+  return ProcessButtonDown(controllerID + DIGITAL_AXIS_MASK, buttonID, action);
+}
+
+void CRetroPlayerInput::ProcessDigitalAxisUp(unsigned int controllerID, unsigned int buttonID)
+{
+  return ProcessButtonUp(controllerID + DIGITAL_AXIS_MASK, buttonID);
+}
+
 void CRetroPlayerInput::ProcessHatDown(unsigned int controllerID, unsigned int hatID, unsigned char hatDir, const CAction &action)
 {
   int id = TranslateActionID(action.GetID());
-  if (0 <= id && id < (int)(RETRO_ARRAY_LENGTH(m_joypadState[0])))
+  if (0 <= id && id < (int)(ARRAY_SIZE(m_joypadState[0])))
   {
     CLog::Log(LOGDEBUG, "-> RetroPlayerInput: Controller=%u, hat down=%u, direction=%u, Action %s, id=%d",
       controllerID, hatID + 1, hatDir, action.GetName().c_str(), id);
@@ -197,11 +217,11 @@ void CRetroPlayerInput::ProcessHatUp(unsigned int controllerID, unsigned int hat
 }
 
 // Untested so far. Need an emulator with analog support.
-void CRetroPlayerInput::ProcessAxis(unsigned int controllerID, unsigned int axisID, const CAction &action)
+void CRetroPlayerInput::ProcessAnalogAxis(unsigned int controllerID, unsigned int axisID, const CAction &action)
 {
   // value is in the range [-0x8000, 0x7fff]
   int16_t value;
-  if (RETRO_ABS(action.GetAmount(1)) <= 0.01f)
+  if (ABS(action.GetAmount(1)) <= 0.01f)
     value = 0;
   else if (action.GetAmount(1) > 0)
   {
@@ -219,7 +239,7 @@ void CRetroPlayerInput::ProcessAxis(unsigned int controllerID, unsigned int axis
     // TODO: modify TranslateActionID() to accept a device ID, then check that
     // we're in the valid range of that device
     int id = TranslateActionID(action.GetID());
-    if (0 <= id && id < (int)(RETRO_ARRAY_LENGTH(m_joypadState[0])))
+    if (0 <= id && id < (int)(ARRAY_SIZE(m_joypadState[0])))
     {
       // Record the axis ID to update the joypad state later
       DeviceItem item = {controllerID, 0, 0, 0, 0, (unsigned char)axisID};

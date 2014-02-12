@@ -25,7 +25,7 @@
 
 #include <map>
 #include <vector>
-#include "system.h" // for HAS_EVENT_SERVER, HAS_JOYSTICK, HAS_LIRC
+#include "system.h" // for HAS_EVENT_SERVER, HAS_LIRC
 
 #ifdef HAS_EVENT_SERVER
 #include "network/EventClient.h"
@@ -94,11 +94,9 @@ public:
 #if defined(HAS_LIRC) || defined(HAS_IRSERVERSUITE)
   int TranslateLircRemoteString(const char* szDevice, const char *szButton);
 #endif
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
   bool TranslateJoystickString(int window, const char* szDevice, int id,
                                short inputType, int& action, CStdString& strAction,
                                bool &fullrange);
-#endif
 
   bool TranslateTouchAction(int window, int touchAction, int touchPointers, int &action);
 
@@ -112,10 +110,8 @@ private:
 
   int GetActionCode(int window, int action);
   int GetActionCode(int window, const CKey &key, CStdString &strAction) const;
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
   typedef std::map<int, std::map<int, std::string> > JoystickMap; // <window, <button/axis, action> >
   int GetActionCode(int window, int id, const JoystickMap &wmap, CStdString &strAction, bool &fullrange) const;
-#endif
   int GetFallbackWindow(int windowID);
 
   static uint32_t TranslateGamepadString(const char *szButton);
@@ -143,13 +139,11 @@ private:
   std::map<CStdString, lircButtonMap*> lircRemotesMap;
 #endif
 
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
   void MapJoystickActions(int windowID, TiXmlNode *pJoystick);
 
   std::map<std::string, JoystickMap> m_joystickButtonMap;      // <joy name, button map>
   std::map<std::string, JoystickMap> m_joystickAxisMap;        // <joy name, axis map>
   std::map<std::string, JoystickMap> m_joystickHatMap;        // <joy name, hat map>
-#endif
 
   void MapTouchActions(int windowID, TiXmlNode *pTouch);
   static uint32_t TranslateTouchCommand(TiXmlElement *pButton, CButtonAction &action);

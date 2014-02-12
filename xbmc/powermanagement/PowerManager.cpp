@@ -35,10 +35,8 @@
 #include "guilib/GUIWindowManager.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogKaiToast.h"
-#ifdef HAS_JOYSTICK
 #include "input/JoystickManager.h"
 #include "peripherals/devices/PeripheralImon.h"
-#endif
 
 
 #if defined(TARGET_DARWIN)
@@ -62,9 +60,6 @@ extern HWND g_hWnd;
 #endif
 
 using namespace ANNOUNCEMENT;
-#if defined(HAS_JOYSTICK)
-using namespace JOYSTICK;
-#endif // HAS_JOYSTICK
 
 CPowerManager g_powerManager;
 
@@ -251,10 +246,8 @@ void CPowerManager::OnSleep()
   CBuiltins::Execute("LIRC.Stop");
 #endif
 
-#ifdef HAS_JOYSTICK
   CLog::Log(LOGNOTICE, "%s: Stopping joystick manager", __FUNCTION__);
   CJoystickManager::Get().SetEnabled(false);
-#endif
 
   g_application.SaveFileState(true);
   g_application.StopPlaying();
@@ -297,11 +290,9 @@ void CPowerManager::OnWake()
   CBuiltins::Execute("LIRC.Start");
 #endif
 
-#ifdef HAS_JOYSTICK
   CLog::Log(LOGNOTICE, "%s: Restarting joystick manager", __FUNCTION__);
   CJoystickManager::Get().SetEnabled(CSettings::Get().GetBool("input.enablejoystick") &&
       PERIPHERALS::CPeripheralImon::GetCountOfImonsConflictWithDInput() == 0);
-#endif
 
   CAEFactory::Resume();
   g_application.UpdateLibraries();

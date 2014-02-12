@@ -20,81 +20,76 @@
 
 #pragma once
 
-#include "IJoystick.h"
+#include "Joystick.h"
 #include "settings/lib/ISettingCallback.h"
 #include "threads/SystemClock.h"
-
-#include <string>
+#include "utils/Observer.h"
 
 class CAction;
-
-namespace JOYSTICK
-{
-
-/**
- * Track key presses for deferred action repeats.
- */
-struct ActionTracker
-{
-  ActionTracker() { Reset(); }
-  void Reset();
-  void Track(const CAction &action);
-
-  int                  actionID; // Action ID, or 0 if not tracking any action
-  std::string          name; // Action name
-  XbmcThreads::EndTime timeout; // Timeout until action is repeated
-};
 
 /**
  * Class to manage all connected joysticks.
  */
-class CJoystickManager : public ISettingCallback
+class CJoystickManager : public ISettingCallback, public Observer
 {
 private:
-  CJoystickManager() : m_bEnabled(false), m_bWakeupChecked(false) { }
-  virtual ~CJoystickManager() { DeInitialize(); }
+  CJoystickManager();
 
 public:
   static CJoystickManager &Get();
+  virtual ~CJoystickManager();
+
+  void Reinitialize() { Initialize(); }
 
   void SetEnabled(bool enabled = true);
   bool IsEnabled() const { return m_bEnabled; }
+
   void Update();
-  unsigned int Count() const { return m_joysticks.size(); }
-  void Reinitialize() { Initialize(); }
-  void Reset() { m_actionTracker.Reset(); }
+
+  void Track(const CAction &action);
+  void ResetActionRepeater();
+
+  /**
+   * Return the first unused joystick ID (starting from 0). APIs like XInput
+   * can ignore this function and force the ID to correspond to player number.
+   */
+  unsigned int NextID() const;
+
+  // Returns true if this wakes up from the screensaver
+  bool Wakeup();
 
   // Inherited from ISettingCallback
   virtual void OnSettingChanged(const CSetting *setting);
 
+  // Inherited from Observer
+  virtual void Notify(const Observable &obs, const ObservableMessage msg);
+
 private:
-  void Initialize();
-  void DeInitialize();
-
   /**
-   * After updating, look for changes in state.
-   * @param oldState - previous joystick state, set to newState as a post-condition
-   * @param newState - the updated joystick state
-   * @param joyID - the ID of the joystick being processed
+   * Track key presses for deferred action repeats.
    */
-  void ProcessStateChanges();
-  void ProcessButtonPresses(Joystick &oldState, const Joystick &newState, unsigned int joyID);
-  void ProcessHatPresses(Joystick &oldState, const Joystick &newState, unsigned int joyID);
-  void ProcessAxisMotion(Joystick &oldState, const Joystick &newState, unsigned int joyID);
+  class CActionRepeater
+  {
+  public:
+    CActionRepeater() { Reset(); }
+    void Reset();
+    void Track(const CAction &action);
+    void Update();
 
-  // Returns true if this wakes up from the screensaver
-  bool Wakeup();
+  private:
+    int                  m_actionID; // Action ID, or 0 if not tracking any action
+    std::string          m_name;     // Action name
+    XbmcThreads::EndTime m_timeout;  // Timeout until action is repeated
+  };
+
+  void Initialize();
+  void Deinitialize();
+
   // Allows Wakeup() to perform another wakeup check
-  void ResetWakeup() { m_bWakeupChecked = false; }
+  void ResetWakeupCheck() { m_bWakeupChecked = false; }
 
-  inline bool IsGameControl(int actionID);
-
-  JoystickArray m_joysticks;
-  Joystick      m_states[GAMEPAD_MAX_CONTROLLERS];
-  bool          m_bEnabled;
-  bool          m_bWakeupChecked; // true if WakeupCheck() has been called
-
-  ActionTracker m_actionTracker;
+  bool            m_bEnabled;
+  JoystickArray   m_joysticks;
+  bool            m_bWakeupChecked; // true if Wakeup() has been called
+  CActionRepeater m_actionRepeater;
 };
-
-} // namespace INPUT

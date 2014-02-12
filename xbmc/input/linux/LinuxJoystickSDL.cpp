@@ -22,6 +22,7 @@
 #if defined(HAS_SDL_JOYSTICK)
 
 #include "LinuxJoystickSDL.h"
+#include "input/JoystickManager.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 
@@ -31,23 +32,19 @@
 #define MAX_AXES          64
 #define MAX_AXISAMOUNT    32768
 
-using namespace JOYSTICK;
-
-CLinuxJoystickSDL::CLinuxJoystickSDL(std::string name, SDL_Joystick *pJoystick, unsigned int id) : m_pJoystick(pJoystick), m_state()
+CLinuxJoystickSDL::CLinuxJoystickSDL(const std::string& name, SDL_Joystick *pJoystick, unsigned int id)
+ : CJoystick(name, id, SDL_JoystickNumButtons(pJoystick), SDL_JoystickNumButtons(pJoystick), SDL_JoystickNumButtons(pJoystick)),
+   m_pJoystick(pJoystick)
 {
-  m_state.id          = id;
-  m_state.name        = name;
-  m_state.ResetState(SDL_JoystickNumButtons(m_pJoystick), SDL_JoystickNumButtons(m_pJoystick), SDL_JoystickNumButtons(m_pJoystick));;
-
   CLog::Log(LOGNOTICE, "Enabled Joystick: \"%s\" (SDL)", name.c_str());
-  CLog::Log(LOGNOTICE, "Details: Total Axes: %u Total Hats: %u Total Buttons: %u",
-    (unsigned int)m_state.axes.size(), (unsigned int)m_state.hats.size(), (unsigned int)m_state.buttons.size());
+  CLog::Log(LOGNOTICE, "Details: Total Axes: %d Total Hats: %d Total Buttons: %d",
+    SDL_JoystickNumButtons(pJoystick), SDL_JoystickNumButtons(pJoystick), SDL_JoystickNumButtons(pJoystick));
 }
 
 /* static */
 void CLinuxJoystickSDL::Initialize(JoystickArray &joysticks)
 {
-  DeInitialize(joysticks);
+  Deinitialize(joysticks);
 
   if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) != 0)
   {
@@ -86,8 +83,7 @@ void CLinuxJoystickSDL::Initialize(JoystickArray &joysticks)
           CLog::Log(LOGNOTICE, "Your Joystick seems to be a Keyboard, ignoring it: %s Axis: %d Buttons: %d", 
             SDL_JoystickName(i), num_axis, num_buttons);
         else
-          joysticks.push_back(boost::shared_ptr<IJoystick>(new CLinuxJoystickSDL(SDL_JoystickName(i),
-            joy, joysticks.size())));
+          joysticks.push_back(JoystickPtr(new CLinuxJoystickSDL(SDL_JoystickName(i), joy, CJoystickManager::Get().NextID())));
       }
     }
   }
@@ -97,7 +93,7 @@ void CLinuxJoystickSDL::Initialize(JoystickArray &joysticks)
 }
 
 /* static */
-void CLinuxJoystickSDL::DeInitialize(JoystickArray &joysticks)
+void CLinuxJoystickSDL::Deinitialize(JoystickArray &joysticks)
 {
   for (int i = 0; i < (int)joysticks.size(); i++)
   {
@@ -112,27 +108,29 @@ void CLinuxJoystickSDL::DeInitialize(JoystickArray &joysticks)
 
 void CLinuxJoystickSDL::Update()
 {
+  CJoystickState &state = InitialState();
+
   // Update the state of all opened joysticks
   SDL_JoystickUpdate();
 
   // Gamepad buttons
-  for (unsigned int b = 0; b < m_state.buttons.size(); b++)
-    m_state.buttons[b] = (SDL_JoystickGetButton(m_pJoystick, b) ? true : false);
+  for (unsigned int b = 0; b < state.buttons.size(); b++)
+    state.buttons[b] = (SDL_JoystickGetButton(m_pJoystick, b) ? true : false);
 
   // Gamepad hats
-  for (unsigned int h = 0; h < m_state.hats.size(); h++)
+  for (unsigned int h = 0; h < state.hats.size(); h++)
   {
-    m_state.hats[h].Center();
+    state.hats[h].Center();
     uint8_t hat = SDL_JoystickGetHat(m_pJoystick, h);
-    if      (hat & SDL_HAT_UP)    m_state.hats[h].up = true;
-    else if (hat & SDL_HAT_DOWN)  m_state.hats[h].down = true;
-    if      (hat & SDL_HAT_RIGHT) m_state.hats[h].right = true;
-    else if (hat & SDL_HAT_LEFT)  m_state.hats[h].left = true;
+    if      (hat & SDL_HAT_UP)    state.hats[h][CJoystickHat::UP] = true;
+    else if (hat & SDL_HAT_DOWN)  state.hats[h][CJoystickHat::DOWN] = true;
+    if      (hat & SDL_HAT_RIGHT) state.hats[h][CJoystickHat::RIGHT] = true;
+    else if (hat & SDL_HAT_LEFT)  state.hats[h][CJoystickHat::LEFT] = true;
   }
 
   // Gamepad axes
-  for (unsigned int a = 0; a < m_state.axes.size(); a++)
-    m_state.SetAxis(a, (long)SDL_JoystickGetAxis(m_pJoystick, a), MAX_AXISAMOUNT);
+  for (unsigned int a = 0; a < state.axes.size(); a++)
+    state.SetAxis(a, (long)SDL_JoystickGetAxis(m_pJoystick, a), MAX_AXISAMOUNT);
 }
 
 #endif // HAS_SDL_JOYSTICK

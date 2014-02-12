@@ -19,6 +19,7 @@
  */
 
 #include "WINJoystickDX.h"
+#include "input/JoystickManager.h"
 #include "system.h"
 #include "utils/log.h"
 
@@ -41,8 +42,6 @@ extern HWND g_hWnd;
 #define JOY_POV_SW   (JOY_POVBACKWARD + JOY_POVLEFT) / 2
 #define JOY_POV_NW   (JOY_POVLEFT + JOY_POV_360) / 2
 
-using namespace JOYSTICK;
-
 // A context to hold our DirectInput handle and accumulated joystick objects
 struct JoystickEnumContext
 {
@@ -54,17 +53,16 @@ struct JoystickEnumContext
 LPDIRECTINPUT8 CJoystickDX::m_pDirectInput = NULL;
 
 CJoystickDX::CJoystickDX(LPDIRECTINPUTDEVICE8 joystickDevice, const std::string &name, const DIDEVCAPS &devCaps)
-  : m_joystickDevice(joystickDevice), m_state()
+ : CJoystick(name, 0, devCaps.dwButtons, devCaps.dwPOVs, devCaps.dwAxes),
+   m_joystickDevice(joystickDevice)
 {
-  // m_state.id is set in Initialize() before adding it to the joystick list
-  m_state.name = name;
-  m_state.ResetState(devCaps.dwButtons, devCaps.dwPOVs, devCaps.dwAxes);
+  // m_id is set in Initialize() before adding it to the joystick list
 }
 
 /* static */
 void CJoystickDX::Initialize(JoystickArray &joysticks)
 {
-  DeInitialize(joysticks);
+  Deinitialize(joysticks);
 
   HRESULT hr;
   JoystickEnumContext context;
@@ -89,8 +87,8 @@ void CJoystickDX::Initialize(JoystickArray &joysticks)
     boost::shared_ptr<CJoystickDX> jdx = boost::dynamic_pointer_cast<CJoystickDX>(*it);
     if (jdx && jdx->InitAxes())
     {
-      // Set the ID based on its position in the list
-      jdx->m_state.id = joysticks.size();
+      // XInput devices may occupy IDs 0 to 3
+      jdx->SetID(CJoystickManager::Get().NextID());
       joysticks.push_back(jdx);
     }
   }
@@ -151,7 +149,7 @@ BOOL CALLBACK CJoystickDX::EnumJoysticksCallback(const DIDEVICEINSTANCE *pdidIns
 
   CJoystickDX *joy = new CJoystickDX(pJoystick, pdidInstance->tszProductName, diDevCaps);
   if (joy)
-    context->joystickItems.push_back(boost::shared_ptr<IJoystick>(joy));
+    context->joystickItems.push_back(JoystickPtr(joy));
 
   return result;
 }
@@ -339,7 +337,7 @@ void CJoystickDX::Release()
 }
 
 /* static */
-void CJoystickDX::DeInitialize(JoystickArray &joysticks)
+void CJoystickDX::Deinitialize(JoystickArray &joysticks)
 {
   for (int i = 0; i < (int)joysticks.size(); i++)
   {
@@ -352,6 +350,8 @@ void CJoystickDX::DeInitialize(JoystickArray &joysticks)
 
 void CJoystickDX::Update()
 {
+  CJoystickState &state = InitialState();
+
   HRESULT hr;
 
   LPDIRECTINPUTDEVICE8 pJoy = m_joystickDevice;
@@ -382,30 +382,32 @@ void CJoystickDX::Update()
     return; // The device should have been acquired during the Poll()
 
   // Gamepad buttons
-  for (unsigned int b = 0; b < m_state.buttons.size(); b++)
-    m_state.buttons[b] = ((js.rgbButtons[b] & 0x80) ? 1: 0);
+  for (unsigned int b = 0; b < state.buttons.size(); b++)
+    state.buttons[b] = ((js.rgbButtons[b] & 0x80) ? 1: 0);
 
   // Gamepad hats
-  for (unsigned int h = 0; h < m_state.hats.size(); h++)
+  for (unsigned int h = 0; h < state.hats.size(); h++)
   {
-    m_state.hats[h].Center();
+    state.hats[h].Center();
     bool bCentered = ((js.rgdwPOV[h] & 0xFFFF) == 0xFFFF);
     if (!bCentered)
     {
       if ((JOY_POV_NW <= js.rgdwPOV[h] && js.rgdwPOV[h] <= JOY_POV_360) || js.rgdwPOV[h] <= JOY_POV_NE)
-        m_state.hats[h].up = true;
+        state.hats[h][CJoystickHat::UP] = true;
       else if (JOY_POV_SE <= js.rgdwPOV[h] && js.rgdwPOV[h] <= JOY_POV_SW)
-        m_state.hats[h].down = true;
+        state.hats[h][CJoystickHat::DOWN] = true;
 
       if (JOY_POV_NE <= js.rgdwPOV[h] && js.rgdwPOV[h] <= JOY_POV_SE)
-        m_state.hats[h].right = true;
+        state.hats[h][CJoystickHat::RIGHT] = true;
       else if (JOY_POV_SW <= js.rgdwPOV[h] && js.rgdwPOV[h] <= JOY_POV_NW)
-        m_state.hats[h].left = true;
+        state.hats[h][CJoystickHat::LEFT] = true;
     }
   }
 
   // Gamepad axes
   long amounts[] = {js.lX, js.lY, js.lZ, js.lRx, js.lRy, js.lRz};
-  for (unsigned int a = 0; a < std::min(m_state.axes.size(), 6U); a++)
-    m_state.SetAxis(a, amounts[a], MAX_AXISAMOUNT);
+  for (unsigned int a = 0; a < std::min(state.axes.size(), 6U); a++)
+    state.SetAxis(a, amounts[a], MAX_AXISAMOUNT);
+
+  UpdateState(state);
 }

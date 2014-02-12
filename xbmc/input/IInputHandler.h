@@ -42,7 +42,9 @@ public:
    */
   virtual void ProcessButtonDown(unsigned int controllerID, unsigned int buttonID, const CAction &action) = 0;
   virtual void ProcessButtonUp(unsigned int controllerID, unsigned int buttonID) = 0;
+  virtual void ProcessDigitalAxisDown(unsigned int controllerID, unsigned int buttonID, const CAction &action) = 0;
+  virtual void ProcessDigitalAxisUp(unsigned int controllerID, unsigned int buttonID) = 0;
   virtual void ProcessHatDown(unsigned int controllerID, unsigned int hatID, unsigned char dir, const CAction &action) = 0;
   virtual void ProcessHatUp(unsigned int controllerID, unsigned int hatID, unsigned char dir) = 0;
-  virtual void ProcessAxis(unsigned int controllerID, unsigned int axisID, const CAction &action) = 0;
+  virtual void ProcessAnalogAxis(unsigned int controllerID, unsigned int axisID, const CAction &action) = 0;
 };

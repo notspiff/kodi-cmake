@@ -19,29 +19,24 @@
  *
  */
 
-#include "input/IJoystick.h"
+#include "input/Joystick.h"
 
-union SDL_Event;
+#include <windows.h>
 
-namespace JOYSTICK
+class CJoystickXInput : public CJoystick
 {
-
-class CJoystickXInput : public IJoystick
-{
-public:
-  static void Initialize(JoystickArray &joysticks);
-  static void DeInitialize(JoystickArray &joysticks);
-
-  virtual ~CJoystickXInput() { }
-  virtual void Update();
-  virtual const Joystick &GetState() const { return m_state; }
-
-private:
+protected:
   CJoystickXInput(unsigned int controllerID, unsigned int id);
 
-  Joystick     m_state;
-  unsigned int m_controllerID; // XInput port, in the range (0, 3)
-  DWORD        m_dwPacketNumber; // If unchanged, controller state hasn't changed
-};
+public:
+  static void Initialize(JoystickArray& joysticks);
+  static void Deinitialize(JoystickArray& joysticks);
 
-} // namespace JOYSTICK
+  virtual ~CJoystickXInput() { }
+
+  virtual void Update();
+
+private:
+  unsigned int m_controllerID;   // XInput port, in the range (0, 3)
+  DWORD        m_dwPacketNumber; // If unchanged, controller state hasn't changed (currently ignored)
+};

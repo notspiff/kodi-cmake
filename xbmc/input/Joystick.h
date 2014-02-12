@@ -19,87 +19,94 @@
  *
  */
 
+#include "JoystickHat.h"
+
+#include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>
 
-#define JACTIVE_NONE      0x00000000
-#define JACTIVE_BUTTON    0x00000001
-#define JACTIVE_HAT       0x00000002
-#define JACTIVE_AXIS      0x00000004
-#define JACTIVE_HAT_UP    0x01
-#define JACTIVE_HAT_RIGHT 0x02
-#define JACTIVE_HAT_DOWN  0x04
-#define JACTIVE_HAT_LEFT  0x08
+#define JACTIVE_NONE            0x00000000
+#define JACTIVE_BUTTON          0x00000001
+#define JACTIVE_HAT             0x00000002
+#define JACTIVE_AXIS            0x00000004
+#define JACTIVE_HAT_UP          0x01
+#define JACTIVE_HAT_RIGHT       0x02
+#define JACTIVE_HAT_DOWN        0x04
+#define JACTIVE_HAT_LEFT        0x08
 
 #define GAMEPAD_BUTTON_COUNT    32
 #define GAMEPAD_HAT_COUNT       4
 #define GAMEPAD_AXIS_COUNT      6
 
-#define GAMEPAD_MAX_CONTROLLERS 4
+#define AXIS_DIGITAL_DEADZONE   0.5f // Axis must be pushed past this for digital action repeats
 
-namespace JOYSTICK
-{
+class CJoystick;
+typedef boost::shared_ptr<CJoystick> JoystickPtr;
+typedef std::vector<JoystickPtr>     JoystickArray;
 
-/**
- * An arrow-based device on a gamepad. Legally, no more than two buttons can be
- * pressed, and only if they are adjacent. If no buttons are pressed (or the
- * hat is in an invalid state), the hat is considered centered.
- */
-struct Hat
-{
-  Hat() { Center(); }
-  void Center();
-
-  bool operator==(const Hat &rhs) const;
-  bool operator!=(const Hat &rhs) const { return !(*this == rhs); }
-
-  /**
-   * Iterate through cardinal directions in an ordinal fashion.
-   *   Hat[0] == up
-   *   Hat[1] == right
-   *   Hat[2] == down
-   *   Hat[3] == left
-   */
-  bool       &operator[](unsigned int i);
-  const bool &operator[](unsigned int i) const { return const_cast<Hat&>(*this)[i]; }
-  
-  /**
-   * Helper function to translate this hat into a cardinal direction
-   * ("N", "NE", "E", ...) or "CENTERED".
-   */
-  const char *GetDirection() const;
-
-  bool up;
-  bool right;
-  bool down;
-  bool left;
-};
+class CAction;
 
 /**
- * Abstract representation of a joystick. Joysticks can have buttons, hats and
- * analog axes in the range [-1, 1]. Some joystick APIs (the Linux Joystick API,
- * for example) report hats as axes with an integer value of -1, 0 or 1. No
- * effort should be made to decode these axes back to hats, as this processing
- * is done in CJoystickManager.
+ * Joysticks can have buttons, hats and analog axes in the range [-1, 1].
  */
-struct Joystick
+class CJoystick
 {
+protected:
+  CJoystick(const std::string& strName, unsigned int id, unsigned int buttonCount, unsigned int hatCount, unsigned int axisCount);
+
 public:
-  Joystick() : id(0) { ResetState(); }
-  void ResetState(unsigned int buttonCount = GAMEPAD_BUTTON_COUNT,
-                  unsigned int hatCount = GAMEPAD_HAT_COUNT,
-                  unsigned int axisCount = GAMEPAD_AXIS_COUNT);
+  virtual ~CJoystick() { }
+
+  virtual void Update() = 0;
+
+  unsigned int ID() const { return m_id; }
+  void SetID(unsigned int id) { m_id = id; }
+
+  const std::string& Name() const { return m_name; }
+
+protected:
+  class CJoystickState
+  {
+  public:
+    CJoystickState(unsigned int buttonCount, unsigned int hatCount, unsigned int axisCount);
+  
+    void Reset();
+
+    /**
+     * Helper function to normalize a value to maxAxisAmount.
+     */
+    void SetAxis(unsigned int axisIndex, long value, long maxAxisAmount);
+
+    std::vector<bool>         buttons;
+    std::vector<CJoystickHat> hats;
+    std::vector<float>        axes;
+  };
+
+  // Methods exposed to subclasses
 
   /**
-   * Helper function to normalize a value to maxAxisAmount.
+   * Get a new state with the same number of buttons, hats and axes as our
+   * current state. By re-using an existing object we avoid the overhead of
+   * allocating a new state on every update.
    */
-  void SetAxis(unsigned int axis, long value, long maxAxisAmount);
+  CJoystickState& InitialState();
 
-  std::string        name;
-  unsigned int       id;
-  std::vector<bool>  buttons;
-  std::vector<Hat>   hats;
-  std::vector<float> axes;
+  /**
+   * A subclass reports the updated joystick state via UpdateState()
+   */
+  void UpdateState(const CJoystickState& newState);
+
+private:
+  void UpdateButton(unsigned int buttonIndex, bool newButton);
+  void UpdateHat(unsigned int hatIndex, const CJoystickHat& newHat);
+  void UpdateAxis(unsigned int axisIndex, float newAxis);
+  void UpdateDigitalAxis(unsigned int axisIndex, bool bActiveBefore, bool bActiveNow, const CAction& action);
+  void UpdateAnalogAxis(unsigned int axisIndex, float newAxis, const CAction& action);
+
+  static bool IsGameControl(int actionID);
+
+  const std::string m_name;
+  unsigned int      m_id;
+  CJoystickState    m_state;
+  CJoystickState    m_initialState; // Initial state of the joystick before any buttons are pressed
 };
-
-} // namespace INPUT

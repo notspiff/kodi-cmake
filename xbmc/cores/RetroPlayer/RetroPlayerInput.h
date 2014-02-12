@@ -22,7 +22,8 @@
 
 #include "guilib/Key.h" // for ACTION_GAME_CONTROL_START
 #include "input/IInputHandler.h"
-#include "input/IJoystick.h" // for GAMEPAD_MAX_CONTROLLERS
+
+#define GAMEPAD_MAX_CONTROLLERS  4
 
 #include <map>
 #include <stdint.h>
@@ -50,9 +51,11 @@ public:
   virtual void ProcessKeyUp(unsigned int controllerID, uint32_t key);
   virtual void ProcessButtonDown(unsigned int controllerID, unsigned int buttonID, const CAction &action);
   virtual void ProcessButtonUp(unsigned int controllerID, unsigned int buttonID);
+  virtual void ProcessDigitalAxisDown(unsigned int controllerID, unsigned int buttonID, const CAction &action);
+  virtual void ProcessDigitalAxisUp(unsigned int controllerID, unsigned int buttonID);
   virtual void ProcessHatDown(unsigned int controllerID, unsigned int hatID, unsigned char dir, const CAction &action);
   virtual void ProcessHatUp(unsigned int controllerID, unsigned int hatID, unsigned char dir);
-  virtual void ProcessAxis(unsigned int controllerID, unsigned int axisID, const CAction &action);
+  virtual void ProcessAnalogAxis(unsigned int controllerID, unsigned int axisID, const CAction &action);
 
   struct DeviceItem
   {

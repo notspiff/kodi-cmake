@@ -22,7 +22,6 @@
 #include "system.h"
 #include "utils/log.h"
 
-#include <windows.h>
 #include <Xinput.h>
 
 #pragma comment(lib, "XInput.lib")
@@ -35,20 +34,17 @@
 #define HAT_COUNT     1
 #define AXIS_COUNT    5
 
-using namespace JOYSTICK;
-
 CJoystickXInput::CJoystickXInput(unsigned int controllerID, unsigned int id)
-  : m_state(), m_controllerID(controllerID), m_dwPacketNumber(0)
+ : CJoystick(XINPUT_ALIAS, id, BUTTON_COUNT, HAT_COUNT, AXIS_COUNT),
+   m_controllerID(controllerID),
+   m_dwPacketNumber(0)
 {
-  m_state.id = id;
-  m_state.name = XINPUT_ALIAS;
-  m_state.ResetState(BUTTON_COUNT, HAT_COUNT, AXIS_COUNT);
 }
 
 /* static */
-void CJoystickXInput::Initialize(JoystickArray &joysticks)
+void CJoystickXInput::Initialize(JoystickArray& joysticks)
 {
-  DeInitialize(joysticks);
+  Deinitialize(joysticks);
 
   XINPUT_STATE controllerState; // No need to memset, only checking for controller existence
 
@@ -58,18 +54,18 @@ void CJoystickXInput::Initialize(JoystickArray &joysticks)
     if (result != ERROR_SUCCESS)
     {
       if (result == ERROR_DEVICE_NOT_CONNECTED)
-        CLog::Log(LOGNOTICE, "CJoystickXInput: No XInput devices on port %u", i);
+        CLog::Log(LOGNOTICE, "No XInput devices on port %u", i);
       continue;
     }
 
     // That's all it takes to check controller existence... I <3 XInput
     CLog::Log(LOGNOTICE, "CJoystickXInput: Found a 360-compatible XInput controller on port %u", i);
-    joysticks.push_back(boost::shared_ptr<IJoystick>(new CJoystickXInput(i, joysticks.size())));
+    joysticks.push_back(JoystickPtr(new CJoystickXInput(i, joysticks.size())));
   }
 }
 
 /* static */
-void CJoystickXInput::DeInitialize(JoystickArray &joysticks)
+void CJoystickXInput::Deinitialize(JoystickArray& joysticks)
 {
   for (int i = 0; i < (int)joysticks.size(); i++)
   {
@@ -80,38 +76,40 @@ void CJoystickXInput::DeInitialize(JoystickArray &joysticks)
 
 void CJoystickXInput::Update()
 {
+  CJoystickState &state = InitialState();
+
   XINPUT_STATE controllerState;
 
   DWORD result = XInputGetState(m_controllerID, &controllerState);
   if (result != ERROR_SUCCESS)
     return;
 
-  if (m_dwPacketNumber == controllerState.dwPacketNumber)
-    return; // No update since last poll
   m_dwPacketNumber = controllerState.dwPacketNumber;
 
   // Map to DirectInput controls
-  m_state.buttons[0] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A) ? true : false;
-  m_state.buttons[1] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_B) ? true : false;
-  m_state.buttons[2] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_X) ? true : false;
-  m_state.buttons[3] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_Y) ? true : false;
-  m_state.buttons[4] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) ? true : false;
-  m_state.buttons[5] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) ? true : false;
-  m_state.buttons[6] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) ? true : false;
-  m_state.buttons[7] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_START) ? true : false;
-  m_state.buttons[8] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB) ? true : false;
-  m_state.buttons[9] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) ? true : false;
+  state.buttons[0] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A) ? true : false;
+  state.buttons[1] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_B) ? true : false;
+  state.buttons[2] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_X) ? true : false;
+  state.buttons[3] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_Y) ? true : false;
+  state.buttons[4] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) ? true : false;
+  state.buttons[5] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) ? true : false;
+  state.buttons[6] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) ? true : false;
+  state.buttons[7] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_START) ? true : false;
+  state.buttons[8] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB) ? true : false;
+  state.buttons[9] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) ? true : false;
 
-  m_state.hats[0].up    = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) ? true : false;
-  m_state.hats[0].right = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) ? true : false;
-  m_state.hats[0].down  = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) ? true : false;
-  m_state.hats[0].left  = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) ? true : false;
+  state.hats[0][CJoystickHat::UP]    = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) ? true : false;
+  state.hats[0][CJoystickHat::RIGHT] = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) ? true : false;
+  state.hats[0][CJoystickHat::DOWN]  = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) ? true : false;
+  state.hats[0][CJoystickHat::LEFT]  = (controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) ? true : false;
 
   // Combine triggers into a single axis, like DirectInput
   const long triggerAxis = (long)controllerState.Gamepad.bLeftTrigger - (long)controllerState.Gamepad.bRightTrigger;
-  m_state.SetAxis(0, controllerState.Gamepad.sThumbLX, MAX_AXIS);
-  m_state.SetAxis(1, -controllerState.Gamepad.sThumbLY, MAX_AXIS);
-  m_state.SetAxis(2, triggerAxis, MAX_TRIGGER); 
-  m_state.SetAxis(3, controllerState.Gamepad.sThumbRX, MAX_AXIS);
-  m_state.SetAxis(4, -controllerState.Gamepad.sThumbRY, MAX_AXIS);
+  state.SetAxis(0, controllerState.Gamepad.sThumbLX, MAX_AXIS);
+  state.SetAxis(1, -controllerState.Gamepad.sThumbLY, MAX_AXIS);
+  state.SetAxis(2, triggerAxis, MAX_TRIGGER); 
+  state.SetAxis(3, controllerState.Gamepad.sThumbRX, MAX_AXIS);
+  state.SetAxis(4, -controllerState.Gamepad.sThumbRY, MAX_AXIS);
+
+  UpdateState(state);
 }

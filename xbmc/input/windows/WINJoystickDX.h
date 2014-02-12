@@ -20,22 +20,19 @@
 
 #pragma once
 
-#include "input/IJoystick.h"
+#include "input/Joystick.h"
 
 #include <string>
 
-namespace JOYSTICK
-{
-
-class CJoystickDX : public IJoystick
+class CJoystickDX : public CJoystick
 {
 public:
   static void Initialize(JoystickArray &joysticks);
-  static void DeInitialize(JoystickArray &joysticks);
+  static void Deinitialize(JoystickArray &joysticks);
 
   virtual ~CJoystickDX() { Release(); }
+
   virtual void Update();
-  virtual const Joystick &GetState() const { return m_state; }
 
 private:
   CJoystickDX(LPDIRECTINPUTDEVICE8 joystickDevice, const std::string &name, const DIDEVCAPS &devCaps);
@@ -48,7 +45,4 @@ private:
 
   static LPDIRECTINPUT8 m_pDirectInput;
   LPDIRECTINPUTDEVICE8  m_joystickDevice;
-  Joystick              m_state;
 };
-
-} // namespace JOYSTICK

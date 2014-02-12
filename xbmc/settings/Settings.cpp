@@ -43,9 +43,7 @@
 #include "guilib/LocalizeStrings.h"
 #include "guilib/StereoscopicsManager.h"
 #include "input/MouseStat.h"
-#if defined(HAS_JOYSTICK)
 #include "input/JoystickManager.h"
-#endif // defined(HAS_JOYSTICK)
 #if defined(TARGET_POSIX)
 #include "linux/LinuxTimezone.h"
 #endif // defined(TARGET_POSIX)
@@ -434,9 +432,7 @@ void CSettings::Uninitialize()
   m_settingsManager->UnregisterCallback(&g_charsetConverter);
   m_settingsManager->UnregisterCallback(&g_graphicsContext);
   m_settingsManager->UnregisterCallback(&g_langInfo);
-#if defined(HAS_JOYSTICK)
-  m_settingsManager->UnregisterCallback(&JOYSTICK::CJoystickManager::Get());
-#endif
+  m_settingsManager->UnregisterCallback(&CJoystickManager::Get());
   m_settingsManager->UnregisterCallback(&g_Mouse);
   m_settingsManager->UnregisterCallback(&CNetworkServices::Get());
   m_settingsManager->UnregisterCallback(&g_passwordManager);
@@ -879,9 +875,6 @@ void CSettings::InitializeConditions()
 #ifdef HAS_KARAOKE
   m_settingsManager->AddCondition("has_karaoke");
 #endif
-#ifdef HAS_JOYSTICK
-  m_settingsManager->AddCondition("has_joystick");
-#endif
 #ifdef HAS_SKIN_TOUCHED
   m_settingsManager->AddCondition("has_skin_touched");
 #endif
@@ -1089,11 +1082,9 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("locale.country");
   m_settingsManager->RegisterCallback(&g_langInfo, settingSet);
 
-#if defined(HAS_JOYSTICK)
   settingSet.clear();
   settingSet.insert("input.enablejoystick");
-  m_settingsManager->RegisterCallback(&JOYSTICK::CJoystickManager::Get(), settingSet);
-#endif
+  m_settingsManager->RegisterCallback(&CJoystickManager::Get(), settingSet);
 
   settingSet.clear();
   settingSet.insert("input.enablemouse");

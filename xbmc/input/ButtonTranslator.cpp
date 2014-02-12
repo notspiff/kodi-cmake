@@ -34,10 +34,7 @@
 #include "utils/log.h"
 #include "utils/XBMCTinyXML.h"
 #include "XBIRRemote.h"
-
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
 #include "JoystickManager.h"
-#endif
 
 #define JOYSTICK_DEFAULT_MAP "_xbmc_"
 
@@ -801,7 +798,6 @@ int CButtonTranslator::TranslateLircRemoteString(const char* szDevice, const cha
 }
 #endif
 
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
 void CButtonTranslator::MapJoystickActions(int windowID, TiXmlNode *pJoystick)
 {
   string joyname = JOYSTICK_DEFAULT_MAP; // default global map name
@@ -1018,7 +1014,6 @@ int CButtonTranslator::GetActionCode(int window, int id, const JoystickMap &wmap
     TranslateActionString(strAction.c_str(), action);
   return action;
 }
-#endif
 
 void CButtonTranslator::GetActions(std::vector<std::string> &actionList)
 {
@@ -1185,7 +1180,6 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
     }
   }
 
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
   if ((pDevice = pWindow->FirstChild("joystick")) != NULL)
   {
     // map joystick actions
@@ -1195,7 +1189,6 @@ void CButtonTranslator::MapWindowActions(TiXmlNode *pWindow, int windowID)
       pDevice = pDevice->NextSibling("joystick");
     }
   }
-#endif
 
   if ((pDevice = pWindow->FirstChild("touch")) != NULL)
   {
@@ -1520,11 +1513,9 @@ void CButtonTranslator::Clear()
   lircRemotesMap.clear();
 #endif
 
-#if defined(HAS_JOYSTICK) || defined(HAS_EVENT_SERVER)
   m_joystickButtonMap.clear();
   m_joystickAxisMap.clear();
   m_joystickHatMap.clear();
-#endif
 
   m_Loaded = false;
 }

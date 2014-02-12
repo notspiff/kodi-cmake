@@ -21,34 +21,37 @@
 
 #pragma once
 
-#include "input/IJoystick.h"
+#include "input/Joystick.h"
 
 #include <stdint.h>
 #include <string>
 
-namespace JOYSTICK
-{
-
-class CLinuxJoystick : public IJoystick
+class CLinuxJoystick : public CJoystick
 {
 public:
   static void Initialize(JoystickArray &joysticks);
-  static void DeInitialize(JoystickArray &joysticks);
+  static void Deinitialize(JoystickArray &joysticks);
 
   virtual ~CLinuxJoystick();
+
   virtual void Update();
-  virtual const JOYSTICK::Joystick &GetState() const { return m_state; }
 
 private:
-  CLinuxJoystick(int fd, unsigned int id, const char *name, const std::string &filename, unsigned char buttons, unsigned char axes);
+  CLinuxJoystick(int fd, unsigned int id, const std::string &name, const std::string &filename, unsigned char buttons, unsigned char axes);
 
-  static int GetButtonMap(int fd, uint16_t *buttonMap);
-  static int GetAxisMap(int fd, uint8_t *axisMap);
-  static int DetermineIoctl(int fd, int *ioctls, uint16_t *buttonMap, int &ioctl_used);
+  static bool GetButtonMap(int fd, uint16_t *buttonMap);
+  static bool GetAxisMap(int fd, uint8_t *axisMap);
 
-  JOYSTICK::Joystick m_state;
-  int                m_fd;
-  std::string        m_filename; // for debugging purposes
+  /**
+   * Try a series of ioctls until one succeeds.
+   * @param fd - The fd to perform ioctl on
+   * @param ioctls - A zero-terminated list of ioctls
+   * @param buttonMap - The discovered button map
+   * @param ioctl_used - The ioctl that succeeded (untouched if false is returned)
+   */
+  static bool DetermineIoctl(int fd, const unsigned long *ioctls, uint16_t *buttonMap, unsigned long &ioctl_used);
+
+  int            m_fd;
+  std::string    m_filename; // For debugging purposes
+  CJoystickState m_state; // Linux Joystick API only reports updates, need to track actual state between calls to Update()
 };
-
-}

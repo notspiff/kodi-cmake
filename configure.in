@@ -299,9 +299,9 @@ AC_ARG_ENABLE([profiling],
 
 AC_ARG_ENABLE([joystick],
   [AS_HELP_STRING([--enable-joystick],
-  [enable SDL joystick support (default is yes)])],
+  [enable SDL joystick support (default is no)])],
   [use_joystick=$enableval],
-  [use_joystick=yes])
+  [use_joystick=no])
 
 AC_ARG_ENABLE([xrandr],
   [AS_HELP_STRING([--enable-xrandr],
@@ -2147,10 +2147,10 @@ else
 fi
 
 if test "$use_joystick" = "yes"; then
-  final_message="$final_message\n  Joystick:\tYes"
+  final_message="$final_message\n  SDL Joystick:\tYes"
   SDL_DEFINES="$SDL_DEFINES -DHAS_SDL_JOYSTICK"
 else
-  final_message="$final_message\n  Joystick:\tNo"
+  final_message="$final_message\n  SDL Joystick:\tNo"
 fi
 
 # --enable-joystick is for SDL joysticks, use joystick.h for Linux Joystick API

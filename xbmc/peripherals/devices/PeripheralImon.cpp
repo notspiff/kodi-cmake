@@ -24,10 +24,7 @@
 #include "settings/Settings.h"
 #include "threads/Atomics.h"
 #if defined (TARGET_WINDOWS)
-#include "system.h" // For HAS_JOYSTICK
-#if defined (HAS_JOYSTICK)
 #include "input/JoystickManager.h"
-#endif // HAS_JOYSTICK
 #endif // TARGET_WINDOWS
 
 
@@ -106,11 +103,11 @@ void CPeripheralImon::ActionOnImonConflict(bool deviceInserted /*= true*/)
 {
   if (deviceInserted || m_lCountOfImonsConflictWithDInput == 0)
   {
-#if defined(TARGET_WINDOWS) && defined(HAS_JOYSTICK)
+#if defined(TARGET_WINDOWS)
     bool enableJoystickNow = !deviceInserted && CSettings::Get().GetBool("input.enablejoystick");
     CLog::Log(LOGNOTICE, "Problematic iMON hardware %s. Joystick usage: %s", (deviceInserted ? "detected" : "was removed"),
         (enableJoystickNow) ? "enabled." : "disabled." );
-    JOYSTICK::CJoystickManager::Get().SetEnabled(enableJoystickNow);
+    CJoystickManager::Get().SetEnabled(enableJoystickNow);
 #endif
   }
 }

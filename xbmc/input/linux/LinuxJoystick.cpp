@@ -20,7 +20,9 @@
 */
 
 #include "LinuxJoystick.h"
+#include "input/JoystickManager.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 
 #include <dirent.h>
 #include <errno.h>
@@ -42,13 +44,13 @@
 #define KEY_MAX_LARGE 0x2FF
 #define KEY_MAX_SMALL 0x1FF
 
-/* Axis map size. */
+/* Axis map size */
 #define AXMAP_SIZE (ABS_MAX + 1)
 
-/* Button map size. */
+/* Button map size */
 #define BTNMAP_SIZE (KEY_MAX_LARGE - BTN_MISC + 1)
 
-/* The following values come from include/joystick.h in the kernel source. */
+/* The following values come from include/joystick.h in the kernel source */
 #define JSIOCSBTNMAP_LARGE _IOW('j', 0x33, __u16[KEY_MAX_LARGE - BTN_MISC + 1])
 #define JSIOCSBTNMAP_SMALL _IOW('j', 0x33, __u16[KEY_MAX_SMALL - BTN_MISC + 1])
 #define JSIOCGBTNMAP_LARGE _IOR('j', 0x34, __u16[KEY_MAX_LARGE - BTN_MISC + 1])
@@ -57,7 +59,6 @@
 #define JOYSTICK_UNKNOWN   "Unknown XBMC-Compatible Linux Joystick"
 #define MAX_AXIS           32767
 
-using namespace JOYSTICK;
 using namespace std;
 
 static const char *axis_names[ABS_MAX + 1] =
@@ -84,12 +85,12 @@ static const char *button_names[KEY_MAX - BTN_MISC + 1] =
   "WheelBtn",   "Gear up",
 };
 
-CLinuxJoystick::CLinuxJoystick(int fd, unsigned int id, const char *name, const std::string &filename,
-    unsigned char buttons, unsigned char axes) : m_state(), m_fd(fd), m_filename(filename)
+CLinuxJoystick::CLinuxJoystick(int fd, unsigned int id, const std::string &name, const std::string &filename, unsigned char buttons, unsigned char axes)
+ : CJoystick(name, id, buttons, 0, axes), // The Linux Joystick API reports hats as axes with an integer value of -1, 0 or 1
+   m_fd(fd),
+   m_filename(filename),
+   m_state(buttons, 0, axes)
 {
-  m_state.id          = id;
-  m_state.name        = name;
-  m_state.ResetState(buttons, 0, axes);
 }
 
 CLinuxJoystick::~CLinuxJoystick()
@@ -97,22 +98,21 @@ CLinuxJoystick::~CLinuxJoystick()
   close(m_fd);
 }
 
-/* static */
 void CLinuxJoystick::Initialize(JoystickArray &joysticks)
 {
-  // TODO: Use udev to grab device names instead of reading /dev/js*
+  // TODO: Use udev to grab device names instead of reading /dev/input/js*
   string inputDir("/dev/input");
   DIR *pd = opendir(inputDir.c_str());
   if (pd == NULL)
   {
-    CLog::Log(LOGERROR, "%s: can't open /dev/input (errno=%d)", __FUNCTION__, errno);
+    CLog::Log(LOGERROR, "%s: can't open %s (errno=%d)", __FUNCTION__, inputDir.c_str(), errno);
     return;
   }
 
   dirent *pDirent;
   while ((pDirent = readdir(pd)) != NULL)
   {
-    if (strncmp(pDirent->d_name, "js", 2) == 0)
+    if (StringUtils::StartsWith(pDirent->d_name, "js"))
     {
       // Found a joystick device
       string filename(inputDir + "/" + pDirent->d_name);
@@ -131,9 +131,9 @@ void CLinuxJoystick::Initialize(JoystickArray &joysticks)
       char name[128] = JOYSTICK_UNKNOWN;
 
       if (ioctl(fd, JSIOCGVERSION, &version) < 0 ||
-          ioctl(fd, JSIOCGAXES, &axes) < 0 ||
+          ioctl(fd, JSIOCGAXES, &axes)       < 0 ||
           ioctl(fd, JSIOCGBUTTONS, &buttons) < 0 ||
-          ioctl(fd, JSIOCGNAME(128), name) < 0)
+          ioctl(fd, JSIOCGNAME(128), name)   < 0)
       {
         CLog::Log(LOGERROR, "%s: failed ioctl() (errno=%d)", __FUNCTION__, errno);
         close(fd);
@@ -162,13 +162,13 @@ void CLinuxJoystick::Initialize(JoystickArray &joysticks)
       uint16_t buttonMap[BTNMAP_SIZE];
       uint8_t axisMap[AXMAP_SIZE];
 
-      if (GetButtonMap(fd, buttonMap) < 0 || GetAxisMap(fd, axisMap) < 0)
+      if (!GetButtonMap(fd, buttonMap) || !GetAxisMap(fd, axisMap))
       {
         CLog::Log(LOGERROR, "%s: can't get button or axis map", __FUNCTION__);
         // I assume this isn't a fatal error...
       }
 
-      /* Determine whether the button map is usable. */
+      // Determine whether the button map is usable
       bool buttonMapOK = true;
       for (int i = 0; buttonMapOK && i < buttons; i++)
       {
@@ -181,7 +181,7 @@ void CLinuxJoystick::Initialize(JoystickArray &joysticks)
 
       if (!buttonMapOK)
       {
-        /* buttonMap out of range for names. Don't print any. */
+        // buttonMap out of range for names. Don't print any.
         CLog::Log(LOGERROR, "%s: XBMC is not fully compatible with your kernel. Unable to retrieve button map!",
             __FUNCTION__);
         CLog::Log(LOGNOTICE, "%s: Joystick \"%s\" has %d buttons and %d axes", __FUNCTION__,
@@ -209,7 +209,7 @@ void CLinuxJoystick::Initialize(JoystickArray &joysticks)
       }
 
       // Got enough information, time to move on to the next joystick
-      joysticks.push_back(boost::shared_ptr<IJoystick>(new CLinuxJoystick(fd, joysticks.size(),
+      joysticks.push_back(JoystickPtr(new CLinuxJoystick(fd, CJoystickManager::Get().NextID(),
           name, filename, buttons, axes)));
     }
   }
@@ -222,19 +222,19 @@ void CLinuxJoystick::Initialize(JoystickArray &joysticks)
  * case of an error, 0 otherwise for kernels up to 2.6.30, the length of the
  * array actually copied for later kernels.
  */
-int CLinuxJoystick::GetButtonMap(int fd, uint16_t *buttonMap)
+bool CLinuxJoystick::GetButtonMap(int fd, uint16_t *buttonMap)
 {
-  static int joyGetButtonMapIoctl = 0;
-  int ioctls[] = { JSIOCGBTNMAP, JSIOCGBTNMAP_LARGE, JSIOCGBTNMAP_SMALL, 0 };
+  static unsigned long joyGetButtonMapIoctl = 0;
+  static const unsigned long ioctls[] = { JSIOCGBTNMAP, JSIOCGBTNMAP_LARGE, JSIOCGBTNMAP_SMALL, 0 };
 
-  if (joyGetButtonMapIoctl != 0)
+  if (joyGetButtonMapIoctl == 0)
   {
-    /* We already know which ioctl to use. */
-    return ioctl(fd, joyGetButtonMapIoctl, buttonMap);
+    return DetermineIoctl(fd, ioctls, buttonMap, joyGetButtonMapIoctl);
   }
   else
   {
-    return DetermineIoctl(fd, ioctls, buttonMap, joyGetButtonMapIoctl);
+    // We already know which ioctl to use
+    return ioctl(fd, joyGetButtonMapIoctl, buttonMap) >= 0;
   }
 }
 
@@ -242,37 +242,36 @@ int CLinuxJoystick::GetButtonMap(int fd, uint16_t *buttonMap)
  * Retrieves the current axis map in the given array, which must contain at
  * least AXMAP_SIZE elements.
  */
-int CLinuxJoystick::GetAxisMap(int fd, uint8_t *axisMap)
+bool CLinuxJoystick::GetAxisMap(int fd, uint8_t *axisMap)
 {
   return ioctl(fd, JSIOCGAXMAP, axisMap);
 }
 
 /* static */
-int CLinuxJoystick::DetermineIoctl(int fd, int *ioctls, uint16_t *buttonMap, int &ioctl_used)
+bool CLinuxJoystick::DetermineIoctl(int fd, const unsigned long *ioctls, uint16_t *buttonMap, unsigned long &ioctl_used)
 {
   int retval = 0;
 
-  /* Try each ioctl in turn. */
+  // Try each ioctl in turn
   for (int i = 0; ioctls[i] != 0; i++)
   {
     retval = ioctl(fd, ioctls[i], (void*)buttonMap);
     if (retval >= 0)
     {
-      /* The ioctl did something. */
+      // The ioctl did something
       ioctl_used = ioctls[i];
-      return retval;
+      return true;
     }
     else if (errno != -EINVAL)
     {
-      /* Some other error occurred. */
-      return retval;
-     }
+      // Some other error occurred
+      return false;
+    }
   }
-  return retval;
+  return false;
 }
 
-/* static */
-void CLinuxJoystick::DeInitialize(JoystickArray &joysticks)
+void CLinuxJoystick::Deinitialize(JoystickArray &joysticks)
 {
   for (int i = 0; i < (int)joysticks.size(); i++)
   {
@@ -294,13 +293,12 @@ void CLinuxJoystick::Update()
       {
         // The circular driver queue holds 64 events. If compiling your own driver,
         // you can increment this size bumping up JS_BUFF_SIZE in joystick.h
-        return;
+        break;
       }
       else
       {
-        CLog::Log(LOGERROR, "%s: failed to read joystick \"%s\" on %s", __FUNCTION__,
-            m_state.name.c_str(), m_filename.c_str());
-        return;
+        CLog::Log(LOGERROR, "%s: failed to read joystick \"%s\" on %s", __FUNCTION__, Name().c_str(), m_filename.c_str());
+        break;
       }
     }
 
@@ -324,4 +322,6 @@ void CLinuxJoystick::Update()
       break;
     }
   }
+
+  UpdateState(m_state);
 }
