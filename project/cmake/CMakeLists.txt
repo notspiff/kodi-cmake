@@ -163,6 +163,8 @@ if(ENABLE_SKIN_TOUCHED)
   list(APPEND DEP_DEFINES "-DHAS_SKIN_TOUCHED=1")
 endif()
 
+core_find_git_rev()
+
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
 add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES} ${PATH_DEFINES})
 
