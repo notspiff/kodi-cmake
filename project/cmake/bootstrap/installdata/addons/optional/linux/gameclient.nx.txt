@@ -1,0 +1,1 @@
+gameclient.nx https://github.com/notspiff/gameclient.nx 8b5104a8 # GAMECLIENTS;GAMECLIENT_NX OFF

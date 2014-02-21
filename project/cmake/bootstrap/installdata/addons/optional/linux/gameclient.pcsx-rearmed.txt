@@ -1,0 +1,1 @@
+gameclient.pcsx-rearmed https://github.com/notspiff/gameclient.pcsx-rearmed ed2f312e # GAMECLIENTS;GAMECLIENT_PCSX-REARMED OFF

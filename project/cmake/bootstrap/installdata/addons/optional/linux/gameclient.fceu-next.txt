@@ -1,0 +1,1 @@
+gameclient.fceu-next https://github.com/notspiff/gameclient.fceu-next b7a1297a # GAMECLIENTS;GAMECLIENT_FCEU-NEXT OFF

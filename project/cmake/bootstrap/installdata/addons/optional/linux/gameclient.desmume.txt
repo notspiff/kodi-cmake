@@ -1,0 +1,1 @@
+gameclient.desmume https://github.com/notspiff/gameclient.desmume 93cf2e93 # GAMECLIENTS;GAMECLIENT_BNES OFF

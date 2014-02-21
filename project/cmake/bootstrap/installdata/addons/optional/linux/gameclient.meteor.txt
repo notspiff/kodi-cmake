@@ -1,0 +1,1 @@
+gameclient.meteor https://github.com/notspiff/gameclient.meteor 856863d # GAMECLIENTS;GAMECLIENT_METEOR OFF

@@ -1,0 +1,1 @@
+gameclient.vba-next https://github.com/notspiff/gameclient.vba-next 823037db # GAMECLIENTS;GAMECLIENT_VBA-NEXT OFF

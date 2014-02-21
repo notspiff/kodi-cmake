@@ -1,0 +1,1 @@
+gameclient.tyrquake https://github.com/notspiff/gameclient.tyrquake 26866ae # GAMECLIENTS;GAMECLIENT_TYRQUAKE OFF

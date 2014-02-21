@@ -1,0 +1,1 @@
+gameclient.snes9x-next https://github.com/notspiff/gameclient.snes9x-next 77bf8f7 # GAMECLIENTS;GAMECLIENT_SNES9X-NEXT OFF

@@ -1,0 +1,1 @@
+gameclient.quicknes https://github.com/notspiff/gameclient.quicknes 191b014 # GAMECLIENTS;GAMECLIENT_QUICKNES OFF

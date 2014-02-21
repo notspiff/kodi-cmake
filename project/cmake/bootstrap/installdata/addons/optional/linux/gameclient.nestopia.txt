@@ -1,0 +1,1 @@
+gameclient.nestopia https://github.com/notspiff/gameclient.nestopia d9ca732e # GAMECLIENTS;GAMECLIENT_NESTOPIA OFF

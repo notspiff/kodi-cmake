@@ -1,0 +1,1 @@
+gameclient.scummvm https://github.com/notspiff/gameclient.scummvm 939eba75 # GAMECLIENTS;GAMECLIENT_SCUMMVM OFF
