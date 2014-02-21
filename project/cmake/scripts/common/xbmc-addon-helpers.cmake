@@ -24,14 +24,19 @@ endmacro()
 
 # Build, link and optionally package an add-on
 macro (build_addon target prefix libs)
-  add_library(${target} ${${prefix}_SOURCES})
-  target_link_libraries(${target} ${${libs}})
   addon_version(${target} ${prefix})
-  set_target_properties(${target} PROPERTIES VERSION ${${prefix}_VERSION}
-                                             SOVERSION 13.0
-                                             PREFIX "")
-  if(OS STREQUAL "android")
-    set_target_properties(${target} PROPERTIES PREFIX "lib")
+  if(${prefix}_SOURCES)
+    add_library(${target} ${${prefix}_SOURCES})
+    target_link_libraries(${target} ${${libs}})
+    set_target_properties(${target} PROPERTIES VERSION ${${prefix}_VERSION}
+                                               SOVERSION 13.0
+                                               PREFIX "")
+    if(OS STREQUAL "android")
+      set_target_properties(${target} PROPERTIES PREFIX "lib")
+    endif()
+  else()
+    add_custom_target(${target})
+    set(BUILD_SHARED_LIBS) # Avoid warnings
   endif()
 
   # set zip as default if addon-package is called without PACKAGE_XXX
@@ -53,16 +58,27 @@ macro (build_addon target prefix libs)
     # Pack files together to create an archive
     install(DIRECTORY ${target} DESTINATION ./ COMPONENT ${target}-${${prefix}_VERSION})
     if(WIN32)
-      install(PROGRAMS ${CMAKE_BINARY_DIR}/${target}.dll
-              DESTINATION ${target}
-              COMPONENT ${target}-${${prefix}_VERSION})
+      if(${${prefix}_SOURCES})
+        install(PROGRAMS ${CMAKE_BINARY_DIR}/${target}.dll
+                DESTINATION ${target}
+                COMPONENT ${target}-${${prefix}_VERSION})
+      endif()
     else()
-      install(TARGETS ${target} DESTINATION ${target}
-              COMPONENT ${target}-${${prefix}_VERSION})
+      if(${prefix}_SOURCES)
+        install(TARGETS ${target} DESTINATION ${target}
+                COMPONENT ${target}-${${prefix}_VERSION})
+      endif()
     endif(WIN32)
     add_cpack_workaround(${target} ${${prefix}_VERSION} ${ext})
   else()
-    install(TARGETS ${target} DESTINATION lib/xbmc/addons/${target})
+    if(${prefix}_SOURCES)
+      install(TARGETS ${target} DESTINATION lib/xbmc/addons/${target})
+    endif()
+    if (${prefix}_CUSTOM_BINARY)
+      list(GET ${${prefix}_CUSTOM_BINARY} 0 FROM_BINARY)
+      list(GET ${${prefix}_CUSTOM_BINARY} 1 TO_BINARY)
+      install(FILES ${FROM_BINARY} DESTINATION lib/xbmc/addons/${target}/${TO_BINARY})
+    endif()
     install(DIRECTORY ${target} DESTINATION share/xbmc/addons)
   endif()
   if(XBMC_BUILD_DIR)
@@ -72,10 +88,21 @@ macro (build_addon target prefix libs)
       # A good way to deal with () in filenames
       configure_file(${file} ${XBMC_BUILD_DIR}/addons/${target}/${name} COPYONLY)
     endforeach()
+    if(${prefix}_SOURCES)
       add_custom_command(TARGET ${target} POST_BUILD
                         COMMAND ${CMAKE_COMMAND} -E copy
                                 $<TARGET_LINKER_FILE:${target}>
                                 ${XBMC_BUILD_DIR}/addons/${target}/$<TARGET_LINKER_FILE_NAME:${target}>)
+    endif()
+    if (${prefix}_CUSTOM_BINARY)
+      list(GET ${prefix}_CUSTOM_BINARY 0 from_binary)
+      list(GET ${prefix}_CUSTOM_BINARY 1 to_binary)
+      list(GET ${prefix}_CUSTOM_BINARY 2 custom_target)
+      add_custom_command(TARGET ${custom_target} POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E rename
+                                ${from_binary}
+                                ${XBMC_BUILD_DIR}/addons/${target}/${to_binary})
+    endif()
   endif()
 endmacro()
 

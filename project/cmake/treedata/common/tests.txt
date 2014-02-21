@@ -3,3 +3,4 @@ xbmc/filesystem/test        test/filesystem
 xbmc/interfaces/python/test test/python
 xbmc/threads/test           test/threads
 xbmc/utils/test             test/utils
+xbmc/games/test             test/games
