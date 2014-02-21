@@ -1,0 +1,4 @@
+xbmc/games          games
+xbmc/games/libretro games/libretro
+xbmc/games/tags     games/tags
+xbmc/games/windows  games/windows

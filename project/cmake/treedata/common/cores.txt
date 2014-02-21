@@ -6,5 +6,6 @@ xbmc/cores/DllLoader/exports/util      cores/dll-loader/exports/util
 xbmc/cores/ExternalPlayer              cores/externalplayer
 xbmc/cores/paplayer                    cores/paplayer
 xbmc/cores/playercorefactory           cores/playercorefactory
+xbmc/cores/RetroPlayer                 cores/retroplayer
 xbmc/cores/VideoRenderers              cores/videorenderers
 xbmc/cores/VideoRenderers/VideoShaders cores/videorenderers/shaders

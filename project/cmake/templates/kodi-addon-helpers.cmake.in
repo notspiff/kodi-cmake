@@ -72,10 +72,19 @@ macro (build_addon target prefix libs)
       # A good way to deal with () in filenames
       configure_file(${file} ${KODI_BUILD_DIR}/addons/${target}/${name} COPYONLY)
     endforeach()
-      add_custom_command(TARGET ${target} POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy
-                                $<TARGET_LINKER_FILE:${target}>
-                                ${KODI_BUILD_DIR}/addons/${target}/$<TARGET_LINKER_FILE_NAME:${target}>)
+    add_custom_command(TARGET ${target} POST_BUILD
+                      COMMAND ${CMAKE_COMMAND} -E copy
+                              $<TARGET_LINKER_FILE:${target}>
+                              ${KODI_BUILD_DIR}/addons/${target}/$<TARGET_LINKER_FILE_NAME:${target}>)
+    if (${prefix}_CUSTOM_BINARY)
+      list(GET ${prefix}_CUSTOM_BINARY 0 from_binary)
+      list(GET ${prefix}_CUSTOM_BINARY 1 to_binary)
+      list(GET ${prefix}_CUSTOM_BINARY 2 custom_target)
+      add_custom_command(TARGET ${custom_target} POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E rename
+                                ${from_binary}
+                                ${XBMC_BUILD_DIR}/addons/${target}/${to_binary})
+    endif()
   endif()
 endmacro()
 
