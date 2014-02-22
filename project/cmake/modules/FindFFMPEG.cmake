@@ -65,11 +65,21 @@ else()
                       PREFIX ${CORE_BUILD_DIR}/ffmpeg
                       CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/tmp/configure_ffmpeg)
   if(ENABLE_STATIC_FFMPEG)
-    find_package(BZip2 REQUIRED)
     list(APPEND FFMPEG_DEFINITIONS -DUSE_STATIC_FFMPEG=1)
-    list(APPEND FFMPEG_LIBRARIES -L${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib
-                                  avformat avcodec avfilter avutil swscale swresample
-                                  postproc ${BZIP2_LIBRARIES})
+    file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/ffmpeg-link-wrapper
+"#!/bin/bash
+avformat=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavcodec`
+avcodec=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavformat`
+avfilter=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavfilter`
+avutil=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavutil`
+swscale=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libswscale`
+swresample=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libswresample`
+$@ $avcodec $avformat $avcodec $avfilter $swscale $swresample -lpostproc")
+    file(COPY ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/ffmpeg-link-wrapper
+         DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+    set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg-link-wrapper <CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>")
+    set(CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_CXX_LINK_EXECUTABLE} PARENT_SCOPE)
   else()
     set(ffmpeg_libs avcodec-54 avformat-54 avfilter-3
                     avutil-52 swscale-2 swresample-0 postproc-52)
