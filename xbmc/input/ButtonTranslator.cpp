@@ -308,6 +308,8 @@ bool CButtonTranslator::IsAnalog(int actionID)
   {
   case ACTION_ANALOG_SEEK_FORWARD:
   case ACTION_ANALOG_SEEK_BACK:
+  case ACTION_SCROLL_UP:
+  case ACTION_SCROLL_DOWN:
   case ACTION_ANALOG_FORWARD:
   case ACTION_ANALOG_REWIND:
   case ACTION_ANALOG_MOVE:
