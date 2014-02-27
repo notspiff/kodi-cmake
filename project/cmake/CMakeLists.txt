@@ -40,6 +40,8 @@ if(UNIX)
   option(ENABLE_VAAPI       "Enable VAAPI support?" ON)
   option(ENABLE_VDPAU       "Enable VDPAU support?" ON)
   option(ENABLE_OPTICAL     "Enable optical support?" ON)
+  option(ENABLE_SDLJOYSTICK "Enable SDL joystick support?" OFF)
+  option(ENABLE_LINUXJOYSTICK "Enable use of the linux Joystick API?" ON)
 endif()
 # System options
 option(WITH_ARCH              "build with given arch" OFF)
@@ -88,7 +90,7 @@ set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
                   JPEG Lzo2 Fribidi SampleRate TagLib FFMPEG)
 
 # Optional dependencies
-set(optional_deps MicroHttpd MySqlClient
+set(optional_deps MicroHttpd MySqlClient LinuxJoystick
                   Alsa UDev Dbus Avahi Wayland
                   PulseAudio VDPAU VAAPI)
 
@@ -161,6 +163,10 @@ endif()
 
 if(ENABLE_SKIN_TOUCHED)
   list(APPEND DEP_DEFINES "-DHAS_SKIN_TOUCHED=1")
+endif()
+
+if(ENABLE_SDLJOYSTICK AND SDL_FOUND)
+  list(APPEND SYSTEM DEP_DEFINES "-DHAS_SDL_JOYSTICK=1")
 endif()
 
 core_find_git_rev()
