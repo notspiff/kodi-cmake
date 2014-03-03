@@ -3152,6 +3152,9 @@
     <ClCompile Include="..\..\xbmc\games\tags\GameInfoTagLoader.cpp">
       <Filter>games\tags</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\addons\AddonCallbacksGame.cpp">
+      <Filter>addons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -6134,6 +6137,21 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\games\tags\GameInfoTag.h">
       <Filter>games\tags</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\addons\include\xbmc_game_callbacks.h">
+      <Filter>addons\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\addons\include\xbmc_game_dll.h">
+      <Filter>addons\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\addons\include\xbmc_game_types.h">
+      <Filter>addons\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\addons\AddonCallbacksGame.h">
+      <Filter>addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\addons\DllGameClient.h">
+      <Filter>addons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

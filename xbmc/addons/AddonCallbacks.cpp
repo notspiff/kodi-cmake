@@ -25,6 +25,7 @@
 #include "AddonCallbacksGUI.h"
 #include "AddonCallbacksPeripheral.h"
 #include "AddonCallbacksPVR.h"
+#include "AddonCallbacksGame.h"
 #include "filesystem/SpecialProtocol.h"
 #include "utils/log.h"
 
@@ -40,6 +41,7 @@ CAddonCallbacks::CAddonCallbacks(CAddon* addon)
   m_helperPeripheral = NULL;
   m_helperPVR   = NULL;
   m_helperCODEC = NULL;
+  m_helperGame  = NULL;
 
   m_callbacks->libBasePath           = strdup(CSpecialProtocol::TranslatePath("special://xbmcbin/addons").c_str());
   m_callbacks->addonData             = this;
@@ -53,6 +55,8 @@ CAddonCallbacks::CAddonCallbacks(CAddon* addon)
   m_callbacks->PeripheralLib_UnRegisterMe = CAddonCallbacks::PeripheralLib_UnRegisterMe;
   m_callbacks->PVRLib_RegisterMe     = CAddonCallbacks::PVRLib_RegisterMe;
   m_callbacks->PVRLib_UnRegisterMe   = CAddonCallbacks::PVRLib_UnRegisterMe;
+  m_callbacks->GameLib_RegisterMe    = CAddonCallbacks::GameLib_RegisterMe;
+  m_callbacks->GameLib_UnRegisterMe  = CAddonCallbacks::GameLib_UnRegisterMe;
 }
 
 CAddonCallbacks::~CAddonCallbacks()
@@ -67,6 +71,8 @@ CAddonCallbacks::~CAddonCallbacks()
   m_helperPeripheral = NULL;
   delete m_helperPVR;
   m_helperPVR = NULL;
+  delete m_helperGame;
+  m_helperGame = NULL;
   free((char*)m_callbacks->libBasePath);
   delete m_callbacks;
   m_callbacks = NULL;
@@ -200,6 +206,32 @@ void CAddonCallbacks::PVRLib_UnRegisterMe(void *addonData, CB_PVRLib *cbTable)
 
   delete addon->m_helperPVR;
   addon->m_helperPVR = NULL;
+}
+
+CB_GameLib* CAddonCallbacks::GameLib_RegisterMe(void *addonData)
+{
+  CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
+  if (addon == NULL)
+  {
+    CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
+    return NULL;
+  }
+
+  addon->m_helperGame = new CAddonCallbacksGame(addon->m_addon);
+  return addon->m_helperGame->GetCallbacks();
+}
+
+void CAddonCallbacks::GameLib_UnRegisterMe(void *addonData, CB_GameLib *cbTable)
+{
+  CAddonCallbacks* addon = (CAddonCallbacks*) addonData;
+  if (addon == NULL)
+  {
+    CLog::Log(LOGERROR, "CAddonCallbacks - %s - called with a null pointer", __FUNCTION__);
+    return;
+  }
+
+  delete addon->m_helperGame;
+  addon->m_helperGame = NULL;
 }
 
 }; /* namespace ADDON */

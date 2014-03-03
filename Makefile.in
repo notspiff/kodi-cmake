@@ -257,6 +257,7 @@ LIBADDON_DIRS=\
 	lib/addons/library.xbmc.codec \
 	lib/addons/library.xbmc.pvr \
 	lib/addons/library.xbmc.gui \
+	lib/addons/library.xbmc.game \
 	lib/addons/library.xbmc.peripheral \
 
 CONFLUENCE_MEDIA=addons/skin.confluence/media
@@ -406,6 +407,7 @@ screensavers: $(SS_DIRS)
 libaddon: exports
 	$(MAKE) -C lib/addons/library.xbmc.addon
 	$(MAKE) -C lib/addons/library.xbmc.codec
+	$(MAKE) -C lib/addons/library.xbmc.game
 	$(MAKE) -C lib/addons/library.xbmc.gui
 	$(MAKE) -C lib/addons/library.xbmc.peripheral
 	$(MAKE) -C lib/addons/library.xbmc.pvr
