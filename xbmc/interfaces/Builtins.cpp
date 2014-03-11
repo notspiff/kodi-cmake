@@ -573,13 +573,6 @@ int CBuiltins::Execute(const CStdString& execString)
           // Otherwise there are 2 entries for the same plugin in ViewModesX.db
           urlParameters = "/";
         }
-        else if (addon->Type() == ADDON_GAMEDLL && params.size() >= 2)
-        {
-          CFileItem item(params[1], false);
-          item.SetProperty("gameclient", params[0]);
-          return g_application.PlayMedia(item);
-        }
-
         if (plugin->Provides(CPluginSource::VIDEO))
           cmd = StringUtils::Format("ActivateWindow(Videos,plugin://%s%s,return)", addonid.c_str(), urlParameters.c_str());
         else if (plugin->Provides(CPluginSource::AUDIO))
@@ -592,6 +585,12 @@ int CBuiltins::Execute(const CStdString& execString)
           // Pass the script name (params[0]) and all the parameters
           // (params[1] ... params[x]) separated by a comma to RunPlugin
           cmd = StringUtils::Format("RunPlugin(%s)", StringUtils::JoinString(params, ",").c_str());
+      }
+      else if (addon->Type() == ADDON_GAMEDLL && params.size() >= 2)
+      {
+        CFileItem item(params[1], false);
+        item.SetProperty("gameclient", params[0]);
+        return g_application.PlayMedia(item);
       }
       else if (CAddonMgr::Get().GetAddon(params[0], addon, ADDON_SCRIPT) ||
                CAddonMgr::Get().GetAddon(params[0], addon, ADDON_SCRIPT_WEATHER) ||
