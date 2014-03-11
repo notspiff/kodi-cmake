@@ -51,6 +51,7 @@ else()
                    --enable-pic
                    --custom-libname-with-major='$(FULLNAME)-$(LIBMAJOR)'-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
                    --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg
+                   --cc=${CMAKE_C_COMPILER}
                    ${FFMPEG_OPTS})
 
   if(GNUTLS_FOUND)
