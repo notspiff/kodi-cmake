@@ -293,6 +293,8 @@ foreach(subdir ${build_dirs})
                                           -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                                           -DBUILD_SHARED_LIBS=${shared}
                                           -DCMAKE_INSTALL_PREFIX=${install_prefix}
+                                          -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                                          -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                                           -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
                                           -DBOOTSTRAP_IN_TREE=1
                         "${install_command}")
@@ -307,6 +309,8 @@ foreach(subdir ${build_dirs})
                                           -DBUILD_SHARED_LIBS=${shared}
                                           -DCMAKE_INSTALL_PREFIX=${install_prefix}
                                           -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                                          -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                                          -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                         "${install_command}")
   endif()
   add_dependencies(${id} xbmc-platform)
