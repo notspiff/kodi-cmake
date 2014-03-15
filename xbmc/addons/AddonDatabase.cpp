@@ -305,14 +305,22 @@ bool CAddonDatabase::GetAddon(int id, AddonPtr &addon)
   return false;
 }
 
-bool CAddonDatabase::GetAddons(VECADDONS& addons)
+bool CAddonDatabase::GetAddons(VECADDONS& addons, const TYPE &type /* = ADDON_UNKNOWN */)
 {
   try
   {
     if (NULL == m_pDB.get()) return false;
     if (NULL == m_pDS2.get()) return false;
 
-    std::string sql = PrepareSQL("select distinct addonID from addon");
+    std::string sql;
+    if (type == ADDON_UNKNOWN)
+      sql = PrepareSQL("select distinct addonID from addon");
+    else
+    {
+      const string strType = TranslateType(type);
+      sql = PrepareSQL("select distinct addonID from addon where type='%s'", strType.c_str());
+    }
+
     m_pDS->query(sql.c_str());
     while (!m_pDS->eof())
     {
