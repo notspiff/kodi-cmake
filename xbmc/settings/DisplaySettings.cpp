@@ -558,7 +558,7 @@ RESOLUTION CDisplaySettings::GetResolutionForScreen()
   return RES_DESKTOP;
 }
 
-void CDisplaySettings::SettingOptionsRefreshChangeDelaysFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+void CDisplaySettings::SettingOptionsRefreshChangeDelaysFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)
 {
   list.push_back(make_pair(g_localizeStrings.Get(13551), 0));
           
@@ -566,7 +566,7 @@ void CDisplaySettings::SettingOptionsRefreshChangeDelaysFiller(const CSetting *s
     list.push_back(make_pair(StringUtils::Format(g_localizeStrings.Get(13553).c_str(), (double)i / 10.0), i));
 }
 
-void CDisplaySettings::SettingOptionsRefreshRatesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current)
+void CDisplaySettings::SettingOptionsRefreshRatesFiller(const CSetting *setting, std::vector< std::pair<std::string, std::string> > &list, std::string &current, void *data)
 {
   // get the proper resolution
   RESOLUTION res = CDisplaySettings::Get().GetDisplayResolution();
@@ -598,7 +598,7 @@ void CDisplaySettings::SettingOptionsRefreshRatesFiller(const CSetting *setting,
     current = GetStringFromResolution(res, g_Windowing.DefaultRefreshRate(resInfo.iScreen, refreshrates).RefreshRate);
 }
 
-void CDisplaySettings::SettingOptionsResolutionsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+void CDisplaySettings::SettingOptionsResolutionsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)
 {
   RESOLUTION res = CDisplaySettings::Get().GetDisplayResolution();
   RESOLUTION_INFO info = CDisplaySettings::Get().GetResolutionInfo(res);
@@ -627,7 +627,7 @@ void CDisplaySettings::SettingOptionsResolutionsFiller(const CSetting *setting, 
   }
 }
 
-void CDisplaySettings::SettingOptionsScreensFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+void CDisplaySettings::SettingOptionsScreensFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)
 {
   if (g_advancedSettings.m_canWindowed)
     list.push_back(make_pair(g_localizeStrings.Get(242), DM_WINDOWED));
@@ -648,7 +648,7 @@ void CDisplaySettings::SettingOptionsScreensFiller(const CSetting *setting, std:
   }
 }
 
-void CDisplaySettings::SettingOptionsVerticalSyncsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+void CDisplaySettings::SettingOptionsVerticalSyncsFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)
 {
   // This ifdef is intended to catch everything except Linux and FreeBSD
 #if defined(TARGET_LINUX) && !defined(TARGET_DARWIN) && !defined(TARGET_ANDROID) && !defined(TARGET_RASPBERRY_PI)
@@ -659,7 +659,7 @@ void CDisplaySettings::SettingOptionsVerticalSyncsFiller(const CSetting *setting
   list.push_back(make_pair(g_localizeStrings.Get(13108), VSYNC_ALWAYS));
 }
 
-void CDisplaySettings::SettingOptionsStereoscopicModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+void CDisplaySettings::SettingOptionsStereoscopicModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)
 {
   for (int i = RENDER_STEREO_MODE_OFF; i < RENDER_STEREO_MODE_COUNT; i++)
   {
@@ -669,8 +669,8 @@ void CDisplaySettings::SettingOptionsStereoscopicModesFiller(const CSetting *set
   }
 }
 
-void CDisplaySettings::SettingOptionsPreferredStereoscopicViewModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current)
+void CDisplaySettings::SettingOptionsPreferredStereoscopicViewModesFiller(const CSetting *setting, std::vector< std::pair<std::string, int> > &list, int &current, void *data)
 {
-  SettingOptionsStereoscopicModesFiller(setting, list, current);
+  SettingOptionsStereoscopicModesFiller(setting, list, current, data);
   list.push_back(make_pair(g_localizeStrings.Get(36525), RENDER_STEREO_MODE_AUTO)); // option for autodetect
 }
