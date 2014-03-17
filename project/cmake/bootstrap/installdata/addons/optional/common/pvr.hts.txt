@@ -1,1 +1,1 @@
-pvr.hts https://github.com/notspiff/pvr.hts 340bfa2 # PVRADDONS;PVRHTS OFF
+pvr.hts https://github.com/notspiff/pvr.hts 22ffcbc # PVRADDONS;PVRHTS OFF
