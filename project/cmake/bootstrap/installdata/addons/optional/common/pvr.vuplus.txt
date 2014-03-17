@@ -1,1 +1,1 @@
-pvr.vuplus https://github.com/notspiff/pvr.vuplus 69c2141 # PVRADDONS;PVRVUPLUS OFF
+pvr.vuplus https://github.com/notspiff/pvr.vuplus a97a098 # PVRADDONS;PVRVUPLUS OFF
