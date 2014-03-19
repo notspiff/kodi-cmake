@@ -60,8 +60,11 @@ bool CGUIControlBaseSetting::IsEnabled() const
   return m_pSetting != NULL && m_pSetting->IsEnabled();
 }
 
-void CGUIControlBaseSetting::Update()
+void CGUIControlBaseSetting::Update(bool updateDisplayOnly /* = false */)
 {
+  if (updateDisplayOnly)
+    return;
+
   CGUIControl *control = GetControl();
   if (control == NULL)
     return;
@@ -89,7 +92,7 @@ bool CGUIControlRadioButtonSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlRadioButtonSetting::Update()
+void CGUIControlRadioButtonSetting::Update(bool updateDisplayOnly /* = false */)
 {
   if (m_pRadioButton == NULL)
     return;
@@ -137,9 +140,9 @@ bool CGUIControlSpinExSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlSpinExSetting::Update()
+void CGUIControlSpinExSetting::Update(bool updateDisplayOnly /* = false */)
 {
-  if (m_pSpin == NULL)
+  if (updateDisplayOnly || m_pSpin == NULL)
     return;
 
   CGUIControlBaseSetting::Update();
@@ -320,9 +323,9 @@ bool CGUIControlListSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlListSetting::Update()
+void CGUIControlListSetting::Update(bool updateDisplayOnly /* = false */)
 {
-  if (m_pButton == NULL)
+  if (updateDisplayOnly || m_pButton == NULL)
     return;
 
   CGUIControlBaseSetting::Update();
@@ -561,9 +564,9 @@ bool CGUIControlButtonSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlButtonSetting::Update()
+void CGUIControlButtonSetting::Update(bool updateDisplayOnly /* = false */)
 {
-  if (m_pButton == NULL)
+  if (updateDisplayOnly || m_pButton == NULL)
     return;
 
   CGUIControlBaseSetting::Update();
@@ -735,9 +738,9 @@ bool CGUIControlEditSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlEditSetting::Update()
+void CGUIControlEditSetting::Update(bool updateDisplayOnly /* = false */)
 {
-  if (m_pEdit == NULL)
+  if (updateDisplayOnly || m_pEdit == NULL)
     return;
 
   CGUIControlBaseSetting::Update();
@@ -821,7 +824,7 @@ bool CGUIControlSliderSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlSliderSetting::Update()
+void CGUIControlSliderSetting::Update(bool updateDisplayOnly /* = false */)
 {
   if (m_pSlider == NULL)
     return;
@@ -834,8 +837,14 @@ void CGUIControlSliderSetting::Update()
     case SettingTypeInteger:
     {
       const CSettingInt *settingInt = static_cast<CSettingInt*>(m_pSetting);
-      int value = static_cast<CSettingInt*>(m_pSetting)->GetValue();
-      m_pSlider->SetIntValue(value);
+      int value;
+      if (updateDisplayOnly)
+        value = m_pSlider->GetIntValue();
+      else
+      {
+        value = static_cast<CSettingInt*>(m_pSetting)->GetValue();
+        m_pSlider->SetIntValue(value);
+      }
 
       strText = CGUIControlSliderSetting::GetText(static_cast<const CSettingControlSlider*>(m_pSetting->GetControl()),
         value, settingInt->GetMinimum(), settingInt->GetStep(), settingInt->GetMaximum());
@@ -845,8 +854,14 @@ void CGUIControlSliderSetting::Update()
     case SettingTypeNumber:
     {
       const CSettingNumber *settingNumber = static_cast<CSettingNumber*>(m_pSetting);
-      double value = static_cast<CSettingNumber*>(m_pSetting)->GetValue();
-      m_pSlider->SetFloatValue((float)value);
+      double value;
+      if (updateDisplayOnly)
+        value = (float)m_pSlider->GetFloatValue();
+      else
+      {
+        value = static_cast<CSettingNumber*>(m_pSetting)->GetValue();
+        m_pSlider->SetFloatValue((float)value);
+      }
 
       strText = CGUIControlSliderSetting::GetText(static_cast<const CSettingControlSlider*>(m_pSetting->GetControl()),
         value, settingNumber->GetMinimum(), settingNumber->GetStep(), settingNumber->GetMaximum());
@@ -965,7 +980,7 @@ bool CGUIControlRangeSetting::OnClick()
   return IsValid();
 }
 
-void CGUIControlRangeSetting::Update()
+void CGUIControlRangeSetting::Update(bool updateDisplayOnly /* = false */)
 {
   if (m_pSlider == NULL ||
       m_pSetting->GetType() != SettingTypeList)
@@ -993,10 +1008,19 @@ void CGUIControlRangeSetting::Update()
   {
     case SettingTypeInteger:
     {
-      int valueLower = static_cast<CSettingInt*>(settingListValues[0].get())->GetValue();
-      int valueUpper = static_cast<CSettingInt*>(settingListValues[1].get())->GetValue();
-      m_pSlider->SetIntValue(valueLower, CGUISliderControl::RangeSelectorLower);
-      m_pSlider->SetIntValue(valueUpper, CGUISliderControl::RangeSelectorUpper);
+      int valueLower, valueUpper;
+      if (updateDisplayOnly)
+      {
+        valueLower = m_pSlider->GetIntValue(CGUISliderControl::RangeSelectorLower);
+        valueUpper = m_pSlider->GetIntValue(CGUISliderControl::RangeSelectorUpper);
+      }
+      else
+      {
+        valueLower = static_cast<CSettingInt*>(settingListValues[0].get())->GetValue();
+        valueUpper = static_cast<CSettingInt*>(settingListValues[1].get())->GetValue();
+        m_pSlider->SetIntValue(valueLower, CGUISliderControl::RangeSelectorLower);
+        m_pSlider->SetIntValue(valueUpper, CGUISliderControl::RangeSelectorUpper);
+      }
 
       if (controlFormat == "date" || controlFormat == "time")
       {
@@ -1040,10 +1064,19 @@ void CGUIControlRangeSetting::Update()
 
     case SettingTypeNumber:
     {
-      double valueLower = static_cast<CSettingNumber*>(settingListValues[0].get())->GetValue();
-      double valueUpper = static_cast<CSettingNumber*>(settingListValues[1].get())->GetValue();
-      m_pSlider->SetFloatValue((float)valueLower, CGUISliderControl::RangeSelectorLower);
-      m_pSlider->SetFloatValue((float)valueUpper, CGUISliderControl::RangeSelectorUpper);
+      double valueLower, valueUpper;
+      if (updateDisplayOnly)
+      {
+        valueLower = static_cast<double>(m_pSlider->GetFloatValue(CGUISliderControl::RangeSelectorLower));
+        valueUpper = static_cast<double>(m_pSlider->GetFloatValue(CGUISliderControl::RangeSelectorUpper));
+      }
+      else
+      {
+        valueLower = static_cast<CSettingNumber*>(settingListValues[0].get())->GetValue();
+        valueUpper = static_cast<CSettingNumber*>(settingListValues[1].get())->GetValue();
+        m_pSlider->SetFloatValue((float)valueLower, CGUISliderControl::RangeSelectorLower);
+        m_pSlider->SetFloatValue((float)valueUpper, CGUISliderControl::RangeSelectorUpper);
+      }
 
       strTextLower = StringUtils::Format(valueFormat.c_str(), valueLower);
       if (valueLower != valueUpper)
