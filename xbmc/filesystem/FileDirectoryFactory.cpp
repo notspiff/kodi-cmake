@@ -44,6 +44,7 @@
 #include "addons/AddonManager.h"
 #include "addons/AudioDecoder.h"
 #include "addons/VFSEntry.h"
+#include "M4BFileDirectory.h"
 
 using namespace ADDON;
 using namespace XFILE;
@@ -188,6 +189,18 @@ IFileDirectory* CFileDirectoryFactory::Create(const CStdString& strPath, CFileIt
         return pDir;
     }
     delete pDir;
+    return NULL;
+  }
+
+  if (strExtension == ".m4b")
+  {
+    if (!pItem->HasMusicInfoTag())
+    {
+      CM4BFileDirectory* pDir = new CM4BFileDirectory;
+      if (pDir->ContainsFiles(strPath))
+        return pDir;
+      delete pDir;
+    }
     return NULL;
   }
   return NULL;
