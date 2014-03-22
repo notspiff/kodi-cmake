@@ -846,7 +846,8 @@ bool CFileItem::IsFileFolder(EFileFolderType types) const
     || IsZIP()
     || IsRAR()
     || IsRSS()
-    || IsType(".ogg|.oga|.nsf|.sid|.sap|.xsp|.m4b")
+    || IsType(".ogg|.oga|.nsf|.sid|.sap|.xsp")
+    || IsAudioBook()
 #if defined(TARGET_ANDROID)
     || IsType(".apk")
 #endif
@@ -974,6 +975,12 @@ bool CFileItem::IsRSS() const
 bool CFileItem::IsAndroidApp() const
 {
   return URIUtils::IsAndroidApp(m_strPath);
+}
+
+bool CFileItem::IsAudioBook() const
+{
+  return     IsType(".m4b") || HasProperty("audiobook")
+         || (IsType(".mp3") && m_bIsFolder == true);
 }
 
 bool CFileItem::IsStack() const
