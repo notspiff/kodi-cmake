@@ -50,6 +50,7 @@
 #include "FileItem.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
+#include "AudioBookFileDirectory.h"
 
 using namespace XFILE;
 using namespace PLAYLIST;
@@ -240,6 +241,18 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
         return pDir;
     }
     delete pDir;
+    return NULL;
+  }
+
+  if (pItem->IsAudioBook())
+  {
+    if (!pItem->HasMusicInfoTag() || pItem->m_lEndOffset <= 0)
+    {
+      CAudioBookFileDirectory* pDir = new CAudioBookFileDirectory;
+      if (pDir->ContainsFiles(url))
+        return pDir;
+      delete pDir;
+    }
     return NULL;
   }
   return NULL;
