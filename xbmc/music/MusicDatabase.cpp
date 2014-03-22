@@ -142,6 +142,11 @@ void CMusicDatabase::CreateTables()
               " iRating integer, "
               " lastScraped varchar(20) default NULL, "
               " strReleaseType text)");
+  CLog::Log(LOGINFO, "create audiobook table");
+  m_pDS->exec("CREATE TABLE audiobook (idBook integer primary key, "
+              " strBook varchar(256), strAuthor text,"
+              " bookmark integer, file text,"
+              " dateAdded varchar (20) default NULL)");
   CLog::Log(LOGINFO, "create album_artist table");
   m_pDS->exec("CREATE TABLE album_artist (idArtist integer, idAlbum integer, strJoinPhrase text, boolFeatured integer, iOrder integer, strArtist text)");
   CLog::Log(LOGINFO, "create album_genre table");
@@ -3946,11 +3951,19 @@ void CMusicDatabase::UpdateTables(int version)
       m_pDS->exec("DROP TABLE album");
       m_pDS->exec("ALTER TABLE album_new RENAME TO album");
    }
+  if (version < 55)
+  {
+    CLog::Log(LOGINFO, "create audiobook table");
+    m_pDS->exec("CREATE TABLE audiobook (idBook integer primary key, "
+                " strBook varchar(256), strAuthor text,"
+                " bookmark integer, file text,"
+                " dateAdded varchar (20) default NULL)");
+  }
 }
 
 int CMusicDatabase::GetSchemaVersion() const
 {
-  return 54;
+  return 55;
 }
 
 unsigned int CMusicDatabase::GetSongIDs(const Filter &filter, std::vector<std::pair<int,int> > &songIDs)
@@ -5788,4 +5801,41 @@ void CMusicDatabase::UpdateFileDateAdded(int songId, const std::string& strFileN
   {
     CLog::Log(LOGERROR, "%s (%s, %s) failed", __FUNCTION__, CURL::GetRedacted(strFileNameAndPath).c_str(), dateAdded.GetAsDBDateTime().c_str());
   }
+}
+
+bool CMusicDatabase::AddAudioBook(const CFileItem& item)
+{
+  std::string strSQL = PrepareSQL("INSERT INTO audiobook (idBook,strBook,strAuthor,bookmark,file,dateAdded) VALUES (NULL,'%s','%s',%i,'%s','%s')",
+                                 item.GetMusicInfoTag()->GetAlbum().c_str(),
+                                 item.GetMusicInfoTag()->GetArtist()[0].c_str(), 0,
+                                 item.GetPath().c_str(),
+                                 CDateTime::GetCurrentDateTime().GetAsDBDateTime().c_str());
+  return ExecuteQuery(strSQL);
+}
+
+bool CMusicDatabase::SetResumeBookmarkForAudioBook(const CFileItem& item, int bookmark)
+{
+  std::string strSQL = PrepareSQL("select bookmark from audiobook where file='%s'",
+                                 item.GetPath().c_str());
+  if (!m_pDS->query(strSQL.c_str()) || m_pDS->num_rows() == 0)
+  {
+    if (!AddAudioBook(item))
+      return false;
+  }
+
+  strSQL = PrepareSQL("UPDATE audiobook SET bookmark=%i WHERE file='%s'",
+                      bookmark, item.GetPath().c_str());
+
+  return ExecuteQuery(strSQL);
+}
+
+bool CMusicDatabase::GetResumeBookmarkForAudioBook(const std::string& path, int& bookmark)
+{
+  std::string strSQL = PrepareSQL("SELECT bookmark FROM audiobook WHERE file='%s'",
+                                 path.c_str());
+  if (!m_pDS->query(strSQL.c_str()) || m_pDS->num_rows() == 0)
+    return false;
+
+  bookmark = m_pDS->fv(0).get_asInt();
+  return true;
 }
