@@ -189,6 +189,12 @@ bool CSaveFileStateJob::DoWork()
           }
         }
       }
+      if (m_item.IsAudioBook())
+      {
+        musicdatabase.Open();
+        musicdatabase.SetResumeBookmarkForAudioBook(m_item, m_item.m_lStartOffset+m_bookmark.timeInSeconds*75);
+        musicdatabase.Close();
+      }
     }
   }
   return true;
