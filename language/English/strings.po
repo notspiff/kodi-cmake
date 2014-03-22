@@ -15510,3 +15510,8 @@ msgstr ""
 msgctxt "#37025"
 msgid "Configure audio encoder settings such as quality and compression level"
 msgstr ""
+
+#: xbmc/music/windows/GUIWindowMusicBase.cpp
+msgctxt "#37026"
+msgid "Resume audiobook"
+msgstr ""
