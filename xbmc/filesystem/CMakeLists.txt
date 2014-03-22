@@ -35,6 +35,7 @@ set(SOURCES AddonsDirectory.cpp
             ISO9660Directory.cpp
             ISOFile.cpp
             LibraryDirectory.cpp
+            M4BFileDirectory.cpp
             MemBufferCache.cpp
             MultiPathDirectory.cpp
             MultiPathFile.cpp
