@@ -16197,7 +16197,12 @@ msgctxt "#37041"
 msgid "Use audio streams that are flagged as "default" (and match the preferred language) regardless of the number of channels or the used codec."
 msgstr ""
 
-#empty strings from id 37042 to 38009
+#: xbmc/music/windows/GUIWindowMusicBase.cpp
+msgctxt "#37042"
+msgid "Resume audiobook"
+msgstr ""
+
+#empty strings from id 37043 to 38009
 
 #: system/settings/rbp.xml
 msgctxt "#38010"
