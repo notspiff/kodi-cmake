@@ -1058,6 +1058,11 @@ bool CFileItem::IsAndroidApp() const
   return URIUtils::IsAndroidApp(m_strPath);
 }
 
+bool CFileItem::IsAudioBook() const
+{
+  return IsType(".m4b");
+}
+
 bool CFileItem::IsStack() const
 {
   return URIUtils::IsStack(m_strPath);
