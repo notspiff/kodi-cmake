@@ -43,7 +43,6 @@ else()
                    --disable-doc
                    --enable-postproc
                    --enable-gpl
-                   --enable-optimizations
                    --enable-vdpau
                    --enable-protocol=http
                    --enable-pthreads
@@ -53,6 +52,11 @@ else()
                    --prefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg
                    --cc=${CMAKE_C_COMPILER}
                    ${FFMPEG_OPTS})
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    list(APPEND ffmpeg_conf --enable-optimizations)
+  else()
+    list(APPEND ffmpeg_conf --disable-optimizations)
+  endif()
 
   if(GNUTLS_FOUND)
     list(APPEND ffmpeg_conf --enable-gnutls)
