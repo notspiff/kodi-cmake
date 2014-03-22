@@ -228,6 +228,7 @@ public:
   bool IsLiveTV() const;
   bool IsRSS() const;
   bool IsAndroidApp() const;
+  bool IsAudioBook() const;
 
   void RemoveExtension();
   void CleanString();
