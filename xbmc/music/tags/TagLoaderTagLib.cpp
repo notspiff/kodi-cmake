@@ -175,13 +175,15 @@ bool CTagLoaderTagLib::Load(const CStdString& strFileName, CMusicInfoTag& tag, c
     }
   }
 
-  if (!file || !file->isOpen())
+  if (file && !file->isOpen())
   {
     delete file;
     delete stream;
     CLog::Log(LOGDEBUG, "file could not be opened for tag reading");
     return false;
   }
+  if (!file)
+    return true;
 
   APE::Tag *ape = NULL;
   ASF::Tag *asf = NULL;
