@@ -834,9 +834,9 @@ void CWinRenderer::ScaleFixedPipeline()
   float srcWidth  = (float)srcDesc.Width;
   float srcHeight = (float)srcDesc.Height;
 
-  bool cbcontrol          = (CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast != 50.0f || CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness != 50.0f);
-  unsigned int contrast   = (unsigned int)(CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast *.01f * 255.0f); // we have to divide by two here/multiply by two later
-  unsigned int brightness = (unsigned int)(CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness * .01f * 255.0f);
+  bool cbcontrol          = (CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast != 50 || CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness != 50);
+  unsigned int contrast   = (unsigned int)(CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast *.01f * 255); // we have to divide by two here/multiply by two later
+  unsigned int brightness = (unsigned int)(CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness * .01f * 255);
 
   D3DCOLOR diffuse  = D3DCOLOR_ARGB(255, contrast, contrast, contrast);
   D3DCOLOR specular = D3DCOLOR_ARGB(255, brightness, brightness, brightness);
@@ -935,10 +935,10 @@ void CWinRenderer::Stage1()
   if (!m_bUseHQScaler)
   {
     m_colorShader->Render(m_sourceRect, g_graphicsContext.StereoCorrection(m_destRect),
-                            CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast,
-                            CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness,
-                            m_iFlags,
-                            (YUVBuffer*)m_VideoBuffers[m_iYV12RenderBuffer]);
+                          static_cast<float>(CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast),
+                          static_cast<float>(CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness),
+                          m_iFlags,
+                          (YUVBuffer*)m_VideoBuffers[m_iYV12RenderBuffer]);
   }
   else
   {
@@ -953,8 +953,8 @@ void CWinRenderer::Stage1()
     CRect rtRect(0.0f, 0.0f, m_sourceWidth, m_sourceHeight);
 
     m_colorShader->Render(srcRect, rtRect,
-                          CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast,
-                          CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness,
+                          static_cast<float>(CMediaSettings::Get().GetCurrentVideoSettings().m_Contrast),
+                          static_cast<float>(CMediaSettings::Get().GetCurrentVideoSettings().m_Brightness),
                           m_iFlags,
                           (YUVBuffer*)m_VideoBuffers[m_iYV12RenderBuffer]);
 

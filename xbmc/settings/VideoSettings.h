@@ -131,9 +131,9 @@ public:
   float m_SubtitleDelay;
   bool m_SubtitleOn;
   bool m_SubtitleCached;
-  float m_Brightness;
-  float m_Contrast;
-  float m_Gamma;
+  int m_Brightness;
+  int m_Contrast;
+  int m_Gamma;
   float m_NoiseReduction;
   bool m_PostProcess;
   float m_Sharpness;
