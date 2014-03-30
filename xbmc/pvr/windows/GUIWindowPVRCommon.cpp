@@ -599,7 +599,7 @@ bool CGUIWindowPVRCommon::ShowTimerSettings(CFileItem *item)
   pDlgInfo->DoModal();
 
   /* Get modify flag from window and return it to caller */
-  return pDlgInfo->GetOK();
+  return pDlgInfo->IsConfirmed();
 }
 
 
