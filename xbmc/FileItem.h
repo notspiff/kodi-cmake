@@ -212,6 +212,7 @@ public:
   bool IsLiveTV() const;
   bool IsRSS() const;
   bool IsAndroidApp() const;
+  bool IsImported() const;
 
   void RemoveExtension();
   void CleanString();

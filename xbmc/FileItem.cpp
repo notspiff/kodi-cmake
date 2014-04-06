@@ -1216,6 +1216,11 @@ bool CFileItem::IsReadOnly() const
   return !CUtil::SupportsWriteFileOperations(m_strPath);
 }
 
+bool CFileItem::IsImported() const
+{
+  return HasVideoInfoTag() && !GetVideoInfoTag()->m_strSource.empty() && !GetVideoInfoTag()->m_strImportPath.empty();
+}
+
 void CFileItem::FillInDefaultIcon()
 {
   //CLog::Log(LOGINFO, "FillInDefaultIcon(%s)", pItem->GetLabel().c_str());
