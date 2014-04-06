@@ -38,6 +38,7 @@
 #include "dialogs/GUIDialogProgress.h"
 #include "filesystem/File.h"
 #include "FileItem.h"
+#include "media/import/MediaImportManager.h"
 #include "storage/MediaManager.h"
 #include "utils/AsyncFileCopy.h"
 #include "profiles/ProfilesManager.h"
@@ -1175,14 +1176,21 @@ bool CGUIDialogVideoInfo::MarkWatched(const CFileItemPtr &item, bool bMark)
       continue;
 
 #ifdef HAS_UPNP
-    if (!URIUtils::IsUPnP(item->GetPath()) || !UPNP::CUPnP::MarkWatched(*pTmpItem, bMark))
+    if (item->IsImported() || !URIUtils::IsUPnP(item->GetPath()) || !UPNP::CUPnP::MarkWatched(*pTmpItem, bMark))
 #endif
     {
       // Clear resume bookmark
       if (bMark)
+      {
         database.ClearBookMarksOfFile(pTmpItem->GetPath(), CBookmark::RESUME);
+        pTmpItem->GetVideoInfoTag()->m_resumePoint.Reset();
+      }
 
       database.SetPlayCount(*pTmpItem, bMark ? 1 : 0);
+      pTmpItem->GetVideoInfoTag()->m_playCount = bMark ? 1 : 0;
+
+      if (item->IsImported())
+        CMediaImportManager::Get().UpdateImportedItem(*pTmpItem);
     }
   }
 
