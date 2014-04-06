@@ -228,6 +228,7 @@ public:
   bool IsLiveTV() const;
   bool IsRSS() const;
   bool IsAndroidApp() const;
+  bool IsImported() const;
 
   void RemoveExtension();
   void CleanString();
@@ -452,6 +453,11 @@ public:
    */
   void SetFromSong(const CSong &song);
 
+  const std::string& GetSource() const { return m_source; }
+  void SetSource(const std::string &source) { m_source = source; }
+  const std::string& GetImportPath() const { return m_importPath; }
+  void SetImportPath(const std::string &importPath) { m_importPath = importPath; }
+
   bool m_bIsShareOrDrive;    ///< is this a root share/drive
   int m_iDriveType;     ///< If \e m_bIsShareOrDrive is \e true, use to get the share type. Types see: CMediaSource::m_iDriveType
   CDateTime m_dateTime;             ///< file creation date & time
@@ -498,6 +504,9 @@ private:
   bool m_bIsAlbum;
 
   CCueDocumentPtr m_cueDocument;
+
+  std::string m_source;
+  std::string m_importPath;
 };
 
 /*!

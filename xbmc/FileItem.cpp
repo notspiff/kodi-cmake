@@ -396,6 +396,8 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
   m_extrainfo = item.m_extrainfo;
   m_specialSort = item.m_specialSort;
   m_bIsAlbum = item.m_bIsAlbum;
+  m_source = item.m_source;
+  m_importPath = item.m_importPath;
   return *this;
 }
 
@@ -433,6 +435,8 @@ void CFileItem::Reset()
   m_bSelected = false;
   m_bIsFolder = false;
 
+  m_source.clear();
+  m_importPath.clear();
   m_strDVDLabel.clear();
   m_strTitle.clear();
   m_strPath.clear();
@@ -508,6 +512,8 @@ void CFileItem::Archive(CArchive& ar)
       ar << 0;
 
     ar << m_enabled;
+    ar << m_source;
+    ar << m_importPath;
   }
   else
   {
@@ -549,6 +555,8 @@ void CFileItem::Archive(CArchive& ar)
       ar >> *GetPictureInfoTag();
 
     ar >> m_enabled;
+    ar >> m_source;
+    ar >> m_importPath;
 
     SetInvalid();
   }
@@ -1114,6 +1122,11 @@ bool CFileItem::IsReadOnly() const
     return true;
 
   return !CUtil::SupportsWriteFileOperations(m_strPath);
+}
+
+bool CFileItem::IsImported() const
+{
+  return !m_source.empty() && !m_importPath.empty();
 }
 
 void CFileItem::FillInDefaultIcon()
