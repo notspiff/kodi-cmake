@@ -75,6 +75,8 @@ public:
     static bool SaveFileState(const CFileItem& item,
                               const CBookmark& bookmark,
                               const bool updatePlayCount);
+    static bool UpdateItem(const std::string& path,
+                           const CFileItem& item);
 
     static void RegisterUserdata(void* ptr);
     static void UnregisterUserdata(void* ptr);
