@@ -31,12 +31,10 @@ public:
   virtual const char* GetIdentification() const { return "UPnPImporter"; }
 
   virtual bool CanImport(const std::string &path) const;
-  /* TODO: update on source
   virtual bool CanUpdateMetadataOnSource(const std::string &path) const { return false; }
   virtual bool CanUpdatePlaycountOnSource(const std::string &path) const;
   virtual bool CanUpdateLastPlayedOnSource(const std::string &path) const;
   virtual bool CanUpdateResumePositionOnSource(const std::string &path) const;
-  */
 
   virtual IMediaImporter* Create(const CMediaImport &import) const;
   virtual bool Import(CMediaImportRetrievalTask *task) const;

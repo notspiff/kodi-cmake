@@ -177,7 +177,6 @@ bool CUPnPMediaImporter::CanImport(const std::string& path) const
   return !searchCapabilities.IsEmpty() && searchCapabilities.Find("upnp:class") >= 0;
 }
 
-/* TODO: update on source
 bool CUPnPMediaImporter::CanUpdatePlaycountOnSource(const std::string& path) const
 {
   // TODO: find a more generic condition
@@ -195,7 +194,6 @@ bool CUPnPMediaImporter::CanUpdateResumePositionOnSource(const std::string& path
   // TODO: find a more generic condition
   return isXbmcServer(path);
 }
-*/
 
 IMediaImporter* CUPnPMediaImporter::Create(const CMediaImport &import) const
 {
@@ -265,11 +263,9 @@ bool CUPnPMediaImporter::UpdateOnSource(CMediaImportUpdateTask* task) const
     return false;
   }
 
-  /* TODO: update on source
   const CMediaImportSettings &importSettings = task->GetImport().GetSettings();
   if (!importSettings.UpdatePlaybackMetadataOnSource())
     return false;
-  */
   
   const std::string &importPath = task->GetImport().GetPath();
   if (!CanUpdatePlaycountOnSource(importPath) &&
@@ -277,11 +273,15 @@ bool CUPnPMediaImporter::UpdateOnSource(CMediaImportUpdateTask* task) const
       !CanUpdateResumePositionOnSource(importPath))
     return false;
 
-  /* TODO: we need a way to get the original path/object identifier from the server
-  return CUPnP::GetInstance()->UpdateItem("TODO", task->GetItem());
-  */
+  const CFileItem &item = task->GetItem();
+  std::string url;
+  if (item.HasVideoInfoTag())
+    url = item.GetVideoInfoTag()->GetPath();
 
-  return false;
+  if (url.empty())
+    return false;
+
+  return CUPnP::GetInstance()->UpdateItem(url, task->GetItem());
 }
 
 bool CUPnPMediaImporter::validatePath(const std::string& path, PLT_DeviceDataReference &device)
