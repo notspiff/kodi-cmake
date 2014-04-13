@@ -41,10 +41,8 @@
 
 #define SETTING_SYNCHRONISATION_UPDATE_ITEMS                  "synchronisation.updateimporteditems"
 #define SETTING_SYNCHRONISATION_UPDATE_PLAYBACK_FROM_SOURCE   "synchronisation.updateplaybackmetadatafromsource"
-/* TODO: update on source
 #define SETTING_SYNCHRONISATION_UPDATE_METADATA_ON_SOURCE     "synchronisation.updatemetadataonsource"
 #define SETTING_SYNCHRONISATION_UPDATE_PLAYBACK_ON_SOURCE     "synchronisation.updateplaybackmetadataonsource"
-*/
 
 CGUIDialogMediaImportInfo::CGUIDialogMediaImportInfo()
     : CGUIDialogSettingsManualBase(WINDOW_DIALOG_MEDIAIMPORT_INFO, "DialogMediaImportInfo.xml"),
@@ -189,7 +187,6 @@ void CGUIDialogMediaImportInfo::OnSettingChanged(const CSetting *setting)
     importSettings.SetUpdateImportedMediaItems(m_synchronisationUpdateImportedMediaItems);
   else if (settingId == SETTING_SYNCHRONISATION_UPDATE_PLAYBACK_FROM_SOURCE)
     importSettings.SetUpdatePlaybackMetadataFromSource(m_synchronisationUpdatePlaybackMetadataFromSource);
-  /* TODO: update on source
   else if (settingId == SETTING_SYNCHRONISATION_UPDATE_METADATA_ON_SOURCE)
   {
     if (m_synchronisationUpdateMetadataOnSource)
@@ -199,7 +196,6 @@ void CGUIDialogMediaImportInfo::OnSettingChanged(const CSetting *setting)
   }
   else if (settingId == SETTING_SYNCHRONISATION_UPDATE_PLAYBACK_ON_SOURCE)
     importSettings.SetUpdatePlaybackMetadataOnSource(m_synchronisationUpdatePlaybackMetadataOnSource);
-  */
 
   Save();
 }
@@ -249,9 +245,7 @@ void CGUIDialogMediaImportInfo::InitializeSettings()
   const CMediaImportSettings &importSettings = m_import->GetSettings();
   m_synchronisationUpdateImportedMediaItems = importSettings.UpdateImportedMediaItems();
   m_synchronisationUpdatePlaybackMetadataFromSource = importSettings.UpdatePlaybackMetadataFromSource();
-  /* TODO: update on source
   m_synchronisationUpdatePlaybackMetadataOnSource = importSettings.UpdatePlaybackMetadataOnSource();
-  */
 
   AddToggle(groupSynchronisation, SETTING_SYNCHRONISATION_UPDATE_ITEMS, 37060, 0, &m_synchronisationUpdateImportedMediaItems);
 
@@ -267,7 +261,6 @@ void CGUIDialogMediaImportInfo::InitializeSettings()
   depsSynchronisationUpdateItemsEnabled.push_back(dependencySynchronisationUpdateItemsEnabled);
   settingPlaybackFromSource->SetDependencies(depsSynchronisationUpdateItemsEnabled);
 
-  /* TODO: update on source
   const std::string &importPath = m_import->GetPath();
   const IMediaImporter *importer = CMediaImportManager::Get().GetImporter(importPath);
   if (importer == NULL)
@@ -300,7 +293,6 @@ void CGUIDialogMediaImportInfo::InitializeSettings()
     // add a dependency on SETTING_SYNCHRONISATION_UPDATE_PLAYBACK_ON_SOURCE (parent setting) being enabled
     settingPlaycountOnSource->SetDependencies(depsSynchronisationUpdateMetadataOnSourceEnabled);
   }
-  */
 }
 
 bool CGUIDialogMediaImportInfo::SetMediaImport(const CFileItemPtr &item)

@@ -71,10 +71,8 @@ protected:
   // media import settings related
   bool m_synchronisationUpdateImportedMediaItems;
   bool m_synchronisationUpdatePlaybackMetadataFromSource;
-  /* TODO: update on source
   bool m_synchronisationUpdateMetadataOnSource;
   bool m_synchronisationUpdatePlaybackMetadataOnSource;
-  */
 
   // media import source related
   CFileItemList* m_sourceMediaTypesList;
