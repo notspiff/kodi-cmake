@@ -251,10 +251,8 @@ public:
 
     bool UpdateItem(const std::string& path, const CFileItem& item)
     {
-        /* TODO
         if (path.empty())
             return false;
-        */
 
         std::set<std::pair<NPT_String, NPT_String> > values;
         if (item.HasVideoInfoTag())
@@ -277,6 +275,10 @@ public:
                 lastPlayedOld = CDateTime::GetCurrentDateTime();
             else
                 lastPlayedNew = details->m_lastPlayed;
+
+            values.insert(std::make_pair(
+                NPT_String::Format("<upnp:lastPlaybackTime>%ld</upnp:lastPlaybackTime>", lastPlayedOld.GetAsW3CDateTime()),
+                NPT_String::Format("<upnp:lastPlaybackTime>%ld</upnp:lastPlaybackTime>", lastPlayedNew.GetAsW3CDateTime())));
 
             // handle resume point
             long resumePointOld = 0L, resumePointNew = 0L;
