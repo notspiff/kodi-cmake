@@ -26,9 +26,7 @@ std::string CMediaImportSettings::Serialize() const
   TiXmlElement root("settings");
   XMLUtils::SetBoolean(&root, "updateImportedMediaItems", m_updateImportedMediaItems);
   XMLUtils::SetBoolean(&root, "updatePlaybackMetadataFromSource", m_updatePlaybackMetadataFromSource);
-  /* TODO: update on source
   XMLUtils::SetBoolean(&root, "updatePlaybackMetadataOnSource", m_updatePlaybackMetadataOnSource);
-  */
 
   std::stringstream stream;
   stream << root;
@@ -44,9 +42,7 @@ bool CMediaImportSettings::Deserialize(const std::string &xmlData)
   const TiXmlElement *root = doc.RootElement();
   XMLUtils::GetBoolean(root, "updateImportedMediaItems", m_updateImportedMediaItems);
   XMLUtils::GetBoolean(root, "updatePlaybackMetadataFromSource", m_updatePlaybackMetadataFromSource);
-  /* TODO: update on source
   XMLUtils::GetBoolean(root, "updatePlaybackMetadataOnSource", m_updatePlaybackMetadataOnSource);
-  */
 
   return true;
 }

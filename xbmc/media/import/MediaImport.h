@@ -30,17 +30,11 @@ class CMediaImportSettings
 {
 public:
   CMediaImportSettings(bool updateImportedMediaItems = true,
-                       bool updatePlaybackMetadataFromSource = true
-                       /* TODO: update on source
-                       ,
-                       bool updatePlaybackMetadataOnSource = true
-                       */)
+                       bool updatePlaybackMetadataFromSource = true,
+                       bool updatePlaybackMetadataOnSource = true)
     : m_updateImportedMediaItems(updateImportedMediaItems),
-      m_updatePlaybackMetadataFromSource(updatePlaybackMetadataFromSource)
-      /* TODO: update on source
-      ,
+      m_updatePlaybackMetadataFromSource(updatePlaybackMetadataFromSource),
       m_updatePlaybackMetadataOnSource(updatePlaybackMetadataOnSource)
-      */
   { }
 
   std::string Serialize() const;
@@ -50,17 +44,13 @@ public:
   void SetUpdateImportedMediaItems(bool updateImportedMediaItems) { m_updateImportedMediaItems = updateImportedMediaItems; }
   bool UpdatePlaybackMetadataFromSource() const { return m_updatePlaybackMetadataFromSource; }
   void SetUpdatePlaybackMetadataFromSource(bool updatePlaybackMetadataFromSource) { m_updatePlaybackMetadataFromSource = updatePlaybackMetadataFromSource; }
-  /* TODO: update on source
   bool UpdatePlaybackMetadataOnSource() const { return m_updatePlaybackMetadataOnSource; }
   void SetUpdatePlaybackMetadataOnSource(bool updatePlaybackMetadataOnSource) { m_updatePlaybackMetadataOnSource = updatePlaybackMetadataOnSource; }
-  */
 
 private:
   bool m_updateImportedMediaItems;
   bool m_updatePlaybackMetadataFromSource;
-  /* TODO: update on source
   bool m_updatePlaybackMetadataOnSource;
-  */
 };
 
 /*!
