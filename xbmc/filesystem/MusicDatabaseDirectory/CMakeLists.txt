@@ -8,6 +8,7 @@ set(SOURCES DirectoryNodeAlbumCompilations.cpp
             DirectoryNodeAlbumTop100.cpp
             DirectoryNodeAlbumTop100Song.cpp
             DirectoryNodeArtist.cpp
+            DirectoryNodeAudiobooks.cpp
             DirectoryNode.cpp
             DirectoryNodeGrouped.cpp
             DirectoryNodeOverview.cpp

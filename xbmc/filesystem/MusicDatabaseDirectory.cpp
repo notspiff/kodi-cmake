@@ -222,6 +222,7 @@ bool CMusicDatabaseDirectory::GetLabel(const CStdString& strDirectory, CStdStrin
       strLabel = g_localizeStrings.Get(521);
       break;
     case NODE_TYPE_OVERVIEW:
+    case NODE_TYPE_AUDIOBOOKS:
       strLabel = "";
       break;
     default:
@@ -244,6 +245,7 @@ bool CMusicDatabaseDirectory::ContainsSongs(const CStdString &path)
   if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_ALBUM_TOP100_SONGS) return true;
   if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_SONG_TOP100) return true;
   if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_YEAR_SONG) return true;
+  if (type == MUSICDATABASEDIRECTORY::NODE_TYPE_AUDIOBOOKS) return true;
   return false;
 }
 
@@ -303,6 +305,8 @@ CStdString CMusicDatabaseDirectory::GetIcon(const CStdString &strDirectory)
     return "DefaultMusicYears.png";
   case NODE_TYPE_ALBUM_COMPILATIONS:
     return "DefaultMusicCompilations.png";
+  case NODE_TYPE_AUDIOBOOKS:
+    return "DefaultAudioBooks.png";
   default:
     CLog::Log(LOGWARNING, "%s - Unknown nodetype requested %s", __FUNCTION__, strDirectory.c_str());
     break;
