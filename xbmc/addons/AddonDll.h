@@ -166,11 +166,10 @@ bool CAddonDll<TheDll, TheStruct, TheProps>::LoadDll()
     strFileName = LibPath();
   }
   else
-  { //FIXME hack to load same Dll twice
+  {
     std::string extension = URIUtils::GetExtension(m_strLibName);
-    strFileName = "special://temp/" + m_strLibName;
-    URIUtils::RemoveExtension(strFileName);
-    strFileName += "-" + ID() + extension;
+    strFileName = "special://temp/" + ID() + "-%03d" + extension;
+    strFileName = CUtil::GetNextFilename(strFileName, 100);
 
     if (!XFILE::CFile::Exists(strFileName))
       XFILE::CFile::Copy(LibPath(), strFileName);
