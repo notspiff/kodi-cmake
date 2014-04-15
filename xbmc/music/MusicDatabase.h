@@ -230,6 +230,7 @@ public:
   // Audiobook
   /////////////////////////////////////////////////
   bool AddAudioBook(const CFileItem& item);
+  bool MakeAudioBook(int idSong);
   bool SetResumeBookmarkForAudioBook(const CFileItem& item, int bookmark);
   bool GetResumeBookmarkForAudioBook(const CStdString& path, int& bookmark);
 
