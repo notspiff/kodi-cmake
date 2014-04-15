@@ -3,8 +3,11 @@ set(SOURCES AdvancedSettings.cpp
             MediaSettings.cpp
             MediaSourceSettings.cpp
             SettingAddon.cpp
+            SettingConditions.cpp
             SettingControl.cpp
+            SettingCreator.cpp
             SettingPath.cpp
+            SettingUtils.cpp
             Settings.cpp
             SkinSettings.cpp
             VideoSettings.cpp)
