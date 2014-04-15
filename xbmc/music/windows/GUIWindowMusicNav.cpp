@@ -466,6 +466,16 @@ void CGUIWindowMusicNav::GetContextButtons(int itemNumber, CContextButtons &butt
         buttons.Add(CONTEXT_BUTTON_SCAN, 13352);
       }
       CGUIMediaWindow::GetContextButtons(itemNumber, buttons);
+
+      buttons.Add(CONTEXT_BUTTON_SONG_INFO, 658);
+      if (!item->IsAudioBook())
+        buttons.Add(CONTEXT_BUTTON_MARK_AUDIOBOOK, 599); // This is an audiobook
+    }
+    else if (item->IsVideoDb())
+    {
+      if (!item->m_bIsFolder) // music video
+       buttons.Add(CONTEXT_BUTTON_INFO, 20393);
+      if (StringUtils::StartsWithNoCase(item->GetPath(), "videodb://musicvideos/artists/") && item->m_bIsFolder)
     }
     else
     {
@@ -753,7 +763,16 @@ bool CGUIWindowMusicNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
       }
       return true;
     }
+  case CONTEXT_BUTTON_MARK_AUDIOBOOK:
+    {
+      CQueryParams params;
+      CDirectoryNode::GetDatabaseInfo(item->GetPath(), params);
+      bool result = m_musicdatabase.MakeAudioBook(params.GetSongId());
+      if (result)
+        Update(m_vecItems->GetPath());
 
+      return result;
+    }
   default:
     break;
   }
