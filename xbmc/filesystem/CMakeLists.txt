@@ -31,6 +31,7 @@ set(SOURCES AddonsDirectory.cpp
             IDirectory.cpp
             IFile.cpp
             ImageFile.cpp
+            ImportDirectory.cpp
             iso9660.cpp
             ISO9660Directory.cpp
             ISOFile.cpp
