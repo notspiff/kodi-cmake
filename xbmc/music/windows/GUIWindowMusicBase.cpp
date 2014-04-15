@@ -1019,7 +1019,7 @@ bool CGUIWindowMusicBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 
   case CONTEXT_BUTTON_RESUME_ITEM: //audiobooks
     {
-      Update(item->GetPath());
+      CFileItem resItem(*item);
       int bookmark;
       m_musicdatabase.GetResumeBookmarkForAudioBook(item->GetPath(), bookmark);
       if (item->IsType(".m4b"))
