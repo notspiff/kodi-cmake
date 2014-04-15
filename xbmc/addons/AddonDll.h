@@ -333,6 +333,8 @@ void CAddonDll<TheDll, TheStruct, TheProps>::Destroy()
   m_pStruct = NULL;
   if (m_pDll)
   {
+    if (m_bIsChild)
+      XFILE::CFile::Delete(m_pDll->GetFile());
     delete m_pDll;
     m_pDll = NULL;
     CLog::Log(LOGINFO, "ADDON: Dll Destroyed - %s", Name().c_str());
