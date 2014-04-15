@@ -105,6 +105,8 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
     items.Add(item);
   }
 
+  items.SetContent("chapters");
+
   return true;
 }
 
