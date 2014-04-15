@@ -32,6 +32,7 @@
 #include "utils/log.h"
 #include "interfaces/IAnnouncer.h"
 #include "interfaces/AnnouncementManager.h"
+#include "Util.h"
 
 using namespace XFILE;
 
@@ -165,11 +166,10 @@ bool CAddonDll<TheDll, TheStruct, TheProps>::LoadDll()
     strFileName = LibPath();
   }
   else
-  { //FIXME hack to load same Dll twice
+  {
     CStdString extension = URIUtils::GetExtension(m_strLibName);
-    strFileName = "special://temp/" + m_strLibName;
-    URIUtils::RemoveExtension(strFileName);
-    strFileName += "-" + ID() + extension;
+    strFileName = "special://temp/" + ID() + "-%03d" + extension;
+    strFileName = CUtil::GetNextFilename(strFileName, 100);
 
     if (!CFile::Exists(strFileName))
       CFile::Cache(LibPath(), strFileName);
@@ -332,6 +332,8 @@ void CAddonDll<TheDll, TheStruct, TheProps>::Destroy()
   m_pStruct = NULL;
   if (m_pDll)
   {
+    if (m_bIsChild)
+      CFile::Delete(m_pDll->GetFile());
     delete m_pDll;
     m_pDll = NULL;
     CLog::Log(LOGINFO, "ADDON: Dll Destroyed - %s", Name().c_str());
