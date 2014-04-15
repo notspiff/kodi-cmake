@@ -117,12 +117,21 @@ bool CMediaSettings::Load(const TiXmlNode *settings)
       m_defaultVideoSettings.m_Sharpness = 0.0f;
     XMLUtils::GetBoolean(pElement, "outputtoallspeakers", m_defaultVideoSettings.m_OutputToAllSpeakers);
     XMLUtils::GetBoolean(pElement, "showsubtitles", m_defaultVideoSettings.m_SubtitleOn);
-    if (!XMLUtils::GetFloat(pElement, "brightness", m_defaultVideoSettings.m_Brightness, 0, 100))
+
+    float fValue;
+    if (XMLUtils::GetFloat(pElement, "brightness", fValue, 0, 100))
+      m_defaultVideoSettings.m_Brightness = static_cast<int>(fValue);
+    else
       m_defaultVideoSettings.m_Brightness = 50;
-    if (!XMLUtils::GetFloat(pElement, "contrast", m_defaultVideoSettings.m_Contrast, 0, 100))
+    if (XMLUtils::GetFloat(pElement, "contrast", fValue, 0, 100))
+      m_defaultVideoSettings.m_Contrast = static_cast<int>(fValue);
+    else
       m_defaultVideoSettings.m_Contrast = 50;
-    if (!XMLUtils::GetFloat(pElement, "gamma", m_defaultVideoSettings.m_Gamma, 0, 100))
+    if (XMLUtils::GetFloat(pElement, "gamma", fValue, 0, 100))
+      m_defaultVideoSettings.m_Gamma = static_cast<int>(fValue);
+    else
       m_defaultVideoSettings.m_Gamma = 20;
+
     if (!XMLUtils::GetFloat(pElement, "audiodelay", m_defaultVideoSettings.m_AudioDelay, -10.0f, 10.0f))
       m_defaultVideoSettings.m_AudioDelay = 0.0f;
     if (!XMLUtils::GetFloat(pElement, "subtitledelay", m_defaultVideoSettings.m_SubtitleDelay, -10.0f, 10.0f))
@@ -199,9 +208,9 @@ bool CMediaSettings::Save(TiXmlNode *settings) const
   XMLUtils::SetFloat(pNode, "volumeamplification", m_defaultVideoSettings.m_VolumeAmplification);
   XMLUtils::SetBoolean(pNode, "outputtoallspeakers", m_defaultVideoSettings.m_OutputToAllSpeakers);
   XMLUtils::SetBoolean(pNode, "showsubtitles", m_defaultVideoSettings.m_SubtitleOn);
-  XMLUtils::SetFloat(pNode, "brightness", m_defaultVideoSettings.m_Brightness);
-  XMLUtils::SetFloat(pNode, "contrast", m_defaultVideoSettings.m_Contrast);
-  XMLUtils::SetFloat(pNode, "gamma", m_defaultVideoSettings.m_Gamma);
+  XMLUtils::SetFloat(pNode, "brightness", static_cast<float>(m_defaultVideoSettings.m_Brightness));
+  XMLUtils::SetFloat(pNode, "contrast", static_cast<float>(m_defaultVideoSettings.m_Contrast));
+  XMLUtils::SetFloat(pNode, "gamma", static_cast<float>(m_defaultVideoSettings.m_Gamma));
   XMLUtils::SetFloat(pNode, "audiodelay", m_defaultVideoSettings.m_AudioDelay);
   XMLUtils::SetFloat(pNode, "subtitledelay", m_defaultVideoSettings.m_SubtitleDelay);
   XMLUtils::SetBoolean(pNode, "autocrop", m_defaultVideoSettings.m_Crop); 

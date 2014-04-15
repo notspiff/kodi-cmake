@@ -32,6 +32,7 @@ class PLT_MediaObject;
 class PLT_MediaItemResource;
 class CFileItem;
 class CBookmark;
+class CUPnPMediaImporter;
 
 namespace UPNP
 {
@@ -74,6 +75,8 @@ public:
     static bool SaveFileState(const CFileItem& item,
                               const CBookmark& bookmark,
                               const bool updatePlayCount);
+    static bool UpdateItem(const std::string& path,
+                           const CFileItem& item);
 
     static void RegisterUserdata(void* ptr);
     static void UnregisterUserdata(void* ptr);
@@ -93,6 +96,7 @@ private:
     CRendererReferenceHolder*   m_RendererHolder;
     CCtrlPointReferenceHolder*  m_CtrlPointHolder;
 
+    CUPnPMediaImporter*         m_mediaImporter;
 
     static CUPnP* upnp;
 };

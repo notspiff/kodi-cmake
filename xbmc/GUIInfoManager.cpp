@@ -446,7 +446,8 @@ const infomap container_ints[] = {{ "row",              CONTAINER_ROW },
 const infomap container_str[]  = {{ "property",         CONTAINER_PROPERTY },
                                   { "content",          CONTAINER_CONTENT }};
 
-const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
+const infomap listitem_labels[]= {{ "enabled",          LISTITEM_ENABLED },
+                                  { "thumb",            LISTITEM_THUMB },
                                   { "icon",             LISTITEM_ICON },
                                   { "actualicon",       LISTITEM_ACTUAL_ICON },
                                   { "overlay",          LISTITEM_OVERLAY },
@@ -464,6 +465,7 @@ const infomap listitem_labels[]= {{ "thumb",            LISTITEM_THUMB },
                                   { "filenameandpath",  LISTITEM_FILENAME_AND_PATH },
                                   { "fileextension",    LISTITEM_FILE_EXTENSION },
                                   { "date",             LISTITEM_DATE },
+                                  { "datetime",         LISTITEM_DATETIME },
                                   { "size",             LISTITEM_SIZE },
                                   { "rating",           LISTITEM_RATING },
                                   { "ratingandvotes",   LISTITEM_RATING_AND_VOTES },
@@ -4571,6 +4573,10 @@ CStdString CGUIInfoManager::GetItemLabel(const CFileItem *item, int info, CStdSt
     if (item->m_dateTime.IsValid())
       return item->m_dateTime.GetAsLocalizedDate();
     break;
+  case LISTITEM_DATETIME:
+    if (item->m_dateTime.IsValid())
+      return item->m_dateTime.GetAsLocalizedDateTime();
+    break;
   case LISTITEM_SIZE:
     if (!item->m_bIsFolder || item->m_dwSize)
       return StringUtils::SizeToString(item->m_dwSize);
@@ -5129,7 +5135,9 @@ bool CGUIInfoManager::GetItemBool(const CGUIListItem *item, int condition) const
   else if (item->IsFileItem())
   {
     const CFileItem *pItem = (const CFileItem *)item;
-    if (condition == LISTITEM_ISRECORDING)
+    if (condition == LISTITEM_ENABLED)
+      return pItem->IsEnabled();
+    else if (condition == LISTITEM_ISRECORDING)
     {
       if (!g_PVRManager.IsStarted())
         return false;

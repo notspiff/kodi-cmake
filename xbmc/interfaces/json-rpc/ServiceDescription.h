@@ -22,7 +22,7 @@
 namespace JSONRPC
 {
   const char* const JSONRPC_SERVICE_ID          = "http://xbmc.org/jsonrpc/ServiceDescription.json";
-  const char* const JSONRPC_SERVICE_VERSION     = "6.14.3";
+  const char* const JSONRPC_SERVICE_VERSION     = "6.15.0";
   const char* const JSONRPC_SERVICE_DESCRIPTION = "JSON-RPC API of XBMC";
 
   const char* const JSONRPC_SERVICE_TYPES[] = {  
@@ -1550,13 +1550,31 @@ namespace JSONRPC
         "\"multiselect\": { \"type\": \"boolean\", \"required\": true }"
       "}"
     "}",
+    "\"Setting.Details.ControlSlider\": {"
+      "\"extends\": \"Setting.Details.ControlHeading\","
+      "\"properties\": {"
+        "\"type\": { \"type\": \"string\", \"required\": true, \"enum\": [ \"slider\" ] },"
+        "\"formatlabel\": { \"type\": \"string\", \"required\": true },"
+        "\"popup\": { \"type\": \"boolean\", \"required\": true }"
+      "}"
+    "}",
+    "\"Setting.Details.ControlRange\": {"
+      "\"extends\": \"Setting.Details.ControlBase\","
+      "\"properties\": {"
+        "\"type\": { \"type\": \"string\", \"required\": true, \"enum\": [ \"range\" ] },"
+        "\"formatlabel\": { \"type\": \"string\", \"required\": true },"
+        "\"formatvalue\": { \"type\": \"string\", \"required\": true }"
+      "}"
+    "}",
     "\"Setting.Details.Control\": {"
       "\"type\": ["
         "{ \"$ref\": \"Setting.Details.ControlCheckmark\", \"required\": true },"
         "{ \"$ref\": \"Setting.Details.ControlSpinner\", \"required\": true },"
         "{ \"$ref\": \"Setting.Details.ControlEdit\", \"required\": true },"
         "{ \"$ref\": \"Setting.Details.ControlButton\", \"required\": true },"
-        "{ \"$ref\": \"Setting.Details.ControlList\", \"required\": true }"
+        "{ \"$ref\": \"Setting.Details.ControlList\", \"required\": true },"
+        "{ \"$ref\": \"Setting.Details.ControlSlider\", \"required\": true },"
+        "{ \"$ref\": \"Setting.Details.ControlRange\", \"required\": true }"
       "]"
     "}",
     "\"Setting.Details.Base\": {"

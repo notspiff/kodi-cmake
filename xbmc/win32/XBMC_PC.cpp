@@ -72,6 +72,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
   SetUnhandledExceptionFilter( CreateMiniDump );
 
   // check if XBMC is already running
+  /*
   CreateMutex(NULL, FALSE, "XBMC Media Center");
   if(GetLastError() == ERROR_ALREADY_EXISTS)
   {
@@ -84,6 +85,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
     }
     return 0;
   }
+  */
 
 #ifndef HAS_DX
   if(CWIN32Util::GetDesktopColorDepth() < 32)

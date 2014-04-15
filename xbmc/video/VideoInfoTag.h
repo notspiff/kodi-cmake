@@ -43,6 +43,7 @@ struct SActorInfo
   CScraperUrl thumbUrl;
   CStdString thumb;
   int        order;
+  bool operator==(const SActorInfo &rhs) const;
 };
 
 class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
@@ -81,6 +82,20 @@ public:
     return m_strFileNameAndPath;
   };
 
+  bool Equals(const CVideoInfoTag& rhs, bool metadataOnly = false) const;
+
+  bool operator==(const CVideoInfoTag& rhs) const
+  {
+    return Equals(rhs, false);
+  }
+
+  bool operator!=(const CVideoInfoTag& rhs) const
+  {
+    return !(*this == rhs);
+  }
+
+  bool GetDifferences(const CVideoInfoTag &rhs, std::set<Field> &fields, bool metadataOnly = false) const;
+
   /*! \brief retrieve the duration in seconds.
    Prefers the duration from stream details if available.
    */
@@ -104,6 +119,8 @@ public:
   CStdString m_strPlot;
   CScraperUrl m_strPictureURL;
   CStdString m_strTitle;
+  CStdString m_strSource;
+  CStdString m_strImportPath;
   CStdString m_strSortTitle;
   CStdString m_strVotes;
   std::vector<std::string> m_artist;
@@ -149,8 +166,9 @@ public:
   CStreamDetails m_streamDetails;
   CBookmark m_resumePoint;
   CDateTime m_dateAdded;
-  CStdString m_type;
+  MediaType m_type;
   int m_duration; ///< duration in seconds
+  bool m_hasDetails;
 
 private:
   /* \brief Parse our native XML format for video info.

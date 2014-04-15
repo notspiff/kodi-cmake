@@ -1006,7 +1006,7 @@ void CGUIWindowMusicBase::UpdateThumb(const CAlbum &album, const CStdString &pat
     saveDirThumb = false;
   }
 
-  CStdString albumThumb = m_musicdatabase.GetArtForItem(album.idAlbum, "album", "thumb");
+  CStdString albumThumb = m_musicdatabase.GetArtForItem(album.idAlbum, MediaTypeAlbum, "thumb");
 
   // Update the thumb in the music database (songs + albums)
   CStdString albumPath(path);

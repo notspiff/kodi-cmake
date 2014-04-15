@@ -385,8 +385,8 @@ bool CPVRDatabase::GetChannelSettings(const CPVRChannel &channel, CVideoSettings
       {
         settings.m_AudioDelay           = m_pDS->fv("fAudioDelay").get_asFloat();
         settings.m_AudioStream          = m_pDS->fv("iAudioStream").get_asInt();
-        settings.m_Brightness           = m_pDS->fv("fBrightness").get_asFloat();
-        settings.m_Contrast             = m_pDS->fv("fContrast").get_asFloat();
+        settings.m_Brightness           = m_pDS->fv("fBrightness").get_asInt();
+        settings.m_Contrast             = m_pDS->fv("fContrast").get_asInt();
         settings.m_CustomPixelRatio     = m_pDS->fv("fPixelRatio").get_asFloat();
         settings.m_CustomNonLinStretch  = m_pDS->fv("bCustomNonLinStretch").get_asBool();
         settings.m_NoiseReduction       = m_pDS->fv("fNoiseReduction").get_asFloat();
@@ -394,7 +394,7 @@ bool CPVRDatabase::GetChannelSettings(const CPVRChannel &channel, CVideoSettings
         settings.m_Sharpness            = m_pDS->fv("fSharpness").get_asFloat();
         settings.m_CustomZoomAmount     = m_pDS->fv("fCustomZoomAmount").get_asFloat();
         settings.m_CustomVerticalShift  = m_pDS->fv("fCustomVerticalShift").get_asFloat();
-        settings.m_Gamma                = m_pDS->fv("fGamma").get_asFloat();
+        settings.m_Gamma                = m_pDS->fv("fGamma").get_asInt();
         settings.m_SubtitleDelay        = m_pDS->fv("fSubtitleDelay").get_asFloat();
         settings.m_SubtitleOn           = m_pDS->fv("bSubtitles").get_asBool();
         settings.m_SubtitleStream       = m_pDS->fv("iSubtitleStream").get_asInt();
@@ -445,7 +445,8 @@ bool CPVRDatabase::PersistChannelSettings(const CPVRChannel &channel, const CVid
          "(%i, %i, %i, %f, %f, %i, %i, %f, %i, %f, %f, %f, %f, %f, %i, %i, %i, %i, %i, %i, %f, %f, %f, %i, %i, %i, %i);",
        channel.ChannelID(), settings.m_InterlaceMethod, settings.m_ViewMode, settings.m_CustomZoomAmount, settings.m_CustomPixelRatio,
        settings.m_AudioStream, settings.m_SubtitleStream, settings.m_SubtitleDelay, settings.m_SubtitleOn ? 1 :0,
-       settings.m_Brightness, settings.m_Contrast, settings.m_Gamma, settings.m_VolumeAmplification, settings.m_AudioDelay,
+       static_cast<float>(settings.m_Brightness), static_cast<float>(settings.m_Contrast), static_cast<float>(settings.m_Gamma),
+       settings.m_VolumeAmplification, settings.m_AudioDelay,
        settings.m_OutputToAllSpeakers ? 1 : 0, settings.m_Crop ? 1 : 0, settings.m_CropLeft, settings.m_CropRight, settings.m_CropTop,
        settings.m_CropBottom, settings.m_Sharpness, settings.m_NoiseReduction, settings.m_CustomVerticalShift,
        settings.m_CustomNonLinStretch ? 1 : 0, settings.m_PostProcess ? 1 : 0, settings.m_ScalingMethod, settings.m_DeinterlaceMode);

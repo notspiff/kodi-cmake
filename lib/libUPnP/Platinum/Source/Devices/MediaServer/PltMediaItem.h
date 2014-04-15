@@ -66,12 +66,13 @@ typedef struct {
 typedef struct {
     NPT_String name;
     NPT_String role;
+    NPT_String thumb;
 } PLT_PersonRole;
 
 class PLT_PersonRoles  : public NPT_List<PLT_PersonRole>
 {
 public:
-    NPT_Result Add(const NPT_String& name, const NPT_String& role = "");
+    NPT_Result Add(const NPT_String& name, const NPT_String& role = "", const NPT_String& thumb = "");
     NPT_Result ToDidl(NPT_String& didl, const NPT_String& tag);
     NPT_Result FromDidl(const NPT_Array<NPT_XmlElementNode*>& nodes);
 };
@@ -147,7 +148,30 @@ typedef struct {
     NPT_String program_title;
     NPT_String series_title;
     NPT_UInt32 episode_number;
+    NPT_UInt32 episode_count;
+    NPT_UInt32 episode_season;
 } PLT_RecordedInfo;
+
+typedef struct {
+    NPT_String type;
+    NPT_String url;
+} PLT_Artwork;
+
+class PLT_Artworks  : public NPT_List<PLT_Artwork>
+{
+public:
+    NPT_Result Add(const NPT_String& type, const NPT_String& url);
+    NPT_Result ToDidl(NPT_String& didl, const NPT_String& tag);
+    NPT_Result FromDidl(const NPT_Array<NPT_XmlElementNode*>& nodes);
+};
+
+typedef struct {
+  NPT_String date_added;
+  NPT_Float rating;
+  NPT_String votes;
+  NPT_List<NPT_String> studios;
+  PLT_Artworks artwork;
+} PLT_XbmcInfo;
 
 /*----------------------------------------------------------------------
 |   PLT_MediaItemResource
@@ -226,6 +250,9 @@ public:
 
     /* resources related */
     NPT_Array<PLT_MediaItemResource> m_Resources;
+
+    /* XBMC specific */
+    PLT_XbmcInfo m_XbmcInfo;
 
     /* original DIDL for Control Points to pass to a renderer when invoking SetAVTransportURI */
     NPT_String m_Didl;    

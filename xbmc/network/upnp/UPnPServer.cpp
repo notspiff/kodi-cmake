@@ -99,7 +99,10 @@ CUPnPServer::SetupServices()
     PLT_Service* service = NULL;
     NPT_Result result = FindServiceById("urn:upnp-org:serviceId:ContentDirectory", service);
     if (service)
-      service->SetStateVariable("SortCapabilities", "res@duration,res@size,res@bitrate,dc:date,dc:title,dc:size,upnp:album,upnp:artist,upnp:albumArtist,upnp:episodeNumber,upnp:genre,upnp:originalTrackNumber,upnp:rating");
+    {
+      service->SetStateVariable("SearchCapabilities", "upnp:class");
+      service->SetStateVariable("SortCapabilities", "res@duration,res@size,res@bitrate,dc:date,dc:title,dc:size,upnp:album,upnp:artist,upnp:albumArtist,upnp:episodeNumber,upnp:genre,upnp:originalTrackNumber,upnp:rating,xbmc:rating,xbmc:dateadded");
+    }
 
     m_scanning = true;
     OnScanCompleted(AudioLibrary);
@@ -339,7 +342,7 @@ CUPnPServer::Build(CFileItemPtr                  item,
                         db.GetTvShowInfo((const char*)path, *item->GetVideoInfoTag(), params.GetTvShowId());
                 }
 
-                if (item->GetVideoInfoTag()->m_type == "tvshow" || item->GetVideoInfoTag()->m_type == "season") {
+                if (item->GetVideoInfoTag()->m_type == MediaTypeTvShow || item->GetVideoInfoTag()->m_type == MediaTypeSeason) {
                     // for tvshows and seasons, iEpisode and playCount are
                     // invalid
                     item->GetVideoInfoTag()->m_iEpisode = (int)item->GetProperty("totalepisodes").asInteger();
@@ -428,7 +431,7 @@ CUPnPServer::Announce(AnnouncementFlag flag, const char *sender, const char *mes
         // we always update 'recently added' nodes along with the specific container,
         // as we don't differentiate 'updates' from 'adds' in RPC interface
         if (flag == VideoLibrary) {
-            if(item_type == "episode") {
+            if(item_type == MediaTypeEpisode) {
                 CVideoDatabase db;
                 if (!db.Open()) return;
                 int show_id = db.GetTvShowForEpisode(item_id);
@@ -437,20 +440,20 @@ CUPnPServer::Announce(AnnouncementFlag flag, const char *sender, const char *mes
                 UpdateContainer(StringUtils::Format("videodb://tvshows/titles/%d/%d/?tvshowid=%d", show_id, season_id, show_id));
                 UpdateContainer("videodb://recentlyaddedepisodes/");
             }
-            else if(item_type == "tvshow") {
+            else if(item_type == MediaTypeTvShow) {
                 UpdateContainer("library://video/tvshows/titles.xml/");
                 UpdateContainer("videodb://recentlyaddedepisodes/");
             }
-            else if(item_type == "movie") {
+            else if(item_type == MediaTypeMovie) {
                 UpdateContainer("library://video/movies/titles.xml/");
                 UpdateContainer("videodb://recentlyaddedmovies/");
             }
-            else if(item_type == "musicvideo") {
+            else if(item_type == MediaTypeMusicVideo) {
                 UpdateContainer("library://video/musicvideos/titles.xml/");
                 UpdateContainer("videodb://recentlyaddedmusicvideos/");
             }
         }
-        else if (flag == AudioLibrary && item_type == "song") {
+        else if (flag == AudioLibrary && item_type == MediaTypeSong) {
             // we also update the 'songs' container is maybe a performance drop too
             // high? would need to check if slow clients even cache at all anyway
             CMusicDatabase db;
@@ -946,6 +949,86 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
         return OnBrowseDirectChildren(action, "musicdb://genres/", filter, starting_index, requested_count, sort_criteria, context);
     } else if (NPT_String(search_criteria).Find("object.container.playlistContainer") >= 0) {
         return OnBrowseDirectChildren(action, "special://musicplaylists/", filter, starting_index, requested_count, sort_criteria, context);
+    } else if (NPT_String(search_criteria).Find("object.container.album.videoAlbum.videoBroadcastShow") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetTvShowsByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      items.SetPath("videodb://tvshows/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.container.album.videoAlbum.videoBroadcastSeason") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      if (!database.GetSeasonsByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, true)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      items.SetPath("videodb://tvshows/titles/-1/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.item.videoItem.movie") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetMoviesByWhere("videodb://movies/titles/", CDatabase::Filter("strSource IS NULL"), items, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      items.SetPath("videodb://movies/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.item.videoItem.videoBroadcast") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetEpisodesByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      items.SetPath("videodb://tvshows/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
+    } else if (NPT_String(search_criteria).Find("object.item.videoItem.musicVideoClip") >= 0) {
+      CFileItemList items;
+      CVideoDatabase database;
+      if (!database.Open()) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetMusicVideosByWhere("videodb://musicvideos/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+
+      items.SetPath("videodb://musicvideos/titles/");
+      return BuildResponse(action, items, filter, starting_index, requested_count, sort_criteria, context, NULL);
     } else if (NPT_String(search_criteria).Find("object.item.videoItem") >= 0) {
       CFileItemList items, itemsall;
 
@@ -955,20 +1038,30 @@ CUPnPServer::OnSearchContainer(PLT_ActionReference&          action,
         return NPT_SUCCESS;
       }
 
-      if (!database.GetMoviesNav("videodb://movies/titles/", items)) {
+      bool needDetails = NPT_String(filter).Find("res@resolution") >= 0 || NPT_String(filter).Find("res@nrAudioChannels") >= 0 || NPT_String(filter).Find("upnp:actor") >= 0;
+
+      if (!database.GetMoviesByWhere("videodb://movies/titles/", CDatabase::Filter("strSource IS NULL"), items, SortDescription(), needDetails)) {
         action->SetError(800, "Internal Error");
         return NPT_SUCCESS;
       }
       itemsall.Append(items);
       items.Clear();
 
-      if (!database.GetEpisodesByWhere("videodb://tvshows/titles/", "", items)) {
+      if (!database.GetEpisodesByWhere("videodb://tvshows/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
         action->SetError(800, "Internal Error");
         return NPT_SUCCESS;
       }
       itemsall.Append(items);
       items.Clear();
 
+      if (!database.GetMusicVideosByWhere("videodb://musicvideos/titles/", CDatabase::Filter("strSource IS NULL"), items, true, SortDescription(), needDetails)) {
+        action->SetError(800, "Internal Error");
+        return NPT_SUCCESS;
+      }
+      itemsall.Append(items);
+      items.Clear();
+
+      items.SetPath("videodb://movies/titles/");
       return BuildResponse(action, itemsall, filter, starting_index, requested_count, sort_criteria, context, NULL);
   } else if (NPT_String(search_criteria).Find("object.item.imageItem") >= 0) {
       CFileItemList items;
@@ -994,7 +1087,7 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
     CLog::Log(LOGINFO, "UPnP: OnUpdateObject: %s from %s", path.c_str(),
                        (const char*) context.GetRemoteAddress().GetIpAddress().ToString());
 
-    NPT_String playCount, position;
+    NPT_String playCount, position, lastPlayed;
     int err;
     const char* msg = NULL;
     bool updatelisting(false);
@@ -1035,6 +1128,8 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
 
         position = new_vals["lastPlaybackPosition"];
         playCount = new_vals["playCount"];
+        lastPlayed = new_vals["lastPlaybackTime"];
+
 
         if (!position.IsEmpty()
               && position.Compare(current_vals["lastPlaybackPosition"]) != 0) {
@@ -1064,7 +1159,14 @@ CUPnPServer::OnUpdateObject(PLT_ActionReference&             action,
 
             NPT_UInt32 count;
             NPT_CHECK_LABEL(playCount.ToInteger32(count), args);
-            db.SetPlayCount(updated, count);
+
+            
+            CDateTime lastPlayedObj;
+            if (!lastPlayed.IsEmpty()
+                  && lastPlayed.Compare(current_vals["lastPlaybackTime"]) != 0)
+                lastPlayedObj.SetFromW3CDateTime(lastPlayed.GetChars());
+
+            db.SetPlayCount(updated, count, lastPlayedObj);
             updatelisting = true;
         }
 
@@ -1233,7 +1335,11 @@ CUPnPServer::SortItems(CFileItemList& items, const char* sort_criteria)
     else if (method.Equals("upnp:originalTrackNumber"))
       sorting.sortBy = SortByTrackNumber;
     else if(method.Equals("upnp:rating"))
+      sorting.sortBy = SortByMPAA;
+    else if (method.Equals("xbmc:rating"))
       sorting.sortBy = SortByRating;
+    else if (method.Equals("xbmc:dateadded"))
+      sorting.sortBy = SortByDateAdded;
     else {
       CLog::Log(LOGINFO, "UPnP: unsupported sort criteria '%s' passed", method.c_str());
       continue; // needed so unidentified sort methods don't re-sort by label

@@ -117,6 +117,9 @@ public:
   void ToSortable(SortItem &sortable, const Fields &fields) const;
   virtual bool IsFileItem() const { return true; };
 
+  bool IsEnabled() const { return m_enabled; }
+  void SetEnabled(bool enabled) { m_enabled = enabled; }
+
   bool Exists(bool bUseCache = true) const;
   
   /*!
@@ -210,6 +213,7 @@ public:
   bool IsRSS() const;
   bool IsAndroidApp() const;
   bool IsAudioBook() const;
+  bool IsImported() const;
 
   void RemoveExtension();
   void CleanString();
@@ -443,6 +447,7 @@ public:
   int m_iBadPwdCount;
 
 private:
+  bool m_enabled;
   CStdString m_strPath;            ///< complete path to item
 
   SortSpecial m_specialSort;
@@ -510,6 +515,7 @@ public:
   enum CACHE_TYPE { CACHE_NEVER = 0, CACHE_IF_SLOW, CACHE_ALWAYS };
 
   CFileItemList();
+  CFileItemList(const CFileItemList &other);
   CFileItemList(const CStdString& strPath);
   virtual ~CFileItemList();
   virtual void Archive(CArchive& ar);

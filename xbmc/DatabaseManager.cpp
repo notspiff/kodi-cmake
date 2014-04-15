@@ -28,6 +28,8 @@
 #include "pvr/PVRDatabase.h"
 #include "epg/EpgDatabase.h"
 #include "settings/AdvancedSettings.h"
+#include "media/import/MediaImportManager.h"
+#include "media/import/MediaImportSource.h"
 
 using namespace std;
 using namespace EPG;
@@ -49,7 +51,7 @@ CDatabaseManager::~CDatabaseManager()
 
 void CDatabaseManager::Initialize(bool addonsOnly)
 {
-  Deinitialize();
+  Deinitialize(addonsOnly);
   { CAddonDatabase db; UpdateDatabase(db); }
   if (addonsOnly)
     return;
@@ -60,14 +62,26 @@ void CDatabaseManager::Initialize(bool addonsOnly)
   { CViewDatabase db; UpdateDatabase(db); }
   { CTextureDatabase db; UpdateDatabase(db); }
   { CMusicDatabase db; UpdateDatabase(db, &g_advancedSettings.m_databaseMusic); }
-  { CVideoDatabase db; UpdateDatabase(db, &g_advancedSettings.m_databaseVideo); }
+  {
+    CVideoDatabase db;
+    UpdateDatabase(db, &g_advancedSettings.m_databaseVideo);
+    db.SetImportItemsEnabled(false);
+    CMediaImportManager::Get().RegisterSourceRepository(&m_videoImportRepository);
+  }
   { CPVRDatabase db; UpdateDatabase(db, &g_advancedSettings.m_databaseTV); }
   { CEpgDatabase db; UpdateDatabase(db, &g_advancedSettings.m_databaseEpg); }
   CLog::Log(LOGDEBUG, "%s, updating databases... DONE", __FUNCTION__);
 }
 
-void CDatabaseManager::Deinitialize()
+void CDatabaseManager::Deinitialize(bool addonsOnly)
 {
+  if (!addonsOnly)
+  {
+    CVideoDatabase db;
+    db.SetImportItemsEnabled(false);
+    CMediaImportManager::Get().UnregisterSourceRepository(&m_videoImportRepository);
+  }
+
   CSingleLock lock(m_section);
   m_dbStatus.clear();
 }

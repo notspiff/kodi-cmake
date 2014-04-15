@@ -164,6 +164,8 @@
 #include "settings/windows/GUIWindowSettings.h"
 #include "windows/GUIWindowFileManager.h"
 #include "settings/windows/GUIWindowSettingsCategory.h"
+#include "media/import/dialogs/GUIDialogMediaImportInfo.h"
+#include "media/import/windows/GUIWindowMediaSourceBrowser.h"
 #include "music/windows/GUIWindowMusicPlaylist.h"
 #include "music/windows/GUIWindowMusicSongs.h"
 #include "music/windows/GUIWindowMusicNav.h"
@@ -300,6 +302,7 @@
 #include "linux/HALManager.h"
 #endif
 
+#include "media/import/MediaImportManager.h"
 #include "storage/MediaManager.h"
 #include "utils/JobManager.h"
 #include "utils/SaveFileStateJob.h"
@@ -1438,6 +1441,9 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIWindowScreensaver);
     g_windowManager.Add(new CGUIWindowWeather);
     g_windowManager.Add(new CGUIWindowStartup);
+
+    g_windowManager.Add(new CGUIWindowMediaSourceBrowser);
+    g_windowManager.Add(new CGUIDialogMediaImportInfo);
 
     /* window id's 3000 - 3100 are reserved for python */
 
@@ -3452,6 +3458,8 @@ bool CApplication::Cleanup()
     g_RemoteControl.Disconnect();
 #endif
 
+    CDatabaseManager::Get().Deinitialize();
+
     CLog::Log(LOGNOTICE, "unload sections");
 
 #ifdef HAS_PERFORMANCE_SAMPLE
@@ -3537,6 +3545,8 @@ void CApplication::Stop(int exitCode)
     m_AppFocused = false;
     m_ExitCode = exitCode;
     CLog::Log(LOGNOTICE, "stop all");
+
+    CMediaImportManager::Get().Uninitialize();
 
     // cancel any jobs from the jobmanager
     CJobManager::GetInstance().CancelJobs();

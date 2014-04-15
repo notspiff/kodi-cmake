@@ -36,6 +36,7 @@ SRCS += HTTPFile.cpp
 SRCS += IDirectory.cpp
 SRCS += IFile.cpp
 SRCS += ImageFile.cpp
+SRCS += ImportDirectory.cpp
 SRCS += iso9660.cpp
 SRCS += ISO9660Directory.cpp
 SRCS += ISOFile.cpp

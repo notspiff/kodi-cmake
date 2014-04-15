@@ -10,6 +10,7 @@ INCLUDES+=-I@abs_top_srcdir@/lib/libUPnP/Platinum/Source/Core \
 
 SRCS= UPnP.cpp \
       UPnPInternal.cpp \
+      UPnPMediaImporter.cpp \
       UPnPPlayer.cpp \
       UPnPRenderer.cpp \
       UPnPServer.cpp \

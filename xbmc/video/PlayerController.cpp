@@ -19,6 +19,7 @@
  */
 
 #include "PlayerController.h"
+#include "dialogs/GUIDialogSlider.h"
 #include "utils/StdString.h"
 #include "settings/AdvancedSettings.h"
 #include "settings/DisplaySettings.h"
@@ -422,7 +423,7 @@ void CPlayerController::OnSliderChange(void *data, CGUISliderControl *slider)
     slider->SetTextValue(strValue);
   }
   else if (m_sliderAction == ACTION_VOLAMP_UP || m_sliderAction == ACTION_VOLAMP_DOWN)
-    slider->SetTextValue(CGUIDialogAudioSubtitleSettings::FormatDecibel(slider->GetFloatValue(), 1.0f));
+    slider->SetTextValue(CGUIDialogAudioSubtitleSettings::FormatDecibel(slider->GetFloatValue()));
   else
     slider->SetTextValue(CGUIDialogAudioSubtitleSettings::FormatDelay(slider->GetFloatValue(), 0.025f));
 

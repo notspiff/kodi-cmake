@@ -27,6 +27,7 @@
 #include "threads/SystemClock.h"
 #include "UPnP.h"
 #include "UPnPInternal.h"
+#include "UPnPMediaImporter.h"
 #include "UPnPRenderer.h"
 #include "UPnPServer.h"
 #include "UPnPSettings.h"
@@ -43,10 +44,12 @@
 #include "FileItem.h"
 #include "guilib/GUIWindowManager.h"
 #include "GUIInfoManager.h"
+#include "utils/StringUtils.h"
 #include "utils/TimeUtils.h"
 #include "video/VideoInfoTag.h"
 #include "guilib/Key.h"
 #include "Util.h"
+#include "media/import/MediaImportManager.h"
 
 using namespace std;
 using namespace UPNP;
@@ -165,6 +168,15 @@ public:
         message.SetStringParam("upnp://");
         g_windowManager.SendThreadMessage(message);
 
+        if (CSettings::Get().GetBool("services.upnpimport"))
+        {
+          std::string sourceID = getSourceID(device);
+          std::set<MediaType> mediaTypes;
+          mediaTypes.insert(MediaTypeMovie); mediaTypes.insert(MediaTypeTvShow); mediaTypes.insert(MediaTypeSeason);
+          mediaTypes.insert(MediaTypeEpisode); mediaTypes.insert(MediaTypeMusicVideo);
+          CMediaImportManager::Get().RegisterSource(sourceID, device->GetFriendlyName().GetChars(), device->GetIconUrl("image/png").GetChars(), mediaTypes);
+        }
+
         return PLT_SyncMediaBrowser::OnMSAdded(device);
     }
     virtual void OnMSRemoved(PLT_DeviceDataReference& device)
@@ -174,6 +186,8 @@ public:
         CGUIMessage message(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE_PATH);
         message.SetStringParam("upnp://");
         g_windowManager.SendThreadMessage(message);
+
+        CMediaImportManager::Get().UnregisterSource(getSourceID(device));
 
         PLT_SyncMediaBrowser::OnMSRemoved(device);
     }
@@ -205,7 +219,10 @@ public:
         }
         else {
             CLog::Log(LOGDEBUG, "UPNP: Marking video item %s as watched", item.GetPath().c_str());
-            return InvokeUpdateObject(item.GetPath().c_str(), "<upnp:playCount>1</upnp:playCount>", "<upnp:playCount>0</upnp:playCount>");
+
+            std::set<std::pair<NPT_String, NPT_String> > values;
+            values.insert(std::make_pair("<upnp:playCount>1</upnp:playCount>", "<upnp:playCount>0</upnp:playCount>"));
+            return InvokeUpdateObject(item.GetPath().c_str(), values);
         }
     }
 
@@ -216,34 +233,77 @@ public:
           return false;
         }
 
-        NPT_String curr_value;
-        NPT_String new_value;
-
+        std::set<std::pair<NPT_String, NPT_String> > values;
         if (item.GetVideoInfoTag()->m_resumePoint.timeInSeconds != bookmark.timeInSeconds) {
             CLog::Log(LOGDEBUG, "UPNP: Updating resume point for item %s", path.c_str());
             long time = (long)bookmark.timeInSeconds;
             if (time < 0) time = 0;
-            curr_value.Append(NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>",
-                                                 (long)item.GetVideoInfoTag()->m_resumePoint.timeInSeconds));
-            new_value.Append(NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>", time));
+
+            values.insert(std::make_pair(
+                NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>", (long)item.GetVideoInfoTag()->m_resumePoint.timeInSeconds),
+                NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>", time)));
         }
         if (updatePlayCount) {
             CLog::Log(LOGDEBUG, "UPNP: Marking video item %s as watched", path.c_str());
-            if (!curr_value.IsEmpty()) curr_value.Append(",");
-            if (!new_value.IsEmpty()) new_value.Append(",");
-            curr_value.Append("<upnp:playCount>0</upnp:playCount>");
-            new_value.Append("<upnp:playCount>1</upnp:playCount>");
+            values.insert(std::make_pair("<upnp:playCount>0</upnp:playCount>", "<upnp:playCount>1</upnp:playCount>"));
         }
 
-        return InvokeUpdateObject(path.c_str(), (const char*)curr_value, (const char*)new_value);
+        return InvokeUpdateObject(path.c_str(), values);
     }
 
-    bool InvokeUpdateObject(const char* id, const char* curr_value, const char* new_value)
+    bool UpdateItem(const std::string& path, const CFileItem& item)
+    {
+        if (path.empty())
+            return false;
+
+        std::set<std::pair<NPT_String, NPT_String> > values;
+        if (item.HasVideoInfoTag())
+        {
+            // handle playcount
+            const CVideoInfoTag *details = item.GetVideoInfoTag();
+            int playcountOld = 0, playcountNew = 0;
+            if (details->m_playCount <= 0)
+              playcountOld = 1;
+            else
+              playcountNew = details->m_playCount;
+
+            values.insert(std::make_pair(
+                NPT_String::Format("<upnp:playCount>%d</upnp:playCount>", playcountOld),
+                NPT_String::Format("<upnp:playCount>%d</upnp:playCount>", playcountNew)));
+            
+            // handle lastplayed
+            CDateTime lastPlayedOld, lastPlayedNew;
+            if (!details->m_lastPlayed.IsValid())
+                lastPlayedOld = CDateTime::GetCurrentDateTime();
+            else
+                lastPlayedNew = details->m_lastPlayed;
+
+            values.insert(std::make_pair(
+                NPT_String::Format("<upnp:lastPlaybackTime>%ld</upnp:lastPlaybackTime>", lastPlayedOld.GetAsW3CDateTime()),
+                NPT_String::Format("<upnp:lastPlaybackTime>%ld</upnp:lastPlaybackTime>", lastPlayedNew.GetAsW3CDateTime())));
+
+            // handle resume point
+            long resumePointOld = 0L, resumePointNew = 0L;
+            if (details->m_resumePoint.timeInSeconds <= 0)
+                resumePointOld = 1;
+            else
+                resumePointNew = static_cast<long>(details->m_resumePoint.timeInSeconds);
+
+            values.insert(std::make_pair(
+                NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>", resumePointOld),
+                NPT_String::Format("<upnp:lastPlaybackPosition>%ld</upnp:lastPlaybackPosition>", resumePointNew)));
+        }
+
+        return InvokeUpdateObject(path.c_str(), values);
+    }
+
+    bool InvokeUpdateObject(const char *id, const std::set<std::pair<NPT_String, NPT_String> >& values)
     {
         CURL url(id);
         PLT_DeviceDataReference device;
         PLT_Service* cds;
         PLT_ActionReference action;
+        NPT_String curr_value, new_value;
 
         CLog::Log(LOGDEBUG, "UPNP: attempting to invoke UpdateObject for %s", id);
 
@@ -258,6 +318,18 @@ public:
             action));
 
         NPT_CHECK_LABEL(action->SetArgumentValue("ObjectID", url.GetFileName().c_str()), failed);
+
+        // put together the current and the new value string
+        for (std::set<std::pair<NPT_String, NPT_String> >::const_iterator value = values.begin(); value != values.end(); ++value)
+        {
+            if (!curr_value.IsEmpty())
+                curr_value.Append(",");
+            if (!new_value.IsEmpty())
+                new_value.Append(",");
+
+            curr_value.Append(value->first);
+            new_value.Append(value->second);
+        }
         NPT_CHECK_LABEL(action->SetArgumentValue("CurrentTagValue", curr_value), failed);
         NPT_CHECK_LABEL(action->SetArgumentValue("NewTagValue", new_value), failed);
 
@@ -269,6 +341,12 @@ public:
     failed:
         CLog::Log(LOGINFO, "UPNP: invoking UpdateObject failed");
         return false;
+    }
+
+private:
+    std::string getSourceID(const PLT_DeviceDataReference& device)
+    {
+      return StringUtils::Format("upnp://%s", device->GetUUID().GetChars());
     }
 };
 
@@ -393,7 +471,8 @@ CUPnP::CUPnP() :
     m_MediaController(NULL),
     m_ServerHolder(new CDeviceHostReferenceHolder()),
     m_RendererHolder(new CRendererReferenceHolder()),
-    m_CtrlPointHolder(new CCtrlPointReferenceHolder())
+    m_CtrlPointHolder(new CCtrlPointReferenceHolder()),
+    m_mediaImporter(NULL)
 {
     // initialize upnp context
     m_UPnP = new PLT_UPnP();
@@ -501,6 +580,20 @@ CUPnP::SaveFileState(const CFileItem& item, const CBookmark& bookmark, const boo
 }
 
 /*----------------------------------------------------------------------
+|   CUPnP::UpdateItem
++---------------------------------------------------------------------*/
+bool
+CUPnP::UpdateItem(const std::string& path, const CFileItem& item)
+{
+    if (upnp && upnp->m_MediaBrowser) {
+        // dynamic_cast is safe here, avoids polluting CUPnP.h header file
+        CMediaBrowser* browser = dynamic_cast<CMediaBrowser*>(upnp->m_MediaBrowser);
+        return browser->UpdateItem(path, item);
+    }
+    return false;
+}
+
+/*----------------------------------------------------------------------
 |   CUPnP::StartClient
 +---------------------------------------------------------------------*/
 void
@@ -522,6 +615,11 @@ CUPnP::StartClient()
         CSettings::Get().GetBool("services.upnpserver")) {
         m_MediaController = new CMediaController(m_CtrlPointHolder->m_CtrlPoint);
     }
+
+    // register the upnp media importer
+    if (m_mediaImporter == NULL)
+      m_mediaImporter = new CUPnPMediaImporter();
+    CMediaImportManager::Get().RegisterImporter(m_mediaImporter);
 }
 
 /*----------------------------------------------------------------------
@@ -531,6 +629,14 @@ void
 CUPnP::StopClient()
 {
     if (m_CtrlPointHolder->m_CtrlPoint.IsNull()) return;
+
+    // unregister the upnp media importer
+    if (m_mediaImporter != NULL)
+    {
+      CMediaImportManager::Get().UnregisterImporter(m_mediaImporter);
+      delete m_mediaImporter;
+      m_mediaImporter = NULL;
+    }
 
     m_UPnP->RemoveCtrlPoint(m_CtrlPointHolder->m_CtrlPoint);
     m_CtrlPointHolder->m_CtrlPoint = NULL;

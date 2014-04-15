@@ -55,11 +55,12 @@ NPT_DEFINE_DYNAMIC_CAST_ANCHOR(PLT_MediaContainer)
 |   PLT_PersonRoles::AddPerson
 +---------------------------------------------------------------------*/
 NPT_Result
-PLT_PersonRoles::Add(const NPT_String& name, const NPT_String& role /* = "" */)
+PLT_PersonRoles::Add(const NPT_String& name, const NPT_String& role /* = "" */, const NPT_String& thumb /* = "" */)
 {
     PLT_PersonRole person;
     person.name = name;
     person.role = role;
+    person.thumb = thumb;
 
     return NPT_List<PLT_PersonRole>::Add(person);
 }
@@ -82,6 +83,11 @@ PLT_PersonRoles::ToDidl(NPT_String& didl, const NPT_String& tag)
             PLT_Didl::AppendXmlEscape(tmp, it->role);
             tmp += "\"";
         }
+        if (!it->thumb.IsEmpty()) {
+            tmp += " thumb=\"";
+            PLT_Didl::AppendXmlEscape(tmp, it->thumb);
+            tmp += "\"";
+        }
         tmp += ">";
         PLT_Didl::AppendXmlEscape(tmp, it->name);
         tmp += "</upnp:" + tag + ">";
@@ -101,10 +107,68 @@ PLT_PersonRoles::FromDidl(const NPT_Array<NPT_XmlElementNode*>& nodes)
         PLT_PersonRole person;
         const NPT_String* name = nodes[i]->GetText();
         const NPT_String* role = nodes[i]->GetAttribute("role");
+        const NPT_String* thumb = nodes[i]->GetAttribute("thumb");
         // DLNA 7.3.17
         if (name) person.name = name->SubString(0, 1024);
         if (role) person.role = role->SubString(0, 1024);
+        if (thumb) person.thumb = thumb->SubString(0, 1024);
         NPT_CHECK(NPT_List<PLT_PersonRole>::Add(person));
+    }
+    return NPT_SUCCESS;
+}
+
+/*----------------------------------------------------------------------
+|   PLT_Artworks::Add
++---------------------------------------------------------------------*/
+NPT_Result
+PLT_Artworks::Add(const NPT_String& type, const NPT_String& url)
+{
+    PLT_Artwork artwork;
+    artwork.type = type;
+    artwork.url = url;
+
+    return NPT_List<PLT_Artwork>::Add(artwork);
+}
+
+/*----------------------------------------------------------------------
+|   PLT_Artworks::ToDidl
++---------------------------------------------------------------------*/
+NPT_Result
+PLT_Artworks::ToDidl(NPT_String& didl, const NPT_String& tag)
+{
+    NPT_String tmp;
+    for (NPT_List<PLT_Artwork>::Iterator it =
+         NPT_List<PLT_Artwork>::GetFirstItem(); it; it++) {
+        if (it->type.IsEmpty()) continue;
+
+        tmp += "<xbmc:" + tag;
+        if (!it->type.IsEmpty()) {
+            tmp += " type=\"";
+            PLT_Didl::AppendXmlEscape(tmp, it->type);
+            tmp += "\"";
+        }
+        tmp += ">";
+        PLT_Didl::AppendXmlEscape(tmp, it->url);
+        tmp += "</xbmc:" + tag + ">";
+    }
+
+    didl += tmp;
+    return NPT_SUCCESS;
+}
+
+/*----------------------------------------------------------------------
+|   PLT_Artworks::ToDidl
++---------------------------------------------------------------------*/
+NPT_Result
+PLT_Artworks::FromDidl(const NPT_Array<NPT_XmlElementNode*>& nodes)
+{
+    for (NPT_Cardinal i=0; i<nodes.GetItemCount(); i++) {
+        PLT_Artwork artwork;
+        const NPT_String* url = nodes[i]->GetText();
+        const NPT_String* type = nodes[i]->GetAttribute("type");
+        if (type) artwork.type = type->SubString(0, 1024);
+        if (url) artwork.url = url->SubString(0, 1024);
+        NPT_CHECK(NPT_List<PLT_Artwork>::Add(artwork));
     }
     return NPT_SUCCESS;
 }
@@ -194,8 +258,16 @@ PLT_MediaObject::Reset()
     m_Recorded.program_title  = "";
     m_Recorded.series_title   = "";
     m_Recorded.episode_number = 0;
+    m_Recorded.episode_count = 0;
+    m_Recorded.episode_season = 0;
 
     m_Resources.Clear();
+
+    m_XbmcInfo.date_added = "";
+    m_XbmcInfo.rating = 0.0f;
+    m_XbmcInfo.votes = "";
+    m_XbmcInfo.studios.Clear();
+    m_XbmcInfo.artwork.Clear();
 
     m_Didl = "";
 
@@ -374,6 +446,20 @@ PLT_MediaObject::ToDidl(NPT_UInt64 mask, NPT_String& didl)
         didl += "</upnp:episodeNumber>";
     }
 
+    // episode count
+    if ((mask & PLT_FILTER_MASK_EPISODE_COUNT) && m_Recorded.episode_count > 0) {
+        didl += "<upnp:episodeCount>";
+        didl += NPT_String::FromInteger(m_Recorded.episode_count);
+        didl += "</upnp:episodeCount>";
+    }
+
+    // episode count
+    if ((mask & PLT_FILTER_MASK_EPISODE_SEASON)) {
+        didl += "<upnp:episodeSeason>";
+        didl += NPT_String::FromInteger(m_Recorded.episode_season);
+        didl += "</upnp:episodeSeason>";
+    }
+
 	if ((mask & PLT_FILTER_MASK_TOC) & !m_MiscInfo.toc.IsEmpty()) {
         didl += "<upnp:toc>";
 		PLT_Didl::AppendXmlEscape(didl, m_MiscInfo.toc);
@@ -439,6 +525,42 @@ PLT_MediaObject::ToDidl(NPT_UInt64 mask, NPT_String& didl)
             PLT_Didl::AppendXmlEscape(didl, m_Resources[i].m_Uri);
             didl += "</res>";
         }
+    }
+
+    // xbmc dateadded
+    if ((mask & PLT_FILTER_MASK_XBMC_DATEADDED) && !m_XbmcInfo.date_added.IsEmpty()) {
+        didl += "<xbmc:dateadded>";
+        PLT_Didl::AppendXmlEscape(didl, m_XbmcInfo.date_added);
+        didl += "</xbmc:dateadded>";
+    } 
+
+    // xbmc rating
+    if (mask & PLT_FILTER_MASK_XBMC_RATING) {
+        didl += "<xbmc:rating>";
+        didl += NPT_String::Format("%.1f", m_XbmcInfo.rating);
+        didl += "</xbmc:rating>";
+    }
+
+    // xbmc votes
+    if (mask & PLT_FILTER_MASK_XBMC_VOTES && !m_XbmcInfo.votes.IsEmpty()) {
+        didl += "<xbmc:votes>";
+        PLT_Didl::AppendXmlEscape(didl, m_XbmcInfo.votes);
+        didl += "</xbmc:votes>";
+    }
+
+    // xbmc studios
+    if (mask & PLT_FILTER_MASK_XBMC_STUDIO) {
+        for (NPT_List<NPT_String>::Iterator it = 
+            m_XbmcInfo.studios.GetFirstItem(); it; ++it) {
+            didl += "<xbmc:studio>";
+            PLT_Didl::AppendXmlEscape(didl, (*it));
+            didl += "</xbmc:studio>";        
+        }
+    }
+
+    // xbmc artwork
+    if (mask & PLT_FILTER_MASK_XBMC_ARTWORK) {
+        m_XbmcInfo.artwork.ToDidl(didl, "artwork");
     }
 
     // class is required
@@ -524,6 +646,12 @@ PLT_MediaObject::FromDidl(NPT_XmlElementNode* entry)
     NPT_UInt32 value;
     if (NPT_FAILED(str.ToInteger(value))) value = 0;
     m_Recorded.episode_number = value;
+    PLT_XmlHelper::GetChildText(entry, "episodeCount", str, didl_namespace_upnp);
+    if (NPT_FAILED(str.ToInteger(value))) value = 0;
+    m_Recorded.episode_count = value;
+    PLT_XmlHelper::GetChildText(entry, "episodeSeason", str, didl_namespace_upnp);
+    if (NPT_FAILED(str.ToInteger(value))) value = -1;
+    m_Recorded.episode_season = value;
 
     children.Clear();
     PLT_XmlHelper::GetChildren(entry, children, "genre", didl_namespace_upnp);
@@ -626,6 +754,36 @@ PLT_MediaObject::FromDidl(NPT_XmlElementNode* entry)
         }    
         m_Resources.Add(resource);
     }
+
+    PLT_XmlHelper::GetChildText(entry, "dateadded", m_XbmcInfo.date_added, didl_namespace_xbmc, 256);
+    // parse date and make sure it's valid
+    for (int format=0; format<=NPT_DateTime::FORMAT_RFC_1036; format++) {
+        NPT_DateTime date;
+        if (NPT_SUCCEEDED(date.FromString(m_XbmcInfo.date_added, (NPT_DateTime::Format)format))) {
+            parsed_date = date.ToString((NPT_DateTime::Format)format);
+            break;
+        }
+    }
+    m_XbmcInfo.date_added = parsed_date;
+
+    PLT_XmlHelper::GetChildText(entry, "rating", str, didl_namespace_xbmc);
+    NPT_Float floatValue;
+    if (NPT_FAILED(str.ToFloat(floatValue))) floatValue = 0.0;
+    m_XbmcInfo.rating = floatValue;
+
+    PLT_XmlHelper::GetChildText(entry, "votes", m_XbmcInfo.votes, didl_namespace_xbmc, 256);
+
+    children.Clear();
+    PLT_XmlHelper::GetChildren(entry, children, "studio", didl_namespace_xbmc);
+    for (NPT_Cardinal i=0; i<children.GetItemCount(); i++) {
+        if (children[i]->GetText()) {
+            m_XbmcInfo.studios.Add(children[i]->GetText()->SubString(0, 256));
+        }
+    }
+
+    children.Clear();
+    PLT_XmlHelper::GetChildren(entry, children, "artwork", didl_namespace_xbmc);
+    m_XbmcInfo.artwork.FromDidl(children);
 
     // re serialize the entry didl as a we might need to pass it to a renderer
     // we may have modified the tree to "fix" issues, so as not to break a renderer

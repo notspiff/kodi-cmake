@@ -56,6 +56,8 @@
 
 #define WINDOW_ADDON_BROWSER              10040
 
+#define WINDOW_MEDIASOURCE_BROWSER        10045
+
 #define WINDOW_SCREENSAVER_DIM               97
 #define WINDOW_DEBUG_INFO                    98
 #define WINDOW_DIALOG_POINTER             10099
@@ -104,6 +106,7 @@
 #define WINDOW_DIALOG_EXT_PROGRESS        10151
 #define WINDOW_DIALOG_MEDIA_FILTER        10152
 #define WINDOW_DIALOG_SUBTITLES           10153
+#define WINDOW_DIALOG_MEDIAIMPORT_INFO    10154
 
 #define WINDOW_MUSIC_PLAYLIST             10500
 #define WINDOW_MUSIC_FILES                10501

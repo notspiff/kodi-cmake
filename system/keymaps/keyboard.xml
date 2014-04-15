@@ -549,4 +549,15 @@
       <delete>Delete</delete>
     </keyboard>
   </AddonSettings>
+  <MediaSourceBrowser>
+    <keyboard>
+      <delete>Delete</delete>
+      <i>Info</i>
+    </keyboard>
+  </MediaSourceBrowser>
+  <MediaImportInformation>
+    <keyboard>
+      <i>Back</i>
+    </keyboard>
+  </MediaImportInformation>
 </keymap>
