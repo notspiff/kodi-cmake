@@ -80,6 +80,7 @@ public:
   const CDateTime& GetLastPlayed() const;
   const CDateTime& GetDateAdded() const;
   bool  GetCompilation() const;
+  bool  HasChapters() const;
   char  GetRating() const;
   int  GetListeners() const;
   int  GetPlayCount() const;
@@ -129,6 +130,7 @@ public:
   void SetDateAdded(const std::string& strDateAdded);
   void SetDateAdded(const CDateTime& strDateAdded);
   void SetCompilation(bool compilation);
+  void SetChapters(bool chapters);
   void SetCoverArtInfo(size_t size, const std::string &mimeType);
   void SetReplayGain(const ReplayGain& aGain);
   void SetAlbumReleaseType(CAlbum::ReleaseType releaseType);
@@ -185,6 +187,7 @@ protected:
   CDateTime m_lastPlayed;
   CDateTime m_dateAdded;
   bool m_bCompilation;
+  bool m_bChapters;
   int m_iDuration;
   int m_iTrack;     // consists of the disk number in the high 16 bits, the track number in the low 16bits
   int m_iDbId;
