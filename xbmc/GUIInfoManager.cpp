@@ -5571,6 +5571,8 @@ bool CGUIInfoManager::GetLibraryBool(int condition)
       if (db.Open())
       {
         m_libraryHasMusic = (db.GetSongsCount() > 0) ? 1 : 0;
+        if (!m_libraryHasMusic)
+          m_libraryHasMusic = (db.GetAudiobookCount() > 0) ? 1 : 0;
         db.Close();
       }
     }
