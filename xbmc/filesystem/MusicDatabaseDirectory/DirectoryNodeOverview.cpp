@@ -87,7 +87,7 @@ bool CDirectoryNodeOverview::GetContent(CFileItemList& items) const
       if (musicDatabase.GetSongsCount() == 0)
         continue;
     }
-    if ((i == 3 && !showSingles) // singles
+    if (i == 3 && !showSingles) // singles
       continue;
     else if (i == 9 && musicDatabase.GetCompilationAlbumsCount() == 0) // compilations
       continue;
