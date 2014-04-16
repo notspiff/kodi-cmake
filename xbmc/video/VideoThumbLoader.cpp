@@ -45,12 +45,17 @@ using namespace XFILE;
 using namespace std;
 using namespace VIDEO;
 
-CThumbExtractor::CThumbExtractor(const CFileItem& item, const CStdString& listpath, bool thumb, const CStdString& target)
+CThumbExtractor::CThumbExtractor(const CFileItem& item,
+                                 const CStdString& listpath,
+                                 bool thumb,
+                                 const CStdString& target,
+                                 int64_t pos)
 {
   m_listpath = listpath;
   m_target = target;
   m_thumb = thumb;
   m_item = item;
+  m_pos = pos;
 
   if (item.IsVideoDb() && item.HasVideoInfoTag())
     m_item.SetPath(item.GetVideoInfoTag()->m_strFileNameAndPath);
@@ -101,7 +106,7 @@ bool CThumbExtractor::DoWork()
     // construct the thumb cache file
     CTextureDetails details;
     details.file = CTextureCache::GetCacheFile(m_target) + ".jpg";
-    result = CDVDFileInfo::ExtractThumb(m_item.GetPath(), details, &m_item.GetVideoInfoTag()->m_streamDetails);
+    result = CDVDFileInfo::ExtractThumb(m_item.GetPath(), details, &m_item.GetVideoInfoTag()->m_streamDetails, m_pos);
     if(result)
     {
       CTextureCache::Get().AddCachedTexture(m_target, details);
