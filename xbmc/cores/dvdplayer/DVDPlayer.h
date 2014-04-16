@@ -266,7 +266,8 @@ public:
 
   virtual int  GetChapterCount();
   virtual int  GetChapter();
-  virtual void GetChapterName(std::string& strChapterName);
+  virtual void GetChapterName(std::string& strChapterName, int chapterIdx=-1);
+  virtual int64_t GetChapterPos(int chapterIdx=-1);
   virtual int  SeekChapter(int iChapter);
 
   virtual void SeekTime(int64_t iTime);
