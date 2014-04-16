@@ -82,9 +82,16 @@ bool CDirectoryNodeOverview::GetContent(CFileItemList& items) const
 
   for (unsigned int i = 0; i < sizeof(OverviewChildren) / sizeof(Node); ++i)
   {
-    if (i == 3 && !showSingles) // singles
+    if (i != 3 && i != 9 && i != 10)
+    {
+      if (musicDatabase.GetSongsCount() == 0)
+        continue;
+    }
+    if ((i == 3 && !showSingles) // singles
       continue;
-    if (i == 9 && musicDatabase.GetCompilationAlbumsCount() == 0) // compilations
+    else if (i == 9 && musicDatabase.GetCompilationAlbumsCount() == 0) // compilations
+      continue;
+    else if (i == 10 && musicDatabase.GetAudiobookCount() == 0) // audiobooks
       continue;
 
     CFileItemPtr pItem(new CFileItem(g_localizeStrings.Get(OverviewChildren[i].label)));
