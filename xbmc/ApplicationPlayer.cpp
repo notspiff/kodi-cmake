@@ -150,11 +150,21 @@ int CApplicationPlayer::GetChapterCount()
     return 0;
 }
 
-void CApplicationPlayer::GetChapterName(CStdString& strChapterName)
+void CApplicationPlayer::GetChapterName(CStdString& strChapterName,
+                                        int chapterIdx)
 {
   boost::shared_ptr<IPlayer> player = GetInternal();
   if (player)
-    player->GetChapterName(strChapterName);
+    player->GetChapterName(strChapterName, chapterIdx);
+}
+
+int64_t CApplicationPlayer::GetChapterPos(int chapterIdx)
+{
+  boost::shared_ptr<IPlayer> player = GetInternal();
+  if (player)
+    return player->GetChapterPos(chapterIdx);
+
+  return -1;
 }
 
 bool CApplicationPlayer::HasAudio() const

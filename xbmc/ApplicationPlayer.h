@@ -88,7 +88,8 @@ public:
   float GetCachePercentage() const;
   int   GetChapterCount();
   int   GetChapter();  
-  void  GetChapterName(CStdString& strChapterName);
+  void  GetChapterName(CStdString& strChapterName, int chapterIdx=-1);
+  int64_t GetChapterPos(int chapterIdx=-1);
   void  GetDeinterlaceMethods(std::vector<int> &deinterlaceMethods);
   void  GetDeinterlaceModes(std::vector<int> &deinterlaceModes);
   void  GetGeneralInfo( CStdString& strVideoInfo);
