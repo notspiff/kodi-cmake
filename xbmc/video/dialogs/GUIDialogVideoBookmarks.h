@@ -23,10 +23,11 @@
 #include "guilib/GUIDialog.h"
 #include "view/GUIViewControl.h"
 #include "video/VideoDatabase.h"
+#include "utils/Job.h"
 
 class CFileItemList;
 
-class CGUIDialogVideoBookmarks : public CGUIDialog
+class CGUIDialogVideoBookmarks : public CGUIDialog, public IJobCallback
 {
 public:
   CGUIDialogVideoBookmarks(void);
@@ -68,6 +69,8 @@ protected:
   void OnRefreshList();
   void OnPopupMenu(int item);
   CGUIControl *GetFirstFocusableControl(int id);
+
+  void OnJobComplete(unsigned int jobID, bool success, CJob* job);
 
   CFileItemList* m_vecItems;
   CGUIViewControl m_viewControl;
