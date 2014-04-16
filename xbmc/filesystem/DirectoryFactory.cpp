@@ -112,7 +112,7 @@ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
   if (!CWakeOnAccess::Get().WakeUpHost(url))
     return NULL;
 
-  CFileItem item(strPath, false);
+  CFileItem item(strPath, true);
   IFileDirectory* pDir=CFileDirectoryFactory::Create(strPath, &item);
   if (pDir)
     return pDir;
