@@ -5,7 +5,7 @@ macro(generate_file file)
                      COMMAND ${Java_JAVA_EXECUTABLE}
                      ARGS -cp ${GROOVY_DIR}/groovy-all-2.1.7.jar:${GROOVY_DIR}/commons-lang-2.6.jar:${CORE_SOURCE_DIR}/tools/codegenerator:${CMAKE_CURRENT_SOURCE_DIR}/../python groovy.ui.GroovyMain ${CORE_SOURCE_DIR}/tools/codegenerator/Generator.groovy ${file}.xml ${CMAKE_CURRENT_SOURCE_DIR}/../python/PythonSwig.cpp.template ${file}.cpp ${CMAKE_CURRENT_BINARY_DIR}/doxygenxml
                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${INTERFACE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
-                     IMPLICIT_DEPENDS CXX ${INTERFACE_FILES})
+                     IMPLICIT_DEPENDS CXX ${CMAKE_CURRENT_SOURCE_DIR}/../swig/${file})
   list(APPEND SOURCES ${file}.cpp)
 endmacro()
 
