@@ -60,6 +60,7 @@
 #include "video/dialogs/GUIDialogVideoInfo.h"
 #include "pvr/recordings/PVRRecording.h"
 #include "ContextMenuManager.h"
+#include "media/import/MediaImportManager.h"
 
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
@@ -1090,7 +1091,17 @@ bool CGUIWindowVideoNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 bool CGUIWindowVideoNav::OnClick(int iItem)
 {
   CFileItemPtr item = m_vecItems->Get(iItem);
-  if (!item->m_bIsFolder && item->IsVideoDb() && !item->Exists())
+  if (!item->m_bIsFolder && item->IsImported() && !CMediaImportManager::Get().IsSourceActive(item->GetSource()))
+  {
+    CMediaImportSource source(item->GetSource());
+    if (CMediaImportManager::Get().GetSource(source.GetIdentifier(), source))
+      CGUIDialogOK::ShowAndGetInput("Media provider unavailable", "The media provider " + source.GetFriendlyName() + " is currently not available.");
+    else
+      CGUIDialogOK::ShowAndGetInput("Media provider unavailable", "The media provider is currently not available.");
+
+    return true;
+  }
+  else if (!item->m_bIsFolder && item->IsVideoDb() && !item->Exists())
   {
     CLog::Log(LOGDEBUG, "%s called on '%s' but file doesn't exist", __FUNCTION__, item->GetPath().c_str());
     if (CProfilesManager::Get().GetCurrentProfile().canWriteDatabases() || g_passwordManager.bMasterUser)
