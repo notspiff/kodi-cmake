@@ -129,6 +129,7 @@ const CMusicInfoTag& CMusicInfoTag::operator =(const CMusicInfoTag& tag)
   m_fTrackPeak = tag.m_fTrackPeak;
   m_fAlbumPeak = tag.m_fAlbumPeak;
   m_iHasGainInfo = tag.m_iHasGainInfo;
+  m_iBookmark = tag.m_iBookmark;
 
   memcpy(&m_dwReleaseDate, &tag.m_dwReleaseDate, sizeof(m_dwReleaseDate) );
   m_coverArt = tag.m_coverArt;
@@ -268,6 +269,11 @@ bool CMusicInfoTag::GetCompilation() const
 bool CMusicInfoTag::HasChapters() const
 {
   return m_bChapters;
+}
+
+int CMusicInfoTag::GetBookmark() const
+{
+  return m_iBookmark;
 }
 
 const EmbeddedArtInfo &CMusicInfoTag::GetCoverArtInfo() const
@@ -439,6 +445,11 @@ void CMusicInfoTag::SetCompilation(bool compilation)
 void CMusicInfoTag::SetChapters(bool chapters)
 {
   m_bChapters = chapters;
+}
+
+void CMusicInfoTag::SetBookmark(int bookmark)
+{
+  m_iBookmark = bookmark;
 }
 
 void CMusicInfoTag::SetLoaded(bool bOnOff)
@@ -677,6 +688,7 @@ void CMusicInfoTag::Archive(CArchive& ar)
     ar << m_listeners;
     ar << m_coverArt;
     ar << m_bChapters;
+    ar << m_iBookmark;
   }
   else
   {
@@ -707,6 +719,7 @@ void CMusicInfoTag::Archive(CArchive& ar)
     ar >> m_listeners;
     ar >> m_coverArt;
     ar >> m_bChapters;
+    ar >> m_iBookmark;
   }
 }
 
@@ -742,6 +755,7 @@ void CMusicInfoTag::Clear()
   m_fTrackPeak = 0.0f;
   m_fAlbumPeak = 0.0f;
   m_iHasGainInfo = 0;
+  m_iBookmark = 0;
 }
 
 void CMusicInfoTag::AppendArtist(const std::string &artist)
