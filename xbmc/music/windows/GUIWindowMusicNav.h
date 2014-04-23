@@ -48,6 +48,7 @@ protected:
   virtual bool OnContextButton(int itemNumber, CONTEXT_BUTTON button);
   virtual bool OnClick(int iItem);
   virtual CStdString GetStartFolder(const CStdString &url);
+  bool OnResumeItem(int iItem);
 
   bool GetSongsFromPlayList(const CStdString& strPlayList, CFileItemList &items);
   void DisplayEmptyDatabaseMessage(bool bDisplay);

@@ -254,6 +254,28 @@ CStdString CGUIWindowMusicNav::GetQuickpathName(const CStdString& strPath) const
   }
 }
 
+bool CGUIWindowMusicNav::OnResumeItem(int iItem)
+{
+  if (iItem < 0 || iItem >= m_vecItems->Size()) return true;
+  CFileItemPtr item = m_vecItems->Get(iItem);
+
+  int startOffset = item->GetMusicInfoTag()->GetBookmark();
+  std::string resumeString = StringUtils::Format(g_localizeStrings.Get(12022).c_str(),
+                                                 StringUtils::SecondsToTimeString(startOffset/75).c_str());
+
+  CContextButtons choices;
+  choices.Add(SELECT_ACTION_RESUME, resumeString);
+  choices.Add(SELECT_ACTION_BROWSE, 20153);   // Browse...
+  int value = CGUIDialogContextMenu::ShowAndGetChoice(choices);
+  if (value < 0)
+    return true;
+
+  if (value == SELECT_ACTION_RESUME)
+    return OnContextButton(iItem, CONTEXT_BUTTON_RESUME_ITEM);
+
+  return CGUIWindowMusicBase::OnClick(iItem);
+}
+
 bool CGUIWindowMusicNav::OnClick(int iItem)
 {
   if (iItem < 0 || iItem >= m_vecItems->Size()) return false;
@@ -271,6 +293,9 @@ bool CGUIWindowMusicNav::OnClick(int iItem)
     }
     return true;
   }
+  if (item->HasProperty("audiobook") && item->GetMusicInfoTag()->GetBookmark() > 0)
+    return OnResumeItem(iItem);
+
   if (item->IsMusicDb() && !item->m_bIsFolder)
     m_musicdatabase.SetPropertiesForFileItem(*item);
     
@@ -357,6 +382,8 @@ bool CGUIWindowMusicNav::GetDirectory(const CStdString &strDirectory, CFileItemL
       items.SetContent("genres");
     else if (node == NODE_TYPE_YEAR)
       items.SetContent("years");
+    else if (node == NODE_TYPE_AUDIOBOOKS)
+      items.SetContent("audiobooks");
   }
   else if (strDirectory.Equals("special://musicplaylists/"))
     items.SetContent("playlists");
