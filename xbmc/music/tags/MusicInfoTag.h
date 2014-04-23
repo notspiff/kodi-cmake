@@ -96,6 +96,7 @@ public:
   const CDateTime& GetLastPlayed() const;
   bool  GetCompilation() const;
   bool  HasChapters() const;
+  int   GetBookmark() const;
   char  GetRating() const;
   int  GetListeners() const;
   int  GetPlayCount() const;
@@ -138,6 +139,7 @@ public:
   void SetLastPlayed(const CDateTime& strLastPlayed);
   void SetCompilation(bool compilation);
   void SetChapters(bool chapters);
+  void SetBookmark(int bookmark);
   void SetCoverArtInfo(size_t size, const std::string &mimeType);
   void SetReplayGain(const ReplayGain& aGain);
 
@@ -197,6 +199,7 @@ protected:
   int m_listeners;
   int m_iTimesPlayed;
   int m_iAlbumId;
+  int m_iBookmark;
   SYSTEMTIME m_dwReleaseDate;
 
   EmbeddedArtInfo m_coverArt; ///< art information
