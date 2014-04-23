@@ -1009,7 +1009,7 @@ bool CGUIWindowVideoBase::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
         // any other select actions but play or resume, resume, play or playpart
         // don't make any sense here since the user already decided that he'd
         // like to play the item (just with a specific player)
-        VideoSelectAction selectAction = (VideoSelectAction)CSettings::GetInstance().GetInt(CSettings::SETTING_MYVIDEOS_SELECTACTION);
+        ResumeSelectAction selectAction = (ResumeSelectAction)CSettings::GetInstance().GetInt(CSettings::SETTING_MYVIDEOS_SELECTACTION);
         if (selectAction != SELECT_ACTION_PLAY_OR_RESUME &&
             selectAction != SELECT_ACTION_RESUME &&
             selectAction != SELECT_ACTION_PLAY &&
