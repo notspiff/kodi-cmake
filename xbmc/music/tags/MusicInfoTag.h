@@ -86,6 +86,7 @@ public:
   int GetListeners() const;
   int GetPlayCount() const;
   bool  HasChapters() const;
+  int   GetBookmark() const;
   const EmbeddedArtInfo &GetCoverArtInfo() const;
   const ReplayGain& GetReplayGain() const;
   CAlbum::ReleaseType GetAlbumReleaseType() const;
@@ -134,6 +135,7 @@ public:
   void SetDateAdded(const CDateTime& strDateAdded);
   void SetCompilation(bool compilation);
   void SetChapters(bool chapters);
+  void SetBookmark(int bookmark);
   void SetCoverArtInfo(size_t size, const std::string &mimeType);
   void SetReplayGain(const ReplayGain& aGain);
   void SetAlbumReleaseType(CAlbum::ReleaseType releaseType);
@@ -213,6 +215,7 @@ protected:
   int m_listeners;
   int m_iTimesPlayed;
   int m_iAlbumId;
+  int m_iBookmark;
   SYSTEMTIME m_dwReleaseDate;
   CAlbum::ReleaseType m_albumReleaseType;
 
