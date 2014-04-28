@@ -1,1 +1,1 @@
-pvr.mediaportal.tvserver https://github.com/notspiff/pvr.mediaportal.tvserver bb6c4bc # PVRADDONS;PVRMEDIAPORTAL OFF
+pvr.mediaportal.tvserver https://github.com/notspiff/pvr.mediaportal.tvserver 9463250 # PVRADDONS;PVRMEDIAPORTAL OFF
