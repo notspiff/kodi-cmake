@@ -1,1 +1,1 @@
-pvr.vdr.vnsi https://github.com/notspiff/pvr.vdr.vnsi 9a7092e # PVRADDONS;PVRVDR OFF
+pvr.vdr.vnsi https://github.com/notspiff/pvr.vdr.vnsi 02b7173 # PVRADDONS;PVRVDR OFF
