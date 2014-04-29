@@ -15,3 +15,4 @@ add_executable(TexturePacker ${SOURCES})
 target_link_libraries(TexturePacker ${SYSTEM_LDFLAGS} squish
                                     ${SDLIMAGE_LIBRARY} ${SDL_LIBRARIES}
                                     ${LZO2_LIBRARIES})
+add_dependencies(TexturePacker ffmpeg)

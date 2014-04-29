@@ -20,7 +20,6 @@
 #include "M4BFileDirectory.h"
 #include "filesystem/File.h"
 #include "FileItem.h"
-#include "DllAvFormat.h"
 #include "utils/StringUtils.h"
 #include "music/tags/MusicInfoTag.h"
 
@@ -43,19 +42,16 @@ static off_t m4b_file_seek(void *h, off_t pos, int whence)
 
 CM4BFileDirectory::CM4BFileDirectory(void) : m_ioctx(NULL), m_fctx(NULL)
 {
-  m_av.Load();
-  m_avu.Load();
-  m_av.av_register_all();
 }
 
 CM4BFileDirectory::~CM4BFileDirectory(void)
 {
   if (m_fctx)
-    m_av.avformat_close_input(&m_fctx);
+    avformat_close_input(&m_fctx);
   if (m_ioctx)
   {
-    m_avu.av_free(m_ioctx->buffer);
-    m_avu.av_free(m_ioctx);
+    av_free(m_ioctx->buffer);
+    av_free(m_ioctx);
   }
 }
 
@@ -69,7 +65,7 @@ bool CM4BFileDirectory::GetDirectory(const CStdString& strPath,
   std::string author;
 
   AVDictionaryEntry* tag=NULL;
-  while ((tag = m_avu.av_dict_get(m_fctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+  while ((tag = av_dict_get(m_fctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
   {
     if (strcmp(tag->key,"title") == 0)
       title = tag->value;
@@ -81,7 +77,7 @@ bool CM4BFileDirectory::GetDirectory(const CStdString& strPath,
   {
     tag=NULL;
     std::string chaptitle = "Unknown";
-    while ((tag=m_avu.av_dict_get(m_fctx->chapters[i]->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+    while ((tag=av_dict_get(m_fctx->chapters[i]->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
     {
       if (strcmp(tag->key,"title") == 0)
       {
@@ -119,8 +115,8 @@ bool CM4BFileDirectory::ContainsFiles(const CStdString& strPath)
   if (!file.Open(strPath))
     return false;
 
-  uint8_t* buffer = (uint8_t*)m_avu.av_malloc(32768);
-  m_ioctx = m_av.avio_alloc_context(buffer, 32768, 0, &file, m4b_file_read, NULL, m4b_file_seek);
+  uint8_t* buffer = (uint8_t*)av_malloc(32768);
+  m_ioctx = avio_alloc_context(buffer, 32768, 0, &file, m4b_file_read, NULL, m4b_file_seek);
 
   m_fctx = avformat_alloc_context();
   m_fctx->pb = m_ioctx;
@@ -131,15 +127,15 @@ bool CM4BFileDirectory::ContainsFiles(const CStdString& strPath)
   m_ioctx->max_packet_size = 32768;
 
   AVInputFormat* iformat=NULL;
-  m_av.av_probe_input_buffer(m_ioctx, &iformat, strPath.c_str(), NULL, 0, 0);
+  av_probe_input_buffer(m_ioctx, &iformat, strPath.c_str(), NULL, 0, 0);
 
   bool contains = false;
-  if (m_av.avformat_open_input(&m_fctx, strPath.c_str(), iformat, NULL) < 0)
+  if (avformat_open_input(&m_fctx, strPath.c_str(), iformat, NULL) < 0)
   {
     if (m_fctx)
-      m_av.avformat_close_input(&m_fctx);
-    m_avu.av_free(m_ioctx->buffer);
-    m_avu.av_free(m_ioctx);
+      avformat_close_input(&m_fctx);
+    av_free(m_ioctx->buffer);
+    av_free(m_ioctx);
     return false;
   }
 

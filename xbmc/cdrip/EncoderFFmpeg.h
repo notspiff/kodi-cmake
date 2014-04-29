@@ -22,6 +22,7 @@
  */
 
 #include "Encoder.h"
+#include "utils/StdString.h"
 
 extern "C" {
 #include "libavformat/avformat.h"
