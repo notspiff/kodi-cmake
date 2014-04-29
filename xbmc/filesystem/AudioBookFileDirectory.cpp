@@ -20,7 +20,6 @@
 #include "AudioBookFileDirectory.h"
 #include "filesystem/File.h"
 #include "FileItem.h"
-#include "DllAvFormat.h"
 #include "utils/StringUtils.h"
 #include "music/tags/MusicInfoTag.h"
 #include "guilib/LocalizeStrings.h"
@@ -45,19 +44,16 @@ static off_t cfile_file_seek(void *h, off_t pos, int whence)
 
 CAudioBookFileDirectory::CAudioBookFileDirectory(void) : m_ioctx(NULL), m_fctx(NULL)
 {
-  m_av.Load();
-  m_avu.Load();
-  m_av.av_register_all();
 }
 
 CAudioBookFileDirectory::~CAudioBookFileDirectory(void)
 {
   if (m_fctx)
-    m_av.avformat_close_input(&m_fctx);
+    avformat_close_input(&m_fctx);
   if (m_ioctx)
   {
-    m_avu.av_free(m_ioctx->buffer);
-    m_avu.av_free(m_ioctx);
+    av_free(m_ioctx->buffer);
+    av_free(m_ioctx);
   }
 }
 
@@ -71,7 +67,7 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
   std::string author;
 
   AVDictionaryEntry* tag=NULL;
-  while ((tag = m_avu.av_dict_get(m_fctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+  while ((tag = av_dict_get(m_fctx->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
   {
     if (strcmp(tag->key,"title") == 0)
       title = tag->value;
@@ -83,7 +79,7 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
   {
     tag=NULL;
     std::string chaptitle = "Unknown";
-    while ((tag=m_avu.av_dict_get(m_fctx->chapters[i]->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
+    while ((tag=av_dict_get(m_fctx->chapters[i]->metadata, "", tag, AV_DICT_IGNORE_SUFFIX)))
     {
       if (strcmp(tag->key,"title") == 0)
       {
@@ -139,9 +135,9 @@ bool CAudioBookFileDirectory::ContainsFiles(const CURL& url)
   if (avformat_open_input(&m_fctx, url.Get().c_str(), iformat, NULL) < 0)
   {
     if (m_fctx)
-      m_av.avformat_close_input(&m_fctx);
-    m_avu.av_free(m_ioctx->buffer);
-    m_avu.av_free(m_ioctx);
+      avformat_close_input(&m_fctx);
+    av_free(m_ioctx->buffer);
+    av_free(m_ioctx);
     return false;
   }
 
