@@ -1,1 +1,0 @@
-lib/xbmc-libav-hacks libav-hacks # EXTERNAL_LIBAV 
