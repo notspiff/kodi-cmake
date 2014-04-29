@@ -101,4 +101,4 @@ include_directories(${CORE_SOURCE_DIR}/lib/libUPnP/Platinum/Source/Core
                     ${CORE_SOURCE_DIR}/lib/libUPnP/Neptune/Source/Core)
   
 core_add_library(filesystem)
-add_dependencies(filesystem libcpluff)
+add_dependencies(filesystem libcpluff ffmpeg)
