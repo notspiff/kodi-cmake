@@ -265,56 +265,7 @@ set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
                ${CORE_BUILD_DIR}/modules/xbmc-config.cmake @ONLY)
 
-# These for built extras
-if(build_dirs)
-  prepare_addon_env()
-endif()
-foreach(subdir ${build_dirs})
-  string(REPLACE " " ";" subdir ${subdir})
-  list(GET subdir 0 id)
-  list(GET subdir 1 url)
-  list(GET subdir 2 hash)
-  set(shared 1)
-  set(install_prefix ${CMAKE_INSTALL_PREFIX})
-  set(install_command INSTALL_COMMAND "")
-  if(subdir MATCHES xbmc-platform)
-    set(shared 0)
-    set(install_prefix ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
-    set(install_command)
-  endif()
-  if(BOOTSTRAP_IN_TREE)
-    externalproject_add(${id}
-                        GIT_REPOSITORY ${url}
-                        GIT_TAG ${hash}
-                        PREFIX ${CORE_BUILD_DIR}/${id}
-                        CONFIGURE_COMMAND PKG_CONFIG_PATH=${DEPENDS_DIR}/lib/pkgconfig
-                                          ${CMAKE_COMMAND} <SOURCE_DIR>
-                                          -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                                          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                                          -DBUILD_SHARED_LIBS=${shared}
-                                          -DCMAKE_INSTALL_PREFIX=${install_prefix}
-                                          -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-                                          -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
-                                          -DBOOTSTRAP_IN_TREE=1
-                        "${install_command}")
-  else()
-    externalproject_add(${id}
-                        SOURCE_DIR ${BOOTSTRAP_DIR}/addons/compile/${id}/src/${id}
-                        PREFIX ${CORE_BUILD_DIR}/${id}
-                        CONFIGURE_COMMAND PKG_CONFIG_PATH=${DEPENDS_DIR}/lib/pkgconfig
-                                          ${CMAKE_COMMAND} <SOURCE_DIR>
-                                          -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
-                                          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                                          -DBUILD_SHARED_LIBS=${shared}
-                                          -DCMAKE_INSTALL_PREFIX=${install_prefix}
-                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
-                                          -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
-                                          -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-                        "${install_command}")
-  endif()
-  add_dependencies(${id} xbmc-platform)
-endforeach()
+prepare_addon_env()
 
 list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
 include(scripts/${CORE_SYSTEM_NAME}/install.cmake)
