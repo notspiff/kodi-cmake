@@ -20,8 +20,9 @@
 
 
 #include "IFileDirectory.h"
-#include "DllAvFormat.h"
-#include "DllAvUtil.h"
+extern "C" {
+#include <libavformat/avformat.h>
+}
 
 namespace XFILE
 {
@@ -37,7 +38,5 @@ namespace XFILE
     protected:
       AVIOContext* m_ioctx;
       AVFormatContext* m_fctx;
-      DllAvFormat m_av;
-      DllAvUtil m_avu;
   };
 }
