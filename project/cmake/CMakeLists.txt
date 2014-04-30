@@ -12,7 +12,6 @@ enable_language(C)
 
 # general
 option(VERBOSE            "Enable verbose output?" OFF)
-option(ENABLE_TESTS       "Enable tests?" ON)
 option(ENABLE_DVDCSS      "Enable libdvdcss support?" ON)
 option(ENABLE_UPNP        "Enable UPnP support?" ON)
 option(ENABLE_MICROHTTPD  "Enable MicroHttpd webserver?" ON)
@@ -182,7 +181,7 @@ if(NOT BOOTSTRAP_DIR)
   set(BOOTSTRAP_IN_TREE 1)
 endif()
 add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap)
-add_subdirectory(${CORE_SOURCE_DIR}/lib/gtest ${CORE_BUILD_DIR}/gtest)
+add_subdirectory(${CORE_SOURCE_DIR}/lib/gtest ${CORE_BUILD_DIR}/gtest EXCLUDE_FROM_ALL)
 
 # Subdirs
 core_add_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/common/*.txt
@@ -249,14 +248,15 @@ if(DOXYGEN_FOUND)
                     COMMENT "Generating API documentation" VERBATIM)
 endif()
 
-if(ENABLE_TESTS)
-  copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
-  add_executable(xbmc-test ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
-  target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
-                        ${DEPLIBS} ${CMAKE_DL_LIBS})
-  enable_testing()
-  gtest_add_tests(xbmc-test "" ${test_sources})
-endif()
+copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
+add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
+target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
+                      ${DEPLIBS} ${CMAKE_DL_LIBS})
+enable_testing()
+gtest_add_tests(xbmc-test "" ${test_sources})
+
+add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+add_dependencies(check xbmc-test)
 
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
                 ${CORE_SOURCE_DIR}/project/cmake/scripts/common/xbmc-addon-helpers.cmake)
