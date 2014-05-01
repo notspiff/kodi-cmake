@@ -372,6 +372,7 @@ file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs
            ${install_dirs})
 
 add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig swig.dir)
+add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/json-rpc/schema jsonschema.dir)
 
 set(autoconf_dirs lib/libdvd/libdvdcss
                   lib/libdvd/libdvdread
