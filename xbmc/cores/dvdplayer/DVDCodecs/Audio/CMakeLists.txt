@@ -1,5 +1,4 @@
 set(SOURCES DVDAudioCodecFFmpeg.cpp
-            DVDAudioCodecLibMad.cpp
             DVDAudioCodecLPcm.cpp
             DVDAudioCodecPassthrough.cpp
             DVDAudioCodecPcm.cpp)
