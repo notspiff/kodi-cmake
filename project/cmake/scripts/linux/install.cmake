@@ -62,10 +62,10 @@ foreach(subdir ${build_dirs})
   endif()
 endforeach()
 
-install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-48x48.png
+install(FILES ${CORE_SOURCE_DIR}/media/icon48x48.png
         RENAME xbmc.png
         DESTINATION ${datarootdir}/icons/hicolor/48x48/apps)
-install(FILES ${CORE_SOURCE_DIR}/media/icon.png
+install(FILES ${CORE_SOURCE_DIR}/media/icon256x256.png
         RENAME xbmc.png
         DESTINATION ${datarootdir}/icons/hicolor/256x256/apps)
 
