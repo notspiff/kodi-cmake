@@ -192,7 +192,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CStdString& strPath, CFileIt
     return NULL;
   }
 
-  if (pItem->IsAudioBook())
+  if (pItem->IsAudioBook() || strExtension.Equals(".mka") || pItem->IsType(".mka"))
   {
     if (!pItem->HasMusicInfoTag() || pItem->m_lEndOffset <= 0)
     {
