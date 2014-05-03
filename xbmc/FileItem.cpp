@@ -851,7 +851,7 @@ bool CFileItem::IsFileFolder(EFileFolderType types) const
     || IsZIP()
     || IsRAR()
     || IsRSS()
-    || IsType(".ogg|.oga|.nsf|.sid|.sap|.xsp")
+    || IsType(".ogg|.oga|.nsf|.sid|.sap|.xsp|.mka")
     || IsAudioBook()
 #if defined(TARGET_ANDROID)
     || IsType(".apk")
