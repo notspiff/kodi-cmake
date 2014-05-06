@@ -7,7 +7,6 @@ set(SOURCES AEFactory.cpp
             Utils/AEUtil.cpp
             Utils/AEPackIEC61937.cpp
             Utils/AEBitstreamPacker.cpp
-            Utils/AEWAVLoader.cpp
             Utils/AEELDParser.cpp
             Utils/AEDeviceInfo.cpp
             Utils/AELimiter.cpp
