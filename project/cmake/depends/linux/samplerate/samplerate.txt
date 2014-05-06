@@ -1,1 +1,0 @@
-samplerate http://mirrors.xbmc.org/build-deps/sources/libsamplerate-0.1.7.tar.gz
