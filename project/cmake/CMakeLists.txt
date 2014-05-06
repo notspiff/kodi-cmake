@@ -81,7 +81,7 @@ list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 # Required dependencies
 set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
                   TinyXML Python Yajl LibSmbClient ZLIB Xslt
-                  JPEG Lzo2 Fribidi SampleRate TagLib FFMPEG)
+                  JPEG Lzo2 Fribidi TagLib FFMPEG)
 
 # Optional dependencies
 set(optional_deps MicroHttpd MySqlClient
