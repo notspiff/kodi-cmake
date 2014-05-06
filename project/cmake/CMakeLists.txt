@@ -21,7 +21,6 @@ option(ENABLE_RTMP        "Enable RTMP support?" ON)
 option(ENABLE_BLURAY      "Enable BluRay support?" ON)
 option(ENABLE_PLIST       "Enable AirPlay support?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
-option(ENABLE_GNUTLS      "Enable gnutls support?" ON)
 if(UNIX)
   option(ENABLE_INTERNAL_FFMPEG "Enable internal ffmpeg?" ON)
   option(ENABLE_ALSA        "Enable ALSA support?" ON)
@@ -98,18 +97,8 @@ set(dyload_optional RTMP CEC Bluray Plist)
 # Required by shared objects we link
 set(required_dep_libs Jasper PNG TIFF EXPAT)
 
-# Optional libs for shared objects we link
-set(optional_dep_libs GnuTls)
-
 foreach(dep ${required_dep_libs})
   find_package(${dep} REQUIRED)
-endforeach()
-
-foreach(dep ${optional_dep_libs})
-  string(TOUPPER dep depup)
-  if(ENABLE_${depup})
-    find_package(${dep})
-  endif()
 endforeach()
 
 foreach(dep ${required_deps})
