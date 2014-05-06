@@ -2,6 +2,8 @@ project(ffmpeg)
 
 cmake_minimum_required(VERSION 2.8)
 
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
+
 find_package(GnuTls)
 
 set(ffmpeg_conf "")
