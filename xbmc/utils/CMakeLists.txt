@@ -81,5 +81,10 @@ if(ARM)
  list(APPEND SOURCES fastmemcpy-arm.S)
 endif()
 
+# The large map trips the clang optimizer
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set_source_files_properties(Mime.cpp PROPERTIES COMPILE_FLAGS -O0)
+endif()
+
 core_add_library(utils)
 add_dependencies(utils libcpluff ffmpeg)
