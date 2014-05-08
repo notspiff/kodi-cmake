@@ -104,7 +104,7 @@ DLLEXPORT char* XBMC_unknown_to_utf8(void *hdl, void* cb, const char* str)
 DLLEXPORT char* XBMC_get_localized_string(void *hdl, void* cb, int dwCode)
 {
   if (cb == NULL)
-    return "";
+    return NULL;
 
   return ((CB_AddOnLib*)cb)->GetLocalizedString(((AddonCB*)hdl)->addonData, dwCode);
 }
@@ -112,7 +112,7 @@ DLLEXPORT char* XBMC_get_localized_string(void *hdl, void* cb, int dwCode)
 DLLEXPORT char* XBMC_get_dvd_menu_language(void *hdl, void* cb)
 {
   if (cb == NULL)
-    return "";
+    return NULL;
 
   return ((CB_AddOnLib*)cb)->GetDVDMenuLanguage(((AddonCB*)hdl)->addonData);
 }
