@@ -29,6 +29,7 @@
 
 struct VFSDirEntry;
 struct VFSURL;
+struct VFSDirEntry;
 
 #ifdef _WIN32                   // windows
 #ifndef _SSIZE_T_DEFINED

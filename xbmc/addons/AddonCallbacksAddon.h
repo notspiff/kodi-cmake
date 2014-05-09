@@ -23,6 +23,7 @@
 
 struct VFSDirEntry;
 struct VFSURL;
+struct VFSDirEntry;
 
 namespace ADDON
 {

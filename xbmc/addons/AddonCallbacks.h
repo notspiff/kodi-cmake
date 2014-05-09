@@ -39,6 +39,7 @@ typedef intptr_t ssize_t;
 
 struct VFSDirEntry;
 struct VFSURL;
+struct VFSDirEntry;
 
 typedef void (*AddOnLogCallback)(void *addonData, const ADDON::addon_log_t loglevel, const char *msg);
 typedef void (*AddOnQueueNotification)(void *addonData, const ADDON::queue_msg_t type, const char *msg);
