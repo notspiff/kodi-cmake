@@ -2,7 +2,6 @@ addons/xbmc.addon/*
 addons/xbmc.audiodecoder/*
 addons/xbmc.codec/*
 addons/xbmc.core/*
-addons/xbmc.debug/*
 addons/xbmc.gui/*
 addons/xbmc.metadata/*
 addons/xbmc.pvr/*
