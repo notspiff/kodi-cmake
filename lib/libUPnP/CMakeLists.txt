@@ -40,9 +40,11 @@ set(SOURCES Platinum/Source/Core/PltAction.cpp
             Neptune/Source/Core/NptHash.cpp
             Neptune/Source/Core/NptHttp.cpp
             Neptune/Source/Core/NptList.cpp
+            Neptune/Source/Core/NptLogging.cpp
             Neptune/Source/Core/NptMessaging.cpp
             Neptune/Source/Core/NptNetwork.cpp
             Neptune/Source/Core/NptQueue.cpp
+            Neptune/Source/Core/NptResults.cpp
             Neptune/Source/Core/NptRingBuffer.cpp
             Neptune/Source/Core/NptSimpleMessageQueue.cpp
             Neptune/Source/Core/NptSockets.cpp
@@ -72,7 +74,7 @@ set(SOURCES Platinum/Source/Core/PltAction.cpp
             Platinum/Source/Devices/MediaConnect/PltMediaConnect.cpp
             Neptune/Source/System/Posix/NptPosixEnvironment.cpp)
 
-INCLUDE_DIRECTORIES(Neptune/Source/Core
+include_directories(Neptune/Source/Core
                     Platinum/Source/Core
                     Platinum/Source/Platinum
                     Platinum/Source/Devices/MediaConnect 
@@ -80,5 +82,7 @@ INCLUDE_DIRECTORIES(Neptune/Source/Core
                     Platinum/Source/Devices/MediaServer
                     Neptune/Source/System/Posix
                     Platinum/Source/Extras)
+
+add_definitions(-DNPT_CONFIG_ENABLE_LOGGING)
 
 core_add_library(upnp)
