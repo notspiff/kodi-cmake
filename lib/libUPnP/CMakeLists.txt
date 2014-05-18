@@ -31,6 +31,7 @@ set(SOURCES Platinum/Source/Core/PltAction.cpp
             Platinum/Source/Devices/MediaServer/ContentDirectorywSearchSCPD.cpp
             Platinum/Source/Devices/MediaServer/PltSyncMediaBrowser.cpp
             Neptune/Source/Core/Neptune.cpp
+            Neptune/Source/Core/NptAutomaticCleaner.cpp
             Neptune/Source/Core/NptBase64.cpp
             Neptune/Source/Core/NptBufferedStreams.cpp
             Neptune/Source/Core/NptCommon.cpp
@@ -53,6 +54,7 @@ set(SOURCES Platinum/Source/Core/PltAction.cpp
             Neptune/Source/Core/NptSystem.cpp
             Neptune/Source/Core/NptThreads.cpp
             Neptune/Source/Core/NptTime.cpp
+            Neptune/Source/Core/NptTls.cpp
             Neptune/Source/Core/NptUri.cpp
             Neptune/Source/Core/NptUtils.cpp
             Neptune/Source/Core/NptXml.cpp
