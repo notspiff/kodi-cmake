@@ -80,6 +80,7 @@ static const TypeMapping types[] =
    {"xbmc.python.library",               ADDON_SCRIPT_LIBRARY,      24081, "DefaultAddonHelper.png" },
    {"xbmc.python.module",                ADDON_SCRIPT_MODULE,       24082, "DefaultAddonLibrary.png" },
    {"xbmc.subtitle.module",              ADDON_SUBTITLE_MODULE,     24012, "DefaultAddonSubtitles.png" },
+   {"xbmc.shared-library",               ADDON_SHARED_LIBRARY,          0, "" },
    {"xbmc.gui.skin",                     ADDON_SKIN,                  166, "DefaultAddonSkin.png" },
    {"xbmc.webinterface",                 ADDON_WEB_INTERFACE,         199, "DefaultAddonWebSkin.png" },
    {"xbmc.addon.repository",             ADDON_REPOSITORY,          24011, "DefaultAddonRepository.png" },
@@ -404,6 +405,7 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_VIZ:
       case ADDON_SCREENSAVER:
       case ADDON_PVRDLL:
+      case ADDON_SHARED_LIBRARY:
       case ADDON_PERIPHERALDLL:
         {
           // Look for a system-dependent one

@@ -114,7 +114,9 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
     case ADDON_VIZ:
     case ADDON_SCREENSAVER:
     case ADDON_PVRDLL:
+
     case ADDON_AUDIOENCODER:
+    case ADDON_SHARED_LIBRARY:
     case ADDON_PERIPHERALDLL:
       { // begin temporary platform handling for Dlls
         // ideally platforms issues will be handled by C-Pluff
@@ -162,12 +164,16 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
           return AddonPtr(new PVR::CPVRClient(props));
 #endif
         }
+        else if (type == ADDON_SCREENSAVER)
+        {
+          return AddonPtr(new CScreenSaver(props));
+        }
         else if (type == ADDON_AUDIOENCODER)
           return AddonPtr(new CAudioEncoder(props));
         else if (type == ADDON_PERIPHERALDLL)
           return AddonPtr(new PERIPHERALS::CPeripheralAddon(props));
         else
-          return AddonPtr(new CScreenSaver(props));
+          return AddonPtr(new CAddon(props));
       }
     case ADDON_SKIN:
       return AddonPtr(new CSkinInfo(props));
