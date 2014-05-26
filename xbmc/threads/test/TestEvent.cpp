@@ -218,53 +218,53 @@ TEST(TestEvent, Group)
 
 }
 
-TEST(TestEvent, GroupLimitedGroupScope)
-{
-  CEvent event1;
-  CEvent event2;
+//TEST(TestEvent, GroupLimitedGroupScope)
+//{
+//  CEvent event1;
+//  CEvent event2;
 
-  {
-    CEventGroup group(&event1,&event2,NULL);
+//  {
+//    CEventGroup group(&event1,&event2,NULL);
 
-    bool result1 = false;
-    bool result2 = false;
+//    bool result1 = false;
+//    bool result2 = false;
 
-    waiter w1(event1,result1);
-    waiter w2(event2,result2);
-    group_wait w3(group);
+//    waiter w1(event1,result1);
+//    waiter w2(event2,result2);
+//    group_wait w3(group);
 
-    thread waitThread1(w1);
-    thread waitThread2(w2);
-    thread waitThread3(w3);
+//    thread waitThread1(w1);
+//    thread waitThread2(w2);
+//    thread waitThread3(w3);
 
-    EXPECT_TRUE(waitForWaiters(event1,1,10000));
-    EXPECT_TRUE(waitForWaiters(event2,1,10000));
-    EXPECT_TRUE(waitForWaiters(group,1,10000));
+//    EXPECT_TRUE(waitForWaiters(event1,1,10000));
+//    EXPECT_TRUE(waitForWaiters(event2,1,10000));
+//    EXPECT_TRUE(waitForWaiters(group,1,10000));
 
-    EXPECT_TRUE(!result1);
-    EXPECT_TRUE(!result2);
+//    EXPECT_TRUE(!result1);
+//    EXPECT_TRUE(!result2);
 
-    EXPECT_TRUE(w3.waiting);
-    EXPECT_TRUE(w3.result == NULL);
+//    EXPECT_TRUE(w3.waiting);
+//    EXPECT_TRUE(w3.result == NULL);
 
-    event1.Set();
+//    event1.Set();
 
-    EXPECT_TRUE(waitThread1.timed_join(MILLIS(10000)));
-    EXPECT_TRUE(waitThread3.timed_join(MILLIS(10000)));
-    SleepMillis(10);
+//    EXPECT_TRUE(waitThread1.timed_join(MILLIS(10000)));
+//    EXPECT_TRUE(waitThread3.timed_join(MILLIS(10000)));
+//    SleepMillis(10);
 
-    EXPECT_TRUE(result1);
-    EXPECT_TRUE(!w1.waiting);
-    EXPECT_TRUE(!result2);
-    EXPECT_TRUE(w2.waiting);
-    EXPECT_TRUE(!w3.waiting);
-    EXPECT_TRUE(w3.result == &event1);
-  }
+//    EXPECT_TRUE(result1);
+//    EXPECT_TRUE(!w1.waiting);
+//    EXPECT_TRUE(!result2);
+//    EXPECT_TRUE(w2.waiting);
+//    EXPECT_TRUE(!w3.waiting);
+//    EXPECT_TRUE(w3.result == &event1);
+//  }
 
-  event2.Set();
+//  event2.Set();
 
-  SleepMillis(50); // give thread 2 a chance to exit
-}
+//  SleepMillis(50); // give thread 2 a chance to exit
+//}
 
 TEST(TestEvent, TwoGroups)
 {
