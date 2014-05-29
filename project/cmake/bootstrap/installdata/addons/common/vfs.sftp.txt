@@ -1,1 +1,1 @@
-vfs.sftp https://github.com/notspiff/vfs.sftp 1d5c99b
+vfs.sftp https://github.com/notspiff/vfs.sftp 297a12c
