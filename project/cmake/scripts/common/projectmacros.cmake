@@ -7,15 +7,20 @@
 # On return:
 #   xbt is added to ${XBT_FILES}
 function(pack_xbt input output)
+  if(BOOTSTRAP_DIR)
+    set(TexturePacker ${BOOTSTRAP_DIR}/texturepacker/TexturePacker)
+  else()
+    set(TexturePacker ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/bootstrap/texturepacker/TexturePacker)
+  endif()
   file(GLOB_RECURSE MEDIA_FILES ${input}/*)
   get_filename_component(dir ${output} PATH)
   add_custom_command(OUTPUT  ${output}
                      COMMAND ${CMAKE_COMMAND} -E make_directory ${dir}
-                     COMMAND ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/texturepacker/TexturePacker
+                     COMMAND ${TexturePacker}
                      ARGS    -input ${input}
                              -output ${output}
                              -dupecheck
-                     DEPENDS ${MEDIA_FILES} TexturePacker)
+                     DEPENDS ${MEDIA_FILES})
   list(APPEND XBT_FILES ${output})
   set(XBT_FILES ${XBT_FILES} PARENT_SCOPE)
 endfunction()

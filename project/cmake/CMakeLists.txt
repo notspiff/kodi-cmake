@@ -203,6 +203,9 @@ foreach(xbt ${EXTRA_XBT})
 endforeach()
 add_custom_target(pack-skins ALL
                   DEPENDS bootstrap export-files ${XBT_FILES})
+if(BOOTSTRAP_IN_TREE)
+  add_dependencies(pack-skins TexturePacker)
+endif()
 
 set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
