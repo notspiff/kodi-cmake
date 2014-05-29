@@ -1,5 +1,8 @@
 add_executable(JsonSchemaBuilder ${CORE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder.cpp)
 
+# Needed due to link wrapper
+add_dependencies(JsonSchemaBuilder ffmpeg)
+
 set(JSON_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/version.txt
               ${CMAKE_CURRENT_SOURCE_DIR}/license.txt
               ${CMAKE_CURRENT_SOURCE_DIR}/methods.json
