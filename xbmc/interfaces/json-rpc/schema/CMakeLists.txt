@@ -1,16 +1,17 @@
-add_executable(JsonSchemaBuilder ${CORE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder.cpp)
-
-# Needed due to link wrapper
-add_dependencies(JsonSchemaBuilder ffmpeg)
-
 set(JSON_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/version.txt
               ${CMAKE_CURRENT_SOURCE_DIR}/license.txt
               ${CMAKE_CURRENT_SOURCE_DIR}/methods.json
               ${CMAKE_CURRENT_SOURCE_DIR}/types.json
               ${CMAKE_CURRENT_SOURCE_DIR}/notifications.json)
 
+if(BOOTSTRAP_IN_TREE)
+  set(JsonSchemaBuilder ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/bootstrap/JsonSchemaBuilder)
+else()
+  set(JsonSchemaBuilder ${BOOTSTRAP_DIR}/JsonSchemaBuilder)
+endif()
+
 add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ServiceDescription.h
-                   COMMAND ${CMAKE_CURRENT_BINARY_DIR}/JsonSchemaBuilder ${JSON_SRCS}
+                   COMMAND ${JsonSchemaBuilder} ${JSON_SRCS}
                    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                    DEPENDS ${JSON_SRCS}
                    COMMENT "Generating ServiceDescription.h")
@@ -25,9 +26,12 @@ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/addons/xbmc.json/addon.xml
                    COMMENT "Generating xbmc.json/addon.xml")
 
 add_custom_target(generate_json_header ALL
-                  DEPENDS JsonSchemaBuilder
-                           ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ServiceDescription.h
-                           ${CMAKE_BINARY_DIR}/addons/xbmc.json/addon.xml)
-list(APPEND install_data addons/xbmc.json/addon.xml)
+                  DEPENDS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ServiceDescription.h
+                          ${CMAKE_BINARY_DIR}/addons/xbmc.json/addon.xml)
 
+list(APPEND install_data addons/xbmc.json/addon.xml)
 set(install_data ${install_data} PARENT_SCOPE)
+
+if(BOOTSTRAP_IN_TREE)
+  add_dependencies(generate_json_header JsonSchemaBuilder)
+endif()

@@ -20,4 +20,3 @@ xbmc/utils                      utils
 xbmc/view                       view
 xbmc/windowing                  windowing
 xbmc/windows                    windows
-tools/TexturePacker             texturepacker
