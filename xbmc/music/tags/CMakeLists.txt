@@ -9,4 +9,4 @@ set(SOURCES MusicInfoTag.cpp
 
 core_add_library(music_tags)
 
-add_dependencies(music_tags libcpluff)
+add_dependencies(music_tags libcpluff ffmpeg)
