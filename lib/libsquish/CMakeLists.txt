@@ -8,7 +8,7 @@ set(SOURCES alpha.cpp
             singlecolourfit.cpp
             squish.cpp)
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(SSE)
 if(SSE2_FOUND)
@@ -18,7 +18,11 @@ elseif(SSE_FOUND)
 endif()
 
 # Always compile release - it's insanely slow in debug
-list(APPEND CMAKE_CXX_FLAGS -O2)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 add_definitions(-DNDEBUG)
 
-core_add_library(squish)
+if(SQUISH_TARGET)
+  core_add_library(${SQUISH_TARGET} 1)
+else()
+  core_add_library(squish)
+endif()

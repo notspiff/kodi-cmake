@@ -8,7 +8,8 @@ if(NOT CORE_SYSTEM_NAME)
   string(TOLOWER ${CMAKE_SYSTEM_NAME} CORE_SYSTEM_NAME)
 endif()
 
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/modules
+                              ${PROJECT_SOURCE_DIR}/../scripts/common)
 
 if(NOT CORE_BUILD_DIR)
   set(CORE_BUILD_DIR build)
@@ -372,7 +373,6 @@ file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/extra-installs
            ${install_dirs})
 
 add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig swig.dir)
-add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/json-rpc/schema jsonschema.dir)
 
 set(autoconf_dirs lib/libdvd/libdvdcss
                   lib/libdvd/libdvdread
@@ -391,4 +391,10 @@ if(BOOTSTRAP_IN_TREE OR BOOTSTRAP_DIR)
   set(install_dirs ${install_dirs} PARENT_SCOPE)
   set(EXTRA_XBT ${EXTRA_XBT} PARENT_SCOPE)
   set(SKINS ${SKINS} PARENT_SCOPE)
+endif()
+
+if(NOT BOOTSTRAP_DIR)
+  # Build helpers
+  add_executable(JsonSchemaBuilder ${CORE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder.cpp)
+  add_subdirectory(${CORE_SOURCE_DIR}/tools/TexturePacker texturepacker)
 endif()
