@@ -287,8 +287,8 @@ public:
   CCdIoSupport();
   virtual ~CCdIoSupport();
 
-  HRESULT EjectTray();
-  HRESULT CloseTray();
+  bool EjectTray();
+  bool CloseTray();
 
   HANDLE OpenCDROM();
   HANDLE OpenIMAGE( std::string& strFilename );
