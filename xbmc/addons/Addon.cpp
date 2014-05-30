@@ -90,6 +90,7 @@ static const TypeMapping types[] =
    {"xbmc.audioencoder",                 ADDON_AUDIOENCODER,         200,  "DefaultAddonAudioEncoder.png" },
    {"xbmc.audiodecoder",                 ADDON_AUDIODECODER,         201,  "DefaultAddonAudioDecoder.png" },
    {"xbmc.vfs",                          ADDON_VFS,                  204,  "DefaultAddonVfs.png" },
+   {"xbmc.peripheral",                   ADDON_PERIPHERAL,          35000, "DefaultAddonPeripheral.png" },
    {"xbmc.service",                      ADDON_SERVICE,             24018, "DefaultAddonService.png" }};
 
 const CStdString TranslateType(const ADDON::TYPE &type, bool pretty/*=false*/)

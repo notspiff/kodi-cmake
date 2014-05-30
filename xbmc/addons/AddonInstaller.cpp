@@ -767,6 +767,9 @@ void CAddonInstallJob::OnPostInstall(bool reloadAddon)
     // (re)start the pvr manager
     PVR::CPVRManager::Get().Start(true);
   }
+
+  if (m_addon->Type() == ADDON_PERIPHERAL)
+    CApplicationMessenger::Get().ExecBuiltIn("ReloadKeymaps");
 }
 
 void CAddonInstallJob::ReportInstallError(const CStdString& addonID,
@@ -868,4 +871,7 @@ void CAddonUnInstallJob::OnPostUnInstall()
     if (CSettings::Get().GetBool("pvrmanager.enabled"))
       PVR::CPVRManager::Get().Start(true);
   }
+
+  if (m_addon->Type() == ADDON_PERIPHERAL)
+    CApplicationMessenger::Get().ExecBuiltIn("ReloadKeymaps");
 }
