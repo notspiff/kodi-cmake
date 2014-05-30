@@ -178,12 +178,6 @@ core_add_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/common/*.txt
 core_add_optional_subdirs_from_filelist(${PROJECT_SOURCE_DIR}/treedata/optional/common/*.txt
                                         ${PROJECT_SOURCE_DIR}/treedata/optional/${CORE_SYSTEM_NAME}/*.txt)
 
-# main binary
-add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
-target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
-                      ${DEPLIBS} ${CMAKE_DL_LIBS})
-install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
-
 # copy files to build tree
 copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/common/*.txt
                                       ${PROJECT_SOURCE_DIR}/installdata/${CORE_SYSTEM_NAME}/*.txt)
@@ -223,11 +217,36 @@ core_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
 add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
 
-add_dependencies(xbmc.bin export-files)
-
 configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
+# main binary
+add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
+target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
+                      ${DEPLIBS} ${CMAKE_DL_LIBS})
+install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
+add_dependencies(xbmc.bin export-files)
+
+# testing
+copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
+add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
+target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
+                      ${DEPLIBS} ${CMAKE_DL_LIBS})
+enable_testing()
+gtest_add_tests(xbmc-test "" ${test_sources})
+add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+add_dependencies(check xbmc-test)
+
+# link wrapper
+if(FFMPEG_LINK_EXECUTABLE)
+  set(CMAKE_CXX_LINK_EXECUTABLE "${FFMPEG_LINK_EXECUTABLE}")
+endif()
+#  set(CMAKE_Cxx_LINK_EXECUTABLE "${FFMPEG_LINK_EXECUTABLE}")
+# set_target_properties(xbmc.bin PROPERTIES LINKER_LANGUAGE Cxx)
+  #  set_target_properties(xbmc-test PROPERTIES LINKER_LANGUAGE Cxx)
+  #endif()
+
+# randr
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
 target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
@@ -239,16 +258,6 @@ if(DOXYGEN_FOUND)
                     WORKING_DIRECTORY ${CORE_SOURCE_DIR}/doxygen_resources
                     COMMENT "Generating API documentation" VERBATIM)
 endif()
-
-copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
-add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
-target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
-                      ${DEPLIBS} ${CMAKE_DL_LIBS})
-enable_testing()
-gtest_add_tests(xbmc-test "" ${test_sources})
-
-add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
-add_dependencies(check xbmc-test)
 
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
                 ${CORE_SOURCE_DIR}/project/cmake/scripts/common/xbmc-addon-helpers.cmake)
