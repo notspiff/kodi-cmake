@@ -1,8 +1,6 @@
 set(SOURCES AEFactory.cpp
             Utils/AEChannelInfo.cpp
             Utils/AEBuffer.cpp
-            Utils/AEConvert.cpp
-            Utils/AERemap.cpp
             Utils/AEStreamInfo.cpp
             Utils/AEUtil.cpp
             Utils/AEPackIEC61937.cpp
