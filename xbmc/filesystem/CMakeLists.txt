@@ -23,7 +23,6 @@ set(SOURCES AddonsDirectory.cpp
             FileReaderFile.cpp
             FTPDirectory.cpp
             FTPParse.cpp
-            HDDirectory.cpp
             HDFile.cpp
             HTSPDirectory.cpp
             HTSPSession.cpp
