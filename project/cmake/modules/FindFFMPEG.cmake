@@ -18,6 +18,11 @@ fi")
        FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
   set(FFMPEG_LINK_EXECUTABLE "${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg-link-wrapper <CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>" PARENT_SCOPE)
   set(FFMPEG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include)
+  file(STRINGS ${PROJECT_SOURCE_DIR}/bootstrap/installdata/lib/optional/linux/ffmpeg/ffmpeg.txt def)
+  string(REPLACE " " ";" def ${def})
+  list(GET def 2 hash)
+  list(APPEND FFMPEG_DEFINITIONS -DFFMPEG_VER_SHA=\"${hash}\"
+                                 -DUSE_STATIC_FFMPEG=1)
 else()
   set(FFMPEG_PKGS libavcodec libavfilter libavformat
                   libavutil libswscale libswresample libpostproc)
@@ -27,6 +32,6 @@ else()
 
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(FFMPEG DEFAULT_MSG FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES)
-
-  mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES FFMPEG_DEFINITIONS)
 endif()
+
+mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES FFMPEG_DEFINITIONS)
