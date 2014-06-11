@@ -234,6 +234,7 @@ target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEP
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
 enable_testing()
 gtest_add_tests(xbmc-test "" ${test_sources})
+add_dependencies(xbmc-test export-files)
 add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 add_dependencies(check xbmc-test)
 
