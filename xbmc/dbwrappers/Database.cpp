@@ -23,7 +23,6 @@
 #include "filesystem/SpecialProtocol.h"
 #include "filesystem/File.h"
 #include "profiles/ProfilesManager.h"
-#include "utils/AutoPtrHandle.h"
 #include "utils/log.h"
 #include "utils/SortUtils.h"
 #include "utils/URIUtils.h"
@@ -36,7 +35,6 @@
 #include "mysqldataset.h"
 #endif
 
-using namespace AUTOPTR;
 using namespace dbiplus;
 
 #define MAX_COMPRESS_COUNT 20
