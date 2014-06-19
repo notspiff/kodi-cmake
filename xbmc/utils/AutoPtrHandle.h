@@ -40,6 +40,7 @@ protected:
   HANDLE m_hHandle;
 };
 
+#ifdef TARGET_WINDOWS
 class CAutoPtrFind : public CAutoPtrHandle
 {
 public:
@@ -48,7 +49,7 @@ public:
 protected:
   virtual void Cleanup();
 };
-
+#endif
 
 class CAutoPtrSocket
 {
