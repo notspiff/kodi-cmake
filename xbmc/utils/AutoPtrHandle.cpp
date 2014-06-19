@@ -70,6 +70,7 @@ void CAutoPtrHandle::reset()
 }
 
 //-------------------------------------------------------------------------------
+#ifdef TARGET_WINDOWS
 CAutoPtrFind ::CAutoPtrFind(HANDLE hHandle)
     : CAutoPtrHandle(hHandle)
 {}
@@ -86,6 +87,7 @@ void CAutoPtrFind::Cleanup()
     m_hHandle = INVALID_HANDLE_VALUE;
   }
 }
+#endif
 
 //-------------------------------------------------------------------------------
 CAutoPtrSocket::CAutoPtrSocket(SOCKET hSocket)
