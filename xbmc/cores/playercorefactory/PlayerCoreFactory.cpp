@@ -32,7 +32,6 @@
 #include "FileItem.h"
 #include "profiles/ProfilesManager.h"
 #include "settings/AdvancedSettings.h"
-#include "utils/AutoPtrHandle.h"
 #include "cores/ExternalPlayer/ExternalPlayer.h"
 #include "PlayerCoreConfig.h"
 #include "PlayerSelectionRule.h"
@@ -42,8 +41,6 @@
 #include "utils/XMLUtils.h"
 
 #define PLAYERCOREFACTORY_XML "playercorefactory.xml"
-
-using namespace AUTOPTR;
 
 CPlayerCoreFactory::CPlayerCoreFactory()
 { }

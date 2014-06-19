@@ -60,7 +60,6 @@
 #include "utils/TimeUtils.h"
 #include "TextureCache.h"
 #include "addons/AddonInstaller.h"
-#include "utils/AutoPtrHandle.h"
 #include "interfaces/AnnouncementManager.h"
 #include "dbwrappers/dataset.h"
 #include "utils/XMLUtils.h"
@@ -68,7 +67,6 @@
 #include "playlists/SmartPlayList.h"
 
 using namespace std;
-using namespace AUTOPTR;
 using namespace XFILE;
 using namespace MUSICDATABASEDIRECTORY;
 using ADDON::AddonPtr;
