@@ -44,6 +44,10 @@
 #include "video/videosync/VideoSyncCocoa.h"
 #endif
 
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
+
 using namespace std;
 
 CVideoReferenceClock::CVideoReferenceClock() : CThread("RefClock")
