@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <sys/stat.h>
+#include <string.h>
 
 using namespace XFILE;
 

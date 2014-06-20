@@ -23,6 +23,7 @@
 #include "DVDCodecs/Overlay/DVDOverlayText.h"
 #include "utils/RegExp.h"
 #include "utils/StringUtils.h"
+#include <string.h>
 
 CDVDSubtitleTagSami::~CDVDSubtitleTagSami()
 {

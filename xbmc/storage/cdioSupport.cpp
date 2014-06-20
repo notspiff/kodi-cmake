@@ -30,6 +30,7 @@
 #include <cdio/util.h>
 #include <cdio/mmc.h>
 #include <cdio/cd_types.h>
+#include <string.h>
 
 #if defined(TARGET_WINDOWS)
 #pragma comment(lib, "libcdio.dll.lib")
