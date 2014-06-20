@@ -43,6 +43,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <vector>
+#include <fcntl.h>
 
 //using namespace std; On VS2010, bind conflicts with std::bind
 
