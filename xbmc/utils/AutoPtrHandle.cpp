@@ -19,6 +19,9 @@
  */
 
 #include "AutoPtrHandle.h"
+#ifdef TARGET_POSIX
+#include "linux/XHandlePublic.h"
+#endif
 
 using namespace AUTOPTR;
 
