@@ -13,4 +13,4 @@ set(SOURCES AdvancedSettings.cpp
             VideoSettings.cpp)
 
 core_add_library(settings)
-add_dependencies(settings libcpluff)
+add_dependencies(settings libcpluff ffmpeg)
