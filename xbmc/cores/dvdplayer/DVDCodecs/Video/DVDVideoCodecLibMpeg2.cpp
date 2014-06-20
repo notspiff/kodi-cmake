@@ -22,6 +22,9 @@
 #include "DVDClock.h"
 #include "DVDStreamInfo.h"
 #include "utils/log.h"
+#ifdef TARGET_POSIX
+#include "linux/XMemUtils.h"
+#endif
 
 enum MPEGProfile
 {
