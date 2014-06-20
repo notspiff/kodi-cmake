@@ -23,6 +23,7 @@
 #include "input/XBMC_keysym.h"
 #include "input/XBMC_vkeys.h"
 #include "input/XBMC_keytable.h"
+#include <string.h>
 
 // The array of XBMCKEYTABLEs used in XBMC.
 // scancode, sym, unicode, ascii, vkey, keyname

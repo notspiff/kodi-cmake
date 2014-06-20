@@ -28,6 +28,7 @@
 #include "dll_util.h"
 #include <limits>
 #include "utils/log.h"
+#include <string.h>
 
 #ifdef TARGET_WINDOWS
 extern "C" FILE *fopen_utf8(const char *_Filename, const char *_Mode);

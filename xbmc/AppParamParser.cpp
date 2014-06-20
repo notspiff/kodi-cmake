@@ -37,6 +37,8 @@
 #endif
 #include <stdlib.h>
 
+#include <string.h>
+
 CAppParamParser::CAppParamParser()
 {
   m_testmode = false;

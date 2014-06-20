@@ -29,6 +29,7 @@
 #include "DVDSubtitleParserSSA.h"
 #include "DVDSubtitleParserVplayer.h"
 #include "utils/log.h"
+#include <string.h>
 
 using namespace std;
 

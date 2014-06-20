@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <vector>
 #include <limits>
+#include <string.h>
 
 using namespace std;
 using namespace XFILE;

@@ -35,6 +35,7 @@
 #include <cassert>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <string.h>
 
 using namespace std;
 using namespace XFILE;

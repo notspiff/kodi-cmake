@@ -19,6 +19,7 @@
  */
 
 #include <cassert>
+#include <string.h>
 #include "system.h"
 #include "AEPackIEC61937.h"
 
