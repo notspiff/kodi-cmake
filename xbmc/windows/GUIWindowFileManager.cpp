@@ -59,6 +59,9 @@
 #include "utils/URIUtils.h"
 #include "Autorun.h"
 #include "URL.h"
+#ifdef TARGET_POSIX
+#include "linux/XFileUtils.h"
+#endif
 
 using namespace std;
 using namespace XFILE;
