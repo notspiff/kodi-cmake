@@ -33,6 +33,7 @@
 #include "settings/AdvancedSettings.h"
 #include <va/va_x11.h>
 #include "linux/XTimeUtils.h"
+#include "linux/XMemUtils.h"
 
 extern "C" {
 #include "libavutil/avutil.h"

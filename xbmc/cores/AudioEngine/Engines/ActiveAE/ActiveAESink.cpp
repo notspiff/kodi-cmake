@@ -32,6 +32,10 @@
 #include <new> // for std::bad_alloc
 #include <algorithm>
 
+#ifdef TARGET_POSIX
+#include "linux/XMemUtils.h"
+#endif
+
 using namespace ActiveAE;
 
 CActiveAESink::CActiveAESink(CEvent *inMsgEvent) :
