@@ -24,6 +24,9 @@
 #include "DVDDemuxUtils.h"
 #include "DVDClock.h"
 #include "utils/log.h"
+#ifdef TARGET_POSIX
+#include "linux/XMemUtils.h"
+#endif
 
 extern "C" {
 #include "libavcodec/avcodec.h"
