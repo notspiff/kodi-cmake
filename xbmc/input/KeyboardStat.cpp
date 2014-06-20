@@ -31,6 +31,7 @@
 #include "input/XBMC_vkeys.h"
 #include "peripherals/Peripherals.h"
 #include "peripherals/devices/PeripheralHID.h"
+#include <string.h>
 
 using namespace std;
 using namespace PERIPHERALS;

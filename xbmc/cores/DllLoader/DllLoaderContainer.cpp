@@ -33,6 +33,8 @@
 #include "utils/log.h"
 #include "URL.h"
 
+#include <string.h>
+
 #define ENV_PARTIAL_PATH "special://xbmcbin/system/;" \
                  "special://xbmcbin/system/players/mplayer/;" \
                  "special://xbmcbin/system/players/dvdplayer/;" \

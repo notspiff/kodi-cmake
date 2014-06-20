@@ -23,6 +23,7 @@
 #include "PipesManager.h"
 #include "utils/StringUtils.h"
 #include "URL.h"
+#include <string.h>
 
 using namespace XFILE;
 
