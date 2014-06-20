@@ -26,6 +26,7 @@
 #include "linux/PosixMountProvider.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
+#include <string.h>
 
 extern "C" {
 #include <libudev.h>
