@@ -42,6 +42,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <vector>
+#include <fcntl.h>
 
 CSAPSessions g_sapsessions;
 
