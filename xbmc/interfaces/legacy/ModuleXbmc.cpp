@@ -64,6 +64,10 @@
 #include "Exception.h"
 #include <vector>
 
+#ifdef TARGET_POSIX
+#include "linux/XMemUtils.h"
+#endif
+
 namespace XBMCAddon
 {
 
