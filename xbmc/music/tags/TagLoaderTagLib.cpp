@@ -21,6 +21,7 @@
 #include "TagLoaderTagLib.h"
 
 #include <vector>
+#include <string.h>
 
 #include <taglib/id3v1tag.h>
 #include <taglib/id3v2tag.h>
