@@ -25,6 +25,7 @@
 #include "iso9660.h"
 
 #include <sys/stat.h>
+#include <string.h>
 
 using namespace std;
 using namespace XFILE;

@@ -23,6 +23,7 @@
 #include "system.h"
 #include "utils/log.h"
 #include <stdlib.h>
+#include <string.h>
 
 /*
  Redbook   : CDDA

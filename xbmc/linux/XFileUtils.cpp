@@ -36,6 +36,7 @@
 #endif
 #include <dirent.h>
 #include <errno.h>
+#include <string.h>
 
 #if defined(TARGET_ANDROID)
 #include <sys/file.h>
