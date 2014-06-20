@@ -31,6 +31,7 @@
 #include "peripherals/devices/PeripheralHID.h"
 #include "threads/SystemClock.h"
 #include "utils/log.h"
+#include <string.h>
 
 using namespace std;
 using namespace PERIPHERALS;

@@ -22,6 +22,7 @@
 
 #include <cstdlib>
 #include <math.h>
+#include <string.h>
 
 #include "filesystem/File.h"
 #include "utils/log.h"
