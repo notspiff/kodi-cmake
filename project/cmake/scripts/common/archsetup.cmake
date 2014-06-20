@@ -12,6 +12,7 @@
 # + the results of compiler tests etc.
 
 include(CheckCXXSourceCompiles)
+include(CheckSymbolExists)
 
 # Macro to check if a given type exists in a given header
 # Arguments:
@@ -53,3 +54,7 @@ check_type(string std::u32string HAVE_STD__U32_STRING)
 check_type(string char16_t HAVE_CHAR16_T)
 check_type(string char32_t HAVE_CHAR32_T)
 check_type(stdint.h uint_least16_t HAVE_STDINT_H)
+check_symbol_exists(posix_fadvise fcntl.h HAVE_POSIX_FADVISE)
+if(HAVE_POSIX_FADVISE)
+  list(APPEND SYSTEM_DEFINES -DHAVE_POSIX_FADVISE=1)
+endif()
