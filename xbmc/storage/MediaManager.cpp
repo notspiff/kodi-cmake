@@ -68,6 +68,8 @@
 #include "windows/Win32StorageProvider.h"
 #endif
 
+#include <fcntl.h>
+
 using namespace std;
 using namespace XFILE;
 
