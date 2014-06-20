@@ -21,6 +21,7 @@
 #include "AutoPtrHandle.h"
 #ifdef TARGET_POSIX
 #include "linux/XHandlePublic.h"
+#include <unistd.h>
 #endif
 
 using namespace AUTOPTR;
