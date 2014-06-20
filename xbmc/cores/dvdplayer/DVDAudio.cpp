@@ -26,6 +26,9 @@
 #include "cores/AudioEngine/AEFactory.h"
 #include "cores/AudioEngine/Interfaces/AEStream.h"
 #include "settings/MediaSettings.h"
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
 
 CDVDAudio::CDVDAudio(volatile bool &bStop)
   : m_bStop(bStop)
