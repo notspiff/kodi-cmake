@@ -44,6 +44,9 @@
 #include "Autorun.h"
 #include "interfaces/AnnouncementManager.h"
 #include "utils/StringUtils.h"
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
 
 #define CONTROL_BTNVIEWASICONS      2
 #define CONTROL_BTNSORTBY           3
