@@ -31,6 +31,7 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <sys/socket.h>
+#include <string.h>
 
 extern "C" {
 #include "libhts/net.h"

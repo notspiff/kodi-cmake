@@ -19,6 +19,7 @@
  */
 
 #include <sstream>
+#include <string.h>
 
 #include "ListItem.h"
 #include "AddonUtils.h"

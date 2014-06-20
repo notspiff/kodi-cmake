@@ -21,6 +21,7 @@
 #include "EmuFileWrapper.h"
 #include "filesystem/File.h"
 #include "threads/SingleLock.h"
+#include <string.h>
 
 CEmuFileWrapper g_emuFileWrapper;
 

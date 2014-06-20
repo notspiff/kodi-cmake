@@ -20,6 +20,7 @@
  */
 #include "cximage.h"
 #include "utils/log.h"
+#include <string.h>
 
 CXImage::CXImage(const std::string& strMimeType): m_strMimeType(strMimeType), m_thumbnailbuffer(NULL)
 {

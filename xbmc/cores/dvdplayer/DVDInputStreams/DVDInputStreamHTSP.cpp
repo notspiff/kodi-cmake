@@ -23,6 +23,7 @@
 #include "FileItem.h"
 #include "utils/log.h"
 #include <limits.h>
+#include <string.h>
 
 extern "C" {
 #include "libhts/net.h"

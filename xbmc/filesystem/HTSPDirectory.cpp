@@ -29,6 +29,7 @@
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
 #include "utils/StringUtils.h"
+#include <string.h>
 
 extern "C" {
 #include "libhts/htsmsg.h"

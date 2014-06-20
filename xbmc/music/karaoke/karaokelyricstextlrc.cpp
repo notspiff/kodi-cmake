@@ -21,6 +21,7 @@
 // C++ Implementation: karaokelyricstextlrc
 
 #include <math.h>
+#include <string.h>
 
 #include "filesystem/File.h"
 #include "settings/AdvancedSettings.h"
