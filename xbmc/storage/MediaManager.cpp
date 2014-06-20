@@ -70,6 +70,8 @@
 #include <string>
 #include <vector>
 
+#include <fcntl.h>
+
 using namespace XFILE;
 
 #ifdef HAS_DVD_DRIVE
