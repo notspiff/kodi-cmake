@@ -25,6 +25,7 @@
 #include "utils/log.h"
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 
 #ifdef TARGET_POSIX
 #define dll_open open

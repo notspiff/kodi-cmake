@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include "Network.h"
 #include "ApplicationMessenger.h"

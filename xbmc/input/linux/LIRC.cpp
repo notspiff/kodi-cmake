@@ -28,6 +28,7 @@
 #include <sys/un.h>
 #include <limits.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "LIRC.h"
 #ifdef HAVE_INOTIFY
 #include <sys/inotify.h>
