@@ -22,7 +22,6 @@
  */
 
 #include "PlatformDefs.h"
-#include "XMemUtils.h"
 #include "ConvUtils.h"
 
 #endif
