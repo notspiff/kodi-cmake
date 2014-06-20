@@ -44,6 +44,9 @@
 #include "interfaces/generic/ScriptInvocationManager.h"
 #include "CharsetConverter.h"
 #include "addons/GUIDialogAddonSettings.h"
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
 
 using namespace std;
 using namespace ADDON;
