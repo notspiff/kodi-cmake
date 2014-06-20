@@ -1,0 +1,1 @@
+pvr.vdr.vnsi https://github.com/Montellese/pvr.vdr.vnsi depends_simple
