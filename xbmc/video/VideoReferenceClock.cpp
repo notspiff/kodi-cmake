@@ -47,6 +47,10 @@
 #include "video/videosync/VideoSyncIos.h"
 #endif
 
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
+
 CVideoReferenceClock::CVideoReferenceClock() : CThread("RefClock")
 {
   m_SystemFrequency = CurrentHostFrequency();
