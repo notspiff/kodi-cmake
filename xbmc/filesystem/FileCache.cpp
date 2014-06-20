@@ -31,6 +31,10 @@
 #include "utils/TimeUtils.h"
 #include "settings/AdvancedSettings.h"
 
+#ifdef TARGET_POSIX
+#include "linux/ConvUtils.h"
+#endif
+
 using namespace AUTOPTR;
 using namespace XFILE;
 
