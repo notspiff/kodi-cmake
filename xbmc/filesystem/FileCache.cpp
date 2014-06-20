@@ -34,6 +34,10 @@
 #include <cassert>
 #include <algorithm>
 
+#ifdef TARGET_POSIX
+#include "linux/ConvUtils.h"
+#endif
+
 using namespace AUTOPTR;
 using namespace XFILE;
 
