@@ -27,6 +27,7 @@
 #include "threads/SingleLock.h"
 #include "utils/log.h"
 #include <math.h>
+#include <string.h>
 
 CAudioDecoder::CAudioDecoder()
 {

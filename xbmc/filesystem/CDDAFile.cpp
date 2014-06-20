@@ -28,6 +28,7 @@
 #include "storage/MediaManager.h"
 #include "utils/log.h"
 #include "utils/URIUtils.h"
+#include <memory.h>
 
 #include <algorithm>
 

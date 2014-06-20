@@ -22,6 +22,7 @@
 #include "threads/SingleLock.h"
 #include "PipesManager.h"
 #include "URL.h"
+#include <string.h>
 
 using namespace XFILE;
 

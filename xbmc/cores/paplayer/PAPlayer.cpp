@@ -32,6 +32,8 @@
 #include "cores/AudioEngine/Interfaces/AEStream.h"
 #include "cores/DataCacheCore.h"
 
+#include <string.h>
+
 #define TIME_TO_CACHE_NEXT_FILE 5000 /* 5 seconds before end of song, start caching the next song */
 #define FAST_XFADE_TIME           80 /* 80 milliseconds */
 #define MAX_SKIP_XFADE_TIME     2000 /* max 2 seconds crossfade on track skip */

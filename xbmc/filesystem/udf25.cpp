@@ -25,6 +25,8 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
 #include "system.h"
 #include "utils/log.h"
 #include "udf25.h"

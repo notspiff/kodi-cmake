@@ -35,6 +35,12 @@
 #include "threads/SingleLock.h"
 #include "utils/StringUtils.h"
 #include "utils/Utf8Utils.h"
+#include "log.h"
+
+#include <errno.h>
+#include <iconv.h>
+#include <algorithm>
+#include <string.h>
 
 #if !defined(TARGET_WINDOWS) && defined(HAVE_CONFIG_H)
   #include "config.h"

@@ -26,6 +26,7 @@
 #include "utils/log.h"
 #include "utils/Utf8Utils.h"
 #include <math.h>
+#include <string.h>
 
 #include "karaokelyricstextkar.h"
 

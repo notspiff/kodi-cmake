@@ -23,6 +23,7 @@
 #include "settings/Settings.h"
 #include "utils/log.h"
 #include <limits.h>
+#include <string.h>
 
 using namespace XFILE;
 
