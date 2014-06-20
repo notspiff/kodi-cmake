@@ -27,6 +27,7 @@
 #include <conio.h>
 #else
 #include <sys/utsname.h>
+#include "linux/XFileUtils.h"
 #endif
 #include "GUIInfoManager.h"
 #include "filesystem/CurlFile.h"
