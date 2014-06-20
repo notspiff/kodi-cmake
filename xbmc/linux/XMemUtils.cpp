@@ -1,7 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -24,6 +20,10 @@
 
 #include "XMemUtils.h"
 #include "Util.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
 #if defined(TARGET_DARWIN)
 #include <mach/mach.h>

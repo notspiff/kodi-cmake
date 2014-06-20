@@ -24,6 +24,7 @@
 #include "threads/SingleLock.h"
 #include "utils/TimeUtils.h"
 #include "CircularCache.h"
+#include <string.h>
 
 using namespace XFILE;
 

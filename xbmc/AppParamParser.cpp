@@ -36,6 +36,8 @@
 #include "linux/XTimeUtils.h"
 #endif
 
+#include <string.h>
+
 CAppParamParser::CAppParamParser()
 {
   m_testmode = false;

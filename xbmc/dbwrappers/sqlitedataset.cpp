@@ -27,7 +27,7 @@
  **********************************************************************/
 
 #include <iostream>
-#include <string>
+#include <string.h>
 
 #include "sqlitedataset.h"
 #include "utils/log.h"

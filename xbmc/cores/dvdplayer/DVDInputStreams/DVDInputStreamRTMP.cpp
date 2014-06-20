@@ -33,6 +33,7 @@
 #include "utils/Variant.h"
 
 #include <string>
+#include <string.h>
 
 using namespace XFILE;
 using namespace std;
