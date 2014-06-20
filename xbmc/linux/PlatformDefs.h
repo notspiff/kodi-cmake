@@ -37,7 +37,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
-#include <string.h>
 #if defined(TARGET_DARWIN)
 #include <stdio.h>
 #include <sched.h>

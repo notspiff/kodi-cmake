@@ -21,6 +21,7 @@
 #include "utils/RegExp.h"
 #include "utils/URIUtils.h"
 #include "utils/log.h"
+#include <string.h>
 
 CPosixMountProvider::CPosixMountProvider()
 {

@@ -25,6 +25,8 @@
 #include "DllLoaderContainer.h"
 #include "threads/SingleLock.h"
 #include "utils/log.h"
+#include <string.h>
+#include <stdlib.h>
 
 extern "C" inline void tracker_library_track(uintptr_t caller, HMODULE hHandle)
 {
