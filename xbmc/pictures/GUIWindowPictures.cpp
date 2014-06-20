@@ -46,6 +46,10 @@
 #include "utils/StringUtils.h"
 #include "ContextMenuManager.h"
 
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
+
 #define CONTROL_BTNVIEWASICONS      2
 #define CONTROL_BTNSORTBY           3
 #define CONTROL_BTNSORTASC          4

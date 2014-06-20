@@ -48,6 +48,10 @@
 #include "video/videosync/VideoSyncIos.h"
 #endif
 
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
+
 using namespace std;
 
 CVideoReferenceClock::CVideoReferenceClock() : CThread("RefClock")
