@@ -1674,7 +1674,7 @@ int DAAP_ClientHost_AsyncGetAudioFile(DAAP_SClientHost *pCHThis,
     DAAP_ClientHost_AddRef(pCHThis);
 
 #if defined(SYSTEM_POSIX)
-    CP_ThreadPool_QueueWorkItem(pCHThis->parent->tp, AsyncGetFile,
+    CP_ThreadPool_QueueWorkItem((CP_SThreadPool*)pCHThis->parent->tp, AsyncGetFile,
                                 (void*)pCHThis, (void*)pGetFile);
 #else /*if defined(SYSTEM_WIN32) */
 	{
@@ -1829,7 +1829,7 @@ int DAAP_ClientHost_AsyncWaitUpdate(DAAP_SClientHost *pCHThis)
         }
         /* and now run it in a new thread */
 #if defined(SYSTEM_POSIX)
-        CP_ThreadPool_QueueWorkItem(pCHThis->parent->tp, update_watch_runloop,
+        CP_ThreadPool_QueueWorkItem((CP_SThreadPool*)pCHThis->parent->tp, update_watch_runloop,
                                     (void*)pCHThis->parent->update_watch, NULL);
 #else
 #error implement me
@@ -1842,7 +1842,7 @@ int DAAP_ClientHost_AsyncWaitUpdate(DAAP_SClientHost *pCHThis)
      * the HTTP GET could take a little while, and then AddUpdateWatch will return
      */
     TRACE("calling\n");
-    CP_ThreadPool_QueueWorkItem(pCHThis->parent->tp, AsyncWaitUpdate,
+    CP_ThreadPool_QueueWorkItem((CP_SThreadPool*)pCHThis->parent->tp, AsyncWaitUpdate,
                                 (void*)pCHThis, NULL);
 #else
 #error please implement
