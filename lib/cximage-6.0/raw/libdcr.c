@@ -968,17 +968,18 @@ void DCR_CLASS dcr_canon_sraw_load_raw(DCRAW* p)
 	ip = (short (*)[4]) p->image;
 	rp = ip[0];
 	for (row=0; row < p->height; row++, ip+=p->width) {
-		if (row & (jh.sraw >> 1))
+		if (row & (jh.sraw >> 1)) {
 			for (col=0; col < p->width; col+=2)
 				for (c=1; c < 3; c++)
 					if (row == p->height-1)
 						ip[col][c] =  ip[col-p->width][c];
-					else ip[col][c] = (ip[col-p->width][c] + ip[col+p->width][c] + 1) >> 1;
+                                        else ip[col][c] = (ip[col-p->width][c] + ip[col+p->width][c] + 1) >> 1;
 					for (col=1; col < p->width; col+=2)
 						for (c=1; c < 3; c++)
 							if (col == p->width-1)
 								ip[col][c] =  ip[col-1][c];
 							else ip[col][c] = (ip[col-1][c] + ip[col+1][c] + 1) >> 1;
+                }
 	}
 	for ( ; rp < ip[0]; rp+=4) {
 		if (p->unique_id < 0x80000200) {
@@ -7956,9 +7957,12 @@ void DCR_CLASS dcr_convert_to_rgb(DCRAW* p)
 					for (out_cam[i][j] = (float)(k=0); k < 3; k++)
 						out_cam[i][j] += (float)out_rgb[p->opt.output_color-1][i][k] * p->rgb_cam[k][j];
 	}
-	if (p->opt.verbose)
-		fprintf (stderr, p->raw_color ? _("Building histograms...\n") :
-	_("Converting to %s colorspace...\n"), name[p->opt.output_color-1]);
+	if (p->opt.verbose) {
+          if (p->raw_color)
+		fprintf (stderr, _("Building histograms...\n"));
+          else
+		fprintf (stderr,_("Converting to %s colorspace...\n"), name[p->opt.output_color-1]);
+        }
 
 	memset (p->histogram, 0, sizeof p->histogram);
 	for (img=p->image[0], row=0; row < p->height; row++)
