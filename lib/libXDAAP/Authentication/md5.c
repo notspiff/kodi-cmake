@@ -177,7 +177,7 @@ void OpenDaap_MD5Final(MD5_CTX *ctx, unsigned char digest[16])
     MD5Transform(ctx->buf, (u_int32_t *) ctx->in, ctx->apple_ver);
     byteReverse((unsigned char *) ctx->buf, 4);
     memcpy(digest, ctx->buf, 16);
-    memset(ctx, 0, sizeof(ctx));     /* In case it's sensitive */
+    memset(ctx, 0, sizeof(*ctx));     /* In case it's sensitive */
 }
 
 #ifndef ASM_MD5
