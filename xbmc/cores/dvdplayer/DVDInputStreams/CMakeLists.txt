@@ -18,4 +18,4 @@ if(BLURAY_FOUND)
 endif()
 
 core_add_library(dvdinputstreams)
-add_dependencies(dvdinputstreams libcpluff dvdnav)
+add_dependencies(dvdinputstreams libcpluff dvdnav ffmpeg)
