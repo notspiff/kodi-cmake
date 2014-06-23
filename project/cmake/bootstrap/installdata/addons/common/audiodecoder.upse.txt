@@ -1,1 +1,1 @@
-audiodecoder.upse https://github.com/notspiff/audiodecoder.upse e9c6caf
+audiodecoder.upse https://github.com/notspiff/audiodecoder.upse 60276f6
