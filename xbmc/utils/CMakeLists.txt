@@ -49,6 +49,7 @@ set(SOURCES ActorProtocol.cpp
             RingBuffer.cpp
             RssManager.cpp
             RssReader.cpp
+            SaveFileStateJob.cpp
             ScraperParser.cpp
             ScraperUrl.cpp
             Screenshot.cpp
