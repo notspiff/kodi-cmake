@@ -34,6 +34,7 @@ externalproject_add(ffmpeg
                       --disable-devices
                       --disable-ffprobe
                       --disable-ffplay
+                      --disable-ffserver
                       --disable-ffmpeg
                       --disable-crystalhd
                       --enable-static
