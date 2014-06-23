@@ -396,6 +396,7 @@ RGBQUAD CxImage::GetPixelColorInterpolated(
             kernelx[i]=KernelPower((float)(xi+i-1-x));
             kernely[i]=KernelPower((float)(yi+i-1-y));
           }//for i
+        default:
           break;
       }//switch
       rr=gg=bb=aa=0;
