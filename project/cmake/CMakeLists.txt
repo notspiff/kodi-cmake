@@ -228,15 +228,17 @@ install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
 add_dependencies(xbmc.bin export-files)
 
 # testing
-copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
-add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
-target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
-                      ${DEPLIBS} ${CMAKE_DL_LIBS})
-enable_testing()
-gtest_add_tests(xbmc-test "" ${test_sources})
-add_dependencies(xbmc-test export-files)
-add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
-add_dependencies(check xbmc-test)
+if(NOT CMAKE_CROSSCOMPILING) # Cannot execute tests when cross compiling
+  copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
+  add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
+  target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
+                        ${DEPLIBS} ${CMAKE_DL_LIBS})
+  enable_testing()
+  gtest_add_tests(xbmc-test "" ${test_sources})
+  add_dependencies(xbmc-test export-files)
+  add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+  add_dependencies(check xbmc-test)
+endif()
 
 # link wrapper
 if(FFMPEG_LINK_EXECUTABLE)
