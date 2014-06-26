@@ -239,16 +239,16 @@ if(NOT CMAKE_CROSSCOMPILING) # Cannot execute tests when cross compiling
   add_dependencies(xbmc-test export-files)
   add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
   add_dependencies(check xbmc-test)
+
+  # For testing commit series
+  add_custom_target(check-commits ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/scripts/common/checkcommits.cmake
+                                                   -DCMAKE_BINARY_DIR=${CMAKE_BINARY_DIR})
 endif()
 
 # link wrapper
 if(FFMPEG_LINK_EXECUTABLE)
   set(CMAKE_CXX_LINK_EXECUTABLE "${FFMPEG_LINK_EXECUTABLE}")
 endif()
-#  set(CMAKE_Cxx_LINK_EXECUTABLE "${FFMPEG_LINK_EXECUTABLE}")
-# set_target_properties(xbmc.bin PROPERTIES LINKER_LANGUAGE Cxx)
-  #  set_target_properties(xbmc-test PROPERTIES LINKER_LANGUAGE Cxx)
-  #endif()
 
 # randr
 add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
