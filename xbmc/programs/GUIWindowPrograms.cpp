@@ -31,6 +31,7 @@
 #include "utils/log.h"
 #include "utils/StringUtils.h"
 #include "ContextMenuManager.h"
+#include "dialogs/GUIDialogContextMenu.h"
 
 #define CONTROL_BTNVIEWASICONS 2
 #define CONTROL_BTNSORTBY      3

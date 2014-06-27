@@ -41,6 +41,8 @@
 #include "dialogs/GUIDialogOK.h"
 #include "dialogs/GUIDialogProgress.h"
 #include "dialogs/GUIDialogSmartPlaylistEditor.h"
+#include "addons/GUIDialogAddonSettings.h"
+#include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "filesystem/FavouritesDirectory.h"
 #include "filesystem/File.h"
