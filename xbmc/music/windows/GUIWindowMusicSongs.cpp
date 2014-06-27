@@ -42,6 +42,7 @@
 #include "cdrip/CDDARipper.h"
 #include "cores/IPlayer.h"
 #include "utils/StringUtils.h"
+#include "dialogs/GUIDialogContextMenu.h"
 
 #define CONTROL_BTNVIEWASICONS     2
 #define CONTROL_BTNSORTBY          3
