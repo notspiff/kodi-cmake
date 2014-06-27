@@ -77,6 +77,7 @@
 #include "utils/GroupUtils.h"
 #include "filesystem/File.h"
 #include "settings/DiscSettings.h"
+#include "dialogs/GUIDialogContextMenu.h"
 
 using namespace std;
 using namespace XFILE;
