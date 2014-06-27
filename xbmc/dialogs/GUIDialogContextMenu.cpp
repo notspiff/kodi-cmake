@@ -58,22 +58,6 @@ using namespace std;
 #define BUTTON_START          1001
 #define BUTTON_END            (BUTTON_START + (int)m_buttons.size() - 1)
 
-void CContextButtons::Add(unsigned int button, const std::string &label)
-{
-  for (const_iterator i = begin(); i != end(); ++i)
-    if (i->first == button)
-      return; // already have this button
-  push_back(pair<unsigned int, std::string>(button, label));
-}
-
-void CContextButtons::Add(unsigned int button, int label)
-{
-  for (const_iterator i = begin(); i != end(); ++i)
-    if (i->first == button)
-      return; // already have added this button
-  push_back(pair<unsigned int, std::string>(button, g_localizeStrings.Get(label)));
-}
-
 CGUIDialogContextMenu::CGUIDialogContextMenu(void)
   : CGUIDialog(WINDOW_DIALOG_CONTEXT_MENU, "DialogContextMenu.xml")
 {
