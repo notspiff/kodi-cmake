@@ -27,6 +27,8 @@
 #include "playlists/SmartPlayList.h"
 #include "view/GUIViewControl.h"
 #include "view/GUIViewState.h"
+#include "ContextButtons.h"
+#include "playlists/SmartPlayList.h"
 
 class CFileItemList;
 
