@@ -21,6 +21,7 @@
 #include "GUIWindowPVRRecordings.h"
 
 #include "guilib/GUIKeyboardFactory.h"
+#include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "guilib/GUIRadioButtonControl.h"
 #include "guilib/GUIWindowManager.h"

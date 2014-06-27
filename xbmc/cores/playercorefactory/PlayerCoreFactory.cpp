@@ -21,7 +21,6 @@
 #include "utils/BitstreamStats.h"
 #include "PlayerCoreFactory.h"
 #include "threads/SingleLock.h"
-#include "cores/AudioEngine/Utils/AEUtil.h"
 #include "cores/dvdplayer/DVDPlayer.h"
 #include "cores/paplayer/PAPlayer.h"
 #include "cores/paplayer/DVDPlayerCodec.h"
@@ -36,7 +35,6 @@
 #include "PlayerCoreConfig.h"
 #include "PlayerSelectionRule.h"
 #include "guilib/LocalizeStrings.h"
-#include "cores/AudioEngine/AEFactory.h"
 #include "utils/StringUtils.h"
 #include "utils/XMLUtils.h"
 
