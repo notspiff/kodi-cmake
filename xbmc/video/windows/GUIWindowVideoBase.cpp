@@ -76,6 +76,7 @@
 #include "GUIInfoManager.h"
 #include "utils/GroupUtils.h"
 #include "filesystem/File.h"
+#include "dialogs/GUIDialogContextMenu.h"
 
 using namespace std;
 using namespace XFILE;
