@@ -1,6 +1,7 @@
-xbmc/test                   test
-xbmc/addons/test            test/addons
-xbmc/filesystem/test        test/filesystem
-xbmc/interfaces/python/test test/python
-xbmc/threads/test           test/threads
-xbmc/utils/test             test/utils
+xbmc/test                         test
+xbmc/addons/test                  test/addons
+xbmc/filesystem/test              test/filesystem
+xbmc/interfaces/python/test       test/python
+xbmc/threads/test                 test/threads
+xbmc/utils/test                   test/utils
+xbmc/cores/AudioEngine/Sinks/test test/audioengine_sinks
