@@ -4,4 +4,5 @@ xbmc/filesystem/test              test/filesystem
 xbmc/interfaces/python/test       test/python
 xbmc/threads/test                 test/threads
 xbmc/utils/test                   test/utils
+xbmc/video/test                   test/video
 xbmc/cores/AudioEngine/Sinks/test test/audioengine_sinks
