@@ -4,7 +4,6 @@ set(SOURCES DVDAudio.cpp
             DVDFileInfo.cpp
             DVDMessage.cpp
             DVDMessageQueue.cpp
-            DVDMessageTracker.cpp
             DVDOverlayContainer.cpp
             DVDOverlayRenderer.cpp
             DVDPlayerAudio.cpp
