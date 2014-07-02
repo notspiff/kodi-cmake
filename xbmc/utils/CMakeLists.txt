@@ -4,6 +4,7 @@ set(SOURCES ActorProtocol.cpp
             Archive.cpp
             AsyncFileCopy.cpp
             AutoPtrHandle.cpp
+            auto_buffer.cpp
             Base64.cpp
             BitstreamConverter.cpp
             BitstreamStats.cpp
