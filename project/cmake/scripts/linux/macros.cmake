@@ -24,7 +24,9 @@ function(core_link_library lib wraplib)
       list(APPEND export ${arg})
     endforeach()
   endif()
+  get_filename_component(dir ${wraplib} PATH)
   add_custom_command(OUTPUT ${wraplib}-${ARCH}${CMAKE_SHARED_MODULE_SUFFIX}
+                     COMMAND cmake -E make_directory ${dir}
                      COMMAND ${CMAKE_C_COMPILER}
                      ARGS    -Wl,--whole-archive
                              ${link_lib}
