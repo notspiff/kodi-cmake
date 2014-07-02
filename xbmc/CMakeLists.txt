@@ -12,7 +12,6 @@ set(SOURCES Application.cpp
             DynamicDll.cpp
             FileItem.cpp
             FileItemListModification.cpp
-            GitRevision.cpp
             GUIInfoManager.cpp
             GUILargeTextureManager.cpp
             GUIPassword.cpp
