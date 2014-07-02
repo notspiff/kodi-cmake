@@ -277,6 +277,21 @@ macro(core_add_optional_subdirs_from_filelist pattern)
   endforeach()
 endmacro()
 
+macro(today RESULT)
+  if (WIN32)
+    execute_process(COMMAND "cmd" " /C date /T" OUTPUT_VARIABLE ${RESULT})
+    string(REGEX REPLACE "(..)/(..)/..(..).*" "\\1/\\2/\\3" ${RESULT} ${${RESULT}})
+  elseif(UNIX)
+    execute_process(COMMAND date -u +%F
+                    OUTPUT_VARIABLE ${RESULT})
+    string(REGEX REPLACE "(..)/(..)/..(..).*" "\\1/\\2/\\3" ${RESULT} ${${RESULT}})
+  else()
+    message(SEND_ERROR "date not implemented")
+    set(${RESULT} 000000)
+  endif()
+  string(REGEX REPLACE "(\r?\n)+$" "" ${RESULT} "${${RESULT}}")
+endmacro()
+
 function(core_find_git_rev)
   if(EXISTS ${CORE_SOURCE_DIR}/VERSION)
     file(STRINGS ${CORE_SOURCE_DIR}/VERSION VERSION_FILE)
@@ -284,15 +299,28 @@ function(core_find_git_rev)
   else()
     find_package(Git)
     if(GIT_FOUND AND EXISTS ${CORE_SOURCE_DIR}/.git)
+      execute_process(COMMAND ${GIT_EXECUTABLE} diff-files --ignore-submodules --quiet --
+                      RESULT_VARIABLE status_code)
+      if (NOT status_code)
+        execute_process(COMMAND ${GIT_EXECUTABLE} diff-index --cached --ignore-submodules --quiet HEAD --
+                        RESULT_VARIABLE status_code)
+      endif()
+      today(DATE)
       execute_process(COMMAND ${GIT_EXECUTABLE} --no-pager log --abbrev=7 -n 1
-                                                --pretty=format:"%h %ci" HEAD
+                                                --pretty=format:"%h-dirty" HEAD
+                      OUTPUT_VARIABLE LOG_UNFORMATTED
+                      WORKING_DIRECTORY ${CORE_SOURCE_DIR})
+      string(SUBSTRING ${LOG_UNFORMATTED} 1 7 HASH)
+    else()
+      execute_process(COMMAND ${GIT_EXECUTABLE} --no-pager log --abbrev=7 -n 1
+                                                --pretty=format:"%h %cd" HEAD
                       OUTPUT_VARIABLE LOG_UNFORMATTED
                       WORKING_DIRECTORY ${CORE_SOURCE_DIR})
       string(SUBSTRING ${LOG_UNFORMATTED} 1 7 HASH)
       string(SUBSTRING ${LOG_UNFORMATTED} 9 10 DATE)
       string(REPLACE "-" "" DATE ${DATE})
-      set(GIT_REV "${DATE}-${HASH}")
     endif()
+    set(GIT_REV "${DATE}-${HASH}")
   endif()
   if(GIT_REV)
     list(APPEND SYSTEM_DEFINES -DGIT_REV=\"${GIT_REV}\")
