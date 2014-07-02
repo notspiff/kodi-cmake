@@ -102,7 +102,8 @@ function(add_git_lib file)
                                  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                                  -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                                  -DXBMC_BUILD_DIR=${OUTPUT_DIR}
-                      PREFIX ${OUTPUT_DIR}/${CORE_BUILD_DIR}/${id})
+                        DEPENDS compileinfo
+                        PREFIX ${OUTPUT_DIR}/${CORE_BUILD_DIR}/${id})
   elseif(BOOTSTRAP_DIR)
     externalproject_add(${id}
                         SOURCE_DIR ${BOOTSTRAP_DIR}/${CORE_BUILD_DIR}/${id}/src/${id}
@@ -150,6 +151,7 @@ function(add_git_cmake id repo hash)
                                           -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                                           -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
                                           -DBOOTSTRAP_IN_TREE=1
+                        DEPENDS compileinfo
                         INSTALL_COMMAND "")
   elseif(BOOTSTRAP_DIR)
     externalproject_add(${id}
