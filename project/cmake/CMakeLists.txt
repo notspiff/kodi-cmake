@@ -151,6 +151,21 @@ if(ENABLE_SKIN_TOUCHED)
 endif()
 
 core_find_git_rev()
+add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
+                   COMMAND ${CMAKE_COMMAND} -DCORE_SOURCE_DIR=${CORE_SOURCE_DIR}
+                                            -DCORE_SYSTEM_NAME=${CORE_SYSTEM_NAME}
+                                            -DCORE_BUILD_DIR=${CORE_BUILD_DIR}
+                                            -DCMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}
+                                            -DARCH_DEFINES="${ARCH_DEFINES}"
+                                            -Dprefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                                            -P ${PROJECT_SOURCE_DIR}/scripts/common/generateversionedfiles.cmake
+                  DEPENDS ${CORE_SOURCE_DIR}/version.txt
+                          ${CORE_SOURCE_DIR}/addons/xbmc.addon/addon.xml.in
+                          ${CORE_SOURCE_DIR}/xbmc/CompileInfo.cpp.in
+                          ${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
+                          ${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-addon-helpers.cmake.in)
+list(APPEND install_data addons/xbmc.addon/addon.xml)
+add_library(compileinfo OBJECT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp)
 
 include_directories(${INCLUDES} ${SYSTEM_INCLUDES})
 add_definitions(${ARCH_DEFINES} ${SYSTEM_DEFINES} ${DEP_DEFINES} ${PATH_DEFINES})
@@ -222,7 +237,7 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
 # main binary
-add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp)
+add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)
 target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
 install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
@@ -231,7 +246,7 @@ add_dependencies(xbmc.bin export-files)
 # testing
 if(NOT CMAKE_CROSSCOMPILING) # Cannot execute tests when cross compiling
   copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
-  add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp)
+  add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp $<TARGET_OBJECTS:compileinfo>)
   target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
                         ${DEPLIBS} ${CMAKE_DL_LIBS})
   enable_testing()
@@ -263,10 +278,11 @@ if(DOXYGEN_FOUND)
                     COMMENT "Generating API documentation" VERBATIM)
 endif()
 
-set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
-                ${CORE_SOURCE_DIR}/project/cmake/scripts/common/xbmc-addon-helpers.cmake)
+set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake)
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
                ${CORE_BUILD_DIR}/modules/xbmc-config.cmake @ONLY)
+configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-addon-helpers.cmake.in
+               ${CORE_BUILD_DIR}/modules/xbmc-addon-helpers.cmake @ONLY)
 
 prepare_addon_env()
 
