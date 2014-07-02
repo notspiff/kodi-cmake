@@ -54,8 +54,6 @@ endfunction()
 function(prepare_addon_env)
   set(prefix ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
   file(COPY ${addon_bindings} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/xbmc)
-  configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
-                 ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/xbmc/xbmc-config.cmake @ONLY)
   file(COPY ${cmake-files} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/xbmc)
 endfunction()
 
