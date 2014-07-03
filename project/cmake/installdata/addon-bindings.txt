@@ -17,10 +17,10 @@ xbmc/addons/include/kodi_vfs_types.h
 xbmc/addons/include/xbmc_vis_dll.h
 xbmc/addons/include/xbmc_vis_types.h
 xbmc/addons/include/xbmc_stream_utils.hpp
-addons/library.xbmc.addon/libXBMC_addon.h
-addons/library.kodi.guilib/libKODI_guilib.h
-lib/addons/library.xbmc.pvr/libXBMC_pvr.h
-lib/addons/library.xbmc.codec/libXBMC_codec.h
+xbmc/addons/bindings/libXBMC_addon.h
+xbmc/addons/bindings/libKODI_guilib.h
+xbmc/addons/bindings/libXBMC_pvr.h
+xbmc/addons/bindings/libXBMC_codec.h
 xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h
 xbmc/cores/AudioEngine/Utils/AEChannelData.h
 xbmc/filesystem/IFileTypes.h
