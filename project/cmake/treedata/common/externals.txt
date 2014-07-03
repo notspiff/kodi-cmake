@@ -1,6 +1,5 @@
 lib/cmyth                    cmyth
 lib/cximage-6.0              cximage
-lib/libexif                  exif
 lib/libhts                   hts
 lib/libsquish                squish
 lib/libUPnP                  upnp
