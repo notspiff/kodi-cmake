@@ -229,7 +229,6 @@ core_link_library(exif system/libexif)
 
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
 core_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
-core_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
 add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
