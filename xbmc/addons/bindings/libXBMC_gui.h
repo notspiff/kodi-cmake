@@ -27,7 +27,7 @@
 #ifdef BUILD_XBMC_ADDON
 #include "xbmc/libXBMC_addon.h"
 #else
-#include "addons/library.xbmc.addon/libXBMC_addon.h"
+#include "addons/bindings/libXBMC_addon.h"
 #endif
 
 typedef void* GUIHANDLE;
