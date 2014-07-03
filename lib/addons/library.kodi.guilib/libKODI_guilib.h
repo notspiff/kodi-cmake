@@ -80,20 +80,7 @@ public:
   {
     m_Handle = Handle;
 
-    std::string libBasePath;
-    libBasePath  = ((cb_array*)m_Handle)->libPath;
-    libBasePath += GUI_HELPER_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + GUI_HELPER_DLL_NAME;
-      }
-#endif
-
-    m_libKODI_guilib = dlopen(libBasePath.c_str(), RTLD_LAZY);
+    m_libKODI_guilib = dlopen(NULL, RTLD_LAZY);
     if (m_libKODI_guilib == NULL)
     {
       fprintf(stderr, "Unable to load %s\n", dlerror());

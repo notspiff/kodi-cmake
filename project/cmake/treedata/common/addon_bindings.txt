@@ -1,2 +1,3 @@
-lib/addons/library.xbmc.codec XBMC_codec
-lib/addons/library.xbmc.pvr   XBMC_pvr
+lib/addons/library.xbmc.codec  XBMC_codec
+lib/addons/library.kodi.guilib KODI_guilib
+lib/addons/library.xbmc.pvr    XBMC_pvr
