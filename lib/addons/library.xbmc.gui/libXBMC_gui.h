@@ -28,13 +28,6 @@
 
 typedef void* GUIHANDLE;
 
-#ifdef _WIN32
-#define GUI_HELPER_DLL "\\library.xbmc.gui\\libXBMC_gui" ADDON_HELPER_EXT
-#else
-#define GUI_HELPER_DLL_NAME "libXBMC_gui-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
-#define GUI_HELPER_DLL "/library.xbmc.gui/" GUI_HELPER_DLL_NAME
-#endif
-
 /* current ADDONGUI API version */
 #define XBMC_GUI_API_VERSION "5.6.0"
 
@@ -73,20 +66,7 @@ public:
   {
     m_Handle = Handle;
 
-    std::string libBasePath;
-    libBasePath  = ((cb_array*)m_Handle)->libPath;
-    libBasePath += GUI_HELPER_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + GUI_HELPER_DLL_NAME;
-      }
-#endif
-
-    m_libXBMC_gui = dlopen(libBasePath.c_str(), RTLD_LAZY);
+    m_libXBMC_gui = dlopen(NULL, RTLD_LAZY);
     if (m_libXBMC_gui == NULL)
     {
       fprintf(stderr, "Unable to load %s\n", dlerror());

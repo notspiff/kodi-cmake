@@ -226,7 +226,6 @@ core_link_library(exif system/libexif)
 core_link_library(cmyth system/libcmyth "nowrap" ${MYSQLCLIENT_LIBRARIES})
 
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
-core_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
 add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
