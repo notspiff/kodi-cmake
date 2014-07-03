@@ -1,5 +1,6 @@
 xbmc                            xbmc
 xbmc/addons                     addons
+xbmc/addons/bindings            addons/bindings
 xbmc/commons                    commons
 xbmc/cdrip                      cdrip
 xbmc/dbwrappers                 dbwrappers
