@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string>
-#include "../../../addons/library.xbmc.codec/libXBMC_codec.h"
+#include "libXBMC_codec.h"
 #include "addons/AddonCallbacks.h"
 
 #ifdef _WIN32

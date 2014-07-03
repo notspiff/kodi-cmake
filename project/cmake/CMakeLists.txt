@@ -228,7 +228,6 @@ core_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
 core_link_library(exif system/libexif)
 
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
-core_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
 core_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
 core_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
 
