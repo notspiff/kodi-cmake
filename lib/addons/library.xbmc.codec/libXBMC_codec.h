@@ -24,13 +24,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <dlfcn.h>
 #ifdef BUILD_XBMC_ADDON
 #include "xbmc/xbmc_codec_types.h"
+#include "xbmc/libXBMC_addon.h"
 #else
 #include "addons/include/xbmc_codec_types.h"
+#include "addons/library.xbmc.addon/libXBMC_addon.h"
 #endif
-
-#include "libXBMC_addon.h"
 
 class CHelper_libXBMC_codec
 {
