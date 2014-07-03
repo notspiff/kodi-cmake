@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-#include "../../addons/library.kodi.guilib/libKODI_guilib.h"
+#include "addons/bindings/libKODI_guilib.h"
 #include "cores/dvdplayer/DVDDemuxers/DVDDemuxUtils.h"
 #include "addons/include/xbmc_pvr_types.h"
 #include "addons/include/xbmc_codec_types.h"

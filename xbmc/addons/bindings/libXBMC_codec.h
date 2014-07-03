@@ -30,7 +30,7 @@
 #include "kodi/libXBMC_addon.h"
 #else
 #include "addons/include/xbmc_codec_types.h"
-#include "addons/library.xbmc.addon/libXBMC_addon.h"
+#include "addons/bindings/libXBMC_addon.h"
 #endif
 
 class CHelper_libXBMC_codec
