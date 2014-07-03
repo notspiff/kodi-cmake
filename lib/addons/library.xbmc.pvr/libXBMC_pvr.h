@@ -28,9 +28,10 @@
 #include "kodi/xbmc_pvr_types.h"
 #include "kodi/libXBMC_addon.h"
 #else
-#define PVR_HELPER_DLL_NAME "libXBMC_pvr-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
-#define PVR_HELPER_DLL "/library.xbmc.pvr/" PVR_HELPER_DLL_NAME
+#include "addons/include/xbmc_pvr_types.h"
 #endif
+
+#include "libXBMC_addon.h"
 
 #define DVD_TIME_BASE 1000000
 #define DVD_NOPTS_VALUE    (-1LL<<52) // should be possible to represent in both double and __int64
@@ -62,20 +63,7 @@ public:
   {
     m_Handle = handle;
 
-    std::string libBasePath;
-    libBasePath  = ((cb_array*)m_Handle)->libPath;
-    libBasePath += PVR_HELPER_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + PVR_HELPER_DLL_NAME;
-      }
-#endif
-
-    m_libXBMC_pvr = dlopen(libBasePath.c_str(), RTLD_LAZY);
+    m_libXBMC_pvr = dlopen(NULL, RTLD_LAZY);
     if (m_libXBMC_pvr == NULL)
     {
       fprintf(stderr, "Unable to load %s\n", dlerror());

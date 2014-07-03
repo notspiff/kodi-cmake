@@ -1,1 +1,2 @@
 lib/addons/library.xbmc.codec XBMC_codec
+lib/addons/library.xbmc.pvr   XBMC_pvr
