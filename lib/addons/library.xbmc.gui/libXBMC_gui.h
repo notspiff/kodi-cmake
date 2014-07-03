@@ -24,7 +24,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "libXBMC_addon.h"
+#ifdef BUILD_XBMC_ADDON
+#include "xbmc/libXBMC_addon.h"
+#else
+#include "addons/library.xbmc.addon/libXBMC_addon.h"
+#endif
 
 typedef void* GUIHANDLE;
 
