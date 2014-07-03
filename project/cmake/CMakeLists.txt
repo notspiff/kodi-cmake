@@ -225,7 +225,6 @@ set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${JASPER_LIBRARIES} )
 
 core_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
-core_link_library(exif system/libexif)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
 add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})

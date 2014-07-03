@@ -32,7 +32,7 @@ bool process_jpeg(const char *filename, ExifInfo_t *exifInfo, IPTCInfo_t *iptcIn
 }
 #endif
 
-#ifndef _DLL
+#ifdef TEST_LIBEXIF
 int main(int argc, char* argv[])
 {
   ExifInfo_t exifInfo;
