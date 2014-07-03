@@ -26,56 +26,12 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <dlfcn.h>
 
 struct VFSDirEntry;
 struct VFSURL;
 struct VFSDirEntry;
 
-#ifdef _WIN32                   // windows
-#ifndef _SSIZE_T_DEFINED
-typedef intptr_t      ssize_t;
-#define _SSIZE_T_DEFINED
-#endif // !_SSIZE_T_DEFINED
-
-#if defined(BUILD_KODI_ADDON)
-	#include "p8-platform/windows/dlfcn-win32.h"
-#else
-	#include "dlfcn-win32.h"
-#endif
-
-#define ADDON_DLL               "\\library.xbmc.addon\\libXBMC_addon" ADDON_HELPER_EXT
-#define ADDON_HELPER_EXT        ".dll"
-#else
-// the ADDON_HELPER_ARCH is the platform dependend name which is used
-// as part of the name of dynamic addon libraries. It has to match the 
-// strings which are set in configure.ac for the "ARCH" variable.
-#if defined(__APPLE__)          // osx
-#if defined(__arm__) || defined(__aarch64__)
-#define ADDON_HELPER_ARCH       "arm-osx"
-#else
-#define ADDON_HELPER_ARCH       "x86-osx"
-#endif
-#define ADDON_HELPER_EXT        ".dylib"
-#else                           // linux
-#if defined(__x86_64__)
-#define ADDON_HELPER_ARCH       "x86_64-linux"
-#elif defined(_POWERPC)
-#define ADDON_HELPER_ARCH       "powerpc-linux"
-#elif defined(_POWERPC64)
-#define ADDON_HELPER_ARCH       "powerpc64-linux"
-#elif defined(__ARMEL__)
-#define ADDON_HELPER_ARCH       "arm"
-#elif defined(__mips__)
-#define ADDON_HELPER_ARCH       "mips"
-#else
-#define ADDON_HELPER_ARCH       "i486-linux"
-#endif
-#define ADDON_HELPER_EXT        ".so"
-#endif
-#include <dlfcn.h>              // linux+osx
-#define ADDON_DLL_NAME "libXBMC_addon-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
-#define ADDON_DLL "/library.xbmc.addon/" ADDON_DLL_NAME
-#endif
 #if defined(ANDROID)
 #include <sys/stat.h>
 #endif
@@ -91,6 +47,13 @@ typedef intptr_t      ssize_t;
 #endif
 #ifdef LOG_ERROR
 #undef LOG_ERROR
+#endif
+
+#ifdef _WIN32                   // windows
+#ifndef _SSIZE_T_DEFINED
+typedef intptr_t      ssize_t;
+#define _SSIZE_T_DEFINED
+#endif // !_SSIZE_T_DEFINED
 #endif
 
 namespace ADDON
@@ -132,20 +95,7 @@ namespace ADDON
     {
       m_Handle = Handle;
 
-      std::string libBasePath;
-      libBasePath  = ((cb_array*)m_Handle)->libPath;
-      libBasePath += ADDON_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + ADDON_DLL_NAME;
-      }
-#endif
-
-      m_libXBMC_addon = dlopen(libBasePath.c_str(), RTLD_LAZY);
+      m_libXBMC_addon = dlopen(NULL, RTLD_LAZY);
       if (m_libXBMC_addon == NULL)
       {
         fprintf(stderr, "Unable to load %s\n", dlerror());
