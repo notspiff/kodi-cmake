@@ -33,13 +33,6 @@
 
 typedef void* ADSPHANDLE;
 
-#ifdef _WIN32
-#define ADSP_HELPER_DLL "\\library.kodi.adsp\\libKODI_adsp" ADDON_HELPER_EXT
-#else
-#define ADSP_HELPER_DLL_NAME "libKODI_adsp-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
-#define ADSP_HELPER_DLL "/library.kodi.adsp/" ADSP_HELPER_DLL_NAME
-#endif
-
 class CAddonSoundPlay;
 
 class CHelper_libKODI_adsp
@@ -69,20 +62,7 @@ public:
   {
     m_Handle = handle;
 
-    std::string libBasePath;
-    libBasePath  = ((cb_array*)m_Handle)->libPath;
-    libBasePath += ADSP_HELPER_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + ADSP_HELPER_DLL_NAME;
-      }
-#endif
-
-    m_libKODI_adsp = dlopen(libBasePath.c_str(), RTLD_LAZY);
+    m_libKODI_adsp = dlopen(nullptr, RTLD_LAZY);
     if (m_libKODI_adsp == NULL)
     {
       fprintf(stderr, "Unable to load %s\n", dlerror());

@@ -1,4 +1,5 @@
-set(SOURCES libKODI_guilib.cpp
+set(SOURCES libKODI_adsp.cpp
+            libKODI_guilib.cpp
             libXBMC_addon.cpp
             libXBMC_codec.cpp
             libXBMC_pvr.cpp)
