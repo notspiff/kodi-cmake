@@ -1,2 +1,1 @@
 lib/addons/library.xbmc.addon XBMC_addon
-lib/addons/library.xbmc.gui   XBMC_gui
