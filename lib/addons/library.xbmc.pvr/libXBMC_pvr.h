@@ -29,9 +29,8 @@
 #include "kodi/libXBMC_addon.h"
 #else
 #include "addons/include/xbmc_pvr_types.h"
+#include "addons/library.xbmc.addon/libXBMC_addon.h"
 #endif
-
-#include "libXBMC_addon.h"
 
 #define DVD_TIME_BASE 1000000
 #define DVD_NOPTS_VALUE    (-1LL<<52) // should be possible to represent in both double and __int64

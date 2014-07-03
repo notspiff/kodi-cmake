@@ -26,49 +26,11 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <dlfcn.h>
 
 struct VFSURL;
 struct VFSDirEntry;
 
-#ifdef _WIN32                   // windows
-#ifndef _SSIZE_T_DEFINED
-typedef intptr_t      ssize_t;
-#define _SSIZE_T_DEFINED
-#endif // !_SSIZE_T_DEFINED
-#include "dlfcn-win32.h"
-#define ADDON_DLL               "\\library.xbmc.addon\\libXBMC_addon" ADDON_HELPER_EXT
-#define ADDON_HELPER_EXT        ".dll"
-#else
-#if defined(__APPLE__)          // osx
-#if defined(__POWERPC__)
-#define ADDON_HELPER_ARCH       "powerpc-osx"
-#elif defined(__arm__)
-#define ADDON_HELPER_ARCH       "arm-osx"
-#elif defined(__x86_64__)
-#define ADDON_HELPER_ARCH       "x86-osx"
-#else
-#define ADDON_HELPER_ARCH       "x86-osx"
-#endif
-#else                           // linux
-#if defined(__x86_64__)
-#define ADDON_HELPER_ARCH       "x86_64-linux"
-#elif defined(_POWERPC)
-#define ADDON_HELPER_ARCH       "powerpc-linux"
-#elif defined(_POWERPC64)
-#define ADDON_HELPER_ARCH       "powerpc64-linux"
-#elif defined(__ARMEL__)
-#define ADDON_HELPER_ARCH       "arm"
-#elif defined(__mips__)
-#define ADDON_HELPER_ARCH       "mips"
-#else
-#define ADDON_HELPER_ARCH       "i486-linux"
-#endif
-#endif
-#include <dlfcn.h>              // linux+osx
-#define ADDON_HELPER_EXT        ".so"
-#define ADDON_DLL_NAME "libXBMC_addon-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
-#define ADDON_DLL "/library.xbmc.addon/" ADDON_DLL_NAME
-#endif
 #if defined(ANDROID)
 #include <sys/stat.h>
 #endif
@@ -84,6 +46,13 @@ typedef intptr_t      ssize_t;
 #endif
 #ifdef LOG_ERROR
 #undef LOG_ERROR
+#endif
+
+#ifdef _WIN32                   // windows
+#ifndef _SSIZE_T_DEFINED
+typedef intptr_t      ssize_t;
+#define _SSIZE_T_DEFINED
+#endif // !_SSIZE_T_DEFINED
 #endif
 
 namespace ADDON
@@ -125,20 +94,7 @@ namespace ADDON
     {
       m_Handle = Handle;
 
-      std::string libBasePath;
-      libBasePath  = ((cb_array*)m_Handle)->libPath;
-      libBasePath += ADDON_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + ADDON_DLL_NAME;
-      }
-#endif
-
-      m_libXBMC_addon = dlopen(libBasePath.c_str(), RTLD_LAZY);
+      m_libXBMC_addon = dlopen(NULL, RTLD_LAZY);
       if (m_libXBMC_addon == NULL)
       {
         fprintf(stderr, "Unable to load %s\n", dlerror());
