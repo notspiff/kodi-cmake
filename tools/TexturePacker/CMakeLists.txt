@@ -17,9 +17,9 @@ find_package(SDL REQUIRED)
 find_package(SDL_image REQUIRED)
 find_package(Lzo2 REQUIRED)
 
-set(SQUISH_TARGET squish-native)
+set(SQUISH_NATIVE 1)
 add_subdirectory(${CORE_SOURCE_DIR}/lib/libsquish squish-native)
-set(SQUISH_TARGET)
+set(SQUISH_NATIVE)
 
 include_directories(${SDLIMAGE_INCLUDE_DIR}
                     ${SDL_INCLUDE_DIR}
