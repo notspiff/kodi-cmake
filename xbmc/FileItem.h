@@ -32,6 +32,7 @@
 #include "utils/SortUtils.h"
 #include "GUIPassword.h"
 #include "threads/CriticalSection.h"
+#include "utils/URIUtils.h"
 
 #include <vector>
 #include "boost/shared_ptr.hpp"
@@ -79,12 +80,25 @@ enum EFileFolderType {
                               | EFILEFOLDER_TYPE_ONBROWSE,
 };
 
+template<>
+struct URIUtilsGet<CFileItem>
+{
+  URIUtilsGet<CFileItem>(const CFileItem& item)
+    : m_item(item)
+  {
+  }
+
+  std::string Get() const;
+
+  const CFileItem& m_item;
+};
+
 /*!
   \brief Represents a file on a share
   \sa CFileItemList
   */
 class CFileItem :
-  public CGUIListItem, public IArchivable, public ISerializable, public ISortable
+  public CGUIListItem, public IArchivable, public ISerializable, public ISortable, public URIUtilsComp<CFileItem>
 {
 public:
   CFileItem(void);
@@ -170,36 +184,15 @@ public:
   bool IsSmartPlayList() const;
   bool IsLibraryFolder() const;
   bool IsPythonScript() const;
-  bool IsPlugin() const;
-  bool IsScript() const;
-  bool IsAddonsPath() const;
-  bool IsSourcesPath() const;
   bool IsNFO() const;
   bool IsDiscImage() const;
   bool IsOpticalMediaFile() const;
   bool IsDVDFile(bool bVobs = true, bool bIfos = true) const;
   bool IsBDFile() const;
-  bool IsRAR() const;
-  bool IsAPK() const;
-  bool IsZIP() const;
   bool IsCBZ() const;
   bool IsCBR() const;
-  bool IsISO9660() const;
-  bool IsCDDA() const;
   bool IsDVD() const;
   bool IsOnDVD() const;
-  bool IsOnLAN() const;
-  bool IsHD() const;
-  bool IsNfs() const;  
-  bool IsAfp() const;    
-  bool IsRemote() const;
-  bool IsSmb() const;
-  bool IsURL() const;
-  bool IsDAAP() const;
-  bool IsStack() const;
-  bool IsMultiPath() const;
-  bool IsMusicDb() const;
-  bool IsVideoDb() const;
   bool IsEPG() const;
   bool IsPVRChannel() const;
   bool IsPVRRecording() const;
@@ -212,15 +205,8 @@ public:
   bool IsParentFolder() const;
   bool IsFileFolder(EFileFolderType types = EFILEFOLDER_MASK_ALL) const;
   bool IsRemovable() const;
-  bool IsTuxBox() const;
-  bool IsMythTV() const;
-  bool IsHDHomeRun() const;
-  bool IsSlingbox() const;
-  bool IsVTP() const;
   bool IsPVR() const;
-  bool IsLiveTV() const;
   bool IsRSS() const;
-  bool IsAndroidApp() const;
   bool IsAudioBook() const;
 
   void RemoveExtension();
