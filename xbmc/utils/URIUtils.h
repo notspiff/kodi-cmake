@@ -21,10 +21,72 @@
 
 #include <string>
 #include <vector>
+#include "URL.h"
 
-class CURL;
+template<class T>
+struct URIUtilsGet
+{
+  std::string Get() const;
+};
 
-class URIUtils
+#define DEFINE_METHOD(x) \
+  static bool (x)(const std::string& path); \
+  bool (x)() const { return URIUtilsComp<std::string>::x(get.Get()); }
+
+template<class T>
+struct URIUtilsComp
+{
+  URIUtilsComp(const T& t) : get(t) {}
+
+  DEFINE_METHOD(IsAddonsPath)
+  DEFINE_METHOD(IsInArchive)
+  DEFINE_METHOD(IsAndroidApp)
+  DEFINE_METHOD(IsAPK)
+  DEFINE_METHOD(IsArchive)
+  DEFINE_METHOD(IsInAPK)
+  DEFINE_METHOD(IsInRAR)
+  DEFINE_METHOD(IsInZIP)
+  DEFINE_METHOD(IsBluray)
+  DEFINE_METHOD(IsCDDA)
+  DEFINE_METHOD(IsDAV)
+  DEFINE_METHOD(IsDOSPath)
+  DEFINE_METHOD(IsDVD)
+  DEFINE_METHOD(IsFTP)
+  DEFINE_METHOD(IsTCP)
+  DEFINE_METHOD(IsUDP)
+  DEFINE_METHOD(IsHD)
+  DEFINE_METHOD(IsHDHomeRun)
+  DEFINE_METHOD(IsHTTP)
+  DEFINE_METHOD(IsISO9660)
+  DEFINE_METHOD(IsLibraryFolder)
+  DEFINE_METHOD(IsLibraryContent)
+  DEFINE_METHOD(IsLiveTV)
+  DEFINE_METHOD(IsMultiPath)
+  DEFINE_METHOD(IsMusicDb)
+  DEFINE_METHOD(IsNfs)
+  DEFINE_METHOD(IsOnDVD)
+  DEFINE_METHOD(IsOnLAN)
+  DEFINE_METHOD(IsPVRRecording)
+  DEFINE_METHOD(IsPlugin)
+  DEFINE_METHOD(IsRAR)
+  DEFINE_METHOD(IsRemote)
+  DEFINE_METHOD(IsPVRChannel)
+  DEFINE_METHOD(IsScript)
+  DEFINE_METHOD(IsSlingbox)
+  DEFINE_METHOD(IsSmb)
+  DEFINE_METHOD(IsSpecial)
+  DEFINE_METHOD(IsStack)
+  DEFINE_METHOD(IsSourcesPath)
+  DEFINE_METHOD(IsUPnP)
+  DEFINE_METHOD(IsURL)
+  DEFINE_METHOD(IsUsingFastSwitch)
+  DEFINE_METHOD(IsVideoDb)
+  DEFINE_METHOD(IsZIP)
+
+  URIUtilsGet<T> get;
+};
+
+class URIUtils : public URIUtilsComp<std::string>
 {
 public:
   URIUtils(void);
@@ -119,53 +181,9 @@ public:
    */
   static bool PathEquals(const std::string& path1, const std::string &path2, bool ignoreTrailingSlash = false);
 
-  static bool IsAddonsPath(const std::string& strFile);
-  static bool IsSourcesPath(const std::string& strFile);
-  static bool IsCDDA(const std::string& strFile);
-  static bool IsDAV(const std::string& strFile);
-  static bool IsDOSPath(const std::string &path);
-  static bool IsDVD(const std::string& strFile);
-  static bool IsFTP(const std::string& strFile);
-  static bool IsHTTP(const std::string& strFile);
-  static bool IsUDP(const std::string& strFile);
-  static bool IsTCP(const std::string& strFile);
-  static bool IsHD(const std::string& strFileName);
-  static bool IsHDHomeRun(const std::string& strFile);
-  static bool IsSlingbox(const std::string& strFile);
-  static bool IsInArchive(const std::string& strFile);
-  static bool IsInRAR(const std::string& strFile);
   static bool IsInternetStream(const std::string& path, bool bStrictCheck = false);
   static bool IsInternetStream(const CURL& url, bool bStrictCheck = false);
-  static bool IsInAPK(const std::string& strFile);
-  static bool IsInZIP(const std::string& strFile);
-  static bool IsISO9660(const std::string& strFile);
-  static bool IsLiveTV(const std::string& strFile);
-  static bool IsPVRRecording(const std::string& strFile);
-  static bool IsMultiPath(const std::string& strPath);
-  static bool IsMusicDb(const std::string& strFile);
-  static bool IsNfs(const std::string& strFile);
-  static bool IsOnDVD(const std::string& strFile);
-  static bool IsOnLAN(const std::string& strFile);
   static bool IsHostOnLAN(const std::string& hostName, bool offLineCheck = false);
-  static bool IsPlugin(const std::string& strFile);
-  static bool IsScript(const std::string& strFile);
-  static bool IsRAR(const std::string& strFile);
-  static bool IsRemote(const std::string& strFile);
-  static bool IsSmb(const std::string& strFile);
-  static bool IsSpecial(const std::string& strFile);
-  static bool IsStack(const std::string& strFile);
-  static bool IsUPnP(const std::string& strFile);
-  static bool IsURL(const std::string& strFile);
-  static bool IsVideoDb(const std::string& strFile);
-  static bool IsAPK(const std::string& strFile);
-  static bool IsZIP(const std::string& strFile);
-  static bool IsArchive(const std::string& strFile);
-  static bool IsBluray(const std::string& strFile);
-  static bool IsAndroidApp(const std::string& strFile);
-  static bool IsLibraryFolder(const std::string& strFile);
-  static bool IsLibraryContent(const std::string& strFile);
-  static bool IsPVRChannel(const std::string& strFile);
-  static bool IsUsingFastSwitch(const std::string& strFile);
 
   static void AddSlashAtEnd(std::string& strFolder);
   static bool HasSlashAtEnd(const std::string& strFile, bool checkURL = false);
