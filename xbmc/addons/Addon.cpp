@@ -378,7 +378,6 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
   {
     switch (m_props.type)
     {
-      case ADDON_SCREENSAVER:
       case ADDON_SCRIPT:
       case ADDON_SCRIPT_LIBRARY:
       case ADDON_SCRIPT_LYRICS:
@@ -391,7 +390,6 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_SCRAPER_MUSICVIDEOS:
       case ADDON_SCRAPER_TVSHOWS:
       case ADDON_SCRAPER_LIBRARY:
-      case ADDON_PVRDLL:
       case ADDON_PLUGIN:
       case ADDON_SERVICE:
       case ADDON_REPOSITORY:
@@ -399,6 +397,26 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
         {
           std::string temp = CAddonMgr::Get().GetExtValue(extension->configuration, "@library");
           m_strLibName = temp;
+        }
+        break;
+      case ADDON_VIZ:
+      case ADDON_SCREENSAVER:
+      case ADDON_PVRDLL:
+        {
+          // Look for a system-dependent one
+#if defined(TARGET_ANDROID)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_android");
+#elif defined(TARGET_LINUX) || defined(TARGET_FREEBSD)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_linux");
+#elif defined(TARGET_WINDOWS) && defined(HAS_SDL_OPENGL)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_wingl");
+#elif defined(TARGET_WINDOWS) && defined(HAS_DX)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_windx");
+#elif defined(TARGET_DARWIN)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_osx");
+#else
+          m_strLibName.clear();
+#endif
         }
         break;
       default:

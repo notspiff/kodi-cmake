@@ -65,7 +65,6 @@ namespace ADDON
   protected:
     void HandleException(std::exception &e, const char* context);
     bool Initialized() { return m_initialized; }
-    virtual void BuildLibName(const cp_extension_t *ext = NULL) {}
     virtual bool LoadSettings();
     TheStruct* m_pStruct;
     TheProps*     m_pInfo;
@@ -94,22 +93,6 @@ CAddonDll<TheDll, TheStruct, TheProps>::CAddonDll(const cp_extension_t *ext)
   : CAddon(ext),
     m_bIsChild(false)
 {
-  // if library attribute isn't present, look for a system-dependent one
-  if (ext && m_strLibName.empty())
-  {
-#if defined(TARGET_ANDROID)
-  m_strLibName = CAddonMgr::Get().GetExtValue(ext->configuration, "@library_android");
-#elif defined(TARGET_LINUX) || defined(TARGET_FREEBSD)
-    m_strLibName = CAddonMgr::Get().GetExtValue(ext->configuration, "@library_linux");
-#elif defined(TARGET_WINDOWS) && defined(HAS_SDL_OPENGL)
-    m_strLibName = CAddonMgr::Get().GetExtValue(ext->configuration, "@library_wingl");
-#elif defined(TARGET_WINDOWS) && defined(HAS_DX)
-    m_strLibName = CAddonMgr::Get().GetExtValue(ext->configuration, "@library_windx");
-#elif defined(TARGET_DARWIN)
-    m_strLibName = CAddonMgr::Get().GetExtValue(ext->configuration, "@library_osx");
-#endif
-  }
-
   m_pStruct     = NULL;
   m_initialized = false;
   m_pDll        = NULL;
