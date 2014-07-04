@@ -71,13 +71,13 @@ using namespace MUSIC_INFO;
 using namespace PVR;
 using namespace EPG;
 
-CFileItem::CFileItem(const CSong& song)
+CFileItem::CFileItem(const CSong& song) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetFromSong(song);
 }
 
-CFileItem::CFileItem(const CURL &url, const CAlbum& album)
+CFileItem::CFileItem(const CURL &url, const CAlbum& album) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
 
@@ -86,7 +86,7 @@ CFileItem::CFileItem(const CURL &url, const CAlbum& album)
   SetFromAlbum(album);
 }
 
-CFileItem::CFileItem(const std::string &path, const CAlbum& album)
+CFileItem::CFileItem(const std::string &path, const CAlbum& album) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
 
@@ -95,7 +95,7 @@ CFileItem::CFileItem(const std::string &path, const CAlbum& album)
   SetFromAlbum(album);
 }
 
-CFileItem::CFileItem(const CMusicInfoTag& music)
+CFileItem::CFileItem(const CMusicInfoTag& music) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetLabel(music.GetTitle());
@@ -106,13 +106,13 @@ CFileItem::CFileItem(const CMusicInfoTag& music)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CVideoInfoTag& movie)
+CFileItem::CFileItem(const CVideoInfoTag& movie) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetFromVideoInfoTag(movie);
 }
 
-CFileItem::CFileItem(const CEpgInfoTagPtr& tag)
+CFileItem::CFileItem(const CEpgInfoTagPtr& tag) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
 
@@ -133,7 +133,7 @@ CFileItem::CFileItem(const CEpgInfoTagPtr& tag)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CPVRChannel& channel)
+CFileItem::CFileItem(const CPVRChannel& channel) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
 
@@ -175,7 +175,7 @@ CFileItem::CFileItem(const CPVRChannel& channel)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CPVRRecordingPtr& record)
+CFileItem::CFileItem(const CPVRRecordingPtr& record) : URIUtilsComp<CFileItem>(*this)
 {
   assert(record.get());
 
@@ -189,7 +189,7 @@ CFileItem::CFileItem(const CPVRRecordingPtr& record)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CPVRTimerInfoTag& timer)
+CFileItem::CFileItem(const CPVRTimerInfoTag& timer) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
 
@@ -206,7 +206,7 @@ CFileItem::CFileItem(const CPVRTimerInfoTag& timer)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CArtist& artist)
+CFileItem::CFileItem(const CArtist& artist) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetLabel(artist.strArtist);
@@ -217,7 +217,7 @@ CFileItem::CFileItem(const CArtist& artist)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CGenre& genre)
+CFileItem::CFileItem(const CGenre& genre) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetLabel(genre.strGenre);
@@ -228,7 +228,7 @@ CFileItem::CFileItem(const CGenre& genre)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CFileItem& item): CGUIListItem()
+CFileItem::CFileItem(const CFileItem& item) : URIUtilsComp<CFileItem>(*this)
 {
   m_musicInfoTag = NULL;
   m_videoInfoTag = NULL;
@@ -238,7 +238,7 @@ CFileItem::CFileItem(const CFileItem& item): CGUIListItem()
   *this = item;
 }
 
-CFileItem::CFileItem(const CGUIListItem& item)
+CFileItem::CFileItem(const CGUIListItem& item) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   // not particularly pretty, but it gets around the issue of Initialize() defaulting
@@ -248,25 +248,24 @@ CFileItem::CFileItem(const CGUIListItem& item)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(void)
+CFileItem::CFileItem(void) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
 }
 
-CFileItem::CFileItem(const std::string& strLabel)
-    : CGUIListItem()
+CFileItem::CFileItem(const std::string& strLabel) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetLabel(strLabel);
 }
 
-CFileItem::CFileItem(const char* strLabel)
+CFileItem::CFileItem(const char* strLabel) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   SetLabel(std::string(strLabel));
 }
 
-CFileItem::CFileItem(const CURL& path, bool bIsFolder)
+CFileItem::CFileItem(const CURL& path, bool bIsFolder)  : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   m_strPath = path.Get();
@@ -277,7 +276,7 @@ CFileItem::CFileItem(const CURL& path, bool bIsFolder)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const std::string& strPath, bool bIsFolder)
+CFileItem::CFileItem(const std::string& strPath, bool bIsFolder) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   m_strPath = strPath;
@@ -288,7 +287,7 @@ CFileItem::CFileItem(const std::string& strPath, bool bIsFolder)
   FillInMimeType(false);
 }
 
-CFileItem::CFileItem(const CMediaSource& share)
+CFileItem::CFileItem(const CMediaSource& share) : URIUtilsComp<CFileItem>(*this)
 {
   Initialize();
   m_bIsFolder = true;
@@ -935,21 +934,6 @@ bool CFileItem::IsBDFile() const
   return (StringUtils::EqualsNoCase(strFileName, "index.bdmv") || StringUtils::EqualsNoCase(strFileName, "MovieObject.bdmv"));
 }
 
-bool CFileItem::IsRAR() const
-{
-  return URIUtils::IsRAR(m_strPath);
-}
-
-bool CFileItem::IsAPK() const
-{
-  return URIUtils::IsAPK(m_strPath);
-}
-
-bool CFileItem::IsZIP() const
-{
-  return URIUtils::IsZIP(m_strPath);
-}
-
 bool CFileItem::IsCBZ() const
 {
   return URIUtils::HasExtension(m_strPath, ".cbz");
@@ -966,51 +950,11 @@ bool CFileItem::IsRSS() const
       || m_mimetype == "application/rss+xml";
 }
 
-bool CFileItem::IsAndroidApp() const
-{
-  return URIUtils::IsAndroidApp(m_strPath);
-}
-
 bool CFileItem::IsAudioBook() const
 {
   return     IsType(".m4b") || HasProperty("audiobook")
          || (IsType(".mp3") && m_bIsFolder == true)
          || (HasMusicInfoTag() && GetMusicInfoTag()->HasChapters()); // a bit zealous?
-}
-
-bool CFileItem::IsStack() const
-{
-  return URIUtils::IsStack(m_strPath);
-}
-
-bool CFileItem::IsPlugin() const
-{
-  return URIUtils::IsPlugin(m_strPath);
-}
-
-bool CFileItem::IsScript() const
-{
-  return URIUtils::IsScript(m_strPath);
-}
-
-bool CFileItem::IsAddonsPath() const
-{
-  return URIUtils::IsAddonsPath(m_strPath);
-}
-
-bool CFileItem::IsSourcesPath() const
-{
-  return URIUtils::IsSourcesPath(m_strPath);
-}
-
-bool CFileItem::IsMultiPath() const
-{
-  return URIUtils::IsMultiPath(m_strPath);
-}
-
-bool CFileItem::IsCDDA() const
-{
-  return URIUtils::IsCDDA(m_strPath);
 }
 
 bool CFileItem::IsDVD() const
@@ -1023,94 +967,9 @@ bool CFileItem::IsOnDVD() const
   return URIUtils::IsOnDVD(m_strPath) || m_iDriveType == CMediaSource::SOURCE_TYPE_DVD;
 }
 
-bool CFileItem::IsNfs() const
-{
-  return URIUtils::IsNfs(m_strPath);
-}
-
-bool CFileItem::IsAfp() const
-{
-  return URIUtils::IsAfp(m_strPath);
-}
-
-bool CFileItem::IsOnLAN() const
-{
-  return URIUtils::IsOnLAN(m_strPath);
-}
-
-bool CFileItem::IsISO9660() const
-{
-  return URIUtils::IsISO9660(m_strPath);
-}
-
-bool CFileItem::IsRemote() const
-{
-  return URIUtils::IsRemote(m_strPath);
-}
-
-bool CFileItem::IsSmb() const
-{
-  return URIUtils::IsSmb(m_strPath);
-}
-
-bool CFileItem::IsURL() const
-{
-  return URIUtils::IsURL(m_strPath);
-}
-
-bool CFileItem::IsDAAP() const
-{
-  return URIUtils::IsDAAP(m_strPath);
-}
-
-bool CFileItem::IsTuxBox() const
-{
-  return URIUtils::IsTuxBox(m_strPath);
-}
-
-bool CFileItem::IsMythTV() const
-{
-  return URIUtils::IsMythTV(m_strPath);
-}
-
-bool CFileItem::IsHDHomeRun() const
-{
-  return URIUtils::IsHDHomeRun(m_strPath);
-}
-
-bool CFileItem::IsSlingbox() const
-{
-  return URIUtils::IsSlingbox(m_strPath);
-}
-
-bool CFileItem::IsVTP() const
-{
-  return URIUtils::IsVTP(m_strPath);
-}
-
 bool CFileItem::IsPVR() const
 {
   return CUtil::IsPVR(m_strPath);
-}
-
-bool CFileItem::IsLiveTV() const
-{
-  return URIUtils::IsLiveTV(m_strPath);
-}
-
-bool CFileItem::IsHD() const
-{
-  return URIUtils::IsHD(m_strPath);
-}
-
-bool CFileItem::IsMusicDb() const
-{
-  return URIUtils::IsMusicDb(m_strPath);
-}
-
-bool CFileItem::IsVideoDb() const
-{
-  return URIUtils::IsVideoDb(m_strPath);
 }
 
 bool CFileItem::IsVirtualDirectoryRoot() const
@@ -3268,4 +3127,9 @@ double CFileItem::GetCurrentResumeTime() const
   }
   // Resume from start when resume points are invalid or the PVR server returns an error
   return 0;
+}
+
+std::string URIUtilsGet<CFileItem>::Get() const
+{
+  return m_item.GetPath();
 }
