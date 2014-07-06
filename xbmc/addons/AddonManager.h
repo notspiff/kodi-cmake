@@ -27,7 +27,6 @@
 #include <deque>
 #include "AddonDatabase.h"
 
-class DllLibCPluff;
 extern "C"
 {
 #include "cpluff.h"
@@ -190,7 +189,6 @@ namespace ADDON
     /* libcpluff */
     const cp_cfg_element_t *GetExtElement(cp_cfg_element_t *base, const char *path);
     cp_context_t *m_cp_context;
-    DllLibCPluff *m_cpluff;
     VECADDONS    m_updateableAddons;
 
     /*! \brief Fetch a (single) addon from a plugin descriptor.
