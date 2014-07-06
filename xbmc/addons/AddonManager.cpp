@@ -21,7 +21,6 @@
 #include "Addon.h"
 #include "AudioDecoder.h"
 #include "AudioEncoder.h"
-#include "DllLibCPluff.h"
 #include "utils/StringUtils.h"
 #include "utils/JobManager.h"
 #include "threads/SingleLock.h"
@@ -217,7 +216,6 @@ bool CAddonMgr::CheckUserDirs(const cp_cfg_element_t *settings)
 
 CAddonMgr::CAddonMgr()
 {
-  m_cpluff = NULL;
 }
 
 CAddonMgr::~CAddonMgr()
@@ -257,21 +255,12 @@ void CAddonMgr::UnregisterAddonMgrCallback(TYPE type)
 
 bool CAddonMgr::Init()
 {
-  m_cpluff = new DllLibCPluff;
-  m_cpluff->Load();
-
   m_database.Open();
 
-  if (!m_cpluff->IsLoaded())
-  {
-    CLog::Log(LOGERROR, "ADDONS: Fatal Error, could not load libcpluff");
-    return false;
-  }
-
-  m_cpluff->set_fatal_error_handler(cp_fatalErrorHandler);
+  cp_set_fatal_error_handler(cp_fatalErrorHandler);
 
   cp_status_t status;
-  status = m_cpluff->init();
+  status = cp_init();
   if (status != CP_OK)
   {
     CLog::Log(LOGERROR, "ADDONS: Fatal Error, cp_init() returned status: %i", status);
@@ -280,30 +269,30 @@ bool CAddonMgr::Init()
 
   //TODO could separate addons into different contexts
   // would allow partial unloading of addon framework
-  m_cp_context = m_cpluff->create_context(&status);
+  m_cp_context = cp_create_context(&status);
   assert(m_cp_context);
-  status = m_cpluff->register_pcollection(m_cp_context, CSpecialProtocol::TranslatePath("special://home/addons").c_str());
+  status = cp_register_pcollection(m_cp_context, CSpecialProtocol::TranslatePath("special://home/addons").c_str());
   if (status != CP_OK)
   {
     CLog::Log(LOGERROR, "ADDONS: Fatal Error, cp_register_pcollection() returned status: %i", status);
     return false;
   }
 
-  status = m_cpluff->register_pcollection(m_cp_context, CSpecialProtocol::TranslatePath("special://xbmc/addons").c_str());
+  status = cp_register_pcollection(m_cp_context, CSpecialProtocol::TranslatePath("special://xbmc/addons").c_str());
   if (status != CP_OK)
   {
     CLog::Log(LOGERROR, "ADDONS: Fatal Error, cp_register_pcollection() returned status: %i", status);
     return false;
   }
 
-  status = m_cpluff->register_pcollection(m_cp_context, CSpecialProtocol::TranslatePath("special://xbmcbin/addons").c_str());
+  status = cp_register_pcollection(m_cp_context, CSpecialProtocol::TranslatePath("special://xbmcbin/addons").c_str());
   if (status != CP_OK)
   {
     CLog::Log(LOGERROR, "ADDONS: Fatal Error, cp_register_pcollection() returned status: %i", status);
     return false;
   }
 
-  status = m_cpluff->register_logger(m_cp_context, cp_logger,
+  status = cp_register_logger(m_cp_context, cp_logger,
       &CAddonMgr::Get(), clog_to_cp(g_advancedSettings.m_logLevel));
   if (status != CP_OK)
   {
@@ -326,10 +315,7 @@ bool CAddonMgr::Init()
 
 void CAddonMgr::DeInit()
 {
-  if (m_cpluff)
-    m_cpluff->destroy();
-  delete m_cpluff;
-  m_cpluff = NULL;
+  cp_destroy();
   m_database.Close();
   m_disabled.clear();
 }
@@ -449,7 +435,7 @@ bool CAddonMgr::GetAddons(const TYPE &type, VECADDONS &addons, bool enabled /* =
   cp_status_t status;
   int num;
   std::string ext_point(TranslateType(type));
-  cp_extension_t **exts = m_cpluff->get_extensions_info(m_cp_context, ext_point.c_str(), &status, &num);
+  cp_extension_t **exts = cp_get_extensions_info(m_cp_context, ext_point.c_str(), &status, &num);
   for(int i=0; i <num; i++)
   {
     const cp_extension_t *props = exts[i];
@@ -469,7 +455,7 @@ bool CAddonMgr::GetAddons(const TYPE &type, VECADDONS &addons, bool enabled /* =
       }
     }
   }
-  m_cpluff->release_info(m_cp_context, exts);
+  cp_release_info(m_cp_context, exts);
   return addons.size() > 0;
 }
 
@@ -478,11 +464,11 @@ bool CAddonMgr::GetAddon(const std::string &str, AddonPtr &addon, const TYPE &ty
   CSingleLock lock(m_critSection);
 
   cp_status_t status;
-  cp_plugin_info_t *cpaddon = m_cpluff->get_plugin_info(m_cp_context, str.c_str(), &status);
+  cp_plugin_info_t *cpaddon = cp_get_plugin_info(m_cp_context, str.c_str(), &status);
   if (status == CP_OK && cpaddon)
   {
     addon = GetAddonFromDescriptor(cpaddon, type==ADDON_UNKNOWN?"":TranslateType(type));
-    m_cpluff->release_info(m_cp_context, cpaddon);
+    cp_release_info(m_cp_context, cpaddon);
 
     if (addon)
     {
@@ -497,7 +483,7 @@ bool CAddonMgr::GetAddon(const std::string &str, AddonPtr &addon, const TYPE &ty
     return NULL != addon.get();
   }
   if (cpaddon)
-    m_cpluff->release_info(m_cp_context, cpaddon);
+    cp_release_info(m_cp_context, cpaddon);
 
   return false;
 }
@@ -583,9 +569,9 @@ void CAddonMgr::FindAddons()
 {
   {
     CSingleLock lock(m_critSection);
-    if (m_cpluff && m_cp_context)
+    if (m_cp_context)
     {
-      m_cpluff->scan_plugins(m_cp_context, CP_SP_UPGRADE);
+      cp_scan_plugins(m_cp_context, CP_SP_UPGRADE);
       SetChanged();
     }
   }
@@ -594,9 +580,9 @@ void CAddonMgr::FindAddons()
 
 void CAddonMgr::RemoveAddon(const std::string& ID)
 {
-  if (m_cpluff && m_cp_context)
+  if (m_cp_context)
   {
-    m_cpluff->uninstall_plugin(m_cp_context,ID.c_str());
+    cp_uninstall_plugin(m_cp_context,ID.c_str());
     SetChanged();
     NotifyObservers(ObservableMessageAddons);
   }
@@ -638,7 +624,7 @@ std::string CAddonMgr::GetTranslatedString(const cp_cfg_element_t *root, const c
     const cp_cfg_element_t &child = root->children[i];
     if (strcmp(tag, child.name) == 0)
     { // see if we have a "lang" attribute
-      const char *lang = m_cpluff->lookup_cfg_value((cp_cfg_element_t*)&child, "@lang");
+      const char *lang = cp_lookup_cfg_value((cp_cfg_element_t*)&child, "@lang");
       if (lang && 0 == strcmp(lang,g_langInfo.GetLanguageLocale(true).c_str()))
         return child.value ? child.value : "";
       if (!lang || 0 == strcmp(lang, "en"))
@@ -746,7 +732,7 @@ const cp_cfg_element_t *CAddonMgr::GetExtElement(cp_cfg_element_t *base, const c
 {
   const cp_cfg_element_t *element = NULL;
   if (base)
-    element = m_cpluff->lookup_cfg_element(base, path);
+    element = cp_lookup_cfg_element(base, path);
   return element;
 }
 
@@ -780,7 +766,7 @@ const cp_extension_t *CAddonMgr::GetExtension(const cp_plugin_info_t *props, con
 std::string CAddonMgr::GetExtValue(cp_cfg_element_t *base, const char *path)
 {
   const char *value = "";
-  if (base && (value = m_cpluff->lookup_cfg_value(base, path)))
+  if (base && (value = cp_lookup_cfg_value(base, path)))
     return value;
   else
     return "";
@@ -791,7 +777,7 @@ bool CAddonMgr::GetExtList(cp_cfg_element_t *base, const char *path, vector<std:
   result.clear();
   if (!base || !path)
     return false;
-  const char *all = m_cpluff->lookup_cfg_value(base, path);
+  const char *all = cp_lookup_cfg_value(base, path);
   if (!all || *all == 0)
     return false;
   StringUtils::Tokenize(all, result, ' ');
@@ -825,11 +811,11 @@ AddonPtr CAddonMgr::GetAddonFromDescriptor(const cp_plugin_info_t *info,
 bool CAddonMgr::LoadAddonDescription(const std::string &path, AddonPtr &addon)
 {
   cp_status_t status;
-  cp_plugin_info_t *info = m_cpluff->load_plugin_descriptor(m_cp_context, CSpecialProtocol::TranslatePath(path).c_str(), &status);
+  cp_plugin_info_t *info = cp_load_plugin_descriptor(m_cp_context, CSpecialProtocol::TranslatePath(path).c_str(), &status);
   if (info)
   {
     addon = GetAddonFromDescriptor(info);
-    m_cpluff->release_info(m_cp_context, info);
+    cp_release_info(m_cp_context, info);
     return NULL != addon.get();
   }
   return false;
@@ -839,7 +825,7 @@ bool CAddonMgr::AddonsFromRepoXML(const TiXmlElement *root, VECADDONS &addons)
 {
   // create a context for these addons
   cp_status_t status;
-  cp_context_t *context = m_cpluff->create_context(&status);
+  cp_context_t *context = cp_create_context(&status);
   if (!root || !context)
     return false;
 
@@ -853,17 +839,17 @@ bool CAddonMgr::AddonsFromRepoXML(const TiXmlElement *root, VECADDONS &addons)
     xml << decl;
     xml << *element;
     cp_status_t status;
-    cp_plugin_info_t *info = m_cpluff->load_plugin_descriptor_from_memory(context, xml.c_str(), xml.size(), &status);
+    cp_plugin_info_t *info = cp_load_plugin_descriptor_from_memory(context, xml.c_str(), xml.size(), &status);
     if (info)
     {
       AddonPtr addon = GetAddonFromDescriptor(info);
       if (addon.get())
         addons.push_back(addon);
-      m_cpluff->release_info(context, info);
+      cp_release_info(context, info);
     }
     element = element->NextSiblingElement("addon");
   }
-  m_cpluff->destroy_context(context);
+  cp_destroy_context(context);
   return true;
 }
 
@@ -871,7 +857,7 @@ bool CAddonMgr::LoadAddonDescriptionFromMemory(const TiXmlElement *root, AddonPt
 {
   // create a context for these addons
   cp_status_t status;
-  cp_context_t *context = m_cpluff->create_context(&status);
+  cp_context_t *context = cp_create_context(&status);
   if (!root || !context)
     return false;
 
@@ -879,13 +865,13 @@ bool CAddonMgr::LoadAddonDescriptionFromMemory(const TiXmlElement *root, AddonPt
   std::string xml;
   xml << TiXmlDeclaration("1.0", "UTF-8", "");
   xml << *root;
-  cp_plugin_info_t *info = m_cpluff->load_plugin_descriptor_from_memory(context, xml.c_str(), xml.size(), &status);
+  cp_plugin_info_t *info = cp_load_plugin_descriptor_from_memory(context, xml.c_str(), xml.size(), &status);
   if (info)
   {
     addon = GetAddonFromDescriptor(info);
-    m_cpluff->release_info(context, info);
+    cp_release_info(context, info);
   }
-  m_cpluff->destroy_context(context);
+  cp_destroy_context(context);
   return addon != NULL;
 }
 
