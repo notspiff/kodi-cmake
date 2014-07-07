@@ -28,6 +28,7 @@
 #include "utils/HttpResponse.h"
 #include "utils/log.h"
 #include "utils/StringUtils.h"
+#include "system.h"
 
 #define WS_HTTP_METHOD          "GET"
 #define WS_HTTP_TAG             "HTTP/"
