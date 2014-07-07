@@ -472,11 +472,6 @@ TEST(TestStringUtils, CreateUUID)
   std::cout << "CreateUUID(): " << StringUtils::CreateUUID() << std::endl;
 }
 
-TEST(TestStringUtils, ValidateUUID)
-{
-  EXPECT_TRUE(StringUtils::ValidateUUID(StringUtils::CreateUUID()));
-}
-
 TEST(TestStringUtils, CompareFuzzy)
 {
   double ref, var;

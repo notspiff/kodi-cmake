@@ -50,7 +50,6 @@
 #include <stdio.h>
 #include <memory.h>
 #include <algorithm>
-#include "utils/RegExp.h" // don't move or std functions end up in PCRE namespace
 
 #define FORMAT_BLOCK_SIZE 512 // # of bytes for initial allocation for printf
 
@@ -1090,13 +1089,6 @@ std::string StringUtils::CreateUUID()
 
   std::stringstream strGuid; strGuid << guid;
   return strGuid.str();
-}
-
-bool StringUtils::ValidateUUID(const std::string &uuid)
-{
-  CRegExp guidRE;
-  guidRE.RegComp(ADDON_GUID_RE);
-  return (guidRE.RegFind(uuid.c_str()) == 0);
 }
 
 double StringUtils::CompareFuzzy(const std::string &left, const std::string &right)
