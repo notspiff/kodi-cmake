@@ -30,12 +30,12 @@
 #include "guilib/IMsgTargetCallback.h"
 #include "messaging/IMessageTarget.h"
 #include "inttypes.h"
-#include "XBDateTime.h"
 #include "utils/Observer.h"
 #include "utils/Temperature.h"
 #include "interfaces/info/InfoBool.h"
 #include "interfaces/info/SkinVariable.h"
 #include "cores/IPlayer.h"
+#include "utils/StringUtils.h"
 
 #include <list>
 #include <map>
