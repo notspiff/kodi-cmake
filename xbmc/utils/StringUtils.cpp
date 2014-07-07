@@ -46,13 +46,10 @@
 #include <stdio.h>
 #include <memory.h>
 #include <algorithm>
-#include "utils/RegExp.h" // don't move or std functions end up in PCRE namespace
 
 #define FORMAT_BLOCK_SIZE 512 // # of bytes for initial allocation for printf
 
 using namespace std;
-
-const char* ADDON_GUID_RE = "^(\\{){0,1}[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}(\\}){0,1}$";
 
 /* empty string for use in returns by ref */
 const std::string StringUtils::Empty = "";
@@ -1116,13 +1113,6 @@ std::string StringUtils::CreateUUID()
 
   m_lastUUID = UuidStrTmp;
   return UuidStrTmp;
-}
-
-bool StringUtils::ValidateUUID(const std::string &uuid)
-{
-  CRegExp guidRE;
-  guidRE.RegComp(ADDON_GUID_RE);
-  return (guidRE.RegFind(uuid.c_str()) == 0);
 }
 
 double StringUtils::CompareFuzzy(const std::string &left, const std::string &right)
