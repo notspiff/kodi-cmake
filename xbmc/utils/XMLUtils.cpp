@@ -21,6 +21,7 @@
 #include "XMLUtils.h"
 #include "URL.h"
 #include "StringUtils.h"
+#include "XBDateTime.h"
 #ifdef TARGET_WINDOWS
 #include "PlatformDefs.h" //for strcasecmp
 #endif
