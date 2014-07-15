@@ -184,6 +184,8 @@ endforeach()
 
 if(NOT BOOTSTRAP_DIR)
   set(BOOTSTRAP_IN_TREE 1)
+else()
+  set(BOOTSTRAP_IN_TREE 0)
 endif()
 add_subdirectory(bootstrap ${CORE_BUILD_DIR}/bootstrap)
 add_subdirectory(${CORE_SOURCE_DIR}/lib/gtest ${CORE_BUILD_DIR}/gtest EXCLUDE_FROM_ALL)
