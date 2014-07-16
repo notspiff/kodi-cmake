@@ -169,7 +169,8 @@ size_t CWinEventsX11::GetQueueSize()
   return CWinEventsX11Imp::GetQueueSize();
 }
 
-CWinEventsX11Imp::CWinEventsX11Imp()
+CWinEventsX11Imp::CWinEventsX11Imp() :
+  m_RREventBase(0)
 {
   m_display = 0;
   m_window = 0;
