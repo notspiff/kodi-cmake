@@ -1,1 +1,1 @@
-pvr.wmc https://github.com/notspiff/pvr.wmc 063ae31 # PVRADDONS;PVRWMC OFF
+pvr.wmc https://github.com/notspiff/pvr.wmc 876f9f2 # PVRADDONS;PVRWMC OFF
