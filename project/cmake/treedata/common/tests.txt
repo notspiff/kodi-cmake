@@ -2,6 +2,7 @@ xbmc/test                         test
 xbmc/addons/test                  test/addons
 xbmc/filesystem/test              test/filesystem
 xbmc/interfaces/python/test       test/python
+xbmc/music/tags/test              test/music_tags
 xbmc/threads/test                 test/threads
 xbmc/utils/test                   test/utils
 xbmc/video/test                   test/video
