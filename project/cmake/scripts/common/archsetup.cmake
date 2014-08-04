@@ -13,6 +13,7 @@
 
 include(CheckCXXSourceCompiles)
 include(CheckSymbolExists)
+include(CheckFunctionExists)
 
 # Macro to check if a given type exists in a given header
 # Arguments:
@@ -57,4 +58,8 @@ check_type(stdint.h uint_least16_t HAVE_STDINT_H)
 check_symbol_exists(posix_fadvise fcntl.h HAVE_POSIX_FADVISE)
 if(HAVE_POSIX_FADVISE)
   list(APPEND SYSTEM_DEFINES -DHAVE_POSIX_FADVISE=1)
+endif()
+check_function_exists(localtime_r HAVE_LOCALTIME_R)
+if(HAVE_LOCALTIME_R)
+  list(APPEND SYSTEM_DEFINES -DHAVE_LOCALTIME_R=1)
 endif()
