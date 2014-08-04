@@ -1,5 +1,4 @@
 set(SOURCES DeviceKitDisksProvider.cpp
-            HALProvider.cpp
             UDisksProvider.cpp)
 
 if(UDEV_FOUND)
