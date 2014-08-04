@@ -2,7 +2,6 @@ set(SOURCES ConvUtils.cpp
             DBusMessage.cpp
             DBusReserve.cpp
             DBusUtil.cpp
-            HALManager.cpp
             LinuxResourceCounter.cpp
             LinuxTimezone.cpp
             PosixMountProvider.cpp
