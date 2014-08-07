@@ -108,7 +108,7 @@ bool CAudioBookFileDirectory::GetDirectory(const CURL& url,
     else
       item->GetMusicInfoTag()->SetArtist(chapauthor);
 
-    item->SetLabel(StringUtils::Format("%02i. %s - %s",i+1,
+    item->SetLabel(StringUtils::Format("%02lu. %s - %s",i+1,
                    item->GetMusicInfoTag()->GetAlbum().c_str(),
                    item->GetMusicInfoTag()->GetTitle().c_str()));
     item->m_lStartOffset = m_fctx->chapters[i]->start*av_q2d(m_fctx->chapters[i]->time_base)*75;
