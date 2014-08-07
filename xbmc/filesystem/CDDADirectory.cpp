@@ -72,11 +72,11 @@ bool CCDDADirectory::GetDirectory(const CURL& url, CFileItemList &items)
       continue;
 
     // Format standard cdda item label
-    std::string strLabel = StringUtils::Format("Track %02.2i", i);
+    std::string strLabel = StringUtils::Format("Track %02i", i);
 
     CFileItemPtr pItem(new CFileItem(strLabel));
     pItem->m_bIsFolder = false;
-    std::string path = StringUtils::Format("cdda://local/%02.2i.cdda", i);
+    std::string path = StringUtils::Format("cdda://local/%02i.cdda", i);
     pItem->SetPath(path);
 
     struct __stat64 s64;
