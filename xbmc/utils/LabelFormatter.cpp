@@ -162,13 +162,13 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
   {
   case 'N':
     if (music && music->GetTrackNumber() > 0)
-      value = StringUtils::Format("%02.2i", music->GetTrackNumber());
+      value = StringUtils::Format("%02i", music->GetTrackNumber());
     if (movie&& movie->m_iTrack > 0)
-      value = StringUtils::Format("%02.2i", movie->m_iTrack);
+      value = StringUtils::Format("%02i", movie->m_iTrack);
     break;
   case 'S':
     if (music && music->GetDiscNumber() > 0)
-      value = StringUtils::Format("%02.2i", music->GetDiscNumber());
+      value = StringUtils::Format("%02i", music->GetDiscNumber());
     break;
   case 'A':
     if (music && music->GetArtist().size())
@@ -269,9 +269,9 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
     if (movie && movie->m_iEpisode > 0)
     { // episode number
       if (movie->m_iSeason == 0)
-        value = StringUtils::Format("S%02.2i", movie->m_iEpisode);
+        value = StringUtils::Format("S%02i", movie->m_iEpisode);
       else
-        value = StringUtils::Format("%02.2i", movie->m_iEpisode);
+        value = StringUtils::Format("%02i", movie->m_iEpisode);
     }
     break;
   case 'P':
@@ -282,9 +282,9 @@ std::string CLabelFormatter::GetMaskContent(const CMaskString &mask, const CFile
     if (movie && movie->m_iEpisode > 0)
     { // season*100+episode number
       if (movie->m_iSeason == 0)
-        value = StringUtils::Format("S%02.2i", movie->m_iEpisode);
+        value = StringUtils::Format("S%02i", movie->m_iEpisode);
       else
-        value = StringUtils::Format("%ix%02.2i", movie->m_iSeason,movie->m_iEpisode);
+        value = StringUtils::Format("%ix%02i", movie->m_iSeason,movie->m_iEpisode);
     }
     break;
   case 'O':
