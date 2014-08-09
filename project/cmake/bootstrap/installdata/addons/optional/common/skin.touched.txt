@@ -1,1 +1,1 @@
-skin.touched https://github.com/xbmc/skin.touched.git 1d71311e4 # SKIN_TOUCHED OFF
+skin.touched https://github.com/xbmc/skin.touched.git 713ed3c # SKIN_TOUCHED OFF
