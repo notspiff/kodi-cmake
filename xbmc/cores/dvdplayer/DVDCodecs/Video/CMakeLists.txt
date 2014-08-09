@@ -11,11 +11,6 @@ if(AMLCODEC_FOUND)
                       DVDVideoCodecAmlogic.cpp)
 endif()
 
-if(CRYSTALHD_FOUND)
-  list(APPEND SOURCES CrylstalHD.cpp
-                      DVDVideoCodecCrystalHD.cpp)
-endif()
-
 if(OPENMAX_FOUND)
   list(APPEND SOURCES DVDVideoCodecOpenMax.cpp
                       OpenMax.cpp
