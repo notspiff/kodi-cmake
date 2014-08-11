@@ -1,5 +1,5 @@
-APP_NAME Kodi
-COMPANY_NAME XBMC-Foundation
+APP_NAME Kodi-cmake
+COMPANY_NAME Spiff-only-inc
 WEBSITE http://kodi.tv
 VERSION_MAJOR 15
 VERSION_MINOR 0
