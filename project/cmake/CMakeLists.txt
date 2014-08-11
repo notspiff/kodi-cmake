@@ -157,6 +157,7 @@ add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
                                             -DCORE_BUILD_DIR=${CORE_BUILD_DIR}
                                             -DCMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}
                                             -DARCH_DEFINES="${ARCH_DEFINES}"
+                                            -DAPP_SCMID=${APP_SCMID}
                                             -Dprefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
                                             -P ${PROJECT_SOURCE_DIR}/scripts/common/generateversionedfiles.cmake
                   DEPENDS ${CORE_SOURCE_DIR}/version.txt
