@@ -19,4 +19,4 @@ set(SOURCES AddonsOperations.cpp
             XBMCOperations.cpp)
   
 core_add_library(jsonrpc_interface)
-add_dependencies(jsonrpc_interface libcpluff generate_json_header)
+add_dependencies(jsonrpc_interface libcpluff generate_json_header ffmpeg)
