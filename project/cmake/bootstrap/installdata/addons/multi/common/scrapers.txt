@@ -1,4 +1,4 @@
-scrapers http://git.code.sf.net/p/xbmc/scrapers 8e0d639
+scrapers http://git.code.sf.net/p/xbmc/scrapers d836579
 metadata.album.universal
 metadata.album.universal
 metadata.artists.universal
