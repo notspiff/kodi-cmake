@@ -18,11 +18,11 @@ endif()
 find_package(Git REQUIRED)
 find_package(AutoConf REQUIRED)
 
-function(add_git_copy id repo rev prefix)
+macro(add_git_copy id repo rev prefix)
   externalproject_add(${id}
                       GIT_REPOSITORY ${repo}
                       PREFIX build/${id}
-                      GIT_TAG ${hash}
+                      GIT_TAG ${rev}
                       UPDATE_COMMAND ""
                       CONFIGURE_COMMAND ""
                       BUILD_COMMAND ""
@@ -35,12 +35,12 @@ function(add_git_copy id repo rev prefix)
     add_dependencies(${id} ${BUILDTOOLS})
   endif()
   file(WRITE ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
-    "FILE(COPY ${CMAKE_BINARY_DIR}/build/${id}/src/${id}
+       "file(COPY ${CMAKE_CURRENT_BINARY_DIR}/build/${id}/src/${id}
              DESTINATION ${OUTPUT_DIR}/${prefix} ${exclude})")
-  add_custom_command(OUTPUT ${OUTPUT_DIR}/build/${id}
+  add_custom_command(OUTPUT ${OUTPUT_DIR}/${prefix}/${id}
                      COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/build/${id}-copy.cmake
                      DEPENDS ${id})
-endfunction()
+endmacro()
 
 macro(setup_patching)
   file(STRINGS ${file} def)
@@ -247,10 +247,13 @@ function(add_addon_multi lines)
   foreach(entry ${lines})
     if(BOOTSTRAP_DIR)
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E copy_directory ${BOOTSTRAP_DIR}}/${entry} ${OUTPUT_DIR}/addons/${entry})
+                         COMMAND ${CMAKE_COMMAND} -E copy_directory
+                                 ${BOOTSTRAP_DIR}}/${entry} ${OUTPUT_DIR}/addons/${entry})
     else()
       add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND cmake -E copy_directory ${CMAKE_CURRENT_BINARY_DIR}/build/${id}/src/${id}/${entry} ${OUTPUT_DIR}/addons/${entry}
+                         COMMAND ${CMAKE_COMMAND} -E copy_directory
+                                 ${CMAKE_CURRENT_BINARY_DIR}/build/${id}/src/${id}/${entry}
+                                 ${OUTPUT_DIR}/addons/${entry}
                          DEPENDS ${id})
     endif()
     list(APPEND SOURCES ${OUTPUT_DIR}/addons/${entry})
