@@ -59,7 +59,7 @@ set(SOURCES AddonsDirectory.cpp
             ShoutcastFile.cpp
             SmartPlaylistDirectory.cpp
             SMBDirectory.cpp
-            SmbFile.cpp
+            SMBFile.cpp
             SourcesDirectory.cpp
             SpecialProtocol.cpp
             SpecialProtocolDirectory.cpp
