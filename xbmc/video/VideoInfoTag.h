@@ -59,6 +59,13 @@ public:
 };
 typedef std::map<std::string, CRating> RatingMap;
 
+enum EpisodeSpecialFlags
+{
+  EPISODE_FLAG_NONE,
+  EPISODE_FLAG_SEASON_FINALE,
+  EPISODE_FLAG_SERIES_FINALE
+};
+
 class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
 {
 public:
@@ -192,6 +199,7 @@ public:
   int m_iFileId;
   int m_iSpecialSortSeason;
   int m_iSpecialSortEpisode;
+  int m_iSpecialFlag;
   int m_iTrack;
   RatingMap m_ratings;
   int m_iIdRating;

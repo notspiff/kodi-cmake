@@ -74,6 +74,7 @@ void CVideoInfoTag::Reset()
   m_iSpecialSortEpisode = -1;
   m_strDefaultRating = "default";
   m_ratings.clear();
+  m_iSpecialFlag = EPISODE_FLAG_NONE;
   m_iUserRating = 0;
   m_iDbId = -1;
   m_iFileId = -1;
@@ -158,6 +159,10 @@ bool CVideoInfoTag::Save(TiXmlNode *node, const std::string &tag, bool savePathI
     XMLUtils::SetString(movie, "uniqueid", m_strUniqueId);
     XMLUtils::SetInt(movie, "displayseason",m_iSpecialSortSeason);
     XMLUtils::SetInt(movie, "displayepisode",m_iSpecialSortEpisode);
+    if (m_iSpecialFlag == EPISODE_FLAG_SEASON_FINALE)
+      XMLUtils::SetString(movie, "specialflag", "seasonfinale");
+    if (m_iSpecialFlag == EPISODE_FLAG_SERIES_FINALE)
+      XMLUtils::SetString(movie, "specialflag", "seriesfinale");
   }
   if (tag == "musicvideo")
   {
@@ -372,6 +377,7 @@ void CVideoInfoTag::Archive(CArchive& ar)
     ar << m_iFileId;
     ar << m_iSpecialSortSeason;
     ar << m_iSpecialSortEpisode;
+    ar << m_iSpecialFlag;
     ar << m_iBookmarkId;
     ar << m_iTrack;
     ar << dynamic_cast<IArchivable&>(m_streamDetails);
@@ -471,6 +477,7 @@ void CVideoInfoTag::Archive(CArchive& ar)
     ar >> m_iFileId;
     ar >> m_iSpecialSortSeason;
     ar >> m_iSpecialSortEpisode;
+    ar >> m_iSpecialFlag;
     ar >> m_iBookmarkId;
     ar >> m_iTrack;
     ar >> dynamic_cast<IArchivable&>(m_streamDetails);
@@ -581,6 +588,7 @@ void CVideoInfoTag::Serialize(CVariant& value) const
   value["seasonid"] = m_iIdSeason;
   value["specialsortseason"] = m_iSpecialSortSeason;
   value["specialsortepisode"] = m_iSpecialSortEpisode;
+  value["specialflag"] = m_iSpecialFlag;
 }
 
 void CVideoInfoTag::ToSortable(SortItem& sortable, Field field) const
@@ -773,6 +781,14 @@ void CVideoInfoTag::ParseNative(const TiXmlElement* movie, bool prioritise)
 
   XMLUtils::GetInt(movie, "displayseason", m_iSpecialSortSeason);
   XMLUtils::GetInt(movie, "displayepisode", m_iSpecialSortEpisode);
+  std::string strFlag;
+  XMLUtils::GetString(movie,"specialflag", strFlag);
+  if (strFlag == "seasonfinale")
+    m_iSpecialFlag = EPISODE_FLAG_SEASON_FINALE;
+  else if (strFlag == "seriesfinale")
+    m_iSpecialFlag = EPISODE_FLAG_SERIES_FINALE;
+  else
+    m_iSpecialFlag = EPISODE_FLAG_NONE;
   int after=0;
   XMLUtils::GetInt(movie, "displayafterseason",after);
   if (after > 0)
