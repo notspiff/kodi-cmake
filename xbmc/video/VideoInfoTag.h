@@ -47,6 +47,13 @@ struct SActorInfo
   int        order;
 };
 
+enum EpisodeSpecialFlags
+{
+  EPISODE_FLAG_NONE,
+  EPISODE_FLAG_SEASON_FINALE,
+  EPISODE_FLAG_SERIES_FINALE
+};
+
 class CVideoInfoTag : public IArchivable, public ISerializable, public ISortable
 {
 public:
@@ -174,6 +181,7 @@ public:
   int m_iFileId;
   int m_iSpecialSortSeason;
   int m_iSpecialSortEpisode;
+  int m_iSpecialFlag;
   int m_iTrack;
   float m_fRating;
   int m_iUserRating;
