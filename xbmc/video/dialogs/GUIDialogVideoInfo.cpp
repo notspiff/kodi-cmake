@@ -74,6 +74,7 @@ using namespace XFILE;
 #define CONTROL_BTN_PLAY_TRAILER    11
 #define CONTROL_BTN_GET_FANART      12
 #define CONTROL_BTN_DIRECTOR        13
+#define CONTROL_BTN_MANAGE          14
 
 #define CONTROL_LIST                50
 
@@ -161,6 +162,30 @@ bool CGUIDialogVideoInfo::OnMessage(CGUIMessage& message)
       else if (iControl == CONTROL_BTN_GET_FANART)
       {
         OnGetFanart();
+      }
+      else if (iControl == CONTROL_BTN_MANAGE)
+      {
+        std::string origPath;
+        if (m_movieItem->HasProperty("db_path"))
+        {
+          origPath = m_movieItem->GetPath();
+          m_movieItem->SetPath(m_movieItem->GetProperty("db_path").asString());
+        }
+        int res = ManageVideoItem(m_movieItem, true);
+        if (!origPath.empty())
+          m_movieItem->SetPath(origPath);
+        if (res == CONTEXT_BUTTON_EDIT)
+        {
+          m_hasUpdatedThumb = true;
+          CUtil::DeleteVideoDatabaseDirectoryCache();
+          Update();
+        }
+        if (res == CONTEXT_BUTTON_DELETE)
+        {
+          m_hasUpdatedThumb = true;
+          CUtil::DeleteVideoDatabaseDirectoryCache();
+          Close();
+        }
       }
       else if (iControl == CONTROL_BTN_DIRECTOR)
       {
@@ -937,7 +962,7 @@ void CGUIDialogVideoInfo::AddItemPathToFileBrowserSources(VECSOURCES &sources, c
   }
 }
 
-int CGUIDialogVideoInfo::ManageVideoItem(const CFileItemPtr &item)
+int CGUIDialogVideoInfo::ManageVideoItem(const CFileItemPtr &item, bool updateItem)
 {
   if (item == NULL || !item->IsVideoDb() || !item->HasVideoInfoTag() || item->GetVideoInfoTag()->m_iDbId < 0)
     return -1;
@@ -1019,7 +1044,7 @@ int CGUIDialogVideoInfo::ManageVideoItem(const CFileItemPtr &item)
     switch ((CONTEXT_BUTTON)button)
     {
       case CONTEXT_BUTTON_EDIT:
-        result = UpdateVideoItemTitle(item);
+        result = UpdateVideoItemTitle(item, updateItem);
         break;
 
       case CONTEXT_BUTTON_EDIT_SORTTITLE:
@@ -1082,7 +1107,7 @@ int CGUIDialogVideoInfo::ManageVideoItem(const CFileItemPtr &item)
 }
 
 //Add change a title's name
-bool CGUIDialogVideoInfo::UpdateVideoItemTitle(const CFileItemPtr &pItem)
+bool CGUIDialogVideoInfo::UpdateVideoItemTitle(const CFileItemPtr &pItem, bool updateItem)
 {
   if (pItem == NULL || !pItem->HasVideoInfoTag())
     return false;
@@ -1115,6 +1140,9 @@ bool CGUIDialogVideoInfo::UpdateVideoItemTitle(const CFileItemPtr &pItem)
   // get the new title
   if (!CGUIKeyboardFactory::ShowAndGetInput(detail.m_strTitle, g_localizeStrings.Get(16105), false))
     return false;
+
+  if (updateItem)
+    const_cast<CFileItemPtr&>(pItem)->GetVideoInfoTag()->m_strTitle = detail.m_strTitle;
 
   database.UpdateMovieTitle(iDbId, detail.m_strTitle, iType);
   return true;
