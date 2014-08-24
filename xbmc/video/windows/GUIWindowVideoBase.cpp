@@ -298,6 +298,7 @@ void CGUIWindowVideoBase::OnInfo(CFileItem* pItem, const ADDON::ScraperPtr& scra
       item.ClearArt();
       item.GetVideoInfoTag()->m_iDbId = item.GetVideoInfoTag()->m_iIdShow;
     }
+    item.SetProperty("db_path", item.GetPath());
     item.SetPath(item.GetVideoInfoTag()->GetPath());
     fromDB = true;
   }
