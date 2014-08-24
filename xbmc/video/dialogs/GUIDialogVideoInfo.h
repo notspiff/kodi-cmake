@@ -46,8 +46,8 @@ public:
   static std::string ChooseArtType(const CFileItem &item, std::map<std::string, std::string> &currentArt);
   static void AddItemPathToFileBrowserSources(VECSOURCES &sources, const CFileItem &item);
 
-  static int ManageVideoItem(const CFileItemPtr &item);
-  static bool UpdateVideoItemTitle(const CFileItemPtr &pItem);
+  static int ManageVideoItem(const CFileItemPtr &item, bool updateItem=false);
+  static bool UpdateVideoItemTitle(const CFileItemPtr &pItem, bool updateItem=false);
   static bool CanDeleteVideoItem(const CFileItemPtr &item);
   static bool DeleteVideoItemFromDatabase(const CFileItemPtr &item, bool unavailable = false);
   static bool DeleteVideoItem(const CFileItemPtr &item, bool unavailable = false);
