@@ -795,6 +795,14 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       }
       break;
 
+    case TMSG_VOLUME_SET:
+      {
+        CAction action(pMsg->param1, *(float*)pMsg->lpVoid);
+        g_application.OnAction(action);
+        delete (float*)pMsg->lpVoid;
+      }
+      break;
+
     case TMSG_SPLASH_MESSAGE:
       {
         if (g_application.GetSplash())
@@ -1313,6 +1321,14 @@ void CApplicationMessenger::ShowVolumeBar(bool up)
 {
   ThreadMessage tMsg = {TMSG_VOLUME_SHOW};
   tMsg.param1 = up ? ACTION_VOLUME_UP : ACTION_VOLUME_DOWN;
+  SendMessage(tMsg, false);
+}
+
+void CApplicationMessenger::SetVolume(int action, float amount)
+{
+  ThreadMessage tMsg = {TMSG_VOLUME_SET};
+  tMsg.param1 = action;
+  tMsg.lpVoid = new float(amount);
   SendMessage(tMsg, false);
 }
 
