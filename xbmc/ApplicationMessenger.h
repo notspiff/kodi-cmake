@@ -110,6 +110,7 @@ namespace MUSIC_INFO
 
 #define TMSG_VOLUME_SHOW          900
 #define TMSG_SPLASH_MESSAGE       901
+#define TMSG_VOLUME_SET           902
 
 #define TMSG_DISPLAY_SETUP      1000
 #define TMSG_DISPLAY_DESTROY    1001
@@ -248,6 +249,10 @@ public:
   std::vector<bool> GetInfoBooleans(const std::vector<std::string> &properties);
 
   void ShowVolumeBar(bool up);
+  //! \brief Set the volume
+  //! \param action ACTION_VOLUME_UP or ACTION_VOLUME_DOWN
+  //! \param amount Amount to adjust with
+  void SetVolume(int action, float amount);
 
   void SetSplashMessage(const std::string& message);
   void SetSplashMessage(int stringID);
