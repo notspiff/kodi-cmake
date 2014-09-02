@@ -212,7 +212,7 @@ endforeach()
 
 # These for skins we cloned from a git within the build system
 foreach(xbt ${EXTRA_XBT})
-  pack_xbt(${xbt}/media ${CMAKE_BINARY_DIR}/${xbt}/media/Textures.xbt ${CMAKE_BINARY_DIR})
+  pack_xbt(${CORE_BUILD_DIR}/bootstrap/build/${xbt}/src/${xbt}/media ${CMAKE_BINARY_DIR}/addons/${xbt}/media/Textures.xbt ${CMAKE_BINARY_DIR})
 endforeach()
 add_custom_target(pack-skins ALL
                   DEPENDS bootstrap export-files ${XBT_FILES})
