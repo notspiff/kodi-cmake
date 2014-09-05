@@ -39,6 +39,7 @@ set(SOURCES ActorProtocol.cpp
             LangCodeExpander.cpp
             LegacyPathTranslation.cpp
             log.cpp
+            MarkWatchedJob.cpp
             md5.cpp
             Mime.cpp
             Observer.cpp
