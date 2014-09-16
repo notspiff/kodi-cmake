@@ -1,0 +1,1 @@
+adsp.template https://github.com/notspiff/adsp.template origin/master

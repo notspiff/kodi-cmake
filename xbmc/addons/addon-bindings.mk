@@ -17,4 +17,6 @@ BINDINGS+=addons/library.xbmc.gui/libXBMC_gui.h
 BINDINGS+=addons/library.xbmc.pvr/libXBMC_pvr.h
 BINDINGS+=addons/library.xbmc.codec/libXBMC_codec.h
 BINDINGS+=xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h
-
+BINDINGS+=addons/library.xbmc.adsp/libXBMC_adsp.h
+BINDINGS+=xbmc/addons/include/xbmc_adsp_types.h
+BINDINGS+=xbmc/addons/include/xbmc_adsp_dll.h
