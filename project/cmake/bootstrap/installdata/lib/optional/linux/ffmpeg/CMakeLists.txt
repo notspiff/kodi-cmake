@@ -22,6 +22,8 @@ externalproject_add(ffmpeg
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}
                     CONFIGURE_COMMAND <SOURCE_DIR>/configure
                       --disable-muxers
+                      --enable-zlib
+                      --enable-bzlib
                       --enable-muxer=spdif
                       --enable-muxer=adts
                       --enable-muxer=asf
@@ -43,6 +45,7 @@ externalproject_add(ffmpeg
                       --enable-postproc
                       --enable-gpl
                       --enable-vdpau
+                      --enable-vaapi
                       --enable-protocol=http
                       --enable-pthreads
                       --enable-runtime-cpudetect
