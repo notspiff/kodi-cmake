@@ -274,6 +274,7 @@ bool URIUtils::HasParentInHostname(const CURL& url)
       || url.IsProtocol("rar")
       || url.IsProtocol("apk")
       || url.IsProtocol("bluray")
+      || url.IsProtocol("sacd")
       || url.IsProtocol("udf");
 }
 
