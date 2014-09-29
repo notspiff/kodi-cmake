@@ -231,6 +231,9 @@ bool URIUtilsComp<std::string>::IsDVD(const std::string& strFile)
     return true;
 #endif
 
+  if (StringUtils::StartsWith(strFileLow, "sacd://"))
+    return true;
+
   return false;
 }
 
