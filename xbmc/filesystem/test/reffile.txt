@@ -23,9 +23,3 @@ your media and automatically create a personalized library complete with box
 covers, descriptions, and fanart. There are playlist and slideshow functions, a
 weather forecast feature and many audio visualizations. Once installed, your
 computer will become a fully functional multimedia jukebox.
-
-This fork contains a separate buildsystem, and the upstream one is broken.
-Use the project/cmake CMakeLists.txt build.
-
-Note: It currently only builds on linux, though the system is designed to
-handle all platforms, just the code has not been done.
