@@ -1,7 +1,20 @@
+if(X_FOUND)
+  set(USE_X11 1)
+else()
+  set(USE_X11 0)
+endif()
+if(OPENGL_FOUND)
+  set(USE_OPENGL 1)
+else()
+  set(USE_OPENGL 0)
+endif()
+
 configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc.sh.in
                ${CORE_BUILD_DIR}/scripts/xbmc @ONLY)
 configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
                ${CORE_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
+configure_file(${CORE_SOURCE_DIR}/tools/Linux/FEH.py.in ${CORE_BUILD_DIR}/FEH.py)
+configure_file(${CORE_SOURCE_DIR}/tools/Linux/FEH-ARM.py.in ${CORE_BUILD_DIR}/FEH-ARM.py)
 
 install(TARGETS xbmc-xrandr DESTINATION ${libdir}/xbmc)
 install(FILES ${addon_bindings} DESTINATION ${includedir}/xbmc)
@@ -12,7 +25,7 @@ install(FILES ${cmake_files}
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc
                  ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc-standalone
         DESTINATION ${bindir})
-install(FILES ${CORE_SOURCE_DIR}/tools/Linux/FEH.py
+install(FILES ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/FEH.py
         DESTINATION ${datarootdir}/xbmc)
 
 install(FILES ${CORE_SOURCE_DIR}/tools/Linux/xbmc-xsession.desktop
