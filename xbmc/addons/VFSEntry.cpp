@@ -108,7 +108,7 @@ int CVFSEntry::Stat(const CURL& url, struct __stat64* buffer)
   return m_pStruct->Stat(&url2.url, buffer);
 }
 
-unsigned int CVFSEntry::Read(void* ctx, void* lpBuf, int64_t uiBufSize)
+ssize_t CVFSEntry::Read(void* ctx, void* lpBuf, size_t uiBufSize)
 {
   if (!Initialized())
     return 0;
@@ -116,7 +116,7 @@ unsigned int CVFSEntry::Read(void* ctx, void* lpBuf, int64_t uiBufSize)
   return m_pStruct->Read(ctx, lpBuf, uiBufSize);
 }
 
-int CVFSEntry::Write(void* ctx, void* lpBuf, int64_t uiBufSize)
+ssize_t CVFSEntry::Write(void* ctx, void* lpBuf, size_t uiBufSize)
 {
   if (!Initialized())
     return 0;
@@ -407,7 +407,7 @@ int CVFSEntryIFileWrapper::Truncate(int64_t size)
   return m_addon->Truncate(m_context, size);
 }
 
-unsigned int CVFSEntryIFileWrapper::Read(void* lpBuf, int64_t uiBufSize)
+ssize_t CVFSEntryIFileWrapper::Read(void* lpBuf, size_t uiBufSize)
 {
   if (!m_context)
     return 0;
@@ -415,7 +415,7 @@ unsigned int CVFSEntryIFileWrapper::Read(void* lpBuf, int64_t uiBufSize)
   return m_addon->Read(m_context, lpBuf, uiBufSize);
 }
 
-int CVFSEntryIFileWrapper::Write(void* lpBuf, int64_t uiBufSize)
+ssize_t CVFSEntryIFileWrapper::Write(void* lpBuf, size_t uiBufSize)
 {
   if (!m_context)
     return 0;
