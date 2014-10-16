@@ -118,7 +118,7 @@ extern "C"
     //! \param uiBufSize Number of bytes to read
     //! \return Number of bytes read
     //! \sa IFile::Read
-    unsigned int  (__cdecl* Read) (void* context, void* buffer, int64_t uiBufSize);
+    ssize_t (__cdecl* Read) (void* context, void* buffer, size_t uiBufSize);
 
     //! \brief Write to a file
     //! \param context The context of the file
@@ -126,7 +126,7 @@ extern "C"
     //! \param uiBufSize Number of bytes to write
     //! \return Number of bytes written
     //! \sa IFile::Write
-    int  (__cdecl* Write) (void* context, const void* buffer, int64_t uiBufSize);
+    ssize_t (__cdecl* Write) (void* context, const void* buffer, size_t uiBufSize);
 
     //! \brief Seek in a file
     //! \param context The context of the file
