@@ -1,1 +1,1 @@
-vfs.hdhomerun https://github.com/notspiff/vfs.hdhomerun 066b3e6
+vfs.hdhomerun https://github.com/notspiff/vfs.hdhomerun fc5b64e

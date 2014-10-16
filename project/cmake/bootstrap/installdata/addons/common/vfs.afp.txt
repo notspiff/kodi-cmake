@@ -1,1 +1,1 @@
-vfs.afp https://github.com/notspiff/vfs.afp 1aee47b
+vfs.afp https://github.com/notspiff/vfs.afp 488faa6
