@@ -34,10 +34,10 @@ extern "C"
   void* OpenForWrite(VFSURL* url, bool bOverWrite);
 
   //! \copydoc VFSEntry::Read
-  unsigned int Read(void* context, void* buffer, int64_t size);
+  ssize_t Read(void* context, void* buffer, size_t size);
 
   //! \copydoc VFSEntry::Write
-  int Write(void* context, const void* buffer, int64_t size);
+  ssize_t Write(void* context, const void* buffer, size_t size);
 
   //! \copydoc VFSEntry::Seek
   int64_t Seek(void* context, int64_t position, int whence);
