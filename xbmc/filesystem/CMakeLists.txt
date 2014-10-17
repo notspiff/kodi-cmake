@@ -86,7 +86,8 @@ if(OS STREQUAL "Android")
 endif()
 
 if(BLURAY_FOUND)
-  list(APPEND SOURCES BlurayDirectory.cpp)
+  list(APPEND SOURCES BlurayDirectory.cpp
+                      BlurayFile.cpp)
 endif()
 
 include_directories(${CORE_SOURCE_DIR}/lib/libUPnP
