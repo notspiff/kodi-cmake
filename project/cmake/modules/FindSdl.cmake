@@ -1,4 +1,4 @@
-# - Try to find SDL
+# - Try to find SDL2
 # Once done this will define
 #
 # SDL_FOUND - system has libSDL
@@ -6,7 +6,7 @@
 # SDL_LIBRARIES - The libSDL libraries
 
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules (SDL sdl)
+  pkg_check_modules (SDL sdl2)
 else()
   find_package(SDL)
   list(APPEND SDL_INCLUDE_DIRS ${SDL_INCLUDE_DIR})

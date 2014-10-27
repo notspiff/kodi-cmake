@@ -1,7 +1,7 @@
 if(ENABLE_INTERNAL_FFMPEG)
   file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/ffmpeg-link-wrapper
 "#!/bin/bash
-if [[ $@ == *xbmc.bin* || $@ == *xbmc-test* ]]
+if [[ $@ == *kodi.bin* || $@ == *kodi-test* ]]
 then
   avformat=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavcodec`
   avcodec=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavformat`
@@ -23,6 +23,7 @@ fi")
   list(GET def 2 hash)
   list(APPEND FFMPEG_DEFINITIONS -DFFMPEG_VER_SHA=\"${hash}\"
                                  -DUSE_STATIC_FFMPEG=1)
+  set(FFMPEG_FOUND 1)
 else()
   set(FFMPEG_PKGS libavcodec>=56.1.100 libavfilter>=5.1.100 libavformat>=56.4.101
                   libavutil>=54.7.100 libswscale>=3.0.100 libswresample>=1.1.100 libpostproc>=53.0.100)
@@ -32,6 +33,7 @@ else()
 
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(FFMPEG DEFAULT_MSG FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES)
+  set(FFMPEG_FOUND 1)
 endif()
 
-mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES FFMPEG_DEFINITIONS)
+mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES FFMPEG_DEFINITIONS FFMPEG_FOUND)
