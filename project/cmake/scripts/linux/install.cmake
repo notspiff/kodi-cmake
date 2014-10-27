@@ -9,18 +9,18 @@ else()
   set(USE_OPENGL 0)
 endif()
 
-configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc.sh.in
-               ${CORE_BUILD_DIR}/scripts/xbmc @ONLY)
-configure_file(${CORE_SOURCE_DIR}/tools/Linux/xbmc-standalone.sh.in
-               ${CORE_BUILD_DIR}/scripts/xbmc-standalone @ONLY)
+configure_file(${CORE_SOURCE_DIR}/tools/Linux/kodi.sh.in
+               ${CORE_BUILD_DIR}/scripts/kodi @ONLY)
+configure_file(${CORE_SOURCE_DIR}/tools/Linux/kodi-standalone.sh.in
+               ${CORE_BUILD_DIR}/scripts/kodi-standalone @ONLY)
 configure_file(${CORE_SOURCE_DIR}/tools/Linux/FEH.py.in ${CORE_BUILD_DIR}/FEH.py)
 configure_file(${CORE_SOURCE_DIR}/tools/Linux/FEH-ARM.py.in ${CORE_BUILD_DIR}/FEH-ARM.py)
 
-install(TARGETS xbmc-xrandr DESTINATION ${libdir}/xbmc)
-install(FILES ${addon_bindings} DESTINATION ${includedir}/xbmc)
+install(TARGETS ${APP_NAME_LC}-xrandr DESTINATION ${libdir}/${APP_NAME_LC})
+install(FILES ${addon_bindings} DESTINATION ${includedir}/${APP_NAME_LC})
 install(FILES ${cmake_files}
-              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/xbmc-config.cmake
-              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/xbmc-addon-helpers.cmake
+              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/${APP_NAME_LC}-config.cmake
+              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/${APP_NAME_LC}-addon-helpers.cmake
         DESTINATION ${libdir}/xbmc)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc
                  ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/xbmc-standalone
