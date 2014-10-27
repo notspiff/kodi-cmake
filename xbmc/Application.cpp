@@ -251,6 +251,10 @@
 
 #include "cores/FFmpeg.h"
 
+#ifdef HAS_SDL
+#include <SDL.h>
+#endif
+
 using namespace std;
 using namespace ADDON;
 using namespace XFILE;
