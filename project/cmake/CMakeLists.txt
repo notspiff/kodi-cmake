@@ -234,23 +234,23 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
 # main binary
-add_executable(xbmc.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)
-target_link_libraries(xbmc.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
+add_executable(kodi.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)
+target_link_libraries(kodi.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
-install(TARGETS xbmc.bin DESTINATION ${libdir}/xbmc)
-add_dependencies(xbmc.bin export-files)
+install(TARGETS kodi.bin DESTINATION ${libdir}/xbmc)
+add_dependencies(kodi.bin export-files)
 
 # testing
 if(NOT CMAKE_CROSSCOMPILING) # Cannot execute tests when cross compiling
   copy_files_from_filelist_to_buildtree(${PROJECT_SOURCE_DIR}/installdata/test-reference-data.txt 1)
-  add_executable(xbmc-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp $<TARGET_OBJECTS:compileinfo>)
-  target_link_libraries(xbmc-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
+  add_executable(kodi-test EXCLUDE_FROM_ALL ${CORE_SOURCE_DIR}/xbmc/test/xbmc-test.cpp $<TARGET_OBJECTS:compileinfo>)
+  target_link_libraries(kodi-test ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} gtest ${test_archives} -Wl,--no-whole-archive
                         ${DEPLIBS} ${CMAKE_DL_LIBS})
   enable_testing()
-  gtest_add_tests(xbmc-test "" ${test_sources})
-  add_dependencies(xbmc-test export-files)
+  gtest_add_tests(kodi-test "" ${test_sources})
+  add_dependencies(kodi-test export-files)
   add_custom_target(check ${CMAKE_CTEST_COMMAND} WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
-  add_dependencies(check xbmc-test)
+  add_dependencies(check kodi-test)
 
   # For testing commit series
   add_custom_target(check-commits ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/scripts/common/checkcommits.cmake
@@ -263,8 +263,8 @@ if(FFMPEG_LINK_EXECUTABLE)
 endif()
 
 # randr
-add_executable(xbmc-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
-target_link_libraries(xbmc-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
+add_executable(${APP_NAME_LC}-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
+target_link_libraries(${APP_NAME_LC}-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
 # For generating the doxy
 find_package(Doxygen)
