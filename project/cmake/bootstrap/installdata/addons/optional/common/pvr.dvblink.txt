@@ -1,1 +1,1 @@
-pvr.dvblink https://github.com/notspiff/pvr.dvblink cdeec7a # PVRADDONS;PVRDVBLINK OFF
+pvr.dvblink https://github.com/notspiff/pvr.dvblink 7f9c793 # PVRADDONS;PVRDVBLINK OFF
