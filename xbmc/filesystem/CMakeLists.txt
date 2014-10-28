@@ -45,6 +45,7 @@ set(SOURCES AddonsDirectory.cpp
             MythFile.cpp
             MythSession.cpp
             NptXbmcFile.cpp
+            OverrideFile.cpp
             PipeFile.cpp
             PipesManager.cpp
             PlaylistDirectory.cpp
