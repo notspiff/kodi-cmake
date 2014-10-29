@@ -58,6 +58,9 @@ include(scripts/common/projectmacros.cmake)
 include(scripts/common/pathsetup.cmake)
 include(ExternalProject)
 
+core_find_git_rev()
+core_find_versions()
+
 set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
              ${CORE_SOURCE_DIR}/lib/addons/library.xbmc.codec
              ${CORE_SOURCE_DIR}/addons/library.xbmc.gui
@@ -150,7 +153,6 @@ if(ENABLE_SKIN_TOUCHED)
   list(APPEND DEP_DEFINES "-DHAS_SKIN_TOUCHED=1")
 endif()
 
-core_find_git_rev()
 add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
                    COMMAND ${CMAKE_COMMAND} -DCORE_SOURCE_DIR=${CORE_SOURCE_DIR}
                                             -DCORE_SYSTEM_NAME=${CORE_SYSTEM_NAME}
@@ -163,8 +165,8 @@ add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
                   DEPENDS ${CORE_SOURCE_DIR}/version.txt
                           ${CORE_SOURCE_DIR}/addons/xbmc.addon/addon.xml.in
                           ${CORE_SOURCE_DIR}/xbmc/CompileInfo.cpp.in
-                          ${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
-                          ${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-addon-helpers.cmake.in)
+                          ${CORE_SOURCE_DIR}/project/cmake/templates/kodi-config.cmake.in
+                          ${CORE_SOURCE_DIR}/project/cmake/templates/kodi-addon-helpers.cmake.in)
 list(APPEND install_data addons/xbmc.addon/addon.xml)
 add_library(compileinfo OBJECT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp)
 
@@ -234,11 +236,10 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
 
 # main binary
-add_executable(kodi.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)
-target_link_libraries(kodi.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
+add_executable(${APP_NAME_LC}.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)
+target_link_libraries(${APP_NAME_LC}.bin ${SYSTEM_LDFLAGS} -Wl,--whole-archive ${core_DEPENDS} -Wl,--no-whole-archive
                       ${DEPLIBS} ${CMAKE_DL_LIBS})
-install(TARGETS kodi.bin DESTINATION ${libdir}/xbmc)
-add_dependencies(kodi.bin export-files)
+add_dependencies(${APP_NAME_LC}.bin export-files)
 
 # testing
 if(NOT CMAKE_CROSSCOMPILING) # Cannot execute tests when cross compiling
@@ -263,8 +264,8 @@ if(FFMPEG_LINK_EXECUTABLE)
 endif()
 
 # randr
-add_executable(${APP_NAME_LC}-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
-target_link_libraries(${APP_NAME_LC}-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
+add_executable(kodi-cmake-xrandr ${CORE_SOURCE_DIR}/xbmc-xrandr.c)
+target_link_libraries(kodi-cmake-xrandr ${SYSTEM_LDFLAGS} ${X_LIBRARIES} m ${XRANDR_LIBRARIES})
 
 # For generating the doxy
 find_package(Doxygen)
@@ -276,14 +277,14 @@ if(DOXYGEN_FOUND)
 endif()
 
 set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake)
-configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-config.cmake.in
-               ${CORE_BUILD_DIR}/modules/xbmc-config.cmake @ONLY)
-configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/xbmc-addon-helpers.cmake.in
-               ${CORE_BUILD_DIR}/modules/xbmc-addon-helpers.cmake @ONLY)
+configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-config.cmake.in
+               ${CORE_BUILD_DIR}/modules/kodi-config.cmake @ONLY)
+configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-addon-helpers.cmake.in
+               ${CORE_BUILD_DIR}/modules/kodi-addon-helpers.cmake @ONLY)
 
 prepare_addon_env()
 
-list(APPEND cmake-files ${CORE_BUILD_DIR}/xbmc-config.cmake)
+list(APPEND cmake-files ${CORE_BUILD_DIR}/kodi-config.cmake)
 include(scripts/${CORE_SYSTEM_NAME}/install.cmake)
 
 # Status

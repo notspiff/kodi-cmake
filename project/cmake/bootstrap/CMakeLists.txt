@@ -101,7 +101,7 @@ function(add_git_lib file)
                                  -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}/${CORE_BUILD_DIR}
                                  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                                  -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-                                 -DXBMC_BUILD_DIR=${OUTPUT_DIR}
+                                 -DKODI_BUILD_DIR=${OUTPUT_DIR}
                         DEPENDS compileinfo
                         PREFIX ${OUTPUT_DIR}/${CORE_BUILD_DIR}/${id})
   elseif(BOOTSTRAP_DIR)
@@ -114,7 +114,7 @@ function(add_git_lib file)
                                           -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                                           -DBUILD_SHARED_LIBS=0
                                           -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}/${CORE_BUILD_DIR}
-                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                                          -DKODI_BUILD_DIR=${CMAKE_BINARY_DIR}
                                           -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                                           -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER})
   else()
@@ -149,7 +149,7 @@ function(add_git_cmake id repo hash)
                                           -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                                           -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                                           -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                                          -DKODI_BUILD_DIR=${CMAKE_BINARY_DIR}
                                           -DBOOTSTRAP_IN_TREE=1
                         DEPENDS compileinfo
                         INSTALL_COMMAND "")
@@ -163,7 +163,7 @@ function(add_git_cmake id repo hash)
                                           -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                                           -DBUILD_SHARED_LIBS=1
                                           -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-                                          -DXBMC_BUILD_DIR=${CMAKE_BINARY_DIR}
+                                          -DKODI_BUILD_DIR=${CMAKE_BINARY_DIR}
                                           -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                                           -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                         INSTALL_COMMAND "")
