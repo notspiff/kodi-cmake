@@ -2,8 +2,8 @@ xbmc/addons/include/xbmc_addon_cpp_dll.h
 xbmc/addons/include/xbmc_addon_cpp_dll.h
 xbmc/addons/include/xbmc_addon_dll.h
 xbmc/addons/include/xbmc_addon_types.h
-xbmc/addons/include/xbmc_audiodec_dll.h
-xbmc/addons/include/xbmc_audiodec_types.h
+xbmc/addons/include/kodi_audiodec_dll.h
+xbmc/addons/include/kodi_audiodec_types.h
 xbmc/addons/include/xbmc_audioenc_dll.h
 xbmc/addons/include/xbmc_audioenc_types.h
 xbmc/addons/include/xbmc_codec_types.h

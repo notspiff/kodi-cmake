@@ -1,1 +1,1 @@
-audiodecoder.opus https://github.com/notspiff/audiodecoder.opus 896f6a9 # OPUSDECODER OFF
+audiodecoder.opus https://github.com/notspiff/audiodecoder.opus da68964 # OPUSDECODER OFF
