@@ -1,1 +1,1 @@
-audiodecoder.sidplay https://github.com/notspiff/audiodecoder.sidplay d07eeda
+audiodecoder.sidplay https://github.com/notspiff/audiodecoder.sidplay 0cd217e
