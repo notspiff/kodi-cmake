@@ -1,1 +1,1 @@
-audiodecoder.flac https://github.com/notspiff/audiodecoder.flac 6cc8eb3 # FLAC_DECODER OFF
+audiodecoder.flac https://github.com/notspiff/audiodecoder.flac 2ab3b76 # FLAC_DECODER OFF
