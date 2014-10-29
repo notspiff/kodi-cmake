@@ -1,7 +1,7 @@
 if(ENABLE_INTERNAL_FFMPEG)
   file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/ffmpeg-link-wrapper
 "#!/bin/bash
-if [[ $@ == *kodi.bin* || $@ == *kodi-test* ]]
+if [[ $@ == *${APP_NAME_LC}.bin* || $@ == *${APP_NAME_LC}-test* ]]
 then
   avformat=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavcodec`
   avcodec=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs libavformat`

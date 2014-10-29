@@ -44,7 +44,7 @@
  *        and the add-on should set bHandlesDemuxing to true.
  */
 #ifdef USE_DEMUX
-#ifdef BUILD_XBMC_ADDON
+#ifdef BUILD_KODI_ADDON
 #include "xbmc/DVDDemuxPacket.h"
 #else
 #include "cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h"
