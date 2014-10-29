@@ -60,3 +60,4 @@ install(CODE "Message(Done)")
 # Quell warnings
 set(BUILD_SHARED_LIBS)
 set(XBMC_BUILD_DIR)
+set(KODI_BUILD_DIR)
