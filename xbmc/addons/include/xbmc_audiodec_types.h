@@ -23,7 +23,7 @@
 #define __AUDIODEC_TYPES_H__
 
 #include <stdint.h>
-#ifdef BUILD_XBMC_ADDON
+#ifdef BUILD_KODI_ADDON
 #include "xbmc/AEChannelData.h"
 #else
 #include "cores/AudioEngine/Utils/AEChannelData.h"
