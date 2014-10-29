@@ -53,8 +53,17 @@ endfunction()
 #   build tree is ready for building add-ons
 function(prepare_addon_env)
   set(prefix ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
-  file(COPY ${addon_bindings} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/xbmc)
-  file(COPY ${cmake-files} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/xbmc)
+  file(COPY ${addon_bindings} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/kodi)
+  file(COPY ${cmake-files} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/kodi)
+  # Generate files with deprecation warnings
+  foreach(binding ${addon_bindings})
+    get_filename_component(file ${binding} NAME)
+    file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/xbmc/${file}
+"#pragma once
+#warning \"Including xbmc/${file} is deprecated, use kodi/${file}\"
+#include \"kodi/${file}\"
+")
+  endforeach()
 endfunction()
 
 # Get GTest tests as CMake tests.

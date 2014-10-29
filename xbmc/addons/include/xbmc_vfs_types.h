@@ -23,7 +23,7 @@
 
 #include <stdint.h>
 #include "xbmc_addon_types.h"
-#ifdef BUILD_XBMC_ADDON
+#ifdef BUILD_KODI_ADDON
 #include "xbmc/IFileTypes.h"
 #else
 #include "filesystem/IFileTypes.h"

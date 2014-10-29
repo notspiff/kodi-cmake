@@ -65,22 +65,22 @@ macro (build_addon target prefix libs)
     install(TARGETS ${target} DESTINATION lib/xbmc/addons/${target})
     install(DIRECTORY ${target} DESTINATION share/xbmc/addons)
   endif()
-  if(XBMC_BUILD_DIR)
+  if(KODI_BUILD_DIR)
     file(GLOB_RECURSE files ${CMAKE_CURRENT_SOURCE_DIR}/${target}/*)
     foreach(file ${files})
       string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/${target}/" "" name "${file}")
       # A good way to deal with () in filenames
-      configure_file(${file} ${XBMC_BUILD_DIR}/addons/${target}/${name} COPYONLY)
+      configure_file(${file} ${KODI_BUILD_DIR}/addons/${target}/${name} COPYONLY)
     endforeach()
       add_custom_command(TARGET ${target} POST_BUILD
                         COMMAND ${CMAKE_COMMAND} -E copy
                                 $<TARGET_LINKER_FILE:${target}>
-                                ${XBMC_BUILD_DIR}/addons/${target}/$<TARGET_LINKER_FILE_NAME:${target}>)
+                                ${KODI_BUILD_DIR}/addons/${target}/$<TARGET_LINKER_FILE_NAME:${target}>)
   endif()
 endmacro()
 
 # finds a path to a given file (recursive)
-function (xbmc_find_path var_name filename search_path strip_file)
+function (kodi_find_path var_name filename search_path strip_file)
   file(GLOB_RECURSE PATH_TO_FILE ${search_path} ${filename})
   if(strip_file)
     string(REPLACE ${filename} "" PATH_TO_FILE ${PATH_TO_FILE})
