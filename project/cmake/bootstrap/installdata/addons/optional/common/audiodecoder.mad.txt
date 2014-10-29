@@ -1,1 +1,1 @@
-audiodecoder.mad https://github.com/notspiff/audiodecoder.mad 4fa7d1f # MADCODEC OFF
+audiodecoder.mad https://github.com/notspiff/audiodecoder.mad 9bc68e1 # MADCODEC OFF
