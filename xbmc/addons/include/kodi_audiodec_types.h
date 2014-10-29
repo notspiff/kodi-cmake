@@ -1,4 +1,3 @@
-#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -19,12 +18,11 @@
  *
  */
 
-#ifndef __AUDIODEC_TYPES_H__
-#define __AUDIODEC_TYPES_H__
+#pragma once
 
 #include <stdint.h>
 #ifdef BUILD_KODI_ADDON
-#include "xbmc/AEChannelData.h"
+#include "kodi/AEChannelData.h"
 #else
 #include "cores/AudioEngine/Utils/AEChannelData.h"
 #endif
@@ -101,5 +99,3 @@ extern "C"
     bool (__cdecl* DeInit)(void* context);
   };
 }
-
-#endif
