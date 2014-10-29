@@ -1,4 +1,3 @@
-#pragma once
 /*
  *      Copyright (C) 2005-2013 Team XBMC
  *      http://xbmc.org
@@ -19,12 +18,11 @@
  *
  */
 
-#ifndef __XBMC_AUDIODEC_H__
-#define __XBMC_AUDIODEC_H__
+#pragma once
 
 #include <stdint.h>
 #include "xbmc_addon_dll.h"
-#include "xbmc_audiodec_types.h"
+#include "kodi_audiodec_types.h"
 
 extern "C"
 {
@@ -60,5 +58,3 @@ extern "C"
     pScr->DeInit = DeInit;
   };
 };
-
-#endif
