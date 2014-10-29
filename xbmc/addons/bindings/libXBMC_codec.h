@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <dlfcn.h>
-#ifdef BUILD_XBMC_ADDON
+#ifdef BUILD_KODI_ADDON
 #include "xbmc/xbmc_codec_types.h"
 #include "xbmc/libXBMC_addon.h"
 #else

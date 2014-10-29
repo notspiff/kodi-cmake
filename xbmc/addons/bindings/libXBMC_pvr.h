@@ -24,7 +24,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#ifdef BUILD_XBMC_ADDON
+#ifdef BUILD_KODI_ADDON
 #include "xbmc/xbmc_pvr_types.h"
 #include "xbmc/libXBMC_addon.h"
 #else
