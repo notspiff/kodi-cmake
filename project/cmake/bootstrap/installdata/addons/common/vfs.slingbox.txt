@@ -1,1 +1,1 @@
-vfs.slingbox https://github.com/notspiff/vfs.slingbox 9f1eb27
+vfs.slingbox https://github.com/notspiff/vfs.slingbox f4a4a7b
