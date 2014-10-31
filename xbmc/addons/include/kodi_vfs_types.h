@@ -1,4 +1,3 @@
-#pragma once
 /*
  *      Copyright (C) 2013 Arne Morten Kvarving
  *
@@ -17,14 +16,12 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef __XBMC_VFS_TYPES_H__
-#define __XBMC_VFS_TYPES_H__
+#pragma once
 
 #include <stdint.h>
 #include "xbmc_addon_types.h"
 #ifdef BUILD_KODI_ADDON
-#include "xbmc/IFileTypes.h"
+#include "kodi/IFileTypes.h"
 #else
 #include "filesystem/IFileTypes.h"
 #include "PlatformDefs.h"
@@ -157,7 +154,7 @@ extern "C"
 
     //! \brief Get chunk size of a file
     //! \param context The context of the file
-    //! \return Chunk size 
+    //! \return Chunk size
     //! \sa IFile::GetChunkSize()
     int      (__cdecl* GetChunkSize)(void* context);
 
@@ -292,5 +289,3 @@ extern "C"
     bool (__cdecl* UpdateItem)    (void* ctx);
   };
 }
-
-#endif
