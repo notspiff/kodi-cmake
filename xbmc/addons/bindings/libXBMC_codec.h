@@ -26,8 +26,8 @@
 #include <stdio.h>
 #include <dlfcn.h>
 #ifdef BUILD_KODI_ADDON
-#include "xbmc/xbmc_codec_types.h"
-#include "xbmc/libXBMC_addon.h"
+#include "kodi/xbmc_codec_types.h"
+#include "kodi/libXBMC_addon.h"
 #else
 #include "addons/include/xbmc_codec_types.h"
 #include "addons/bindings/libXBMC_addon.h"
