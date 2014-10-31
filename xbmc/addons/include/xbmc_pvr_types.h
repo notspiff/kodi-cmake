@@ -45,7 +45,7 @@
  */
 #ifdef USE_DEMUX
 #ifdef BUILD_KODI_ADDON
-#include "xbmc/DVDDemuxPacket.h"
+#include "kodi/DVDDemuxPacket.h"
 #else
 #include "cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h"
 #endif
