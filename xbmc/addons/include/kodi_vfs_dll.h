@@ -1,4 +1,3 @@
-#pragma once
 /*
  *      Copyright (C) 2013 Arne Morten Kvarving
  *
@@ -17,13 +16,11 @@
  *  <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef __XBMC_VFS_DLL_H__
-#define __XBMC_VFS_DLL_H__
+#pragma once
 
 #include <stdint.h>
 #include "xbmc_addon_dll.h"
-#include "xbmc_vfs_types.h"
+#include "kodi_vfs_types.h"
 
 extern "C"
 {
@@ -93,7 +90,7 @@ extern "C"
   void FreeDirectory(void* ctx);
 
   //! \copydoc VFSEntry::Delete
-  bool Delete(VFSURL* url); 
+  bool Delete(VFSURL* url);
 
   //! \copydoc VFSEntry::Rename
   bool Rename(VFSURL* url, VFSURL* url2);
@@ -150,5 +147,3 @@ extern "C"
     pScr->GetChunkSize = GetChunkSize;
   };
 };
-
-#endif
