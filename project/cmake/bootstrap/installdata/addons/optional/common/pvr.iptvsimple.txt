@@ -1,1 +1,1 @@
-pvr.iptvsimple https://github.com/notspiff/pvr.iptvsimple 8f199cc # PVRADDONS;PVRIPTVSIMPLE OFF
+pvr.iptvsimple https://github.com/notspiff/pvr.iptvsimple 1bef3cc # PVRADDONS;PVRIPTVSIMPLE OFF
