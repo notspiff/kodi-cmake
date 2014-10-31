@@ -183,7 +183,7 @@ function(add_git_cmake id repo hash)
   if(BUILDTOOLS)
     add_dependencies(${id} ${BUILDTOOLS})
   endif()
-  add_dependencies(${id} xbmc-platform)
+  add_dependencies(${id} kodi-platform)
 endfunction()
 
 function(add_addon_separate entry)
