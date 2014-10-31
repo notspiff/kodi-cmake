@@ -23,7 +23,7 @@
 #include <stdarg.h>
 #include <string>
 #include "addons/include/xbmc_addon_types.h"
-#include "addons/include/xbmc_vfs_types.h"
+#include "addons/include/kodi_vfs_types.h"
 #include "libXBMC_addon.h"
 #include "addons/AddonCallbacks.h"
 
