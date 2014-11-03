@@ -31,6 +31,7 @@
 #include "windowing/WindowingFactory.h"
 #include "guilib/GraphicContext.h"
 #include "utils/log.h"
+#include <fcntl.h>
 
 bool CVideoSyncDRM::Setup(PUPDATECLOCK func)
 {
