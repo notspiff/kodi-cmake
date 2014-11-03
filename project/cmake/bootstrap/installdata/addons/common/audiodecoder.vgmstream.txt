@@ -1,1 +1,1 @@
-audiodecoder.vgmstream https://github.com/notspiff/audiodecoder.vgmstream fd1fcf2
+audiodecoder.vgmstream https://github.com/notspiff/audiodecoder.vgmstream 5de3c22
