@@ -1,3 +1,4 @@
-xbmc/video         video
-xbmc/video/dialogs video/dialogs
-xbmc/video/windows video/windows
+xbmc/video           video
+xbmc/video/dialogs   video/dialogs
+xbmc/video/videosync video/sync
+xbmc/video/windows   video/windows
