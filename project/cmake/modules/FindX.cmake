@@ -6,7 +6,7 @@
 # X11_LIBRARIES - The X11 libraries
 
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules (X x11 xext)
+  pkg_check_modules (X x11 xext libdrm)
   list(APPEND X_INCLUDE_DIRS /usr/include)
 else()
   find_path(X_INCLUDE_DIRS X11/Xlib.h)

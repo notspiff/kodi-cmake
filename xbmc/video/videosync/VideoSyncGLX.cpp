@@ -31,6 +31,9 @@
 #include "utils/log.h"
 #include "utils/TimeUtils.h"
 #include <string>
+#ifdef TARGET_POSIX
+#include "linux/XTimeUtils.h"
+#endif
 
 using namespace std;
 
