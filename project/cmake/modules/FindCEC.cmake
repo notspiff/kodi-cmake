@@ -6,7 +6,7 @@
 # CEC_LIBRARIES - The libcec libraries
 
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules (CEC libcec>=2.1.0)
+  pkg_check_modules (CEC libcec>=2.2.0)
 else()
   find_path(CEC_INCLUDE_DIRS libcec/cec.h)
   find_library(CEC_LIBRARIES cec)
