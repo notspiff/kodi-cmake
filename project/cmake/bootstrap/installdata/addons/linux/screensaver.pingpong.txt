@@ -1,1 +1,1 @@
-screensaver.pingpong https://github.com/notspiff/screensaver.pingpong dbd9eca
+screensaver.pingpong https://github.com/notspiff/screensaver.pingpong 8562fec
