@@ -1,1 +1,1 @@
-screensaver.asterwave https://github.com/notspiff/screensaver.asterwave d96364c
+screensaver.asterwave https://github.com/notspiff/screensaver.asterwave 2e4844b

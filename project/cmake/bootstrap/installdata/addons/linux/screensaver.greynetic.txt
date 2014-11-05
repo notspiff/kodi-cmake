@@ -1,1 +1,1 @@
-screensaver.greynetic https://github.com/notspiff/screensaver.greynetic ef7eaa9
+screensaver.greynetic https://github.com/notspiff/screensaver.greynetic c27a2a5
