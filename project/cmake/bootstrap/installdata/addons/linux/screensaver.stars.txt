@@ -1,1 +1,1 @@
-screensaver.stars https://github.com/notspiff/screensaver.stars 37a4e16
+screensaver.stars https://github.com/notspiff/screensaver.stars 79a6364

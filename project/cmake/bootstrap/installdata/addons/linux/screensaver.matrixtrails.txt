@@ -1,1 +1,1 @@
-screensaver.matrixtrails https://github.com/notspiff/screensaver.matrixtrails 186d95e
+screensaver.matrixtrails https://github.com/notspiff/screensaver.matrixtrails ae13b62
