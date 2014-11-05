@@ -7,6 +7,7 @@
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules (RTMP librtmp)
+  list(APPEND RTMP_INCLUDE_DIRS ${RTMP_INCLUDEDIR})
 else()
   find_path(RTMP_INCLUDE_DIRS librtmp/rtmp.h)
   find_library(RTMP_LIBRARIES rtmp)
