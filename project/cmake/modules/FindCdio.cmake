@@ -6,8 +6,8 @@
 # CDIO_LIBRARIES - The libcdio libraries
 
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules (CDIO libcdio)
-  list(APPEND CDIO_INCLUDE_DIRS ${CDIO_INCLUDEDIR})
+  pkg_check_modules (CDIO libcdio libiso9660)
+  list(APPEND CDIO_INCLUDE_DIRS ${CDIO_libcdio_INCLUDEDIR} ${CDIO_libiso9660_INCLUDEDIR})
 endif()
 if(NOT CDIO_FOUND)
   find_path(CDIO_INCLUDE_DIRS cdio/cdio.h)
