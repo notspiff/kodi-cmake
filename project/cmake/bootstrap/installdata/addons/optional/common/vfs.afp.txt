@@ -1,0 +1,1 @@
+vfs.afp https://github.com/notspiff/vfs.afp d002196 # AFPVFS OFF
