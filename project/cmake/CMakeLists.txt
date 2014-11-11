@@ -61,11 +61,7 @@ include(ExternalProject)
 core_find_git_rev()
 core_find_versions()
 
-set(INCLUDES ${CORE_SOURCE_DIR}/addons/library.xbmc.addon
-             ${CORE_SOURCE_DIR}/lib/addons/library.xbmc.codec
-             ${CORE_SOURCE_DIR}/addons/library.xbmc.gui
-             ${CORE_SOURCE_DIR}/addons/library.xbmc.pvr
-             ${CORE_SOURCE_DIR}/lib
+set(INCLUDES ${CORE_SOURCE_DIR}/lib
              ${CORE_SOURCE_DIR}/lib/gtest/include
              ${CORE_SOURCE_DIR}/xbmc
              ${CORE_SOURCE_DIR}/xbmc/linux
