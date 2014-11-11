@@ -13,7 +13,6 @@ set(SOURCES AEFactory.cpp
             Encoders/AEEncoderFFmpeg.cpp
             Sinks/AESinkNULL.cpp
             Sinks/AESinkOSS.cpp
-            Sinks/AESinkProfiler.cpp
             Engines/ActiveAE/ActiveAE.cpp
             Engines/ActiveAE/ActiveAESink.cpp
             Engines/ActiveAE/ActiveAEStream.cpp
