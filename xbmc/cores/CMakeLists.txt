@@ -1,4 +1,5 @@
-set(SOURCES DummyVideoPlayer.cpp
+set(SOURCES DataCacheCore.cpp
+            DummyVideoPlayer.cpp
             FFmpeg.cpp)
 
 core_add_library(cores)
