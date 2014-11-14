@@ -1,1 +1,1 @@
-pvr.nextpvr https://github.com/notspiff/pvr.nextpvr 8fd8459 # PVRADDONS;PVRNEXTPVR OFF
+pvr.nextpvr https://github.com/notspiff/pvr.nextpvr a9fab09 # PVRADDONS;PVRNEXTPVR OFF
