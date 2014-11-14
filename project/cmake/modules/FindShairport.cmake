@@ -7,6 +7,7 @@
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules (SHAIRPORT libshairport)
+  list(APPEND SHAIRPORT_INCLUDE_DIRS ${SHAIRPORT_INCLUDEDIR})
 else()
   find_path(SHAIRPORT_INCLUDE_DIRS shairport/shairport.h)
   find_library(SHAIRPORT_LIBRARIES shairport)
