@@ -1,1 +1,1 @@
-kodi-platform https://github.com/notspiff/kodi-platform 7f4fb56
+kodi-platform https://github.com/notspiff/kodi-platform 82886bb
