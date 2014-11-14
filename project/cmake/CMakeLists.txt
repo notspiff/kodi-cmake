@@ -280,7 +280,6 @@ configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-addon-helpers.cma
 
 prepare_addon_env()
 
-list(APPEND cmake-files ${CORE_BUILD_DIR}/kodi-config.cmake)
 include(scripts/${CORE_SYSTEM_NAME}/install.cmake)
 
 # Status
