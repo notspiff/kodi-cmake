@@ -1,1 +1,1 @@
-pvr.argustv https://github.com/notspiff/pvr.argustv 87dc821 # PVRADDONS;PVRARGUSTV OFF
+pvr.argustv https://github.com/notspiff/pvr.argustv 7f2db0e # PVRADDONS;PVRARGUSTV OFF
