@@ -1,1 +1,1 @@
-visualization.fishbmc https://github.com/notspiff/visualization.fishbmc a51ecb8
+visualization.fishbmc https://github.com/notspiff/visualization.fishbmc d1d0751
