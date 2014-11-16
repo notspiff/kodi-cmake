@@ -161,6 +161,15 @@ namespace XBMCAddon
       static_cast<CGUITextBox*>(pGUIControl)->Scroll((int)position);
     }
 
+    void ControlTextBox::autoScroll(float delay, float time, float repeat) throw(UnimplementedException)
+    {
+      TiXmlDocument doc;
+      std::string xml;
+      xml = StringUtils::Format("<document><autoscroll delay=\"%f\" time=\"%f\" repeat=\"%f\"/></document>", delay, time, repeat);
+      doc.Parse(xml.c_str());
+      static_cast<CGUITextBox*>(pGUIControl)->SetAutoScrolling(doc.RootElement());
+    }
+
     CGUIControl* ControlTextBox::Create() throw (WindowException)
     {
       // create textbox
