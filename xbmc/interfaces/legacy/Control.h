@@ -920,6 +920,20 @@ namespace XBMCAddon
        */
       virtual void scroll(long id) throw(UnimplementedException);
 
+      // autoScroll() Method
+      /**
+       * autoScroll(delay, time, repeat) -- Set autoscrolling times.
+       *
+       * delay           : float - Scroll delay
+       * time            : float - Scroll time
+       * repeat          : float - Repeat time
+       *
+       * example:
+       *   - self.textbox.autoScroll(0.5, 2.0, 1.0)
+       */
+      virtual void autoScroll(float delay, float time,
+                              float repeat) throw(UnimplementedException);
+
 #ifndef SWIG
       std::string strFont;
       color_t textColor;
