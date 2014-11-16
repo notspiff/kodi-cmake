@@ -30,6 +30,7 @@
 #include "ModuleXbmcgui.h"
 #include "guilib/GUIKeyboardFactory.h"
 #include "utils/StringUtils.h"
+#include "FileItem.h"
 #ifdef TARGET_POSIX
 #include "linux/XTimeUtils.h"
 #endif
@@ -85,7 +86,7 @@ namespace XBMCAddon
       return pDialog->IsConfirmed();
     }
 
-    int Dialog::select(const String& heading, const std::vector<String>& list, int autoclose) throw (WindowException)
+    Alternative<int, std::vector<String> > Dialog::select(const String& heading, const std::vector<String>& list, int autoclose, bool multi) throw (WindowException)
     {
       DelayedCallGuard dcguard(languageHook);
       const int window = WINDOW_DIALOG_SELECT;
@@ -101,15 +102,26 @@ namespace XBMCAddon
       for(unsigned int i = 0; i < list.size(); i++)
       {
         listLine = list[i];
-          pDialog->Add(listLine);
+        pDialog->Add(listLine);
       }
       if (autoclose > 0)
         pDialog->SetAutoClose(autoclose);
 
+      pDialog->SetMultiSelection(multi);
+
       //send message and wait for user input
       XBMCWaitForThreadMessage(TMSG_DIALOG_DOMODAL, window, ACTIVE_WINDOW);
+      Alternative<int, std::vector<String> > ret;
+      if (multi)
+      {
+        const CFileItemList& items = pDialog->GetSelectedItems();
+        for (int i=0;i<items.Size();++i)
+          ret.later().push_back(items[i]->GetLabel());
+      }
+      else
+        ret.former() = pDialog->GetSelectedLabel();
 
-      return pDialog->GetSelectedLabel();
+      return ret;
     }
 
     bool Dialog::ok(const String& heading, const String& line1, 
