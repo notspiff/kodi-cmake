@@ -20,8 +20,6 @@ install(TARGETS ${APP_NAME_LC}.bin DESTINATION ${libdir}/kodi)
 install(TARGETS ${APP_NAME_LC}-xrandr DESTINATION ${libdir}/${APP_NAME_LC})
 install(FILES ${addon_bindings} DESTINATION ${includedir}/kodi)
 install(FILES ${cmake-files}
-              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/kodi-config.cmake
-              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/kodi-addon-helpers.cmake
         DESTINATION ${libdir}/kodi)
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/${APP_NAME_LC}
                 ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/${APP_NAME_LC}-standalone
