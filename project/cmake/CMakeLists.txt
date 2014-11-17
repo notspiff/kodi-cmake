@@ -1,4 +1,4 @@
-project(xbmc)
+project(kodi)
 
 cmake_minimum_required(VERSION 2.8.8)
 
@@ -272,7 +272,10 @@ if(DOXYGEN_FOUND)
                     COMMENT "Generating API documentation" VERBATIM)
 endif()
 
-set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake)
+set(cmake-files ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
+                ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/kodi-config.cmake
+                ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/modules/kodi-addon-helpers.cmake)
+
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-config.cmake.in
                ${CORE_BUILD_DIR}/modules/kodi-config.cmake @ONLY)
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-addon-helpers.cmake.in
