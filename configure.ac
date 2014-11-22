@@ -2511,6 +2511,7 @@ OUTPUT_FILES="Makefile \
     xbmc/guilib/Makefile \
     xbmc/input/linux/Makefile \
     xbmc/interfaces/Makefile \
+    xbmc/media/import/Makefile \
     xbmc/network/Makefile \
     xbmc/network/httprequesthandler/python/Makefile \
     xbmc/network/upnp/Makefile \

@@ -1,4 +1,14 @@
 SRCS= MediaImport.cpp \
+      MediaImportManager.cpp \
+      MediaImportTaskProcessorJob.cpp \
+      task/MediaImportChangesetTask.cpp \
+      task/MediaImportCleanupTask.cpp \
+      task/MediaImportRemovalTask.cpp \
+      task/MediaImportRetrievalTask.cpp \
+      task/MediaImportScrapingTask.cpp \
+      task/MediaImportSourceRegistrationTask.cpp \
+      task/MediaImportSynchronisationTask.cpp \
+      task/MediaImportUpdateTask.cpp \
 
 LIB=media-import.a
 

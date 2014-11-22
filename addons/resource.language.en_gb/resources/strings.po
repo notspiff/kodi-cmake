@@ -16564,3 +16564,91 @@ msgstr ""
 msgctxt "#38016"
 msgid "%d fps"
 msgstr ""
+
+# empty strings from id 38017 to 38999
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39000"
+msgid "New media provider detected"
+msgstr ""
+
+#. No importer found for (media provider name)
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39001"
+msgid "No importer found for %s..."
+msgstr ""
+
+#. Would you like to import media items from (media provider name)?
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39002"
+msgid "Would you like to import media items from %s?"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39003"
+msgid "Ignore"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39004"
+msgid "Import"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39005"
+msgid "Media types available for import:"
+msgstr ""
+
+#. (media type plural), (media type plural) (in combination with #37044)
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39006"
+msgid "%s, %s"
+msgstr ""
+
+#. (media type plural) and (media type plural) (in combination with #37043)
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39007"
+msgid "%s and %s"
+msgstr ""
+
+#. Retrieving media items from (media provider name)
+#: xbmc/media/import/task/MediaImportRetrievalTask.cpp
+msgctxt "#39008"
+msgid "Retrieving media items from %s..."
+msgstr ""
+
+#. Retrieving media items from (media provider name)
+#: xbmc/media/import/task/MediaImportChangesetTask.cpp
+msgctxt "#39009"
+msgid "Processing media items from %s..."
+msgstr "
+
+#. Processing (media type plural)...
+#: xbmc/media/import/task/MediaImportChangesetTask.cpp
+msgctxt "#39010"
+msgid "Processing %s..."
+msgstr ""
+
+#. Importing (media type plural) from (media provider name)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39011"
+msgid "Importing %s from %s..."
+msgstr ""
+
+#. Adding (media item title)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39012"
+msgid "Adding %s..."
+msgstr ""
+
+#. Updating (media item title)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39013"
+msgid "Updating %s..."
+msgstr ""
+
+#. Removing (media item title)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39014"
+msgid "Removing %s..."
+msgstr ""
