@@ -266,7 +266,7 @@ void CVisualisation::OnAudioData(const float* pAudioData, int iAudioDataLength)
     return;
 
   // Save our audio data in the buffers
-  auto_ptr<CAudioBuffer> pBuffer ( new CAudioBuffer(AUDIO_BUFFER_SIZE) );
+  auto_ptr<CAudioBuffer> pBuffer ( new CAudioBuffer(2*AUDIO_BUFFER_SIZE) );
   pBuffer->Set(pAudioData, iAudioDataLength);
   m_vecBuffers.push_back( pBuffer.release() );
 
@@ -278,7 +278,7 @@ void CVisualisation::OnAudioData(const float* pAudioData, int iAudioDataLength)
   if (m_bWantsFreq)
   {
     const float *psAudioData = ptrAudioBuffer->Get();
-    memcpy(m_fFreq, psAudioData, AUDIO_BUFFER_SIZE * sizeof(float));
+    memcpy(m_fFreq, psAudioData, AUDIO_BUFFER_SIZE * 2 * sizeof(float));
 
     // FFT the data
     twochanwithwindow(m_fFreq, AUDIO_BUFFER_SIZE);
