@@ -24,6 +24,7 @@
 #include "include/xbmc_vis_types.h"
 #include "guilib/IRenderingCallback.h"
 
+#include <algorithm>
 #include <map>
 #include <list>
 #include <memory>
@@ -46,6 +47,56 @@ private:
   CAudioBuffer();
   float* m_pBuffer;
   int m_iLen;
+};
+
+#include "kissfft.hh"
+
+  template<class Scalar>
+class RFFT
+{
+  public:
+    RFFT(int size, bool windowed=false) :
+      m_size(size), m_windowed(windowed), m_transform(size, false) {}
+
+    void calc(const Scalar* input, Scalar* output)
+    {
+      // temporary buffers
+      std::vector<std::complex<Scalar>> linput, loutput(m_size);
+      std::vector<std::complex<Scalar>> rinput, routput(m_size);
+
+      bool toggle = false;
+      std::partition_copy(input, input+2*m_size,
+			  std::back_inserter(linput),
+                          std::back_inserter(rinput),
+                          [&toggle](int) { return toggle = !toggle; });
+
+      if (m_windowed)
+      {
+        hann(linput);
+        hann(rinput);
+      }
+
+      // transform channels
+      m_transform.transform(&linput[0], &loutput[0]);
+      m_transform.transform(&rinput[0], &routput[0]);
+
+      // interleave while taking magnitudes and normalizing
+      for (int i=0;i<m_size;++i)
+      {
+        output[2*i] = std::abs(loutput[i])* 2.0/m_size * (m_windowed?sqrt(8.0/3.0):1.0);
+        output[2*i+1] = std::abs(routput[i])* 2.0/m_size * (m_windowed?sqrt(8.0/3.0):1.0);
+      }
+    }
+  protected:
+    void hann(std::vector<std::complex<Scalar>>& data)
+    {
+      for (int i=0;i<m_size;++i)
+        data[i] *= 0.5*(1.0-cos(2*M_PI*i/(m_size-1)));
+    }
+
+    int m_size;
+    bool m_windowed;
+    kissfft<Scalar> m_transform;
 };
 
 namespace ADDON
@@ -102,8 +153,9 @@ namespace ADDON
     std::list<CAudioBuffer*> m_vecBuffers;
     int m_iNumBuffers;        // Number of Audio buffers
     bool m_bWantsFreq;
-    float m_fFreq[2*AUDIO_BUFFER_SIZE];         // Frequency data
+    float m_fFreq[AUDIO_BUFFER_SIZE];         // Frequency data
     bool m_bCalculate_Freq;       // True if the vis wants freq data
+    std::unique_ptr<RFFT<float>> m_transform;
 
     // track information
     std::string m_AlbumThumb;
