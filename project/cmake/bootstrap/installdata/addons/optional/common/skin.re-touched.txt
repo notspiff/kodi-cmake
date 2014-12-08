@@ -1,1 +1,1 @@
-skin.re-touched https://github.com/xbmc/skin.re-touched.git cffcffc # SKIN_RETOUCHED OFF
+skin.re-touched https://github.com/xbmc/skin.re-touched.git 77c95ec # SKIN_RETOUCHED OFF
