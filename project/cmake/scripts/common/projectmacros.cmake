@@ -53,7 +53,10 @@ endfunction()
 #   build tree is ready for building add-ons
 function(prepare_addon_env)
   set(prefix ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
-  file(COPY ${addon_bindings} DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/kodi)
+  file(COPY ${addon_bindings}
+       DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/kodi)
+  file(COPY ${CORE_SOURCE_DIR}/project/cmake/scripts/common/addoptions.cmake
+       DESTINATION ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/kodi)
   # Generate files with deprecation warnings
   foreach(binding ${addon_bindings})
     get_filename_component(file ${binding} NAME)
