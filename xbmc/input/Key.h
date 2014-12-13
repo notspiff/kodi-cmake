@@ -500,22 +500,13 @@ class CKey
 {
 public:
   CKey(void);
-  CKey(uint32_t buttonCode, uint8_t leftTrigger = 0, uint8_t rightTrigger = 0, float leftThumbX = 0.0f, float leftThumbY = 0.0f, float rightThumbX = 0.0f, float rightThumbY = 0.0f, float repeat = 0.0f);
-  CKey(uint32_t buttonCode, unsigned int held);
+  CKey(uint32_t buttonCode, unsigned int held = 0);
   CKey(uint8_t vkey, wchar_t unicode, char ascii, uint32_t modifiers, unsigned int held);
   CKey(const CKey& key);
 
   virtual ~CKey(void);
   CKey& operator=(const CKey& key);
-  uint8_t GetLeftTrigger() const;
-  uint8_t GetRightTrigger() const;
-  float GetLeftThumbX() const;
-  float GetLeftThumbY() const;
-  float GetRightThumbX() const;
-  float GetRightThumbY() const;
-  float GetRepeat() const;
   bool FromKeyboard() const;
-  bool IsAnalogButton() const;
   bool IsIRRemote() const;
   void SetFromService(bool fromService);
   bool GetFromService() const { return m_fromService; }
@@ -546,13 +537,6 @@ private:
   uint32_t m_modifiers;
   unsigned int m_held;
 
-  uint8_t m_leftTrigger;
-  uint8_t m_rightTrigger;
-  float m_leftThumbX;
-  float m_leftThumbY;
-  float m_rightThumbX;
-  float m_rightThumbY;
-  float m_repeat; // time since last keypress
   bool m_fromService;
 };
 #endif //undef SWIG

@@ -454,9 +454,6 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
       break;
     case WM_ACTIVATE:
       {
-        if( WA_INACTIVE != wParam )
-          CInputManager::Get().ReInitializeJoystick();
-
         bool active = g_application.GetRenderGUI();
         if (HIWORD(wParam))
         {
@@ -761,7 +758,6 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             if (((_DEV_BROADCAST_HEADER*) lParam)->dbcd_devicetype == DBT_DEVTYP_DEVICEINTERFACE)
             {
               g_peripherals.TriggerDeviceScan(PERIPHERAL_BUS_USB);
-              CInputManager::Get().ReInitializeJoystick();
             }
             // check if an usb or optical media was inserted or removed
             if (((_DEV_BROADCAST_HEADER*) lParam)->dbcd_devicetype == DBT_DEVTYP_VOLUME)

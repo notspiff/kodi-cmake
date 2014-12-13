@@ -29,20 +29,7 @@ CKey::CKey(void)
 CKey::~CKey(void)
 {}
 
-CKey::CKey(uint32_t buttonCode, uint8_t leftTrigger, uint8_t rightTrigger, float leftThumbX, float leftThumbY, float rightThumbX, float rightThumbY, float repeat)
-{
-  Reset();
-  m_buttonCode = buttonCode;
-  m_leftTrigger = leftTrigger;
-  m_rightTrigger = rightTrigger;
-  m_leftThumbX = leftThumbX;
-  m_leftThumbY = leftThumbY;
-  m_rightThumbX = rightThumbX;
-  m_rightThumbY = rightThumbY;
-  m_repeat = repeat;
-}
-
-CKey::CKey(uint32_t buttonCode, unsigned int held)
+CKey::CKey(uint32_t buttonCode, unsigned int held /* = 0 */)
 {
   Reset();
   m_buttonCode = buttonCode;
@@ -71,13 +58,6 @@ CKey::CKey(const CKey& key)
 
 void CKey::Reset()
 {
-  m_leftTrigger = 0;
-  m_rightTrigger = 0;
-  m_leftThumbX = 0.0f;
-  m_leftThumbY = 0.0f;
-  m_rightThumbX = 0.0f;
-  m_rightThumbY = 0.0f;
-  m_repeat = 0.0f;
   m_fromService = false;
   m_buttonCode = KEY_INVALID;
   m_vkey = 0;
@@ -90,13 +70,6 @@ void CKey::Reset()
 CKey& CKey::operator=(const CKey& key)
 {
   if (&key == this) return * this;
-  m_leftTrigger  = key.m_leftTrigger;
-  m_rightTrigger = key.m_rightTrigger;
-  m_leftThumbX   = key.m_leftThumbX;
-  m_leftThumbY   = key.m_leftThumbY;
-  m_rightThumbX  = key.m_rightThumbX;
-  m_rightThumbY  = key.m_rightThumbY;
-  m_repeat       = key.m_repeat;
   m_fromService  = key.m_fromService;
   m_buttonCode   = key.m_buttonCode;
   m_vkey         = key.m_vkey;
@@ -107,48 +80,9 @@ CKey& CKey::operator=(const CKey& key)
   return *this;
 }
 
-BYTE CKey::GetLeftTrigger() const
-{
-  return m_leftTrigger;
-}
-
-BYTE CKey::GetRightTrigger() const
-{
-  return m_rightTrigger;
-}
-
-float CKey::GetLeftThumbX() const
-{
-  return m_leftThumbX;
-}
-
-float CKey::GetLeftThumbY() const
-{
-  return m_leftThumbY;
-}
-
-
-float CKey::GetRightThumbX() const
-{
-  return m_rightThumbX;
-}
-
-float CKey::GetRightThumbY() const
-{
-  return m_rightThumbY;
-}
-
 bool CKey::FromKeyboard() const
 {
   return (m_buttonCode >= KEY_VKEY && m_buttonCode != KEY_INVALID);
-}
-
-bool CKey::IsAnalogButton() const
-{
-  if ((GetButtonCode() > 261 && GetButtonCode() < 270) || (GetButtonCode() > 279 && GetButtonCode() < 284))
-    return true;
-
-  return false;
 }
 
 bool CKey::IsIRRemote() const
@@ -156,11 +90,6 @@ bool CKey::IsIRRemote() const
   if (GetButtonCode() < 256)
     return true;
   return false;
-}
-
-float CKey::GetRepeat() const
-{
-  return m_repeat;
 }
 
 void CKey::SetFromService(bool fromService)
@@ -219,41 +148,9 @@ CAction::CAction(int actionID, const std::string &name, const CKey &key):
   m_amount[0] = 1; // digital button (could change this for repeat acceleration)
   for (unsigned int i = 1; i < max_amounts; i++)
     m_amount[i] = 0;
-  m_repeat = key.GetRepeat();
   m_buttonCode = key.GetButtonCode();
   m_unicode = 0;
   m_holdTime = key.GetHeld();
-  // get the action amounts of the analog buttons
-  if (key.GetButtonCode() == KEY_BUTTON_LEFT_ANALOG_TRIGGER)
-    m_amount[0] = (float)key.GetLeftTrigger() / 255.0f;
-  else if (key.GetButtonCode() == KEY_BUTTON_RIGHT_ANALOG_TRIGGER)
-    m_amount[0] = (float)key.GetRightTrigger() / 255.0f;
-  else if (key.GetButtonCode() == KEY_BUTTON_LEFT_THUMB_STICK)
-  {
-    m_amount[0] = key.GetLeftThumbX();
-    m_amount[1] = key.GetLeftThumbY();
-  }
-  else if (key.GetButtonCode() == KEY_BUTTON_RIGHT_THUMB_STICK)
-  {
-    m_amount[0] = key.GetRightThumbX();
-    m_amount[1] = key.GetRightThumbY();
-  }
-  else if (key.GetButtonCode() == KEY_BUTTON_LEFT_THUMB_STICK_UP)
-    m_amount[0] = key.GetLeftThumbY();
-  else if (key.GetButtonCode() == KEY_BUTTON_LEFT_THUMB_STICK_DOWN)
-    m_amount[0] = -key.GetLeftThumbY();
-  else if (key.GetButtonCode() == KEY_BUTTON_LEFT_THUMB_STICK_LEFT)
-    m_amount[0] = -key.GetLeftThumbX();
-  else if (key.GetButtonCode() == KEY_BUTTON_LEFT_THUMB_STICK_RIGHT)
-    m_amount[0] = key.GetLeftThumbX();
-  else if (key.GetButtonCode() == KEY_BUTTON_RIGHT_THUMB_STICK_UP)
-    m_amount[0] = key.GetRightThumbY();
-  else if (key.GetButtonCode() == KEY_BUTTON_RIGHT_THUMB_STICK_DOWN)
-    m_amount[0] = -key.GetRightThumbY();
-  else if (key.GetButtonCode() == KEY_BUTTON_RIGHT_THUMB_STICK_LEFT)
-    m_amount[0] = -key.GetRightThumbX();
-  else if (key.GetButtonCode() == KEY_BUTTON_RIGHT_THUMB_STICK_RIGHT)
-    m_amount[0] = key.GetRightThumbX();
 }
 
 CAction::CAction(int actionID, const std::string &name):
