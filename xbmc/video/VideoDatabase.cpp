@@ -403,9 +403,9 @@ void CVideoDatabase::CreateViews()
                                      "FROM seasons"
                                      "  JOIN tvshow_view ON"
                                      "    tvshow_view.idShow = seasons.idShow"
-                                     "  JOIN episode_view ON"
+                                     "  LEFT JOIN episode_view ON"
                                      "    episode_view.idShow = seasons.idShow AND episode_view.c%02d = seasons.season"
-                                     "  JOIN files ON"
+                                     "  LEFT JOIN files ON"
                                      "    files.idFile = episode_view.idFile "
                                      "GROUP BY seasons.idSeason",
                                      VIDEODB_ID_TV_TITLE, VIDEODB_ID_TV_PLOT, VIDEODB_ID_TV_PREMIERED,
@@ -2311,9 +2311,6 @@ bool CVideoDatabase::UpdateDetailsForTvShow(int idTvShow, const CVideoInfoTag &d
   AddLinksToItem(idTvShow, MediaTypeTvShow, "studio", details.m_studio);
   AddLinksToItem(idTvShow, MediaTypeTvShow, "tag", details.m_tags);
   AddActorLinksToItem(idTvShow, MediaTypeTvShow, "director", details.m_director);
-
-  // add "all seasons" - the rest are added in SetDetailsForEpisode
-  AddSeason(idTvShow, -1);
 
   SetArtForItem(idTvShow, MediaTypeTvShow, artwork);
   for (map<int, map<string, string> >::const_iterator i = seasonArt.begin(); i != seasonArt.end(); ++i)
@@ -4753,6 +4750,8 @@ void CVideoDatabase::UpdateTables(int iVersion)
     m_pDS->exec("DROP TABLE IF EXISTS tag");
     m_pDS->exec("ALTER TABLE tagnew RENAME TO tag");
   }
+  if (iVersion < 92)
+    m_pDS->exec("DELETE FROM seasons WHERE season < 0");
 }
 
 int CVideoDatabase::GetSchemaVersion() const
@@ -9437,6 +9436,10 @@ bool CVideoDatabase::GetFilter(CDbUrl &videoUrl, Filter &filter, SortDescription
         filter.AppendWhere(PrepareSQL("season_view.premiered like '%%%i%%'", (int)option->second.asInteger()));
 
       AppendIdLinkFilter("actor", "actor", "tvshow", "season", "idShow", options, filter);
+
+      option = options.find("showempty");
+      if (option == options.end() || !option->second.asBoolean())
+        filter.AppendWhere(PrepareSQL("season_view.episodes > 0"));
     }
     else if (itemType == "episodes")
     {
