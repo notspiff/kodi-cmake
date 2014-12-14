@@ -3441,6 +3441,76 @@ bool CVideoDatabase::GetResumePoint(CVideoInfoTag& tag)
   return match;
 }
 
+void CVideoDatabase::DeleteFile(int idFile, const std::string &strFilenameAndPath /* = "" */)
+{
+  if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+     (idFile <= 0 && strFilenameAndPath.empty()))
+    return;
+
+  // if the file ID is invalid, try to get it from the path
+  if (idFile <= 0)
+    idFile = GetFileId(strFilenameAndPath);
+  // invalid file
+  if (idFile <= 0)
+    return;
+
+  std::string sql;
+  try
+  {
+    // prepare the SQL WHERE condition as it's the same for all following SQL queries
+    std::string condition = PrepareSQL("WHERE idFile = %d", idFile);
+
+    // delete bookmarks
+    sql = "DELETE FROM bookmark " + condition;
+    m_pDS->exec(sql.c_str());
+
+    // delete file-specific settings
+    sql = "DELETE FROM settings " + condition;
+    m_pDS->exec(sql.c_str());
+
+    // delete stack information
+    sql = "DELETE FROM stacktimes " + condition;
+    m_pDS->exec(sql.c_str());
+
+    // delete streamdetails
+    sql = "DELETE FROM streamdetails " + condition;
+    m_pDS->exec(sql.c_str());
+
+    // finally delete the file itself
+    sql = "DELETE FROM files " + condition;
+    m_pDS->exec(sql.c_str());
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s(%d, %s) failed: %s", __FUNCTION__, idFile, strFilenameAndPath.c_str(), sql.c_str());
+  }
+}
+
+void CVideoDatabase::DeletePath(int idPath, const std::string &strPath /* = "" */)
+{
+  if (m_pDB.get() == NULL || m_pDS.get() == NULL ||
+     (idPath <= 0 && strPath.empty()))
+    return;
+
+  // if the path ID is invalid, try to get it from the path
+  if (idPath <= 0)
+    idPath = GetPathId(strPath);
+  // invalid path
+  if (idPath <= 0)
+    return;
+
+  std::string sql;
+  try
+  {
+    sql = PrepareSQL("DELETE FROM path WHERE idPath = %d", idPath);
+    m_pDS->exec(sql.c_str());
+  }
+  catch (...)
+  {
+    CLog::Log(LOGERROR, "%s(%d, %s) failed: %s", __FUNCTION__, idPath, strPath.c_str(), sql.c_str());
+  }
+}
+
 CVideoInfoTag CVideoDatabase::GetDetailsForMovie(unique_ptr<Dataset> &pDS, bool getDetails /* = false */)
 {
   return GetDetailsForMovie(pDS->get_sql_record(), getDetails);

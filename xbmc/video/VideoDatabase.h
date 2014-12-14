@@ -563,6 +563,8 @@ public:
   bool GetResumePoint(CVideoInfoTag& tag);
   bool GetStreamDetails(CFileItem& item);
   bool GetStreamDetails(CVideoInfoTag& tag) const;
+  void DeleteFile(int idFile, const std::string &strFilenameAndPath = "");
+  void DeletePath(int idPath, const std::string &strPath = "");
 
   // scraper settings
   void SetScraperForPath(const std::string& filePath, const ADDON::ScraperPtr& info, const VIDEO::SScanSettings& settings);
