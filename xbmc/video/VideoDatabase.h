@@ -33,6 +33,8 @@ class CFileItemList;
 class CVideoSettings;
 class CGUIDialogProgress;
 class CGUIDialogProgressBarHandle;
+class CMediaImport;
+class CMediaImportSource;
 
 namespace dbiplus
 {
@@ -68,7 +70,7 @@ namespace VIDEO
 // these defines are based on how many columns we have and which column certain data is going to be in
 // when we do GetDetailsForMovie()
 #define VIDEODB_MAX_COLUMNS 24
-#define VIDEODB_DETAILS_FILEID      1
+#define VIDEODB_DETAILS_FILEID			1
 
 #define VIDEODB_DETAILS_MOVIE_SET_ID            VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_MOVIE_SET_NAME          VIDEODB_MAX_COLUMNS + 3
@@ -79,6 +81,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_MOVIE_DATEADDED         VIDEODB_MAX_COLUMNS + 8
 #define VIDEODB_DETAILS_MOVIE_RESUME_TIME       VIDEODB_MAX_COLUMNS + 9
 #define VIDEODB_DETAILS_MOVIE_TOTAL_TIME        VIDEODB_MAX_COLUMNS + 10
+#define VIDEODB_DETAILS_MOVIE_SOURCE            VIDEODB_MAX_COLUMNS + 11
+#define VIDEODB_DETAILS_MOVIE_ENABLED           VIDEODB_MAX_COLUMNS + 12
+#define VIDEODB_DETAILS_MOVIE_IMPORTPATH        VIDEODB_MAX_COLUMNS + 13
 
 #define VIDEODB_DETAILS_EPISODE_TVSHOW_ID       VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_EPISODE_FILE            VIDEODB_MAX_COLUMNS + 3
@@ -93,6 +98,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_EPISODE_RESUME_TIME     VIDEODB_MAX_COLUMNS + 12
 #define VIDEODB_DETAILS_EPISODE_TOTAL_TIME      VIDEODB_MAX_COLUMNS + 13
 #define VIDEODB_DETAILS_EPISODE_SEASON_ID       VIDEODB_MAX_COLUMNS + 14
+#define VIDEODB_DETAILS_EPISODE_SOURCE          VIDEODB_MAX_COLUMNS + 15
+#define VIDEODB_DETAILS_EPISODE_ENABLED         VIDEODB_MAX_COLUMNS + 16
+#define VIDEODB_DETAILS_EPISODE_IMPORTPATH      VIDEODB_MAX_COLUMNS + 17
 
 #define VIDEODB_DETAILS_TVSHOW_PARENTPATHID     VIDEODB_MAX_COLUMNS + 1
 #define VIDEODB_DETAILS_TVSHOW_PATH             VIDEODB_MAX_COLUMNS + 2
@@ -101,6 +109,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_TVSHOW_NUM_EPISODES     VIDEODB_MAX_COLUMNS + 5
 #define VIDEODB_DETAILS_TVSHOW_NUM_WATCHED      VIDEODB_MAX_COLUMNS + 6
 #define VIDEODB_DETAILS_TVSHOW_NUM_SEASONS      VIDEODB_MAX_COLUMNS + 7
+#define VIDEODB_DETAILS_TVSHOW_SOURCE           VIDEODB_MAX_COLUMNS + 8
+#define VIDEODB_DETAILS_TVSHOW_ENABLED          VIDEODB_MAX_COLUMNS + 9
+#define VIDEODB_DETAILS_TVSHOW_IMPORTPATH       VIDEODB_MAX_COLUMNS + 10
 
 #define VIDEODB_DETAILS_MUSICVIDEO_FILE         VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_MUSICVIDEO_PATH         VIDEODB_MAX_COLUMNS + 3
@@ -109,6 +120,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_MUSICVIDEO_DATEADDED    VIDEODB_MAX_COLUMNS + 6
 #define VIDEODB_DETAILS_MUSICVIDEO_RESUME_TIME  VIDEODB_MAX_COLUMNS + 7
 #define VIDEODB_DETAILS_MUSICVIDEO_TOTAL_TIME   VIDEODB_MAX_COLUMNS + 8
+#define VIDEODB_DETAILS_MUSICVIDEO_SOURCE       VIDEODB_MAX_COLUMNS + 9
+#define VIDEODB_DETAILS_MUSICVIDEO_ENABLED      VIDEODB_MAX_COLUMNS + 10
+#define VIDEODB_DETAILS_MUSICVIDEO_IMPORTPATH   VIDEODB_MAX_COLUMNS + 11
 
 #define VIDEODB_TYPE_STRING 1
 #define VIDEODB_TYPE_INT 2
@@ -720,6 +734,84 @@ public:
    */
   int AddPath(const std::string& strPath, const std::string &parentPath = "", const std::string &strDateAdded = "");
 
+  std::vector<CMediaImportSource> GetSources();
+
+  /*! \brief Add a source to the database, if necessary
+   If the identifier is already in the database, we simply return its id.
+   \param source Source to be added
+   \return id of the source, -1 if it could not be added.
+   */
+  int AddSource(const CMediaImportSource &source);
+
+  /*! \brief Updates the values of the given source.
+   \param source Source with updated values
+   \return True if the update was successful, false otherwise
+   */
+  bool SetDetailsForSource(const CMediaImportSource &source);
+
+  /*! \brief sets the given media types for the source with the given identifier
+   \param sourceIDentifier identifier of the source
+   \param mediaTypes Media types to be set
+   */
+  void SetMediaTypesForSource(const std::string& sourceIdentifier, const std::set<MediaType> &mediaTypes);
+
+  /*! \brief Remove source with the given identifier from the database
+   \param sourceIdentifier identifier of the source
+   */
+  void RemoveSource(const std::string& sourceIdentifier);
+
+  std::vector<CMediaImport> GetImports();
+
+  /*! \brief Add an import to the database, if necessary
+   If the import is already in the database, we simply return its id.
+   \param import Import to be added
+   \return id of the import, -1 if it could not be added.
+   */
+  int AddImport(const CMediaImport &import);
+
+  /*! \brief Updates the values of the given import.
+   \param import Import with updated values
+   \return True if the update was successful, false otherwise
+   */
+  bool SetDetailsForImport(const CMediaImport &import);
+
+  /*! \brief Update last synced date of the import with the given path
+   \param sourceIDentifier identifier of the source
+   */
+  void UpdateImportLastSynced(const CMediaImport& import, const CDateTime &lastSynced = CDateTime());
+
+  /*! \brief Remove the import with the given path from the database
+   \param path Path of the import
+   */
+  bool RemoveImport(const CMediaImport& import, bool standalone = true);
+
+  /*! \brief Set the import of an item
+   \param idMedia Database ID of the item belonging to the given import
+   \param import Import the given item belongs to
+   */
+  bool SetImportForItem(int idMedia, const CMediaImport& import);
+
+  /*! \brief Remove the import from an item
+  \param idMedia Database ID of the item belonging to the given import
+  \param import Import the given item belonged to
+  */
+  bool RemoveImportFromItem(int idMedia, const CMediaImport& import);
+
+  /*! \brief Deletes all items from the given import
+   \param import Import from which all items are deleted
+   */
+  bool DeleteItemsFromImport(const CMediaImport& import);
+  
+  /*! \brief Enable/Disable all import items from the given import path
+   \param enabled Whether to enable or disable the items
+   */
+  void SetImportItemsEnabled(bool enabled);
+  
+  /*! \brief Enable/Disable all import items from the given import path
+   \param enabled Whether to enable or disable the items
+   */
+  void SetImportItemsEnabled(bool enabled, const CMediaImport& import);
+
   /*! \brief Updates the dateAdded field in the files table for the file
    with the given idFile and the given path based on the files modification date
    \param idFile id of the file in the files table
@@ -827,6 +919,22 @@ protected:
    \return id of the file, -1 if it is not in the db.
    */
   int GetFileId(const std::string& url);
+
+  /*! \brief Get the id of a source from its identifier
+   \param sourceIdentifier identifier of the source
+   \return id of the source, -1 if it is not in the db.
+   */
+  int GetSourceId(const std::string& sourceIdentifier);
+
+  /*! \brief Get the id of an import from its path
+   \param path path of the import
+   \param mediaType media type of the import
+   \param sourceIdentifier optional source identifier
+   \return id of the import, -1 if it is not in the db.
+   */
+  int GetImportId(const std::string& path, const MediaType& mediaType, const std::string &sourceIdentifier = "");
+  int GetImportId(const CMediaImport& import);
+  int GetImportId(int idPath, const MediaType& mediaType, int idSource = -1);
 
   int AddToTable(const std::string& table, const std::string& firstField, const std::string& secondField, const std::string& value);
   int AddActor(const std::string& strActor, const std::string& thumbURL, const std::string &thumb = "");
