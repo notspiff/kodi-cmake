@@ -3102,7 +3102,7 @@ void CVideoDatabase::DeleteTvShow(int idTvShow, bool bKeepId /* = false */, bool
   }
 }
 
-void CVideoDatabase::DeleteSeason(int idSeason, bool bKeepId /* = false */)
+void CVideoDatabase::DeleteSeason(int idSeason, bool bKeepId /* = false */, bool deleteChildren /* = true */)
 {
   if (idSeason < 0)
     return;
@@ -3116,14 +3116,17 @@ void CVideoDatabase::DeleteSeason(int idSeason, bool bKeepId /* = false */)
 
     BeginTransaction();
 
+    if (deleteChildren)
+    {
     std::string strSQL = PrepareSQL("SELECT episode.idEpisode FROM episode "
                                     "JOIN seasons ON seasons.idSeason = %d AND episode.idShow = seasons.idShow AND episode.c%02d = seasons.season ",
                                    idSeason, VIDEODB_ID_EPISODE_SEASON);
-    m_pDS2->query(strSQL.c_str());
-    while (!m_pDS2->eof())
-    {
-      DeleteEpisode(m_pDS2->fv(0).get_asInt(), bKeepId);
-      m_pDS2->next();
+      m_pDS2->query(strSQL.c_str());
+      while (!m_pDS2->eof())
+      {
+        DeleteEpisode(m_pDS2->fv(0).get_asInt(), bKeepId);
+        m_pDS2->next();
+      }
     }
 
     ExecuteQuery(PrepareSQL("DELETE FROM seasons WHERE idSeason = %i", idSeason));
