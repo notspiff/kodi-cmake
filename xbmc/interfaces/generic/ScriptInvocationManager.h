@@ -24,10 +24,9 @@
 #include <boost/shared_ptr.hpp>
 
 #include "addons/IAddon.h"
+#include "interfaces/generic/ILanguageInvoker.h"
 #include "threads/CriticalSection.h"
 
-class ILanguageInvocationHandler;
-class ILanguageInvoker;
 class CLanguageInvokerThread;
 typedef boost::shared_ptr<CLanguageInvokerThread> CLanguageInvokerThreadPtr;
 
@@ -43,9 +42,10 @@ public:
   void RegisterLanguageInvocationHandler(ILanguageInvocationHandler *invocationHandler, const std::set<std::string> &extensions);
   void UnregisterLanguageInvocationHandler(ILanguageInvocationHandler *invocationHandler);
   bool HasLanguageInvoker(const std::string &script) const;
-  ILanguageInvoker* GetLanguageInvoker(const std::string &script) const;
+  LanguageInvokerPtr GetLanguageInvoker(const std::string &script) const;
 
   int Execute(const std::string &script, const ADDON::AddonPtr &addon = ADDON::AddonPtr(), const std::vector<std::string> &arguments = std::vector<std::string>());
+  int Execute(const std::string &script, LanguageInvokerPtr languageInvoker, const ADDON::AddonPtr &addon = ADDON::AddonPtr(), const std::vector<std::string> &arguments = std::vector<std::string>());
   bool Stop(int scriptId, bool wait = false);
   bool Stop(const std::string &scriptPath, bool wait = false);
 
