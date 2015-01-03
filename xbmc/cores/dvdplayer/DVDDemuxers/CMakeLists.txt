@@ -1,4 +1,5 @@
 set(SOURCES DVDDemuxBXA.cpp
+            DVDDemuxCC.cpp
             DVDDemuxCDDA.cpp
             DVDDemux.cpp
             DVDDemuxFFmpeg.cpp
