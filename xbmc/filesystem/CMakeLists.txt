@@ -45,6 +45,7 @@ set(SOURCES AddonsDirectory.cpp
             MythFile.cpp
             MythSession.cpp
             NptXbmcFile.cpp
+            OverrideDirectory.cpp
             OverrideFile.cpp
             PipeFile.cpp
             PipesManager.cpp
