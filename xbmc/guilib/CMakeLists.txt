@@ -81,6 +81,7 @@ set(SOURCES AnimatedGif.cpp
 
 if(OPENGL_FOUND)
   list(APPEND SOURCES TextureGL.cpp
+                      MatrixGLES.cpp
                       GUIFontTTFGL.cpp
                       GUITextureGL.cpp)
 endif()
