@@ -1,1 +1,1 @@
-ffmpeg https://github.com/xbmc/FFmpeg 2.4.4-Helix # INTERNAL_FFMPEG ON
+ffmpeg https://github.com/xbmc/FFmpeg 2.5.2-Isengard-alpha # INTERNAL_FFMPEG ON
