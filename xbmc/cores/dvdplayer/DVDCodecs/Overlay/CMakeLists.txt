@@ -1,10 +1,10 @@
-set(SOURCES DVDOverlayCodecCC.cpp
-            DVDOverlayCodec.cpp
+set(SOURCES DVDOverlayCodec.cpp
             DVDOverlayCodecFFmpeg.cpp
             DVDOverlayCodecSSA.cpp
             DVDOverlayCodecText.cpp
             DVDOverlayCodecTX3G.cpp
-            libspucc/cc_decoder.c)
+            contrib/cc_decoder708.cpp
+            contrib/cc_decoder.c)
 
 core_add_library(dvdoverlaycodecs)
 add_dependencies(dvdoverlaycodecs ffmpeg)
