@@ -1,6 +1,6 @@
-lib/cmyth                    cmyth
-lib/cximage-6.0              cximage
-lib/libhts                   hts
-lib/libsquish                squish
-lib/libUPnP                  upnp
-lib/libXDAAP                 xdaap
+lib/cmyth                             cmyth
+lib/cximage-6.0                       cximage
+lib/libhts                            hts
+tools/depends/native/libsquish-native squish
+lib/libUPnP                           upnp
+lib/libXDAAP                          xdaap
