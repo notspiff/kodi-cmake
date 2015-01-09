@@ -401,5 +401,5 @@ endif()
 if(NOT BOOTSTRAP_DIR)
   # Build helpers
   add_executable(JsonSchemaBuilder ${CORE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder.cpp)
-  add_subdirectory(${CORE_SOURCE_DIR}/tools/TexturePacker texturepacker)
+  add_subdirectory(${CORE_SOURCE_DIR}/tools/depends/native/TexturePacker texturepacker)
 endif()
