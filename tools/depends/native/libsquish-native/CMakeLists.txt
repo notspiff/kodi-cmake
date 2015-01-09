@@ -1,14 +1,14 @@
-set(SOURCES alpha.cpp
-            clusterfit.cpp
-            colourblock.cpp
-            colourfit.cpp
-            colourset.cpp
-            maths.cpp
-            rangefit.cpp
-            singlecolourfit.cpp
-            squish.cpp)
+set(SOURCES src/alpha.cpp
+            src/clusterfit.cpp
+            src/colourblock.cpp
+            src/colourfit.cpp
+            src/colourset.cpp
+            src/maths.cpp
+            src/rangefit.cpp
+            src/singlecolourfit.cpp
+            src/squish.cpp)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 find_package(SSE)
 if(SSE2_FOUND)
