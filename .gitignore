@@ -123,6 +123,7 @@ config.log
 /addons/script.module.pil/
 /addons/audioencoder.*
 /addons/pvr.*
+/addons/peripheral.*
 /addons/xbmc.addon/addon.xml
 /addons/xbmc.json/addon.xml
 
@@ -145,6 +146,7 @@ config.log
 /lib/addons/library.xbmc.gui/Makefile
 /lib/addons/library.xbmc.pvr/Makefile
 /lib/addons/library.xbmc.codec/Makefile
+/lib/addons/library.xbmc.peripheral/Makefile
 /lib/addons/library.xbmc.addon/project/VS2010Express/Release
 /lib/addons/library.xbmc.addon/project/VS2010Express/Debug
 /lib/addons/library.xbmc.codec/project/VS2010Express/Release
@@ -153,6 +155,8 @@ config.log
 /lib/addons/library.xbmc.gui/project/VS2010Express/Debug
 /lib/addons/library.xbmc.pvr/project/VS2010Express/Release
 /lib/addons/library.xbmc.pvr/project/VS2010Express/Debug
+/lib/addons/library.xbmc.peripheral/project/VS2010Express/Release
+/lib/addons/library.xbmc.peripheral/project/VS2010Express/Debug
 
 # /lib/cmyth/
 lib/cmyth/Makefile
@@ -604,6 +608,7 @@ lib/cpluff/stamp-h1
 /xbmc/osx/atv2/XBMCATV2-Info.plist
 
 # /xbmc/peripherals/
+/xbmc/peripherals/addons/Makefile
 /xbmc/peripherals/bus/Makefile
 /xbmc/peripherals/devices/Makefile
 
@@ -984,5 +989,8 @@ lib/cpluff/stamp-h1
 /addons/library.xbmc.gui/libXBMC_gui.lib
 /addons/library.xbmc.pvr/libXBMC_pvr.dll
 /addons/library.xbmc.pvr/libXBMC_pvr.lib
+/addons/library.xbmc.peripheral/libXBMC_peripheral.dll
+/addons/library.xbmc.peripheral/libXBMC_peripheral.lib
 
 /pvr-addons
+/peripheral-addons

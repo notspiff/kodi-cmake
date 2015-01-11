@@ -45,6 +45,8 @@ typedef enum {
        XBMC_MOUSEMOTION,        /* Mouse moved */
        XBMC_MOUSEBUTTONDOWN,    /* Mouse button pressed */
        XBMC_MOUSEBUTTONUP,      /* Mouse button released */
+       XBMC_JOYDIGITAL,         /* Joystick digital button motion */
+       XBMC_JOYANALOG,          /* Joystick button motion with amount */
        XBMC_QUIT,               /* User-requested quit */
        XBMC_SYSWMEVENT,         /* System specific event */
        XBMC_VIDEORESIZE,        /* User resized video mode */
@@ -91,6 +93,14 @@ typedef struct XBMC_MouseButtonEvent {
 	unsigned char state;	/* XBMC_PRESSED or XBMC_RELEASED */
 	uint16_t x, y;	/* The X/Y coordinates of the mouse at press time */
 } XBMC_MouseButtonEvent;
+
+/* Joystick event structure */
+typedef struct XBMC_JoystickEvent {
+    unsigned char type;     /* XBMC_JOYDIGITAL or XBMC_JOYANALOG */
+    unsigned int  button;   /* The joystick button's key ID */
+    unsigned int  holdtime; /* The hold time (ms) for digital buttons */
+    float         amount;   /* The amount for analog events */
+} XBMC_JoystickEvent;
 
 /* The "window resized" event
    When you get this event, you are responsible for setting a new video
@@ -162,6 +172,7 @@ typedef union XBMC_Event {
   XBMC_KeyboardEvent key;
   XBMC_MouseMotionEvent motion;
   XBMC_MouseButtonEvent button;
+  XBMC_JoystickEvent joystick;
   XBMC_ResizeEvent resize;
   XBMC_MoveEvent move;
   XBMC_ExposeEvent expose;

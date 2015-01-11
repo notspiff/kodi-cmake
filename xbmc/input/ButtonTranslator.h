@@ -113,6 +113,7 @@ private:
   static uint32_t TranslateGamepadString(const char *szButton);
   static uint32_t TranslateRemoteString(const char *szButton);
   static uint32_t TranslateUniversalRemoteString(const char *szButton);
+  static uint32_t TranslateJoystickString(const char *szButton);
 
   static uint32_t TranslateKeyboardString(const char *szButton);
   static uint32_t TranslateKeyboardButton(TiXmlElement *pButton);

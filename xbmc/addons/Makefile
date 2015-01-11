@@ -3,6 +3,7 @@ SRCS=Addon.cpp \
      AddonCallbacksAddon.cpp \
      AddonCallbacksCodec.cpp \
      AddonCallbacksGUI.cpp \
+     AddonCallbacksPeripheral.cpp \
      AddonCallbacksPVR.cpp \
      AddonDatabase.cpp \
      AddonInstaller.cpp \
