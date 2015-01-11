@@ -39,7 +39,7 @@ public:
    *
    * \return True if the event was handled otherwise false
    */
-  virtual bool OnButtonPress(unsigned int id, bool bPressed) { return true; }
+  virtual bool OnButtonPress(JoystickActionID id) { return false; }
 
   /*!
    * \brief A pressure-sensitive button has been pressed or a trigger has moved
@@ -49,7 +49,13 @@ public:
    *
    * \return True if the event was handled otherwise false
    */
-  virtual bool OnButtonMotion(unsigned int id, float magnitude) { return true; }
+  virtual bool OnButtonMotion(JoystickActionID id, float magnitude) { return false; }
+
+  virtual bool OnButtonHold(JoystickActionID id) { return false; }
+  virtual bool OnButtonDoublePress(JoystickActionID id) { return false; }
+  virtual bool OnMultiPress(const std::vector<JoystickActionID>& ids) { return false; }
+
+  virtual bool OnButtonRelease(JoystickActionID id) { return false; }
 
   /*!
    * \brief An analog stick has moved
@@ -60,7 +66,7 @@ public:
    *
    * \return True if the event was handled otherwise false
    */
-  virtual bool OnAnalogStickMotion(unsigned int id, float x, float y) { return true; }
+  virtual bool OnAnalogStickMotion(JoystickActionID id, float x, float y) { return false; }
 
   /*!
    * \brief An analog stick's magnitude has crossed a threshold of 0.5 in a
@@ -73,7 +79,7 @@ public:
    *
    * \return True if the event was handled otherwise false
    */
-  virtual bool OnAnalogStickThreshold(unsigned int id, bool bPressed, HatDirection direction = HatDirectionNone) { return true; }
+  virtual bool OnAnalogStickThreshold(JoystickActionID, bool bPressed, HatDirection direction = HatDirectionNone) { return false; }
 
   /*!
    * \brief An accelerometer's acceleration has changed
@@ -84,5 +90,5 @@ public:
    *
    * \return True if the event was handled otherwise false
    */
-  virtual bool OnAccelerometerMotion(unsigned int id, float x, float y, float z) { return true; }
+  virtual bool OnAccelerometerMotion(JoystickActionID, float x, float y, float z) { return false; }
 };

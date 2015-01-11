@@ -19,32 +19,7 @@
  */
 #pragma once
 
-#include "IJoystickInputHandling.h"
-#include "windowing/XBMC_events.h"
-
-/*!
- * \ingroup joysticks
- * \brief Events for raw joystick features (buttons, hats and axes)
- */
-enum JoystickEvent
-{
-  JoystickEventRawButton,
-  JoystickEventRawHat,
-  JoystickEventRawAxis,
-};
-
-/*!
- * \ingroup joysticks
- * \brief Events for physical joystick features (TODO)
- */
-enum JoystickActionEvent
-{
-  JoystickActionEventButtonDigital,
-  JoystickActionEventButtonAnalog,
-  JoystickActionEventAnalogStick,
-  JoystickActionEventAnalogStickThreshold,
-  JoystickActionEventAccelerometer,
-};
+#include "JoystickTypes.h"
 
 /*!
  * \ingroup joysticks
@@ -55,29 +30,10 @@ enum JoystickActionEvent
  * (raw) joystick events for buttons, hats and axes and with no button mapping
  * or gesture recognition logic.
  */
-class IJoystickInputHandler : public IJoystickInputHandling
+class IJoystickInputHandler
 {
 public:
-  IJoystickInputHandler()/*
-    : m_buttonCount(0),
-      m_hatCount(0),
-      m_axisCount(0)*/
-  {
-  }
-
   virtual ~IJoystickInputHandler() { }
-
-  /*
-  unsigned int ButtonCount(void) const { return m_buttonCount; }
-  unsigned int HatCount(void) const    { return m_hatCount; }
-  unsigned int AxisCount(void) const   { return m_axisCount; }
-  */
-
-  /*
-  void SetButtonCount(unsigned int buttonCount) { m_buttonCount = buttonCount; }
-  void SetHatCount(unsigned int hatCount)       { m_hatCount    = hatCount; }
-  void SetAxisCount(unsigned int axisCount)     { m_axisCount   = axisCount; }
-  */
 
   /*!
    * \brief Handle a joystick event
@@ -98,20 +54,9 @@ public:
    *
    * \return True if the event was handled otherwise false.
    */
-  virtual bool HandleJoystickEvent(JoystickEvent event,
-                                   unsigned int  index,
-                                   int64_t       timeNs,
-                                   bool          bPressed  = false,
-                                   HatDirection  direction = HatDirectionNone,
-                                   float         axisPos   = 0.0f) = 0;
+  virtual void OnButtonMotion(unsigned int index, bool bPressed) = 0;
 
-protected:
-  /*!
-   * \brief Counts of driver features
-   */
-  /*
-  unsigned int m_buttonCount;
-  unsigned int m_hatCount;
-  unsigned int m_axisCount;
-  */
+  virtual void OnHatMotion(unsigned int index, HatDirection direction) = 0;
+
+  virtual void OnAxisMotion(unsigned int index, float position) = 0;
 };

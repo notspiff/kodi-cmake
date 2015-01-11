@@ -19,3 +19,43 @@
  */
 
 #include "GenericJoystickActionHandler.h"
+
+bool CGenericJoystickActionHandler::OnButtonPress(JoystickActionID id)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnButtonMotion(JoystickActionID id, float magnitude)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnButtonHold(JoystickActionID id)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnButtonDoublePress(JoystickActionID id)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnMultiPress(const std::vector<JoystickActionID>& ids)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnAnalogStickMotion(JoystickActionID id, float x, float y)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnAnalogStickThreshold(JoystickActionID, bool bPressed, HatDirection direction)
+{
+  return false; // TODO
+}
+
+bool CGenericJoystickActionHandler::OnAccelerometerMotion(JoystickActionID, float x, float y, float z)
+{
+  return false; // TODO
+}

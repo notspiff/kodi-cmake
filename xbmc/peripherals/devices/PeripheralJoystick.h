@@ -32,13 +32,14 @@ namespace PERIPHERALS
 
     virtual bool InitialiseFeature(const PeripheralFeature feature);
 
+    /*
     bool HandleJoystickEvent(JoystickEvent event,
                              unsigned int  index,
                              int64_t       timeNs,
                              bool          bPressed  = false,
                              HatDirection  direction = HatDirectionNone,
                              float         axisPos   = 0.0f);
-
+    */
   protected:
     IJoystickInputHandler* m_inputHandler;
   };

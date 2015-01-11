@@ -19,16 +19,16 @@
  */
 #pragma once
 
-#include "input/joysticks/IJoystickRawInputHandler.h"
+#include "input/joysticks/IJoystickActionHandler.h"
 
 /*!
  * \ingroup joysticks_generic
  * \brief Generic implementation of IJoystickActionHandler to translate
  *        joystick actions into XBMC specific and mappable actions.
  *
- * \sa IJoystickRawInputHandler
+ * \sa IJoystickActionHandler
  */
-class CGenericJoystickActionHandler : public IJoystickRawInputHandler // TODO: Extend IJoystickActionHandler
+class CGenericJoystickActionHandler : public IJoystickActionHandler
 {
 public:
   CGenericJoystickActionHandler() { }
@@ -36,11 +36,56 @@ public:
   virtual ~CGenericJoystickActionHandler() { }
 
   // implementation of IJoystickActionHandler
-  /*
-  virtual bool OnButtonPress(unsigned int id, bool bPressed);
-  virtual bool OnButtonMotion(unsigned int id, float magnitude);
-  virtual bool OnAnalogStickMotion(unsigned int id, float x, float y);
-  virtual bool OnAnalogStickThreshold(unsigned int id, bool bPressed, HatDirection direction = HatDirectionNone);
-  virtual bool OnAccelerometerMotion(unsigned int id, float x, float y, float z);
-  */
+  virtual bool OnButtonPress(JoystickActionID id);
+
+  /*!
+   * \brief A pressure-sensitive button has been pressed or a trigger has moved
+   *
+   * \param id        The ID of the button or trigger
+   * \param magnitude The button pressure or trigger travel distance in the interval [0, 1]
+   *
+   * \return True if the event was handled otherwise false
+   */
+  virtual bool OnButtonMotion(JoystickActionID id, float magnitude);
+
+  virtual bool OnButtonHold(JoystickActionID id);
+
+  virtual bool OnButtonDoublePress(JoystickActionID id);
+
+  virtual bool OnMultiPress(const std::vector<JoystickActionID>& ids);
+
+  /*!
+   * \brief An analog stick has moved
+   *
+   * \param id        The ID of the analog stick
+   * \param x         The x coordinate in the interval [-1, 1], inclusive
+   * \param y         The y coordinate in the interval [-1, 1], inclusive
+   *
+   * \return True if the event was handled otherwise false
+   */
+  virtual bool OnAnalogStickMotion(JoystickActionID id, float x, float y);
+
+  /*!
+   * \brief An analog stick's magnitude has crossed a threshold of 0.5 in a
+   *        cardinal or intercardinal direction
+   *
+   * \param id        The ID of the analog stick
+   * \param bPressed  True when activated (threshold >= 0.5), false when centered
+   * \param direction If bPressed is false then direction is HatDirectionNone; otherwise,
+   *                  direction is the direction closest to the displaced stick
+   *
+   * \return True if the event was handled otherwise false
+   */
+  virtual bool OnAnalogStickThreshold(JoystickActionID, bool bPressed, HatDirection direction);
+
+  /*!
+   * \brief An accelerometer's acceleration has changed
+   *
+   * \param x         The x coordinate in the interval [-1, 1], inclusive
+   * \param y         The y coordinate in the interval [-1, 1], inclusive
+   * \param z         The z coordinate in the interval [-1, 1], inclusive
+   *
+   * \return True if the event was handled otherwise false
+   */
+  virtual bool OnAccelerometerMotion(JoystickActionID, float x, float y, float z);
 };

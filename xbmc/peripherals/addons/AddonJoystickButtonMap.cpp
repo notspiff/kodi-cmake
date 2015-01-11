@@ -18,10 +18,4 @@
  *
  */
 
-#include "PlayerManager.h"
-
-CPlayerManager& CPlayerManager::Get(void)
-{
-  static CPlayerManager _instance;
-  return _instance;
-}
+#include "AddonJoystickButtonMap.h"

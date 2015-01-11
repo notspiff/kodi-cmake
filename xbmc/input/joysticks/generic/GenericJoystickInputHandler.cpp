@@ -18,83 +18,150 @@
  *
  */
 
-#include <math.h>
+#include "GenericJoystickInputHandler.h"
+#include "input/joysticks/ButtonPrimitive.h"
+#include "input/joysticks/IJoystickActionHandler.h"
+#include "input/joysticks/IJoystickButtonMap.h"
 
-#include "input/joysticks/generic/GenericJoystickInputHandler.h"
-#include "input/joysticks/generic/GenericJoystickMultiPressDetector.h"
-#include "input/joysticks/generic/GenericRawButtonInputHandler.h"
-#include "input/joysticks/generic/GenericRawHatInputHandler.h"
-#include "input/joysticks/generic/GenericRawAxisInputHandler.h"
-#include "threads/SingleLock.h"
-#include "utils/log.h"
+#include <algorithm>
 
-CGenericJoystickInputHandler::CGenericJoystickInputHandler(IButtonMapper* buttonMapper, unsigned int buttonCount, unsigned int hatCount, unsigned int axisCount)
+#define ANALOG_DIGITAL_THRESHOLD  0.5f
+
+CGenericJoystickInputHandler::CGenericJoystickInputHandler(IJoystickActionHandler *handler, IJoystickButtonMap* buttonMap)
+ : m_handler(handler),
+   m_buttonMap(buttonMap)
 {
-  m_buttonHandlers.reserve(buttonCount);
-  for (unsigned int i = 0; i < buttonCount; i++)
-    m_buttonHandlers.push_back(new CGenericRawButtonInputHandler(i, this));
-
-  m_hatHandlers.reserve(hatCount);
-  for (unsigned int i = 0; i < hatCount; i++)
-    m_hatHandlers.push_back(new CGenericRawHatInputHandler(i, this));
-
-  m_axisHandlers.reserve(axisCount);
-  for (unsigned int i = 0; i < axisCount; i++)
-    m_axisHandlers.push_back(new CGenericRawAxisInputHandler(i, this));
-
-  m_inputHandler = new CGenericJoystickMultiPressDetector(buttonMapper);
-  RegisterHandler(m_inputHandler);
 }
 
-CGenericJoystickInputHandler::~CGenericJoystickInputHandler()
+void CGenericJoystickInputHandler::OnButtonMotion(unsigned int index, bool bPressed)
 {
-  for (unsigned int i = 0; i < m_buttonHandlers.size(); i++)
-    delete m_buttonHandlers[i];
+  CButtonPrimitive button(index);
+  JoystickActionID action = m_buttonMap->GetAction(button);
 
-  for (unsigned int i = 0; i < m_hatHandlers.size(); i++)
-    delete m_hatHandlers[i];
-
-  for (unsigned int i = 0; i < m_axisHandlers.size(); i++)
-    delete m_axisHandlers[i];
-
-  delete m_inputHandler;
-}
-
-bool CGenericJoystickInputHandler::HandleJoystickEvent(JoystickEvent event,
-                                                       unsigned int  index,
-                                                       int64_t       timeNs,
-                                                       bool          bPressed  /* = false */,
-                                                       HatDirection  direction /* = HatDirectionNone */,
-                                                       float         axisPos   /* = 0.0f */)
-{
-  if (timeNs < 0)
-    return false;
-
-  CSingleLock lock(m_critical);
-
-  bool result = false;
-
-  switch (event)
+  if (action)
   {
-    case JoystickEventRawButton:
-      if (index < m_buttonHandlers.size())
-        result = m_buttonHandlers[index]->OnMotion(bPressed);
-      break;
+    if (bPressed)
+      m_handler->OnButtonPress(action);
+    else
+      m_handler->OnButtonRelease(action);
+  }
+}
 
-    case JoystickEventRawHat:
-      if (index < m_hatHandlers.size())
-        result = m_hatHandlers[index]->OnMotion(direction);
-      break;
+void CGenericJoystickInputHandler::OnHatMotion(unsigned int index, HatDirection direction)
+{
+  if (m_hatStates.size() <= index)
+    m_hatStates.resize(index + 1);
 
-    case JoystickEventRawAxis:
-      if (index < m_axisHandlers.size())
-        result = m_axisHandlers[index]->OnMotion(axisPos);
-      break;
+  HatDirection& oldDirection = m_hatStates[index];
 
-    default:
-      CLog::Log(LOGDEBUG, "CGenericJoystickInputHandler: unknown JoystickEvent: %u", event);
-      break;
+  // Check left press/release
+  if (!(oldDirection & HatDirectionLeft) && (direction & HatDirectionLeft))
+  {
+    CButtonPrimitive left(index, HatDirectionLeft);
+    JoystickActionID action = m_buttonMap->GetAction(left);
+    if (action)
+      m_handler->OnButtonPress(action);
+  }
+  else if ((oldDirection & HatDirectionLeft) && !(direction & HatDirectionLeft))
+  {
+    CButtonPrimitive left(index, HatDirectionLeft);
+    JoystickActionID action = m_buttonMap->GetAction(left);
+    if (action)
+      m_handler->OnButtonRelease(action);
   }
 
-  return result;
+  // Check right press/release
+  if (!(oldDirection & HatDirectionRight) && (direction & HatDirectionRight))
+  {
+    CButtonPrimitive right(index, HatDirectionRight);
+    JoystickActionID action = m_buttonMap->GetAction(right);
+    if (action)
+      m_handler->OnButtonPress(action);
+  }
+  else if ((oldDirection & HatDirectionRight) && !(direction & HatDirectionRight))
+  {
+    CButtonPrimitive right(index, HatDirectionRight);
+    JoystickActionID action = m_buttonMap->GetAction(right);
+    if (action)
+      m_handler->OnButtonRelease(action);
+  }
+
+  // Check up press/release
+  if (!(oldDirection & HatDirectionUp) && (direction & HatDirectionUp))
+  {
+    CButtonPrimitive up(index, HatDirectionUp);
+    JoystickActionID action = m_buttonMap->GetAction(up);
+    if (action)
+      m_handler->OnButtonPress(action);
+  }
+  else if ((oldDirection & HatDirectionUp) && !(direction & HatDirectionUp))
+  {
+    CButtonPrimitive up(index, HatDirectionUp);
+    JoystickActionID action = m_buttonMap->GetAction(up);
+    if (action)
+      m_handler->OnButtonRelease(action);
+  }
+
+  // Check down press/release
+  if (!(oldDirection & HatDirectionDown) && (direction & HatDirectionDown))
+  {
+    CButtonPrimitive down(index, HatDirectionDown);
+    JoystickActionID action = m_buttonMap->GetAction(down);
+    if (action)
+      m_handler->OnButtonPress(action);
+  }
+  else if ((oldDirection & HatDirectionDown) && !(direction & HatDirectionDown))
+  {
+    CButtonPrimitive down(index, HatDirectionDown);
+    JoystickActionID action = m_buttonMap->GetAction(down);
+    if (action)
+      m_handler->OnButtonRelease(action);
+  }
+
+  oldDirection = direction;
+}
+
+void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float position)
+{
+  if (m_axisStates.size() <= index)
+    m_axisStates.resize(index + 1);
+
+  if (m_axisStates[index] == position)
+    return;
+
+  m_axisStates[index] = position;
+
+  CButtonPrimitive positiveAxis(index, SemiAxisDirectionPositive);
+  CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
+
+  JoystickActionID positiveAction = m_buttonMap->GetAction(positiveAxis);
+  JoystickActionID negativeAction = m_buttonMap->GetAction(negativeAxis);
+
+  if (positiveAction)
+    m_handler->OnButtonMotion(positiveAction, std::max(position, 0.0f));
+
+  if (negativeAction)
+    m_handler->OnButtonMotion(negativeAction, -1.0f * std::min(position, 0.0f)); // magnitude is >= 0
+
+  if (!(positiveAction || negativeAction))
+  {
+    unsigned int indexHoriz, indexVert;
+    JoystickActionID action = m_buttonMap->GetAnalogStick(index, indexHoriz, indexVert);
+    if (action)
+    {
+      m_handler->OnAnalogStickMotion(action, GetAxisState(indexHoriz), GetAxisState(indexVert));
+    }
+    else
+    {
+      unsigned int indexX, indexY, indexZ;
+      JoystickActionID action = m_buttonMap->GetAccelerometer(index, indexX, indexY, indexZ);
+      if (action)
+        m_handler->OnAccelerometerMotion(action, GetAxisState(indexX), GetAxisState(indexY), GetAxisState(indexZ));
+    }
+  }
+}
+
+float CGenericJoystickInputHandler::GetAxisState(unsigned int axisIndex) const
+{
+  return axisIndex < m_axisStates.size() ? m_axisStates[axisIndex] : 0;
 }

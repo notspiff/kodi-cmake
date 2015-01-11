@@ -20,15 +20,11 @@
 #pragma once
 
 #include "input/joysticks/IJoystickInputHandler.h"
-#include "threads/CriticalSection.h"
 
 #include <vector>
 
-class CGenericJoystickMultiPressDetector;
-class CGenericRawButtonInputHandler;
-class CGenericRawHatInputHandler;
-class CGenericRawAxisInputHandler;
-class IButtonMapper;
+class IJoystickActionHandler;
+class IJoystickButtonMap;
 
 /*!
  * \ingroup joysticks_generic
@@ -45,22 +41,22 @@ class IButtonMapper;
 class CGenericJoystickInputHandler : public IJoystickInputHandler
 {
 public:
-  CGenericJoystickInputHandler(IButtonMapper* buttonMapper, unsigned int buttonCount, unsigned int hatCount, unsigned int axisCount);
+  CGenericJoystickInputHandler(IJoystickActionHandler *handler, IJoystickButtonMap *buttonMap);
 
-  virtual ~CGenericJoystickInputHandler();
+  virtual ~CGenericJoystickInputHandler() { }
+
+
 
   // implementation of IJoystickInputHandler
-  virtual bool HandleJoystickEvent(JoystickEvent event,
-                                   unsigned int  index,
-                                   int64_t       timeNs,
-                                   bool          bPressed  = false,
-                                   HatDirection  direction = HatDirectionNone,
-                                   float         axisPos   = 0.0f);
+  virtual void OnButtonMotion(unsigned int index, bool bPressed);
+  virtual void OnHatMotion(unsigned int index, HatDirection direction);
+  virtual void OnAxisMotion(unsigned int index, float position);
 
 private:
-  CCriticalSection                            m_critical;
-  std::vector<CGenericRawButtonInputHandler*> m_buttonHandlers;
-  std::vector<CGenericRawHatInputHandler*>    m_hatHandlers;
-  std::vector<CGenericRawAxisInputHandler*>   m_axisHandlers;
-  CGenericJoystickMultiPressDetector          *m_inputHandler;
+  float GetAxisState(unsigned int axisIndex) const;
+
+  IJoystickActionHandler    *m_handler;
+  IJoystickButtonMap        *m_buttonMap;
+  std::vector<HatDirection> m_hatStates;
+  std::vector<float>        m_axisStates;
 };
