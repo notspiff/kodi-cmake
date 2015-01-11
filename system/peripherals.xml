@@ -43,4 +43,6 @@
     <setting key="do_not_use_custom_keymap" type="bool" value="1" label="35009" configurable="0"/>
     <setting key="disable_winjoystick" type="bool" value="1" label="35102" order="1" />
   </peripheral>
+
+  <peripheral bus="addon" class="joystick" name="Peripheral add-on joystick" mapTo="joystick" />
 </peripherals>

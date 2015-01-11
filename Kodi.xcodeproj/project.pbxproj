@@ -193,6 +193,18 @@
 		5558ED10176396CD00118C35 /* StereoscopicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5558ED0E176396CD00118C35 /* StereoscopicsManager.cpp */; };
 		55611BA31766672F00754072 /* RenderFlags.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55611BA21766672F00754072 /* RenderFlags.cpp */; };
 		55D3604E1826CAB900DA66D2 /* OverlayRendererGUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D3604C1826CAB900DA66D2 /* OverlayRendererGUI.cpp */; };
+		68070C951A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68070C931A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp */; };
+		68070C961A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68070C931A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp */; };
+		68070C971A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68070C931A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp */; };
+		68070C9A1A3C4902009D6E40 /* PeripheralAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68070C981A3C4902009D6E40 /* PeripheralAddon.cpp */; };
+		68070C9B1A3C4902009D6E40 /* PeripheralAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68070C981A3C4902009D6E40 /* PeripheralAddon.cpp */; };
+		68070C9C1A3C4902009D6E40 /* PeripheralAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68070C981A3C4902009D6E40 /* PeripheralAddon.cpp */; };
+		68B61C201A39667200965EAC /* PeripheralBusAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B61C1E1A39667200965EAC /* PeripheralBusAddon.cpp */; };
+		68B61C211A39667200965EAC /* PeripheralBusAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B61C1E1A39667200965EAC /* PeripheralBusAddon.cpp */; };
+		68B61C221A39667200965EAC /* PeripheralBusAddon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B61C1E1A39667200965EAC /* PeripheralBusAddon.cpp */; };
+		68B61C251A3974E000965EAC /* PeripheralJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B61C231A3974E000965EAC /* PeripheralJoystick.cpp */; };
+		68B61C261A3974E000965EAC /* PeripheralJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B61C231A3974E000965EAC /* PeripheralJoystick.cpp */; };
+		68B61C271A3974E000965EAC /* PeripheralJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B61C231A3974E000965EAC /* PeripheralJoystick.cpp */; };
 		7C0B98A4154B79C30065A238 /* AEDeviceInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C0B98A1154B79C30065A238 /* AEDeviceInfo.cpp */; };
 		7C140989183224B8009F9411 /* ISetting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C14096F183224B8009F9411 /* ISetting.cpp */; };
 		7C14098A183224B8009F9411 /* ISetting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C14096F183224B8009F9411 /* ISetting.cpp */; };
@@ -4081,6 +4093,15 @@
 		55611BA41766679200754072 /* RenderFlags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderFlags.h; sourceTree = "<group>"; };
 		55D3604C1826CAB900DA66D2 /* OverlayRendererGUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OverlayRendererGUI.cpp; sourceTree = "<group>"; };
 		55D3604D1826CAB900DA66D2 /* OverlayRendererGUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayRendererGUI.h; sourceTree = "<group>"; };
+		68070C931A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AddonCallbacksPeripheral.cpp; sourceTree = "<group>"; };
+		68070C941A3C48DB009D6E40 /* AddonCallbacksPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddonCallbacksPeripheral.h; sourceTree = "<group>"; };
+		68070C981A3C4902009D6E40 /* PeripheralAddon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PeripheralAddon.cpp; sourceTree = "<group>"; };
+		68070C991A3C4902009D6E40 /* PeripheralAddon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeripheralAddon.h; sourceTree = "<group>"; };
+		68118A5C1A3995A100B952B8 /* DllPeripheral.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DllPeripheral.h; sourceTree = "<group>"; };
+		68B61C1E1A39667200965EAC /* PeripheralBusAddon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PeripheralBusAddon.cpp; sourceTree = "<group>"; };
+		68B61C1F1A39667200965EAC /* PeripheralBusAddon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeripheralBusAddon.h; sourceTree = "<group>"; };
+		68B61C231A3974E000965EAC /* PeripheralJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PeripheralJoystick.cpp; sourceTree = "<group>"; };
+		68B61C241A3974E000965EAC /* PeripheralJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeripheralJoystick.h; sourceTree = "<group>"; };
 		6E2FACD20E26E92800DF79EA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E97BDBF0DA2B620003A2A89 /* EventClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventClient.h; sourceTree = "<group>"; };
 		6E97BDC00DA2B620003A2A89 /* EventPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventPacket.h; sourceTree = "<group>"; };
@@ -6425,6 +6446,8 @@
 				DFBB4307178B574E006CC20A /* AddonCallbacksCodec.h */,
 				C8482915156CFFE7005A996F /* AddonCallbacksGUI.cpp */,
 				C8482916156CFFE7005A996F /* AddonCallbacksGUI.h */,
+				68070C931A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp */,
+				68070C941A3C48DB009D6E40 /* AddonCallbacksPeripheral.h */,
 				C8482917156CFFE7005A996F /* AddonCallbacksPVR.cpp */,
 				C8482918156CFFE7005A996F /* AddonCallbacksPVR.h */,
 				18B7C3821294203F009E7A26 /* AddonDatabase.cpp */,
@@ -6441,6 +6464,7 @@
 				7CF34D9D1930264A00D543C5 /* AudioEncoder.cpp */,
 				7CF34D9E1930264A00D543C5 /* AudioEncoder.h */,
 				18B49FF61152BFA5001AF8A6 /* DllAddon.h */,
+				68118A5C1A3995A100B952B8 /* DllPeripheral.h */,
 				18B7C38612942090009E7A26 /* GUIDialogAddonInfo.cpp */,
 				18B7C38712942090009E7A26 /* GUIDialogAddonInfo.h */,
 				18B7C8F912942718009E7A26 /* GUIDialogAddonSettings.cpp */,
@@ -6450,6 +6474,8 @@
 				18B7C97A12943809009E7A26 /* GUIWindowAddonBrowser.cpp */,
 				18B7C97B1294380A009E7A26 /* GUIWindowAddonBrowser.h */,
 				18B49FFB1152BFA5001AF8A6 /* IAddon.h */,
+				68070C981A3C4902009D6E40 /* PeripheralAddon.cpp */,
+				68070C991A3C4902009D6E40 /* PeripheralAddon.h */,
 				183FDF8811AF0B0500B81E9C /* PluginSource.cpp */,
 				183FDF8911AF0B0500B81E9C /* PluginSource.h */,
 				C85EB75A1174614E0008E5A5 /* Repository.cpp */,
@@ -10215,6 +10241,8 @@
 				F5E10512140AA38000175026 /* osx */,
 				F5E10515140AA38000175026 /* PeripheralBus.cpp */,
 				F5E10516140AA38000175026 /* PeripheralBus.h */,
+				68B61C1E1A39667200965EAC /* PeripheralBusAddon.cpp */,
+				68B61C1F1A39667200965EAC /* PeripheralBusAddon.h */,
 			);
 			path = bus;
 			sourceTree = "<group>";
@@ -10243,6 +10271,8 @@
 				F5E10525140AA38000175026 /* PeripheralHID.h */,
 				1D638126161E211E003603ED /* PeripheralImon.cpp */,
 				1D638127161E211E003603ED /* PeripheralImon.h */,
+				68B61C231A3974E000965EAC /* PeripheralJoystick.cpp */,
+				68B61C241A3974E000965EAC /* PeripheralJoystick.h */,
 				F5E10526140AA38000175026 /* PeripheralNIC.cpp */,
 				F5E10527140AA38000175026 /* PeripheralNIC.h */,
 				F5E10528140AA38000175026 /* PeripheralNyxboard.cpp */,
@@ -10687,6 +10717,7 @@
 				E38E1F710D25F9FD00618676 /* wrapper.c in Sources */,
 				E38E1F720D25F9FD00618676 /* ldt_keeper.c in Sources */,
 				E38E1F730D25F9FD00618676 /* LibraryLoader.cpp in Sources */,
+				68070C9A1A3C4902009D6E40 /* PeripheralAddon.cpp in Sources */,
 				E38E1F750D25F9FD00618676 /* mmap_anon.c in Sources */,
 				E38E1F760D25F9FD00618676 /* SoLoader.cpp in Sources */,
 				E38E1F770D25F9FD00618676 /* DummyVideoPlayer.cpp in Sources */,
@@ -10768,6 +10799,7 @@
 				E38E20360D25F9FD00618676 /* DirectoryNodeAlbumCompilations.cpp in Sources */,
 				E38E20370D25F9FD00618676 /* DirectoryNodeAlbumCompilationsSongs.cpp in Sources */,
 				E38E20380D25F9FD00618676 /* DirectoryNodeAlbumRecentlyAdded.cpp in Sources */,
+				68B61C201A39667200965EAC /* PeripheralBusAddon.cpp in Sources */,
 				E38E20390D25F9FD00618676 /* DirectoryNodeAlbumRecentlyAddedSong.cpp in Sources */,
 				E38E203A0D25F9FD00618676 /* DirectoryNodeAlbumRecentlyPlayed.cpp in Sources */,
 				E38E203B0D25F9FD00618676 /* DirectoryNodeAlbumRecentlyPlayedSong.cpp in Sources */,
@@ -10827,6 +10859,7 @@
 				E38E20890D25F9FD00618676 /* GUIDialogMediaSource.cpp in Sources */,
 				E38E208A0D25F9FD00618676 /* GUIDialogMusicOSD.cpp in Sources */,
 				E38E208C0D25F9FD00618676 /* GUIDialogMuteBug.cpp in Sources */,
+				68B61C251A3974E000965EAC /* PeripheralJoystick.cpp in Sources */,
 				E38E208D0D25F9FD00618676 /* GUIDialogNetworkSetup.cpp in Sources */,
 				E38E208E0D25F9FD00618676 /* GUIDialogNumeric.cpp in Sources */,
 				E38E208F0D25F9FD00618676 /* GUIDialogOK.cpp in Sources */,
@@ -11666,6 +11699,7 @@
 				7CCDA7BB192756250074CF51 /* NptDynamicLibraries.cpp in Sources */,
 				7CCDA7BE192756250074CF51 /* NptFile.cpp in Sources */,
 				7CCDA7C7192756250074CF51 /* NptHash.cpp in Sources */,
+				68070C951A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp in Sources */,
 				7CCDA7D0192756250074CF51 /* NptHttp.cpp in Sources */,
 				7CCDA7D9192756250074CF51 /* NptJson.cpp in Sources */,
 				7CCDA7DC192756250074CF51 /* NptList.cpp in Sources */,
@@ -11950,6 +11984,7 @@
 				DFF0F14B17528350002DA3A4 /* emu_dummy.cpp in Sources */,
 				DFF0F14C17528350002DA3A4 /* emu_kernel32.cpp in Sources */,
 				DFF0F14D17528350002DA3A4 /* emu_msvcrt.cpp in Sources */,
+				68B61C271A3974E000965EAC /* PeripheralJoystick.cpp in Sources */,
 				DFF0F14E17528350002DA3A4 /* coff.cpp in Sources */,
 				DFF0F14F17528350002DA3A4 /* dll.cpp in Sources */,
 				DFF0F15017528350002DA3A4 /* dll_tracker.cpp in Sources */,
@@ -12253,6 +12288,7 @@
 				DFF0F28617528350002DA3A4 /* GUIDialog.cpp in Sources */,
 				DFF0F28717528350002DA3A4 /* GUIEditControl.cpp in Sources */,
 				DFF0F28817528350002DA3A4 /* GUIFadeLabelControl.cpp in Sources */,
+				68B61C221A39667200965EAC /* PeripheralBusAddon.cpp in Sources */,
 				DFF0F28917528350002DA3A4 /* GUIFixedListContainer.cpp in Sources */,
 				DFF0F28A17528350002DA3A4 /* GUIFont.cpp in Sources */,
 				DFF0F28B17528350002DA3A4 /* GUIFontManager.cpp in Sources */,
@@ -12726,6 +12762,7 @@
 				DFF0F47117528350002DA3A4 /* KeyboardLayoutConfiguration.cpp in Sources */,
 				DFF0F47217528350002DA3A4 /* KeyboardStat.cpp in Sources */,
 				DFF0F47417528350002DA3A4 /* XBMC_keytable.cpp in Sources */,
+				68070C9C1A3C4902009D6E40 /* PeripheralAddon.cpp in Sources */,
 				DFF0F47517528350002DA3A4 /* WinEventsIOS.mm in Sources */,
 				DFF0F47617528350002DA3A4 /* WinSystemIOS.mm in Sources */,
 				DFF0F47717528350002DA3A4 /* htsatomic.c in Sources */,
@@ -12932,6 +12969,7 @@
 				7CCDA904192756250074CF51 /* NptTlsTrustAnchor_Base_0049.cpp in Sources */,
 				7CCDA907192756250074CF51 /* NptTlsTrustAnchor_Base_0050.cpp in Sources */,
 				7CCDA90A192756250074CF51 /* NptTlsTrustAnchor_Base_0051.cpp in Sources */,
+				68070C971A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp in Sources */,
 				7CCDA90D192756250074CF51 /* NptTlsTrustAnchor_Base_0052.cpp in Sources */,
 				7CCDA910192756250074CF51 /* NptTlsTrustAnchor_Base_0053.cpp in Sources */,
 				7CCDA913192756250074CF51 /* NptTlsTrustAnchor_Base_0054.cpp in Sources */,
@@ -13075,6 +13113,7 @@
 				E4991155174E5CC300741B6D /* encname.cpp in Sources */,
 				E4991156174E5CC300741B6D /* errhnd.cpp in Sources */,
 				E4991157174E5CC300741B6D /* extinfo.cpp in Sources */,
+				68B61C211A39667200965EAC /* PeripheralBusAddon.cpp in Sources */,
 				E4991158174E5CC300741B6D /* extract.cpp in Sources */,
 				E4991159174E5CC300741B6D /* filcreat.cpp in Sources */,
 				E499115A174E5CC300741B6D /* file.cpp in Sources */,
@@ -13517,6 +13556,7 @@
 				E4991330174E5DAD00741B6D /* XBTF.cpp in Sources */,
 				E4991331174E5DAD00741B6D /* XBTFReader.cpp in Sources */,
 				E4991345174E5E5C00741B6D /* GenericTouchActionHandler.cpp in Sources */,
+				68B61C261A3974E000965EAC /* PeripheralJoystick.cpp in Sources */,
 				E499134B174E5E5C00741B6D /* ITouchInputHandling.cpp in Sources */,
 				E499134D174E5EB700741B6D /* SkinVariable.cpp in Sources */,
 				E499134E174E5EBE00741B6D /* AddonsOperations.cpp in Sources */,
@@ -13855,6 +13895,7 @@
 				E49914AB174E607200741B6D /* GUIWindowSystemInfo.cpp in Sources */,
 				E49914AC174E607200741B6D /* GUIWindowWeather.cpp in Sources */,
 				E499152C174E640800741B6D /* Application.cpp in Sources */,
+				68070C9B1A3C4902009D6E40 /* PeripheralAddon.cpp in Sources */,
 				E499152D174E642900741B6D /* ApplicationMessenger.cpp in Sources */,
 				E499152E174E642900741B6D /* AppParamParser.cpp in Sources */,
 				E499152F174E642900741B6D /* Autorun.cpp in Sources */,
@@ -14176,6 +14217,7 @@
 				7CCDA99C192756250074CF51 /* NptTlsTrustAnchor_Base_0100.cpp in Sources */,
 				7CCDA99F192756250074CF51 /* NptTlsTrustAnchor_Base_0101.cpp in Sources */,
 				7CCDA9A2192756250074CF51 /* NptTlsTrustAnchor_Base_0102.cpp in Sources */,
+				68070C961A3C48DB009D6E40 /* AddonCallbacksPeripheral.cpp in Sources */,
 				7CCDA9A5192756250074CF51 /* NptTlsTrustAnchor_Base_0103.cpp in Sources */,
 				7CCDA9A8192756250074CF51 /* NptTlsTrustAnchor_Base_0104.cpp in Sources */,
 				7CCDA9AB192756250074CF51 /* NptTlsTrustAnchor_Base_0105.cpp in Sources */,

@@ -37,7 +37,8 @@ namespace PERIPHERALS
     PERIPHERAL_BUS_USB,
     PERIPHERAL_BUS_PCI,
     PERIPHERAL_BUS_RPI,
-    PERIPHERAL_BUS_CEC
+    PERIPHERAL_BUS_CEC,
+    PERIPHERAL_BUS_ADDON
   };
 
   enum PeripheralFeature
@@ -50,7 +51,8 @@ namespace PERIPHERALS
     FEATURE_CEC,
     FEATURE_BLUETOOTH,
     FEATURE_TUNER,
-    FEATURE_IMON
+    FEATURE_IMON,
+    FEATURE_JOYSTICK
   };
 
   enum PeripheralType
@@ -63,7 +65,8 @@ namespace PERIPHERALS
     PERIPHERAL_CEC,
     PERIPHERAL_BLUETOOTH,
     PERIPHERAL_TUNER,
-    PERIPHERAL_IMON 
+    PERIPHERAL_IMON,
+    PERIPHERAL_JOYSTICK
   };
 
   struct PeripheralID
@@ -111,6 +114,8 @@ namespace PERIPHERALS
         return "tuner";
       case PERIPHERAL_IMON:
         return "imon";
+      case PERIPHERAL_JOYSTICK:
+        return "joystick";
       default:
         return "unknown";
       }
@@ -137,6 +142,8 @@ namespace PERIPHERALS
         return PERIPHERAL_TUNER;
       else if (strTypeLowerCase.Equals("imon"))
         return PERIPHERAL_IMON;
+      else if (strTypeLowerCase.Equals("joystick"))
+        return PERIPHERAL_JOYSTICK;
 
       return PERIPHERAL_UNKNOWN;
     };
@@ -153,6 +160,8 @@ namespace PERIPHERALS
         return "rpi";
       case PERIPHERAL_BUS_CEC:
         return "cec";
+      case PERIPHERAL_BUS_ADDON:
+        return "addon";
       default:
         return "unknown";
       }

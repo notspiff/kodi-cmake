@@ -2398,6 +2398,16 @@ else
   final_message="$final_message\n  PVR add-ons:\t\tNo"
 fi
 
+USE_PERIPHERAL_ADDONS=0
+DISABLE_PERIPHERAL_ADDON_CONFIG=1
+if [[ -f "peripheral-addons/Makefile.am" ]]; then
+  final_message="$final_message\n  PERIPHERAL add-ons:\t\tYes"
+  USE_PERIPHERAL_ADDONS=1
+  DISABLE_PERIPHERAL_ADDON_CONFIG=0
+else
+  final_message="$final_message\n  PERIPHERAL add-ons:\t\tNo"
+fi
+
 OUTPUT_FILES="Makefile \
     Makefile.include \
     addons/skin.confluence/media/Makefile \
@@ -2458,6 +2468,7 @@ OUTPUT_FILES="Makefile \
     lib/addons/library.xbmc.codec/Makefile \
     lib/addons/library.xbmc.gui/Makefile \
     lib/addons/library.xbmc.pvr/Makefile \
+    lib/addons/library.xbmc.peripheral/Makefile \
     xbmc/visualizations/EGLHelpers/Makefile \
     tools/Linux/${APP_NAME_LC}.sh \
     tools/Linux/${APP_NAME_LC}-standalone.sh \
@@ -2467,6 +2478,7 @@ OUTPUT_FILES="Makefile \
     tools/TexturePacker/Makefile \
     tools/EventClients/Makefile \
     tools/EventClients/Clients/OSXRemote/Makefile \
+    xbmc/peripherals/addons/Makefile \
     xbmc/peripherals/bus/Makefile \
     xbmc/peripherals/devices/Makefile \
     xbmc/android/activity/Makefile \
@@ -2589,6 +2601,7 @@ AC_SUBST(UPNP_DEFINES)
 AC_SUBST(USE_SSE4)
 AC_SUBST(USE_MMAL)
 AC_SUBST(USE_X11)
+AC_SUBST(USE_PERIPHERAL_ADDONS)
 
 # pushd and popd are not available in other shells besides bash, so implement
 # our own pushd/popd functions
@@ -2791,6 +2804,18 @@ XB_CONFIG_MODULE([pvr-addons], [
     CFLAGS="$CFLAGS" \
     CXXFLAGS="$CXXFLAGS"
 ], [$DISABLE_PVR_ADDON_CONFIG])
+
+XB_CONFIG_MODULE([peripheral-addons], [
+  ./configure \
+    --prefix="${prefix}" \
+    --host=$host_alias \
+    --build=$build_alias \
+    --target=$target_alias \
+    CC="$CC" \
+    CXX="$CXX" \
+    CFLAGS="$CFLAGS" \
+    CXXFLAGS="$CXXFLAGS"
+], [$DISABLE_PERIPHERAL_ADDON_CONFIG])
 
 AC_OUTPUT
 

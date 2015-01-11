@@ -1,0 +1,7 @@
+SRCS  = AddonJoytsickButtonMapper.cpp
+SRCS += PeripheralAddon.cpp
+
+LIB = peripheral-addons.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(SRCS)))
