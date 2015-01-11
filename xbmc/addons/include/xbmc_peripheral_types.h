@@ -116,8 +116,8 @@ extern "C"
     JOYSTICK_ID_BUTTON_B,                /*!< @brief corresponds to B (generic) or Circle (Sony) */
     JOYSTICK_ID_BUTTON_X,                /*!< @brief corresponds to C or X (generic), Square (Sony), C-down (N64) or One (Wii)*/
     JOYSTICK_ID_BUTTON_Y,                /*!< @brief corresponds to Y (generic), Triangle (Sony), C-left (N64) or Two (Wii) */
-    JOYSTICK_ID_BUTTON_5,                /*!< @brief corresponds to Black (Xbox) or C-right (N64) */
-    JOYSTICK_ID_BUTTON_6,                /*!< @brief corresponds to White (Xbox) or C-up (N64) */
+    //JOYSTICK_ID_BUTTON_C,                /*!< @brief corresponds to Black (Xbox) or C-right (N64) */
+    //JOYSTICK_ID_BUTTON_Z,                /*!< @brief corresponds to White (Xbox) or C-up (N64) */
     JOYSTICK_ID_BUTTON_START,            /*!< @brief corresponds to Start (generic) */
     JOYSTICK_ID_BUTTON_SELECT,           /*!< @brief corresponds to Select (generic) or Back (Xbox) */
     JOYSTICK_ID_BUTTON_HOME,             /*!< @brief corresponds to Guide (Xbox) or Analog (Sony) */
@@ -222,11 +222,11 @@ extern "C"
 
   typedef enum JOYSTICK_BUTTON_PRIMITIVE_TYPE
   {
-    JOYSTICK_BUTTON_MAP_VALUE_UNKNOWN = 0,
-    JOYSTICK_BUTTON_MAP_VALUE_BUTTON,
-    JOYSTICK_BUTTON_MAP_VALUE_HAT_DIRECTION,
-    JOYSTICK_BUTTON_MAP_VALUE_SEMI_AXIS,
-  } JOYSTICK_BUTTON_MAP_VALUE_TYPE;
+    JOYSTICK_BUTTON_PRIMITIVE_UNKNOWN = 0,
+    JOYSTICK_BUTTON_PRIMITIVE_BUTTON,
+    JOYSTICK_BUTTON_PRIMITIVE_HAT_DIRECTION,
+    JOYSTICK_BUTTON_PRIMITIVE_SEMI_AXIS,
+  } JOYSTICK_BUTTON_PRIMITIVE_TYPE;
 
   typedef struct JOYSTICK_BUTTON_PRIMITIVE
   {
@@ -256,9 +256,9 @@ extern "C"
     void             (__cdecl* FreeJoystickInfo)(JOYSTICK_INFO*);
     PERIPHERAL_ERROR (__cdecl* GetEvents)(unsigned int*, PERIPHERAL_EVENT**);
     void             (__cdecl* FreeEvents)(unsigned int, PERIPHERAL_EVENT*);
-    JOYSTICK_ID      (__cdecl* GetAction)(JOYSTICK_BUTTON_PRIMITIVE*);
-    JOYSTICK_ID      (__cdecl* GetAnalogStick)(unsigned int, unsigned int*, unsigned int*);
-    JOYSTICK_ID      (__cdecl* GetAccelerometer)(unsigned int, unsigned int*, unsigned int*, unsigned int*);
+    JOYSTICK_ID      (__cdecl* GetAction)(unsigned int, JOYSTICK_BUTTON_PRIMITIVE*);
+    JOYSTICK_ID      (__cdecl* GetAnalogStick)(unsigned int, unsigned int, unsigned int*, unsigned int*);
+    JOYSTICK_ID      (__cdecl* GetAccelerometer)(unsigned int, unsigned int, unsigned int*, unsigned int*, unsigned int*);
     ///}
   } PeripheralAddon;
 

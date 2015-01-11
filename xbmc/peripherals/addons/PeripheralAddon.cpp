@@ -19,8 +19,12 @@
  */
 
 #include "PeripheralAddon.h"
+#include "AddonJoystickButtonMap.h"
 #include "addons/AddonManager.h"
 #include "filesystem/SpecialProtocol.h"
+#include "input/joysticks/generic/GenericJoystickActionHandler.h"
+#include "input/joysticks/generic/GenericJoystickInputHandler.h"
+#include "input/joysticks/ButtonPrimitive.h"
 #include "peripherals/Peripherals.h"
 #include "peripherals/bus/PeripheralBusAddon.h"
 #include "peripherals/devices/PeripheralJoystick.h"
@@ -365,33 +369,6 @@ bool CPeripheralAddon::PerformDeviceScan(PeripheralScanResults &results)
 
   return false;
 }
-/*
-bool CPeripheralAddon::GetJoystickInfo(unsigned int index, ADDON::Joystick& info)
-{
-  if (!HasFeature(FEATURE_JOYSTICK))
-    return false;
-
-  PERIPHERAL_ERROR retVal;
-
-  JOYSTICK_INFO infoStruct;
-
-  try { LogError(retVal = m_pStruct->GetJoystickInfo(index, &infoStruct), "GetJoystickInfo()"); }
-  catch (std::exception &e) { LogException(e, "GetJoystickInfo()"); return false; }
-
-  if (retVal == PERIPHERAL_NO_ERROR)
-  {
-    info = infoStruct;
-
-    try { m_pStruct->FreeJoystickInfo(&infoStruct); }
-    catch (std::exception &e) { LogException(e, "FreeJoystickInfo()"); }
-
-    return true;
-  }
-
-  return false;
-}
-*/
-
 
 bool CPeripheralAddon::ProcessEvents(void)
 {
@@ -470,6 +447,135 @@ bool CPeripheralAddon::ProcessEvents(void)
   }
 
   return false;
+}
+
+IJoystickInputHandler* CPeripheralAddon::CreateInputHandler(unsigned int index)
+{
+  if (!HasFeature(FEATURE_JOYSTICK))
+    return false;
+
+  IJoystickInputHandler* handler = NULL;
+
+  JOYSTICK_INFO infoStruct;
+
+  PERIPHERAL_ERROR errorVal;
+
+  try { LogError(errorVal = m_pStruct->GetJoystickInfo(index, &infoStruct), "GetJoystickInfo()"); }
+  catch (std::exception &e) { LogException(e, "GetJoystickInfo()"); return false; }
+
+  if (errorVal == PERIPHERAL_NO_ERROR)
+  {
+    ADDON::Joystick joystickInfo(infoStruct);
+
+    try { m_pStruct->FreeJoystickInfo(&infoStruct); }
+    catch (std::exception &e) { LogException(e, "FreeJoystickInfo()"); }
+
+    CPeripheralBusAddon* addonBus = static_cast<CPeripheralBusAddon*>(g_peripherals.GetBusByType(PERIPHERAL_BUS_ADDON));
+    if (addonBus)
+    {
+      ADDON::AddonPtr addon;
+      if (addonBus->GetAddon(ID(), addon))
+      {
+        // TODO
+        IJoystickActionHandler* actionHandler = new CGenericJoystickActionHandler();
+        CAddonJoystickButtonMap* buttonMap = new CAddonJoystickButtonMap(boost::dynamic_pointer_cast<CPeripheralAddon>(addon), index);
+        handler = new CGenericJoystickInputHandler(actionHandler, buttonMap);
+      }
+    }
+  }
+
+  return handler;
+}
+
+JoystickActionID CPeripheralAddon::GetAction(unsigned int index, const CButtonPrimitive& source)
+{
+  JOYSTICK_BUTTON_PRIMITIVE sourceStruct;
+  
+  sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_UNKNOWN;
+  switch (source.Type())
+  {
+  case ButtonPrimitiveTypeButton:       sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_BUTTON;        break;
+  case ButtonPrimitiveTypeHatDirection: sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_HAT_DIRECTION; break;
+  case ButtonPrimitiveTypeSemiAxis:     sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_SEMI_AXIS;     break;
+  default: break;
+  }
+
+  sourceStruct.index = source.Index();
+
+  sourceStruct.hat_direction = JOYSTICK_STATE_HAT_UNPRESSED;
+  switch (source.HatDir())
+  {
+  case HatDirectionLeft:  sourceStruct.hat_direction = JOYSTICK_STATE_HAT_LEFT;  break;
+  case HatDirectionRight: sourceStruct.hat_direction = JOYSTICK_STATE_HAT_RIGHT; break;
+  case HatDirectionUp:    sourceStruct.hat_direction = JOYSTICK_STATE_HAT_UP;    break;
+  case HatDirectionDown:  sourceStruct.hat_direction = JOYSTICK_STATE_HAT_DOWN;  break;
+  default: break;
+  }
+
+  sourceStruct.semi_axis_dir = JOYSTICK_SEMI_AXIS_DIRECTION_UNKNOWN;
+  switch (source.SemiAxisDir())
+  {
+  case SemiAxisDirectionNegative: sourceStruct.semi_axis_dir = JOYSTICK_SEMI_AXIS_DIRECTION_NEGATIVE; break;
+  case SemiAxisDirectionPositive: sourceStruct.semi_axis_dir = JOYSTICK_SEMI_AXIS_DIRECTION_POSITIVE; break;
+  default: break;
+  }
+
+  JOYSTICK_ID id = JOYSTICK_ID_BUTTON_UNKNOWN;
+
+  try { id = m_pStruct->GetAction(index, &sourceStruct); }
+  catch (std::exception &e) { LogException(e, "GetJoystickInfo()"); }
+
+  return GetID(id);
+}
+
+JoystickActionID CPeripheralAddon::GetAnalogStick(unsigned int index, unsigned int axisIndex, unsigned int& indexHoriz, unsigned int& indexVert)
+{
+  JOYSTICK_ID id = JOYSTICK_ID_BUTTON_UNKNOWN;
+
+  try { id = m_pStruct->GetAnalogStick(index, axisIndex, &indexHoriz, &indexVert); }
+  catch (std::exception &e) { LogException(e, "GetAnalogStick()"); }
+
+  return GetID(id);
+}
+
+JoystickActionID CPeripheralAddon::GetAccelerometer(unsigned int index, unsigned int axisIndex, unsigned int& indexX, unsigned int& indexY, unsigned int& indexZ)
+{
+  JOYSTICK_ID id = JOYSTICK_ID_BUTTON_UNKNOWN;
+
+  try { id = m_pStruct->GetAccelerometer(index, axisIndex, &indexX, &indexY, &indexZ); }
+  catch (std::exception &e) { LogException(e, "GetAccelerometer()"); }
+
+  return GetID(id);
+}
+
+JoystickActionID CPeripheralAddon::GetID(JOYSTICK_ID addonId)
+{
+  switch (addonId)
+  {
+  case JOYSTICK_ID_BUTTON_A:           return JOY_ID_BUTTON_A;
+  case JOYSTICK_ID_BUTTON_B:           return JOY_ID_BUTTON_B;
+  case JOYSTICK_ID_BUTTON_X:           return JOY_ID_BUTTON_X;
+  case JOYSTICK_ID_BUTTON_Y:           return JOY_ID_BUTTON_Y;
+  //case JOYSTICK_ID_BUTTON_5:           return JOY_ID_BUTTON_C;
+  //case JOYSTICK_ID_BUTTON_6:           return JOY_ID_BUTTON_Z;
+  case JOYSTICK_ID_BUTTON_START:       return JOY_ID_BUTTON_START;
+  case JOYSTICK_ID_BUTTON_SELECT:      return JOY_ID_BUTTON_SELECT;
+  case JOYSTICK_ID_BUTTON_HOME:        return JOY_ID_BUTTON_MODE;
+  case JOYSTICK_ID_BUTTON_UP:          return JOY_ID_BUTTON_UP;
+  case JOYSTICK_ID_BUTTON_DOWN:        return JOY_ID_BUTTON_DOWN;
+  case JOYSTICK_ID_BUTTON_LEFT:        return JOY_ID_BUTTON_LEFT;
+  case JOYSTICK_ID_BUTTON_RIGHT:       return JOY_ID_BUTTON_RIGHT;
+  case JOYSTICK_ID_BUTTON_L:           return JOY_ID_BUTTON_L;
+  case JOYSTICK_ID_BUTTON_R:           return JOY_ID_BUTTON_R;
+  case JOYSTICK_ID_BUTTON_L_STICK:     return JOY_ID_BUTTON_L_STICK;
+  case JOYSTICK_ID_BUTTON_R_STICK:     return JOY_ID_BUTTON_R_STICK;
+  case JOYSTICK_ID_TRIGGER_L:          return JOY_ID_TRIGGER_L;
+  case JOYSTICK_ID_TRIGGER_R:          return JOY_ID_TRIGGER_R;
+  case JOYSTICK_ID_ANALOG_STICK_LEFT:  return JOY_ID_ANALOG_STICK_L;
+  case JOYSTICK_ID_ANALOG_STICK_RIGHT: return JOY_ID_ANALOG_STICK_R;
+  case JOYSTICK_ID_ACCELEROMETER:      return JOY_ID_ACCELEROMETER;
+  default:                             return JOY_ID_BUTTON_UNKNOWN;
+  }
 }
 
 const char *CPeripheralAddon::ToString(const PERIPHERAL_ERROR error)

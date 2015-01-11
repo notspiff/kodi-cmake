@@ -23,12 +23,14 @@
 #include "addons/DllPeripheral.h"
 #include "addons/include/xbmc_peripheral_types.h"
 #include "addons/include/xbmc_peripheral_utils.hpp"
+#include "input/joysticks/JoystickTypes.h"
 #include "peripherals/PeripheralTypes.h"
 #include "threads/Thread.h"
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
+class CButtonPrimitive;
 class IJoystickInputHandler;
 
 namespace PERIPHERALS
@@ -72,15 +74,15 @@ namespace PERIPHERALS
     /** @name Peripheral add-on methods */
     //@{
     bool PerformDeviceScan(PeripheralScanResults &results);
-    std::string GetName(unsigned int index) { return ""; } // TODO
+    bool ProcessEvents(void);
     //@}
 
     /** @name Joystick methods */
     //@{
-    //bool GetJoystickInfo(unsigned int index, ADDON::Joystick& info);
-
-    bool ProcessEvents(void);
-    IJoystickInputHandler* GetInputHandler(unsigned int index) { return NULL; } // TODO
+    IJoystickInputHandler* CreateInputHandler(unsigned int index);
+    JoystickActionID GetAction(unsigned int index, const CButtonPrimitive& source);
+    JoystickActionID GetAnalogStick(unsigned int index, unsigned int axisIndex, unsigned int& indexHoriz, unsigned int& indexVert);
+    JoystickActionID GetAccelerometer(unsigned int index, unsigned int axisIndex, unsigned int& indexX, unsigned int& indexY, unsigned int& indexZ);
     //@}
 
     static const char *ToString(PERIPHERAL_ERROR error);
@@ -107,6 +109,8 @@ namespace PERIPHERALS
      * @return True when compatible, false otherwise
      */
     static bool IsCompatibleAPIVersion(const ADDON::AddonVersion &minVersion, const ADDON::AddonVersion &version);
+
+    static JoystickActionID GetID(JOYSTICK_ID addonId);
 
     bool LogError(const PERIPHERAL_ERROR error, const char *strMethod) const;
     void LogException(const std::exception &e, const char *strFunctionName) const;

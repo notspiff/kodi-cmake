@@ -54,12 +54,10 @@ bool CPeripheralJoystick::InitialiseFeature(const PeripheralFeature feature)
         unsigned int index;
         if (addonBus->SplitLocation(m_strLocation, addon, index))
         {
-          // TODO
-
           // Override peripherals.xml
-          //m_strDeviceName = addon->GetName(index);
+          //m_strDeviceName = addon->GetName(index); // TODO
 
-          //m_inputHandler = addon->GetInputHandler(index);
+          m_inputHandler = addon->CreateInputHandler(index);
         }
         else
           CLog::Log(LOGERROR, "CPeripheralJoystick: Invalid location (%s)", m_strLocation.c_str());

@@ -19,3 +19,26 @@
  */
 
 #include "AddonJoystickButtonMap.h"
+
+using namespace PERIPHERALS;
+
+CAddonJoystickButtonMap::CAddonJoystickButtonMap(const PERIPHERALS::PeripheralAddonPtr& addon, unsigned int index)
+ : m_addon(addon),
+   m_index(index)
+{
+}
+
+JoystickActionID CAddonJoystickButtonMap::GetAction(const CButtonPrimitive& source)
+{
+  return m_addon->GetAction(m_index, source);
+}
+
+JoystickActionID CAddonJoystickButtonMap::GetAnalogStick(unsigned int  axisIndex, unsigned int& indexHoriz, unsigned int& indexVert)
+{
+  return m_addon->GetAnalogStick(m_index, axisIndex, indexHoriz, indexVert);
+}
+
+JoystickActionID CAddonJoystickButtonMap::GetAccelerometer(unsigned int  axisIndex, unsigned int& indexX, unsigned int& indexY, unsigned int& indexZ)
+{
+  return m_addon->GetAccelerometer(m_index, axisIndex, indexX, indexY, indexZ);
+}

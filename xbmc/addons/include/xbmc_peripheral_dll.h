@@ -96,9 +96,9 @@ extern "C"
   /*!
    * @brief Look up joystick elements in the button map
    */
-  JOYSTICK_ID GetAction(JOYSTICK_BUTTON_PRIMITIVE* source);
-  JOYSTICK_ID GetAnalogStick(unsigned int axis_index, unsigned int* horiz_index, unsigned int* vert_index);
-  JOYSTICK_ID GetAccelerometer(unsigned int axis_index, unsigned int* x_index, unsigned int* y_index, unsigned int* z_index);
+  JOYSTICK_ID GetAction(unsigned int index, JOYSTICK_BUTTON_PRIMITIVE* source);
+  JOYSTICK_ID GetAnalogStick(unsigned int index, unsigned int axis_index, unsigned int* horiz_index, unsigned int* vert_index);
+  JOYSTICK_ID GetAccelerometer(unsigned int index, unsigned int axis_index, unsigned int* x_index, unsigned int* y_index, unsigned int* z_index);
 #endif
   ///}
 

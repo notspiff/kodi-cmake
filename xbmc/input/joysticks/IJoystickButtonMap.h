@@ -33,7 +33,8 @@ class IJoystickButtonMap
 {
 public:
   virtual ~IJoystickButtonMap() { }
-
+  
+#if 0 // TODO
   /*!
    * \brief Load()
    *
@@ -54,11 +55,7 @@ public:
                     int                buttonCount = -1,
                     int                hatCount    = -1,
                     int                axisCount   = -1) = 0;
-
-  /*!
-   * \brief Save()
-   */
-  virtual bool Save() = 0;
+#endif
 
   virtual JoystickActionID GetAction(const CButtonPrimitive& source) = 0;
 

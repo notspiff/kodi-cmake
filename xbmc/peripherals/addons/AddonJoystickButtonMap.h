@@ -22,34 +22,28 @@
 #include "input/joysticks/IJoystickButtonMap.h"
 #include "peripherals/addons/PeripheralAddon.h"
 
-class CAddonJoystickButtonMap : public IJoystickButtonMap
+namespace PERIPHERALS
 {
-public:
-  CAddonJoystickButtonMap(void) { }
+  class CAddonJoystickButtonMap : public IJoystickButtonMap
+  {
+  public:
+    CAddonJoystickButtonMap(const PERIPHERALS::PeripheralAddonPtr& addon, unsigned int index);
 
-  virtual ~CAddonJoystickButtonMap() { }
+    virtual ~CAddonJoystickButtonMap(void) { }
 
-  virtual bool Load(const std::string& strProvider,
-                    const std::string& strName     = "",
-                    uint16_t           vendorId    = 0x0000,
-                    uint16_t           productId   = 0x0000,
-                    int                buttonCount = -1,
-                    int                hatCount    = -1,
-                    int                axisCount   = -1);
+    JoystickActionID GetAction(const CButtonPrimitive& source);
 
-  virtual bool Save();
+    JoystickActionID GetAnalogStick(unsigned int  axisIndex,
+                                    unsigned int& indexHoriz,
+                                    unsigned int& indexVert);
 
-  JoystickActionID GetAction(const CButtonPrimitive& source);
+    JoystickActionID GetAccelerometer(unsigned int  axisIndex,
+                                      unsigned int& indexX,
+                                      unsigned int& indexY,
+                                      unsigned int& indexZ);
 
-  JoystickActionID GetAnalogStick(unsigned int  axisIndex,
-                                  unsigned int& indexHoriz,
-                                  unsigned int& indexVert);
-
-  JoystickActionID GetAccelerometer(unsigned int  axisIndex,
-                                    unsigned int& indexX,
-                                    unsigned int& indexY,
-                                    unsigned int& indexZ);
-
-private:
-  PERIPHERALS::PeripheralAddonPtr m_addon;
-};
+  private:
+    PERIPHERALS::PeripheralAddonPtr m_addon;
+    unsigned int                    m_index;
+  };
+}
