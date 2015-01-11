@@ -488,11 +488,9 @@
     <ClCompile Include="..\..\xbmc\GUIPassword.cpp" />
     <ClCompile Include="..\..\xbmc\input\ButtonTranslator.cpp" />
     <ClCompile Include="..\..\xbmc\input\InertialScrollingHandler.cpp" />
+    <ClCompile Include="..\..\xbmc\input\joysticks\ButtonPrimitive.cpp" />
     <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickActionHandler.cpp" />
-    <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickButtonMapper.cpp" />
     <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.cpp" />
-    <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickRotateDetector.cpp" />
-    <ClCompile Include="..\..\xbmc\input\joysticks\IJoystickInputHandling.cpp" />
     <ClCompile Include="..\..\xbmc\input\KeyboardLayout.cpp" />
     <ClCompile Include="..\..\xbmc\input\KeyboardLayoutConfiguration.cpp" />
     <ClCompile Include="..\..\xbmc\input\KeyboardStat.cpp" />
@@ -502,7 +500,6 @@
     <ClCompile Include="..\..\xbmc\input\touch\ITouchInputHandling.cpp" />
     <ClCompile Include="..\..\xbmc\input\windows\IRServerSuite.cpp" />
     <ClCompile Include="..\..\xbmc\input\windows\IrssMessage.cpp" />
-    <ClCompile Include="..\..\xbmc\input\windows\WINJoystick.cpp" />
     <ClCompile Include="..\..\xbmc\input\XBMC_keytable.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\AnnouncementManager.cpp" />
     <ClCompile Include="..\..\xbmc\interfaces\Builtins.cpp" />
@@ -664,6 +661,8 @@
     <ClCompile Include="..\..\xbmc\NfoFile.cpp" />
     <ClCompile Include="..\..\xbmc\PartyModeManager.cpp" />
     <ClCompile Include="..\..\xbmc\PasswordManager.cpp" />
+    <ClCompile Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.cpp" />
+    <ClCompile Include="..\..\xbmc\peripherals\addons\PeripheralAddon.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\bus\PeripheralBus.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\bus\PeripheralBusAddon.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\bus\virtual\PeripheralBusCEC.cpp" />
@@ -680,7 +679,6 @@
     <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralTuner.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\dialogs\GUIDialogPeripheralManager.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\dialogs\GUIDialogPeripheralSettings.cpp" />
-    <ClCompile Include="..\..\xbmc\peripherals\PeripheralAddon.cpp" />
     <ClCompile Include="..\..\xbmc\peripherals\Peripherals.cpp" />
     <ClCompile Include="..\..\xbmc\pictures\GUIDialogPictureInfo.cpp" />
     <ClCompile Include="..\..\xbmc\pictures\GUIViewStatePictures.cpp" />
@@ -878,15 +876,12 @@
     <ClInclude Include="..\..\xbmc\guilib\imagefactory.h" />
     <ClInclude Include="..\..\xbmc\guilib\ISliderCallback.h" />
     <ClInclude Include="..\..\xbmc\IFileItemListModifier.h" />
+    <ClInclude Include="..\..\xbmc\input\joysticks\ButtonPrimitive.h" />
     <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickActionHandler.h" />
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickButtonMapper.h" />
     <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.h" />
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickRotateDetector.h" />
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\IGenericJoystickButtonMapper.h" />
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\IGenericJoystickGestureDetector.h" />
     <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickActionHandler.h" />
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickButtonMap.h" />
     <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickInputHandler.h" />
-    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickInputHandling.h" />
     <ClInclude Include="..\..\xbmc\input\joysticks\JoystickTypes.h" />
     <ClInclude Include="..\..\xbmc\input\touch\generic\GenericTouchActionHandler.h" />
     <ClInclude Include="..\..\xbmc\input\touch\generic\GenericTouchSwipeDetector.h" />
@@ -895,7 +890,6 @@
     <ClInclude Include="..\..\xbmc\input\touch\ITouchInputHandler.h" />
     <ClInclude Include="..\..\xbmc\input\touch\ITouchInputHandling.h" />
     <ClInclude Include="..\..\xbmc\input\touch\TouchTypes.h" />
-    <ClInclude Include="..\..\xbmc\input\windows\WINJoystick.h" />
     <ClInclude Include="..\..\xbmc\interfaces\generic\ILanguageInvocationHandler.h" />
     <ClInclude Include="..\..\xbmc\interfaces\generic\ILanguageInvoker.h" />
     <ClInclude Include="..\..\xbmc\interfaces\generic\LanguageInvokerThread.h" />
@@ -950,11 +944,12 @@
     <ClInclude Include="..\..\xbmc\media\MediaType.h" />
     <ClInclude Include="..\..\xbmc\music\karaoke\karaokevideobackground.h" />
     <ClInclude Include="..\..\xbmc\network\NetworkServices.h" />
+    <ClInclude Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.h" />
+    <ClInclude Include="..\..\xbmc\peripherals\addons\PeripheralAddon.h" />
     <ClInclude Include="..\..\xbmc\peripherals\bus\PeripheralBusAddon.h" />
     <ClInclude Include="..\..\xbmc\peripherals\bus\virtual\PeripheralBusCEC.h" />
     <ClInclude Include="..\..\xbmc\network\upnp\UPnPSettings.h" />
     <ClInclude Include="..\..\xbmc\peripherals\devices\PeripheralJoystick.h" />
-    <ClInclude Include="..\..\xbmc\peripherals\PeripheralAddon.h" />
     <ClInclude Include="..\..\xbmc\playlists\SmartPlaylistFileItemListModifier.h" />
     <ClInclude Include="..\..\xbmc\profiles\dialogs\GUIDialogLockSettings.h" />
     <ClInclude Include="..\..\xbmc\profiles\dialogs\GUIDialogProfileSettings.h" />

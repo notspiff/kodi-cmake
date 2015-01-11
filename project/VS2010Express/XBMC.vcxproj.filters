@@ -323,10 +323,13 @@
       <UniqueIdentifier>{9775d5c0-c640-4606-a625-e6cdcf9f959e}</UniqueIdentifier>
     </Filter>
     <Filter Include="input\joysticks">
-      <UniqueIdentifier>{1259ea08-d381-4f56-95b4-78df7f8e583e}</UniqueIdentifier>
+      <UniqueIdentifier>{eb6a9381-9d8f-4539-b82c-12a146cb350f}</UniqueIdentifier>
     </Filter>
     <Filter Include="input\joysticks\generic">
-      <UniqueIdentifier>{0e6d6fcd-d1e3-4ab6-8f4f-84bda5bf6990}</UniqueIdentifier>
+      <UniqueIdentifier>{d973c9ea-09b4-453f-9ef9-bf74f50f8778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="peripherals\addons">
+      <UniqueIdentifier>{79accf60-e1c8-4541-9447-06b188cfa488}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2403,9 +2406,6 @@
     <ClCompile Include="..\..\xbmc\utils\RecentlyAddedJob.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\input\windows\WINJoystick.cpp">
-      <Filter>input\windows</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\filesystem\ImageFile.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
@@ -3095,23 +3095,20 @@
     <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralJoystick.cpp">
       <Filter>peripherals\devices</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\peripherals\PeripheralAddon.cpp">
-      <Filter>peripherals</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\input\joysticks\IJoystickInputHandling.cpp">
-      <Filter>input\joysticks</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickActionHandler.cpp">
-      <Filter>input\joysticks\generic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickButtonMapper.cpp">
       <Filter>input\joysticks\generic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.cpp">
       <Filter>input\joysticks\generic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickRotateDetector.cpp">
-      <Filter>input\joysticks\generic</Filter>
+    <ClCompile Include="..\..\xbmc\input\joysticks\ButtonPrimitive.cpp">
+      <Filter>input\joysticks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.cpp">
+      <Filter>peripherals\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\peripherals\addons\PeripheralAddon.cpp">
+      <Filter>peripherals\addons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5472,9 +5469,6 @@
     <ClInclude Include="..\..\xbmc\utils\RecentlyAddedJob.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\windows\WINJoystick.h">
-      <Filter>input\windows</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ImageFile.h">
       <Filter>filesystem</Filter>
     </ClInclude>
@@ -6070,38 +6064,32 @@
     <ClInclude Include="..\..\xbmc\peripherals\devices\PeripheralJoystick.h">
       <Filter>peripherals\devices</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\peripherals\PeripheralAddon.h">
-      <Filter>peripherals</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickActionHandler.h">
-      <Filter>input\joysticks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickInputHandler.h">
-      <Filter>input\joysticks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickInputHandling.h">
-      <Filter>input\joysticks</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\JoystickTypes.h">
-      <Filter>input\joysticks</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickActionHandler.h">
-      <Filter>input\joysticks\generic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickButtonMapper.h">
       <Filter>input\joysticks\generic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.h">
       <Filter>input\joysticks\generic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickRotateDetector.h">
-      <Filter>input\joysticks\generic</Filter>
+    <ClInclude Include="..\..\xbmc\input\joysticks\ButtonPrimitive.h">
+      <Filter>input\joysticks</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\IGenericJoystickButtonMapper.h">
-      <Filter>input\joysticks\generic</Filter>
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickActionHandler.h">
+      <Filter>input\joysticks</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\generic\IGenericJoystickGestureDetector.h">
-      <Filter>input\joysticks\generic</Filter>
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickButtonMap.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickInputHandler.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\JoystickTypes.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.h">
+      <Filter>peripherals\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\peripherals\addons\PeripheralAddon.h">
+      <Filter>peripherals\addons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
