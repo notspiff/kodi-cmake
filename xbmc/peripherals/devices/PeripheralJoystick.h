@@ -24,7 +24,8 @@
 
 namespace PERIPHERALS
 {
-  class CPeripheralJoystick : public CPeripheral // TODO: extend CPeripheralHID
+  class CPeripheralJoystick : public CPeripheral, // TODO: extend CPeripheralHID
+                              public IJoystickInputHandler
   {
   public:
     CPeripheralJoystick(const PeripheralScanResult& scanResult);
@@ -32,14 +33,10 @@ namespace PERIPHERALS
 
     virtual bool InitialiseFeature(const PeripheralFeature feature);
 
-    /*
-    bool HandleJoystickEvent(JoystickEvent event,
-                             unsigned int  index,
-                             int64_t       timeNs,
-                             bool          bPressed  = false,
-                             HatDirection  direction = HatDirectionNone,
-                             float         axisPos   = 0.0f);
-    */
+    virtual void OnButtonMotion(unsigned int index, bool bPressed);
+    virtual void OnHatMotion(unsigned int index, HatDirection direction);
+    virtual void OnAxisMotion(unsigned int index, float position);
+
   protected:
     IJoystickInputHandler* m_inputHandler;
   };

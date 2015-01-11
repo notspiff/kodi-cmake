@@ -391,6 +391,8 @@ bool CPeripheralAddon::GetJoystickInfo(unsigned int index, ADDON::Joystick& info
   return false;
 }
 */
+
+
 bool CPeripheralAddon::ProcessEvents(void)
 {
   if (!HasFeature(FEATURE_JOYSTICK))
@@ -412,21 +414,18 @@ bool CPeripheralAddon::ProcessEvents(void)
       if (!device)
         continue;
 
-      const int64_t timeNs = 0; // TODO
-
       switch (device->Type())
       {
       case PERIPHERAL_JOYSTICK:
       {
         CPeripheralJoystick* joystickDevice = static_cast<CPeripheralJoystick*>(device);
 
-        /* TODO
         switch (pEvents[i].type)
         {
           case JOYSTICK_EVENT_TYPE_RAW_BUTTON:
           {
-            bool bPressed = (pEvents[i].button_state == JOYSTICK_STATE_BUTTON_PRESSED);
-            joystickDevice->HandleJoystickEvent(JoystickEventRawButton, pEvents[i].raw_index,timeNs, bPressed);
+            const bool bPressed = (pEvents[i].button_state == JOYSTICK_STATE_BUTTON_PRESSED);
+            joystickDevice->OnButtonMotion(pEvents[i].raw_index, bPressed);
             break;
           }
           case JOYSTICK_EVENT_TYPE_RAW_HAT:
@@ -446,18 +445,17 @@ bool CPeripheralAddon::ProcessEvents(void)
               default:
                 break;
             }
-            joystickDevice->HandleJoystickEvent(JoystickEventRawHat, pEvents[i].raw_index,timeNs, false, dir);
+            joystickDevice->OnHatMotion(pEvents[i].raw_index, dir);
             break;
           }
           case JOYSTICK_EVENT_TYPE_RAW_AXIS:
           {
-            joystickDevice->HandleJoystickEvent(JoystickEventRawAxis, pEvents[i].raw_index,timeNs, false, HatDirectionNone, pEvents[i].axis_state);
+            joystickDevice->OnAxisMotion(pEvents[i].raw_index, pEvents[i].axis_state);
             break;
           }
           default:
             break;
         }
-        */
         break;
       }
       default:

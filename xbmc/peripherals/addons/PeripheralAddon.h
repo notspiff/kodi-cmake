@@ -36,8 +36,8 @@ namespace PERIPHERALS
   class CPeripheral;
 
   class CPeripheralAddon;
-  typedef boost::shared_ptr<CPeripheralAddon>       PeripheralAddonPtr;
-  typedef std::vector<PeripheralAddonPtr>           PeripheralAddonVector;
+  typedef boost::shared_ptr<CPeripheralAddon> PeripheralAddonPtr;
+  typedef std::vector<PeripheralAddonPtr>     PeripheralAddonVector;
 
   class CPeripheralAddon : public ADDON::CAddonDll<DllPeripheral, PeripheralAddon, PERIPHERAL_PROPERTIES>
   {
@@ -72,6 +72,7 @@ namespace PERIPHERALS
     /** @name Peripheral add-on methods */
     //@{
     bool PerformDeviceScan(PeripheralScanResults &results);
+    std::string GetName(unsigned int index) { return ""; } // TODO
     //@}
 
     /** @name Joystick methods */
@@ -79,6 +80,7 @@ namespace PERIPHERALS
     //bool GetJoystickInfo(unsigned int index, ADDON::Joystick& info);
 
     bool ProcessEvents(void);
+    IJoystickInputHandler* GetInputHandler(unsigned int index) { return NULL; } // TODO
     //@}
 
     static const char *ToString(PERIPHERAL_ERROR error);

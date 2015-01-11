@@ -54,16 +54,12 @@ bool CPeripheralJoystick::InitialiseFeature(const PeripheralFeature feature)
         unsigned int index;
         if (addonBus->SplitLocation(m_strLocation, addon, index))
         {
-          //m_strDeviceName = m_addon->GetName(index); // TODO
-          //addon->RegisterInputHandler(index, this); // TODO
+          // TODO
 
-          // TODO: Need a manager
-          //m_inputHandler = m_addon->GetInputHandler(index); // TODO
-          //m_inputHandler = new CGenericJoystickInputHandler(Index(), m_strDeviceName, m_iVendorId, m_iProductId);
-          //m_inputHandler->SetButtonCount(joystickInfo.ButtonCount());
-          //m_inputHandler->SetHatCount(joystickInfo.HatCount());
-          //m_inputHandler->SetAxisCount(joystickInfo.AxisCount());
-          //m_inputHandler->SetRequestedPort(joystickInfo.RequestedPlayer()); // TODO
+          // Override peripherals.xml
+          //m_strDeviceName = addon->GetName(index);
+
+          //m_inputHandler = addon->GetInputHandler(index);
         }
         else
           CLog::Log(LOGERROR, "CPeripheralJoystick: Invalid location (%s)", m_strLocation.c_str());
@@ -76,4 +72,22 @@ bool CPeripheralJoystick::InitialiseFeature(const PeripheralFeature feature)
   }
 
   return m_inputHandler != NULL;
+}
+
+void CPeripheralJoystick::OnButtonMotion(unsigned int index, bool bPressed)
+{
+  if (m_inputHandler)
+    m_inputHandler->OnButtonMotion(index, bPressed);
+}
+
+void CPeripheralJoystick::OnHatMotion(unsigned int index, HatDirection direction)
+{
+  if (m_inputHandler)
+    m_inputHandler->OnHatMotion(index, direction);
+}
+
+void CPeripheralJoystick::OnAxisMotion(unsigned int index, float position)
+{
+  if (m_inputHandler)
+    m_inputHandler->OnAxisMotion(index, position);
 }
