@@ -113,6 +113,7 @@ void doMethod(Node method, MethodType methodType)
 {
   boolean isOperator = method.@name.startsWith("operator ")
   boolean doAsMappingIndex = false
+  boolean doAsSequence = false
 
   if (isOperator)
   {
@@ -121,6 +122,8 @@ void doMethod(Node method, MethodType methodType)
     else
       return;
   }
+  else if (method.@name == "contains")
+    doAsSequence = true
 
   boolean constructor = methodType == MethodType.constructor
 
@@ -148,15 +151,15 @@ void doMethod(Node method, MethodType methodType)
 <%  }
   }
 %>
-  static <% if(methodType == MethodType.destructor) { %>void<% } else { %>PyObject*<% } %> ${module.@name}_${PythonTools.getPyMethodName(method,methodType)} (<%= ((clazz == null) ? "PyObject" : 
+  static <% if(methodType == MethodType.destructor) { %>void<% } else if (doAsSequence) { %>int<% } else { %>PyObject*<% } %> ${module.@name}_${PythonTools.getPyMethodName(method,methodType)} (<%= ((clazz == null) ? "PyObject" : 
                    (constructor ? "PyTypeObject" : 'PyHolder')) %>* ${constructor ? 'pytype' : 'self'} <% 
-                   if (doAsMappingIndex) { %>, PyObject* py${params[0].@name}<% }
+                   if (doAsMappingIndex || doAsSequence) { %>, PyObject* py${params[0].@name}<% }
                    else if (methodType != MethodType.destructor) { %> , PyObject *args, PyObject *kwds <%} %> )
   {
     XBMC_TRACE;
 <%  if (numParams > 0)
     { 
-      if (useKeywordParsing && !doAsMappingIndex)
+      if (useKeywordParsing && !doAsMappingIndex && !doAsSequence)
       { %>
     static const char *keywords[] = {<%
           params.each { %>
@@ -166,12 +169,12 @@ void doMethod(Node method, MethodType methodType)
       params.each { 
 %>         
     ${SwigTypeParser.SwigType_str(SwigTypeParser.convertTypeToLTypeForParam(it.@type))} ${it.@name} ${it.@value != null ? ' = ' + it.@value : ''};<%
-        if (!PythonTools.parameterCanBeUsedDirectly(it) && !doAsMappingIndex)
+        if (!PythonTools.parameterCanBeUsedDirectly(it) && !doAsMappingIndex && !doAsSequence)
         { %>
     PyObject* py${it.@name} = NULL;<%
         }
      }
-    if (!doAsMappingIndex)
+    if (!doAsMappingIndex && !doAsSequence)
     { %>
     if (!${useKeywordParsing ? 'PyArg_ParseTupleAndKeywords' : 'PyArg_ParseTuple'}(
        args,
@@ -193,7 +196,7 @@ void doMethod(Node method, MethodType methodType)
     {
 <%
     // now do the input converstion if any are necessary
-    params.findAll({ !PythonTools.parameterCanBeUsedDirectly(it) || doAsMappingIndex }).each { %>      ${Helper.getInConversion(it.@type, it.@name, 'py' + it.@name, method)} <% println() }
+    params.findAll({ !PythonTools.parameterCanBeUsedDirectly(it) || doAsMappingIndex || doAsSequence }).each { %>      ${Helper.getInConversion(it.@type, it.@name, 'py' + it.@name, method)} <% println() }
 %>
 <%
     // check to see if this method is a call to a virtual function on a director class.
@@ -253,7 +256,10 @@ void doMethod(Node method, MethodType methodType)
       } %>
     }
 <%
-    if (!destructor) { %>
+    if (doAsSequence) { %>
+    return (int)apiResult; <%
+    }
+    else if (!destructor) { %>
     PyObject* result = Py_None;
 
     // transform the result
@@ -347,6 +353,8 @@ void doClassMethodInfo(Node clazz, List initTypeCalls)
   // see if we have any valid (or invalid) operators
   boolean doComparator = false
   boolean doAsMapping = false
+  boolean doAsSequence = false
+  Node containsNode = clazz.function.find { it.@name == "contains" }
   boolean hasEquivalenceOp = false
   boolean hasLtOp = false
   boolean hasGtOp = false
@@ -354,7 +362,7 @@ void doClassMethodInfo(Node clazz, List initTypeCalls)
   boolean indexOpSupportsSet = false
   Node sizeNode = null
 
-  List normalMethods = clazz.function.findAll { !it.@name.startsWith("operator ") && it.@name != "toString" }
+  List normalMethods = clazz.function.findAll { !it.@name.startsWith("operator ") && it.@name != "contains" && it.@name != "toString" }
   List operators =  clazz.function.findAll { it.@name.startsWith("operator ") }
   List properties = clazz.variable.findAll { it.@access != null && it.@access == "public" }
   List properties_set = properties.findAll { it.@feature_immutable == null || it.@feature_immutable == 0 }
@@ -387,15 +395,6 @@ void doClassMethodInfo(Node clazz, List initTypeCalls)
       doComparator = true
   }
 
-  if (indexOp)
-  { 
-    sizeNode =  clazz.function.find { it.@name == "size" }
-    if (sizeNode)
-      doAsMapping = true
-    else
-      System.err.println ("Warning: class ${fullClassName} has an inconsistent operator set. To get a as_mapping you must implement 'size' as well as operator[]")
-  }
-
   if (doComparator){ 
 %>
   static int ${module.@name}_${classNameAsVariable}_cmp(PyObject* obj1, PyObject* obj2)
@@ -405,14 +404,52 @@ void doClassMethodInfo(Node clazz, List initTypeCalls)
 <%
   }
 
-  if (doAsMapping)
+  if (indexOp || containsNode)
+  { 
+    sizeNode =  clazz.function.find { it.@name == "size" }
+    if (sizeNode)
+    {
+      if (indexOp)
+        doAsMapping = true
+      if (containsNode)
+        doAsSequence = true
+    }
+    else
+      System.err.println ("Warning: class ${fullClassName} has an inconsistent operator set. To get a as_mapping you must implement 'size' as well as operator[]")
+  }
+  
+  if (sizeNode)
   {
 %>
   static Py_ssize_t ${module.@name}_${classNameAsVariable}_size_(PyObject* self)
   {
-    return (Py_ssize_t)((${fullClassName}*)retrieveApiInstance(self,&Ty${classNameAsVariable}_Type,"${Helper.callingName(indexOp)}","${fullClassName}"))-> size();
+    return (Py_ssize_t)((${fullClassName}*)retrieveApiInstance(self,&Ty${classNameAsVariable}_Type,"${Helper.callingName(indexOp)}","${fullClassName}"))->size();
   }
 <%
+  }
+
+  if (doAsSequence)
+  { %>
+  //=========================================================================
+  // tp_as_sequence struct for ${fullClassName}
+  //=========================================================================
+  PySequenceMethods ${module.@name}_${classNameAsVariable}_as_sequence = {
+    ${module.@name}_${classNameAsVariable}_size_,  /* sq_length */
+    0,                                      /* sq_concat */
+    0,                                      /* sq_repeat */
+    0,                                      /* sq_item */
+    0,                                      /* sq_slice */
+    0,                                      /* sq_ass_item */
+    0,                                      /* sq_ass_slice */
+    (objobjproc)${module.@name}_${PythonTools.getPyMethodName(containsNode,MethodType.method)},  /* sq_contains */
+    0,                                      /* sq_inplace_concat */
+    0,                                      /* sq_inplace_repeat */
+  };
+<%
+  }
+
+  if (doAsMapping)
+  {
     if (indexOpSupportsSet)
     {
       Node indexOpKeyParam = indexOp?.parm[0]
@@ -659,6 +696,9 @@ void doClassMethodInfo(Node clazz, List initTypeCalls)
     pythonType.tp_str = (reprfunc)${module.@name}_${PythonTools.getClassNameAsVariable(clazz)}_toString;
 <%
  }
+ if (containsNode) { %>
+    pythonType.tp_as_sequence = &${module.@name}_${classNameAsVariable}_as_sequence;
+<% }
  if (doAsMapping) { %>
     pythonType.tp_as_mapping = &${module.@name}_${classNameAsVariable}_as_mapping;
 <%  }
