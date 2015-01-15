@@ -1,1 +1,1 @@
-pvr.njoy https://github.com/notspiff/pvr.njoy 9faeb45 # PVRADDONS;PVRNJOY OFF
+pvr.njoy https://github.com/notspiff/pvr.njoy 3701efa # PVRADDONS;PVRNJOY OFF
