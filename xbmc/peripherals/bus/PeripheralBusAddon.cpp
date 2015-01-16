@@ -36,10 +36,6 @@ CPeripheralBusAddon::CPeripheralBusAddon(CPeripherals *manager) :
 
 CPeripheralBusAddon::~CPeripheralBusAddon(void)
 {
-  CSingleLock lock(m_critSection);
-
-  for (PeripheralAddonVector::const_iterator itAddon = m_addons.begin(); itAddon != m_addons.end(); ++itAddon)
-    (*itAddon)->Destroy();
 }
 
 bool CPeripheralBusAddon::GetAddon(const std::string &strId, AddonPtr &addon) const
