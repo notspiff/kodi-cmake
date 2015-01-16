@@ -58,8 +58,6 @@ bool CPeripheralBusAddon::GetAddon(const std::string &strId, AddonPtr &addon) co
 
 bool CPeripheralBusAddon::PerformDeviceScan(PeripheralScanResults &results)
 {
-  bool bReturn(false);
-
   VECADDONS addons;
   CAddonMgr::Get().GetAddons(ADDON_PERIPHERALDLL, addons, true);
 
@@ -89,10 +87,11 @@ bool CPeripheralBusAddon::PerformDeviceScan(PeripheralScanResults &results)
     }
 
     for (PeripheralAddonVector::const_iterator itAddon = m_addons.begin(); itAddon != m_addons.end(); ++itAddon)
-      bReturn |= (*itAddon)->PerformDeviceScan(results);
+      (*itAddon)->PerformDeviceScan(results);
   }
 
-  return bReturn;
+  // Scan during bus initialization must return true or bus gets deleted
+  return true;
 }
 
 void CPeripheralBusAddon::ProcessEvents(void)
