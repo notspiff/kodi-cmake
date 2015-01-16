@@ -123,13 +123,10 @@ void CPeripheralAddon::Destroy(void)
   CLog::Log(LOGDEBUG, "PERIPHERAL - %s - destroying peripheral add-on '%s'", __FUNCTION__, Name().c_str());
 
   /* destroy the add-on */
-  try { CAddonDll<DllPeripheral, PeripheralAddon, PERIPHERAL_PROPERTIES>::Destroy(); }
-  catch (const std::exception &e) { LogException(e, __FUNCTION__); }
+  CAddonDll<DllPeripheral, PeripheralAddon, PERIPHERAL_PROPERTIES>::Destroy();
 
   /* reset all properties to defaults */
   ResetProperties();
-
-  CAddonDll<DllPeripheral, PeripheralAddon, PERIPHERAL_PROPERTIES>::Destroy();
 }
 
 bool CPeripheralAddon::GetAddonProperties(void)
