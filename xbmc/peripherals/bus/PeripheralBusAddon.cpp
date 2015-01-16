@@ -19,6 +19,7 @@
  */
 
 #include "PeripheralBusAddon.h"
+#include "addons/AddonDatabase.h"
 #include "addons/AddonManager.h"
 #include "peripherals/Peripherals.h"
 #include "threads/SingleLock.h"
@@ -74,7 +75,9 @@ bool CPeripheralBusAddon::PerformDeviceScan(PeripheralScanResults &results)
       {
         if (addon->Create() != ADDON_STATUS_OK)
         {
-          addon->MarkAsDisabled();
+          CAddonDatabase addonDb;
+          if (addonDb.Open())
+            addonDb.DisableAddon(addon->ID());
           continue;
         }
       }
