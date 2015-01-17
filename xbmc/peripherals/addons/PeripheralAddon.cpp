@@ -352,7 +352,7 @@ bool CPeripheralAddon::PerformDeviceScan(PeripheralScanResults &results)
       result.m_iProductId    = peripheral.ProductID();
       result.m_mappedType    = PERIPHERAL_JOYSTICK;
       result.m_mappedBusType = PERIPHERAL_BUS_ADDON;
-      result.m_iSequence     = GetNumberOfPeripheralsWithId(result.m_iVendorId, result.m_iProductId);
+      result.m_iSequence     = 0;
 
       if (!results.ContainsResult(result))
         results.m_results.push_back(result);
