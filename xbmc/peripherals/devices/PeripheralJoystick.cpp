@@ -19,8 +19,10 @@
  */
 
 #include "PeripheralJoystick.h"
+#include "input/joysticks/generic/GenericJoystickActionHandler.h"
 #include "input/joysticks/generic/GenericJoystickInputHandler.h"
 #include "peripherals/Peripherals.h"
+#include "peripherals/addons/AddonJoystickButtonMap.h"
 #include "peripherals/bus/PeripheralBusAddon.h"
 #include "utils/log.h"
 
@@ -28,7 +30,13 @@ using namespace PERIPHERALS;
 
 CPeripheralJoystick::CPeripheralJoystick(const PeripheralScanResult& scanResult) :
   CPeripheral(scanResult),
-  m_inputHandler(NULL)
+  m_inputHandler(NULL),
+  m_actionHandler(NULL),
+  m_buttonMap(NULL),
+  m_requestedPort(0),
+  m_buttonCount(0),
+  m_hatCount(0),
+  m_axisCount(0)
 {
   m_features.push_back(FEATURE_JOYSTICK);
 }
@@ -36,6 +44,8 @@ CPeripheralJoystick::CPeripheralJoystick(const PeripheralScanResult& scanResult)
 CPeripheralJoystick::~CPeripheralJoystick(void)
 {
   delete m_inputHandler;
+  delete m_actionHandler;
+  delete m_buttonMap;
 }
 
 bool CPeripheralJoystick::InitialiseFeature(const PeripheralFeature feature)
@@ -54,18 +64,13 @@ bool CPeripheralJoystick::InitialiseFeature(const PeripheralFeature feature)
         unsigned int index;
         if (addonBus->SplitLocation(m_strLocation, addon, index))
         {
-          // Override peripherals.xml
-          //m_strDeviceName = addon->GetName(index); // TODO
-
-          m_inputHandler = addon->CreateInputHandler(index);
+          m_actionHandler = new CGenericJoystickActionHandler;
+          m_buttonMap     = new CAddonJoystickButtonMap(addon, index);
+          m_inputHandler  = new CGenericJoystickInputHandler(m_actionHandler, m_buttonMap);
         }
         else
           CLog::Log(LOGERROR, "CPeripheralJoystick: Invalid location (%s)", m_strLocation.c_str());
       }
-    }
-    else
-    {
-      m_inputHandler = NULL; // TODO
     }
   }
 

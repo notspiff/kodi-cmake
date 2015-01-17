@@ -22,8 +22,6 @@
 #include "AddonJoystickButtonMap.h"
 #include "addons/AddonManager.h"
 #include "filesystem/SpecialProtocol.h"
-#include "input/joysticks/generic/GenericJoystickActionHandler.h"
-#include "input/joysticks/generic/GenericJoystickInputHandler.h"
 #include "input/joysticks/ButtonPrimitive.h"
 #include "peripherals/Peripherals.h"
 #include "peripherals/bus/PeripheralBusAddon.h"
@@ -190,12 +188,39 @@ bool CPeripheralAddon::Register(unsigned int peripheralIndex, CPeripheral *perip
 
   if (m_peripherals.find(peripheralIndex) == m_peripherals.end())
   {
-    m_peripherals[peripheralIndex] = peripheral;
-    CLog::Log(LOGNOTICE, "%s - new %s device registered on %s->%s: %s",
-        __FUNCTION__, PeripheralTypeTranslator::TypeToString(peripheral->Type()),
-        PeripheralTypeTranslator::BusTypeToString(PERIPHERAL_BUS_ADDON),
-        peripheral->Location().c_str(), peripheral->DeviceName().c_str());
-    return true;
+    if (peripheral->Type() == PERIPHERAL_JOYSTICK)
+    {
+      CPeripheralJoystick* joystickDevice = static_cast<CPeripheralJoystick*>(peripheral);
+      JOYSTICK_INFO        joystickInfo;
+      PERIPHERAL_ERROR     retVal;
+
+      try { LogError(retVal = m_pStruct->GetJoystickInfo(peripheralIndex, &joystickInfo), "GetJoystickInfo()"); }
+      catch (std::exception &e) { LogException(e, "GetJoystickInfo()"); return false;  }
+
+      if (retVal == PERIPHERAL_NO_ERROR)
+      {
+        ADDON::Joystick joystick(joystickInfo);
+
+        joystickDevice->SetDeviceName(joystick.Name());
+        joystickDevice->SetProvider(joystick.Provider());
+        joystickDevice->SetRequestedPort(joystick.RequestedPort());
+        joystickDevice->SetButtonCount(joystick.ButtonCount());
+        joystickDevice->SetHatCount(joystick.HatCount());
+        joystickDevice->SetAxisCount(joystick.AxisCount());
+
+        m_peripherals[peripheralIndex] = joystickDevice;
+
+        CLog::Log(LOGNOTICE, "%s - new %s device registered on %s->%s: %s",
+            __FUNCTION__, PeripheralTypeTranslator::TypeToString(peripheral->Type()),
+            PeripheralTypeTranslator::BusTypeToString(PERIPHERAL_BUS_ADDON),
+            peripheral->Location().c_str(), peripheral->DeviceName().c_str());
+
+        try { m_pStruct->FreeJoystickInfo(&joystickInfo); }
+        catch (std::exception &e) { LogException(e, "FreeJoystickInfo()"); }
+
+        return true;
+      }
+    }
   }
   return false;
 }
@@ -445,44 +470,6 @@ bool CPeripheralAddon::ProcessEvents(void)
   }
 
   return false;
-}
-
-IJoystickInputHandler* CPeripheralAddon::CreateInputHandler(unsigned int index)
-{
-  if (!HasFeature(FEATURE_JOYSTICK))
-    return false;
-
-  IJoystickInputHandler* handler = NULL;
-
-  JOYSTICK_INFO infoStruct;
-
-  PERIPHERAL_ERROR errorVal;
-
-  try { LogError(errorVal = m_pStruct->GetJoystickInfo(index, &infoStruct), "GetJoystickInfo()"); }
-  catch (std::exception &e) { LogException(e, "GetJoystickInfo()"); return false; }
-
-  if (errorVal == PERIPHERAL_NO_ERROR)
-  {
-    ADDON::Joystick joystickInfo(infoStruct);
-
-    try { m_pStruct->FreeJoystickInfo(&infoStruct); }
-    catch (std::exception &e) { LogException(e, "FreeJoystickInfo()"); }
-
-    CPeripheralBusAddon* addonBus = static_cast<CPeripheralBusAddon*>(g_peripherals.GetBusByType(PERIPHERAL_BUS_ADDON));
-    if (addonBus)
-    {
-      ADDON::AddonPtr addon;
-      if (addonBus->GetAddon(ID(), addon))
-      {
-        // TODO
-        IJoystickActionHandler* actionHandler = new CGenericJoystickActionHandler();
-        CAddonJoystickButtonMap* buttonMap = new CAddonJoystickButtonMap(boost::dynamic_pointer_cast<CPeripheralAddon>(addon), index);
-        handler = new CGenericJoystickInputHandler(actionHandler, buttonMap);
-      }
-    }
-  }
-
-  return handler;
 }
 
 JoystickActionID CPeripheralAddon::GetAction(unsigned int index, const CButtonPrimitive& source)

@@ -79,7 +79,6 @@ namespace PERIPHERALS
 
     /** @name Joystick methods */
     //@{
-    IJoystickInputHandler* CreateInputHandler(unsigned int index);
     JoystickActionID GetAction(unsigned int index, const CButtonPrimitive& source);
     JoystickActionID GetAnalogStick(unsigned int index, unsigned int axisIndex, unsigned int& indexHoriz, unsigned int& indexVert);
     JoystickActionID GetAccelerometer(unsigned int index, unsigned int axisIndex, unsigned int& indexX, unsigned int& indexY, unsigned int& indexZ);
