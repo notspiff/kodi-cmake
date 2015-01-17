@@ -229,7 +229,7 @@ namespace ADDON
     Joystick(const std::string& strProvider = "", const std::string& strName = "")
     : Peripheral(PERIPHERAL_TYPE_JOYSTICK, strName),
       m_strProvider(strProvider),
-      m_requestedPlayer(0),
+      m_requestedPort(0),
       m_buttonCount(0),
       m_hatCount(0),
       m_axisCount(0)
@@ -239,7 +239,7 @@ namespace ADDON
     Joystick(JOYSTICK_INFO& info)
     : Peripheral(info.peripheral_info),
       m_strProvider(info.provider ? info.provider : ""),
-      m_requestedPlayer(info.requested_player_num),
+      m_requestedPort(info.requested_port_num),
       m_buttonCount(info.virtual_layout.button_count),
       m_hatCount(info.virtual_layout.hat_count),
       m_axisCount(info.virtual_layout.axis_count)
@@ -255,19 +255,19 @@ namespace ADDON
 
     virtual ~Joystick(void) { }
 
-    const std::string& Provider(void) const        { return m_strProvider; }
-    unsigned int       RequestedPlayer(void) const { return m_requestedPlayer; }
-    unsigned int       ButtonCount(void) const     { return m_buttonCount; }
-    unsigned int       HatCount(void) const        { return m_hatCount; }
-    unsigned int       AxisCount(void) const       { return m_axisCount; }
+    const std::string& Provider(void) const      { return m_strProvider; }
+    unsigned int       RequestedPort(void) const { return m_requestedPort; }
+    unsigned int       ButtonCount(void) const   { return m_buttonCount; }
+    unsigned int       HatCount(void) const      { return m_hatCount; }
+    unsigned int       AxisCount(void) const     { return m_axisCount; }
 
     const std::vector<JoystickButton>& Buttons(void) const { return m_buttons; }
 
-    void SetProvider(const std::string& strProvider)      { m_strProvider     = strProvider; }
-    void SetRequestedPlayer(unsigned int requestedPlayer) { m_requestedPlayer = requestedPlayer; }
-    void SetButtonCount(unsigned int buttonCount)         { m_buttonCount     = buttonCount; }
-    void SetHatCount(unsigned int hatCount)               { m_hatCount        = hatCount; }
-    void SetAxisCount(unsigned int axisCount)             { m_axisCount       = axisCount; }
+    void SetProvider(const std::string& strProvider)  { m_strProvider   = strProvider; }
+    void SetRequestedPort(unsigned int requestedPort) { m_requestedPort = requestedPort; }
+    void SetButtonCount(unsigned int buttonCount)     { m_buttonCount   = buttonCount; }
+    void SetHatCount(unsigned int hatCount)           { m_hatCount      = hatCount; }
+    void SetAxisCount(unsigned int axisCount)         { m_axisCount     = axisCount; }
 
     std::vector<JoystickButton>& Buttons(void) { return m_buttons; }
 
@@ -276,7 +276,7 @@ namespace ADDON
       Peripheral::ToStruct(info.peripheral_info);
 
       info.provider = new char[m_strProvider.size() + 1];
-      info.requested_player_num         = m_requestedPlayer;
+      info.requested_port_num           = m_requestedPort;
       info.virtual_layout.button_count  = m_buttonCount;
       info.virtual_layout.hat_count     = m_hatCount;
       info.virtual_layout.axis_count    = m_axisCount;
@@ -298,7 +298,7 @@ namespace ADDON
 
   private:
     std::string                 m_strProvider;
-    unsigned int                m_requestedPlayer;
+    unsigned int                m_requestedPort;
     unsigned int                m_buttonCount;
     unsigned int                m_hatCount;
     unsigned int                m_axisCount;

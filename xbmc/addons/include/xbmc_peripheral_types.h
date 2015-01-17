@@ -168,9 +168,9 @@ extern "C"
 
   typedef struct JOYSTICK_INFO
   {
-    PERIPHERAL_INFO          peripheral_info;      /*!< @brief inherited info */
-    char*                    provider;             /*!< @brief name of the interface providing the joystick */
-    unsigned int             requested_player_num; /*!< @brief requested port number (such as for 360 controllers), or NO_PORT_REQUESTED */
+    PERIPHERAL_INFO          peripheral_info;    /*!< @brief inherited info */
+    char*                    provider;           /*!< @brief name of the interface providing the joystick */
+    unsigned int             requested_port_num; /*!< @brief requested port number (such as for 360 controllers), or NO_PORT_REQUESTED */
     JOYSTICK_VIRTUAL_LAYOUT  virtual_layout;
     JOYSTICK_PHYSICAL_LAYOUT physical_layout;
   } ATTRIBUTE_PACKED JOYSTICK_INFO;
