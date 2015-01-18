@@ -132,36 +132,68 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
   m_axisStates[index] = position;
 
   CButtonPrimitive positiveAxis(index, SemiAxisDirectionPositive);
-  CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
-
   JoystickActionID positiveAction = m_buttonMap->GetAction(positiveAxis);
-  JoystickActionID negativeAction = m_buttonMap->GetAction(negativeAxis);
 
-  if (positiveAction)
-    m_handler->OnButtonMotion(positiveAction, std::max(position, 0.0f));
-
-  if (negativeAction)
-    m_handler->OnButtonMotion(negativeAction, -1.0f * std::min(position, 0.0f)); // magnitude is >= 0
-
-  if (!(positiveAction || negativeAction))
+  switch (positiveAction)
   {
-    unsigned int indexHoriz, indexVert;
-    JoystickActionID action = m_buttonMap->GetAnalogStick(index, indexHoriz, indexVert);
-    if (action)
+  case JOY_ID_ANALOG_STICK_L:
+  case JOY_ID_ANALOG_STICK_R:
+  {
+    int  horizIndex;
+    bool horizInverted;
+    int  vertIndex;
+    bool vertInverted;
+
+    if (m_buttonMap->GetAnalogStick(positiveAction,
+                                    horizIndex, horizInverted,
+                                    vertIndex,  vertInverted))
     {
-      m_handler->OnAnalogStickMotion(action, GetAxisState(indexHoriz), GetAxisState(indexVert));
+      const float horizPos = GetAxisState(horizIndex) * (horizInverted ? -1.0f : 1.0f);
+      const float vertPos  = GetAxisState(vertIndex)  * (vertInverted  ? -1.0f : 1.0f);
+      m_handler->OnAnalogStickMotion(positiveAction, horizPos, vertPos);
     }
-    else
+    break;
+  }
+
+  case JOY_ID_ACCELEROMETER:
+  {
+    int  xIndex;
+    bool xInverted;
+    int  yIndex;
+    bool yInverted;
+    int  zIndex;
+    bool zInverted;
+
+    if (m_buttonMap->GetAccelerometer(positiveAction,
+                                      xIndex, xInverted,
+                                      yIndex, yInverted,
+                                      zIndex, zInverted))
     {
-      unsigned int indexX, indexY, indexZ;
-      JoystickActionID action = m_buttonMap->GetAccelerometer(index, indexX, indexY, indexZ);
-      if (action)
-        m_handler->OnAccelerometerMotion(action, GetAxisState(indexX), GetAxisState(indexY), GetAxisState(indexZ));
+      const float xPos = GetAxisState(xIndex) * (xInverted ? -1.0f : 1.0f);
+      const float yPos = GetAxisState(yIndex) * (yInverted ? -1.0f : 1.0f);
+      const float zPos = GetAxisState(zIndex) * (zInverted ? -1.0f : 1.0f);
+      m_handler->OnAccelerometerMotion(positiveAction, xPos, yPos, zPos);
     }
+    break;
+  }
+
+  default:
+  {
+    CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
+    JoystickActionID negativeAction = m_buttonMap->GetAction(negativeAxis);
+
+    if (positiveAction)
+      m_handler->OnButtonMotion(positiveAction, std::max(position, 0.0f));
+
+    if (negativeAction)
+      m_handler->OnButtonMotion(negativeAction, -1.0f * std::min(position, 0.0f)); // magnitude is >= 0
+
+    break;
+  }
   }
 }
 
-float CGenericJoystickInputHandler::GetAxisState(unsigned int axisIndex) const
+float CGenericJoystickInputHandler::GetAxisState(int axisIndex) const
 {
-  return axisIndex < m_axisStates.size() ? m_axisStates[axisIndex] : 0;
+  return (0 <= axisIndex && axisIndex < (int)m_axisStates.size()) ? m_axisStates[axisIndex] : 0;
 }

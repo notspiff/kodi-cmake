@@ -34,37 +34,16 @@ class IJoystickButtonMap
 public:
   virtual ~IJoystickButtonMap() { }
   
-#if 0 // TODO
-  /*!
-   * \brief Load()
-   *
-   * \param strProvider Standard name of the API providing the joystick
-   * \param strName     Name of the joystick reported by the provider, or empty if unknown
-   * \param vendorId    Vendor ID of the joystick, or 0x0000 if unknown
-   * \param productId   Product ID of the joystick, or 0x0000 if unknown
-   * \param buttonCount Number of raw buttons reported by the provider, or -1 if unknown
-   * \param hatCount    Number of raw hats reported by the provider, or -1 if unknown
-   * \param axisCount   Number of raw axes reported by the provider, or -1 if unknown
-   *
-   * \return True if the button map was loaded
-   */
-  virtual bool Load(const std::string& strProvider,
-                    const std::string& strName     = "",
-                    uint16_t           vendorId    = 0x0000,
-                    uint16_t           productId   = 0x0000,
-                    int                buttonCount = -1,
-                    int                hatCount    = -1,
-                    int                axisCount   = -1) = 0;
-#endif
+  virtual bool Load(void) = 0;
 
-  virtual JoystickActionID GetAction(const CButtonPrimitive& source) = 0;
+  virtual JoystickActionID GetAction(const CButtonPrimitive& button) = 0;
 
-  virtual JoystickActionID GetAnalogStick(unsigned int  axisIndex,
-                                          unsigned int& indexHoriz,
-                                          unsigned int& indexVert) = 0;
+  virtual bool GetButtonPrimitive(JoystickActionID id, CButtonPrimitive& button) = 0;
 
-  virtual JoystickActionID GetAccelerometer(unsigned int  axisIndex,
-                                            unsigned int& indexX,
-                                            unsigned int& indexY,
-                                            unsigned int& indexZ) = 0;
+  virtual bool GetAnalogStick(JoystickActionID id, int& horizIndex, bool& horizInverted,
+                                                    int& vertIndex,  bool& vertInverted) = 0;
+
+  virtual bool GetAccelerometer(JoystickActionID id, int& xIndex, bool& xInverted,
+                                                      int& yIndex, bool& yInverted,
+                                                      int& zIndex, bool& zInverted) = 0;
 };

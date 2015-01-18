@@ -23,6 +23,7 @@
 
 #include <cmath>
 #include <cstring>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -412,4 +413,156 @@ namespace ADDON
   };
 
   typedef PeripheralVector<PeripheralEvent, PERIPHERAL_EVENT> PeripheralEvents;
+
+  class ButtonMapValue
+  {
+  public:
+    ButtonMapValue(void)
+    : m_value()
+    {
+    }
+
+    ButtonMapValue(unsigned int buttonIndex)
+    : m_value()
+    {
+      SetButtonIndex(buttonIndex);
+    }
+
+    ButtonMapValue(unsigned int hatIndex, JOYSTICK_HAT_DIRECTION direction)
+    : m_value()
+    {
+      SetHatDirection(hatIndex, direction);
+    }
+
+    ButtonMapValue(unsigned int axisIndex, bool bInverted)
+    : m_value()
+    {
+      SetSemiAxis(axisIndex, bInverted);
+    }
+
+    ButtonMapValue(unsigned int horizIndex, bool horizInverted, unsigned int vertIndex, bool vertInverted)
+    : m_value()
+    {
+      SetAnalogStick(horizIndex, horizInverted, vertIndex, vertInverted);
+    }
+
+    ButtonMapValue(unsigned int xIndex, bool xInverted, unsigned int yIndex, bool yInverted, unsigned int zIndex, bool zInverted)
+    : m_value()
+    {
+      SetAccelerometer(xIndex, xInverted, yIndex, yInverted, zIndex, zInverted);
+    }
+
+    ButtonMapValue(const JOYSTICK_BUTTONMAP_VALUE& value)
+    : m_value(value)
+    {
+    }
+
+    JOYSTICK_BUTTONMAP_VALUE_TYPE Type(void) const { return m_value.type; }
+    
+    JOYSTICK_BUTTONMAP_VALUE::button&        Button(void)        { return m_value.button_value; }
+    JOYSTICK_BUTTONMAP_VALUE::hat&           Hat(void)           { return m_value.hat_value; }
+    JOYSTICK_BUTTONMAP_VALUE::semiaxis&      SemiAxis(void)      { return m_value.semiaxis_value; }
+    JOYSTICK_BUTTONMAP_VALUE::analog_stick&  AnalogStick(void)   { return m_value.analog_stick_value; }
+    JOYSTICK_BUTTONMAP_VALUE::accelerometer& Accelerometer(void) { return m_value.accelerometer_value; }
+
+    const JOYSTICK_BUTTONMAP_VALUE::button&        Button(void)        const { return m_value.button_value; }
+    const JOYSTICK_BUTTONMAP_VALUE::hat&           Hat(void)           const { return m_value.hat_value; }
+    const JOYSTICK_BUTTONMAP_VALUE::semiaxis&      SemiAxis(void)      const { return m_value.semiaxis_value; }
+    const JOYSTICK_BUTTONMAP_VALUE::analog_stick&  AnalogStick(void)   const { return m_value.analog_stick_value; }
+    const JOYSTICK_BUTTONMAP_VALUE::accelerometer& Accelerometer(void) const { return m_value.accelerometer_value; }
+
+    void SetButtonIndex(unsigned int buttonIndex)
+    {
+      m_value.type   = JOYSTICK_BUTTONMAP_VALUE_BUTTON;
+      Button().index = buttonIndex;
+    }
+
+    void SetHatDirection(unsigned int hatIndex, JOYSTICK_HAT_DIRECTION direction)
+    {
+      m_value.type    = JOYSTICK_BUTTONMAP_VALUE_HAT_DIRECTION;
+      Hat().index     = hatIndex;
+      Hat().direction = direction;
+    }
+
+    void SetSemiAxis(unsigned int axisIndex, bool bInverted)
+    {
+      m_value.type         = JOYSTICK_BUTTONMAP_VALUE_SEMIAXIS;
+      SemiAxis().index     = axisIndex;
+      SemiAxis().direction = bInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+    }
+
+    void SetAnalogStick(unsigned int horizIndex, bool horizInverted, 
+                        unsigned int vertIndex,  bool vertInverted)
+    {
+      m_value.type                  = JOYSTICK_BUTTONMAP_VALUE_ANALOG_STICK;
+      AnalogStick().right.index     = horizIndex;
+      AnalogStick().right.direction = horizInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+      AnalogStick().up.index        = vertIndex;
+      AnalogStick().up.direction    = vertInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+    }
+
+    void SetAccelerometer(unsigned int xIndex, bool xInverted, 
+                          unsigned int yIndex, bool yInverted,
+                          unsigned int zIndex, bool zInverted)
+    {
+      m_value.type                = JOYSTICK_BUTTONMAP_VALUE_ACCELEROMETER;
+      Accelerometer().x.index     = xIndex;
+      Accelerometer().x.direction = xInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+      Accelerometer().y.index     = yIndex;
+      Accelerometer().y.direction = yInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+      Accelerometer().z.index     = zIndex;
+      Accelerometer().z.direction = zInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+    }
+
+    void ToStruct(JOYSTICK_BUTTONMAP_VALUE& value) const
+    {
+      value = m_value;
+    }
+
+  private:
+    JOYSTICK_BUTTONMAP_VALUE m_value;
+  };
+
+  typedef std::map<JOYSTICK_ID, ButtonMapValue> ButtonMap;
+
+  class ButtonMaps
+  {
+  public:
+    static void ToStruct(const ButtonMap& buttonMap, JOYSTICK_BUTTONMAP& buttonMapStruct)
+    {
+      buttonMapStruct.size = 0;
+      if (buttonMap.empty())
+      {
+        buttonMapStruct.keys   = NULL;
+        buttonMapStruct.values = NULL;
+      }
+      else
+      {
+        buttonMapStruct.keys   = new JOYSTICK_ID[buttonMapStruct.size];
+        buttonMapStruct.values = new JOYSTICK_BUTTONMAP_VALUE[buttonMapStruct.size];
+        for (ButtonMap::const_iterator it = buttonMap.begin(); it != buttonMap.end(); ++it)
+        {
+          unsigned int i = buttonMapStruct.size++;
+          buttonMapStruct.keys[i] = it->first;
+          it->second.ToStruct(buttonMapStruct.values[i]);
+        }
+      }
+    }
+
+    static void ToMap(const JOYSTICK_BUTTONMAP& buttonMapStruct, ButtonMap& buttonMap)
+    {
+      buttonMap.clear();
+      if (buttonMapStruct.keys && buttonMapStruct.values)
+      {
+        for (unsigned int i = 0; i < buttonMapStruct.size; i++)
+          buttonMap[buttonMapStruct.keys[i]] = buttonMapStruct.values[i];
+      }
+    }
+
+    static void FreeStruct(JOYSTICK_BUTTONMAP& buttonMapStruct)
+    {
+      SAFE_DELETE_ARRAY(buttonMapStruct.keys);
+      SAFE_DELETE_ARRAY(buttonMapStruct.values);
+    }
+  };
 }

@@ -58,6 +58,9 @@
 /* indicates a joystick has no preference for port number */
 #define NO_PORT_REQUESTED 0
 
+/* joystick button index is unknown */
+#define JOYSTICK_INDEX_UNKNOWN -1
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -119,8 +122,8 @@ extern "C"
     JOYSTICK_ID_BUTTON_B,                /*!< @brief corresponds to B (generic) or Circle (Sony) */
     JOYSTICK_ID_BUTTON_X,                /*!< @brief corresponds to C or X (generic), Square (Sony), C-down (N64) or One (Wii)*/
     JOYSTICK_ID_BUTTON_Y,                /*!< @brief corresponds to Y (generic), Triangle (Sony), C-left (N64) or Two (Wii) */
-    //JOYSTICK_ID_BUTTON_C,                /*!< @brief corresponds to Black (Xbox) or C-right (N64) */
-    //JOYSTICK_ID_BUTTON_Z,                /*!< @brief corresponds to White (Xbox) or C-up (N64) */
+    JOYSTICK_ID_BUTTON_C,                /*!< @brief corresponds to Black (Xbox) or C-right (N64) */
+    JOYSTICK_ID_BUTTON_Z,                /*!< @brief corresponds to White (Xbox) or C-up (N64) */
     JOYSTICK_ID_BUTTON_START,            /*!< @brief corresponds to Start (generic) */
     JOYSTICK_ID_BUTTON_SELECT,           /*!< @brief corresponds to Select (generic) or Back (Xbox) */
     JOYSTICK_ID_BUTTON_HOME,             /*!< @brief corresponds to Guide (Xbox) or Analog (Sony) */
@@ -134,8 +137,8 @@ extern "C"
     JOYSTICK_ID_BUTTON_R_STICK,          /*!< @brief corresponds to Right stick (Xbox, Sony) */
     JOYSTICK_ID_TRIGGER_L,               /*!< @brief corresponds to Left trigger (generic) or L2 (Sony) */
     JOYSTICK_ID_TRIGGER_R,               /*!< @brief corresponds to Right trigger (generic) or R2 (Sony) */
-    JOYSTICK_ID_ANALOG_STICK_LEFT,       /*!< @brief corresponds to Left analog stick */
-    JOYSTICK_ID_ANALOG_STICK_RIGHT,      /*!< @brief corresponds to Right analog stick */
+    JOYSTICK_ID_ANALOG_STICK_L,          /*!< @brief corresponds to Left analog stick */
+    JOYSTICK_ID_ANALOG_STICK_R,          /*!< @brief corresponds to Right analog stick */
     JOYSTICK_ID_ACCELEROMETER,           /*!< @brief corresponds to Accelerometer (Wii/Sixaxis) */
   } JOYSTICK_ID;
 
@@ -217,27 +220,82 @@ extern "C"
     };
   } ATTRIBUTE_PACKED PERIPHERAL_EVENT;
 
-  typedef enum JOYSTICK_SEMI_AXIS_DIRECTION
+  typedef enum JOYSTICK_HAT_DIRECTION
   {
-    JOYSTICK_SEMI_AXIS_DIRECTION_NEGATIVE = -1,     /*!< @brief negative part of the axis in the interval [-1, 0) */
-    JOYSTICK_SEMI_AXIS_DIRECTION_UNKNOWN  =  0,     /*!< @brief positive part of the axis in the interval (0, 1] */
-    JOYSTICK_SEMI_AXIS_DIRECTION_POSITIVE =  1,     /*!< @brief positive part of the axis in the interval (0, 1] */
-  } JOYSTICK_SEMI_AXIS_DIRECTION;
+    JOYSTICK_HAT_UNKNOWN = 0,
+    JOYSTICK_HAT_LEFT,
+    JOYSTICK_HAT_RIGHT,
+    JOYSTICK_HAT_UP,
+    JOYSTICK_HAT_DOWN,
+  } JOYSTICK_HAT_DIRECTION;
 
-  typedef enum JOYSTICK_BUTTON_PRIMITIVE_TYPE
+  typedef enum JOYSTICK_SEMIAXIS_DIRECTION
   {
-    JOYSTICK_BUTTON_PRIMITIVE_UNKNOWN = 0,
-    JOYSTICK_BUTTON_PRIMITIVE_BUTTON,
-    JOYSTICK_BUTTON_PRIMITIVE_HAT_DIRECTION,
-    JOYSTICK_BUTTON_PRIMITIVE_SEMI_AXIS,
-  } JOYSTICK_BUTTON_PRIMITIVE_TYPE;
+    JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE = -1,     /*!< @brief negative part of the axis in the interval [-1, 0) */
+    JOYSTICK_SEMIAXIS_DIRECTION_UNKNOWN  =  0,     /*!< @brief positive part of the axis in the interval (0, 1] */
+    JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE =  1,     /*!< @brief positive part of the axis in the interval (0, 1] */
+  } JOYSTICK_SEMIAXIS_DIRECTION;
 
-  typedef struct JOYSTICK_BUTTON_PRIMITIVE
+  typedef enum JOYSTICK_BUTTONMAP_VALUE_TYPE
   {
-    JOYSTICK_BUTTON_PRIMITIVE_TYPE type;
-    unsigned int                   index;
-    JOYSTICK_STATE_HAT             hat_direction;
-    JOYSTICK_SEMI_AXIS_DIRECTION   semi_axis_dir;
+    JOYSTICK_BUTTONMAP_VALUE_UNKNOWN = 0,
+    JOYSTICK_BUTTONMAP_VALUE_BUTTON,
+    JOYSTICK_BUTTONMAP_VALUE_HAT_DIRECTION,
+    JOYSTICK_BUTTONMAP_VALUE_SEMIAXIS,
+    JOYSTICK_BUTTONMAP_VALUE_ANALOG_STICK,
+    JOYSTICK_BUTTONMAP_VALUE_ACCELEROMETER,
+  } JOYSTICK_BUTTONMAP_VALUE_TYPE;
+
+  typedef struct JOYSTICK_BUTTONMAP_VALUE
+  {
+    struct button
+    {
+      unsigned int index;
+    };
+
+    struct hat
+    {
+      unsigned int index;
+      JOYSTICK_HAT_DIRECTION direction;
+    };
+
+    struct semiaxis
+    {
+      unsigned int                index;
+      JOYSTICK_SEMIAXIS_DIRECTION direction;
+    };
+
+    struct analog_stick
+    {
+      struct semiaxis right;
+      struct semiaxis up;
+    };
+
+    struct accelerometer
+    {
+      struct semiaxis x;
+      struct semiaxis y;
+      struct semiaxis z;
+    };
+
+    JOYSTICK_BUTTONMAP_VALUE_TYPE type;
+    union
+    {
+      struct button        button_value;
+      struct hat           hat_value;
+      struct semiaxis      semiaxis_value;
+      struct analog_stick  analog_stick_value;
+      struct accelerometer accelerometer_value;
+    };
+  } ATTRIBUTE_PACKED JOYSTICK_BUTTONMAP_VALUE;
+
+  typedef JOYSTICK_ID  JOYSTICK_BUTTONMAP_KEY;
+
+  typedef struct JOYSTICK_BUTTONMAP
+  {
+    unsigned int              size;
+    JOYSTICK_BUTTONMAP_KEY*   keys;
+    JOYSTICK_BUTTONMAP_VALUE* values;
   } ATTRIBUTE_PACKED JOYSTICK_BUTTON_PRIMITIVE;
   ///}
 
@@ -260,9 +318,9 @@ extern "C"
     void             (__cdecl* FreeJoystickInfo)(JOYSTICK_INFO*);
     PERIPHERAL_ERROR (__cdecl* GetEvents)(unsigned int*, PERIPHERAL_EVENT**);
     void             (__cdecl* FreeEvents)(unsigned int, PERIPHERAL_EVENT*);
-    JOYSTICK_ID      (__cdecl* GetAction)(unsigned int, JOYSTICK_BUTTON_PRIMITIVE*);
-    JOYSTICK_ID      (__cdecl* GetAnalogStick)(unsigned int, unsigned int, unsigned int*, unsigned int*);
-    JOYSTICK_ID      (__cdecl* GetAccelerometer)(unsigned int, unsigned int, unsigned int*, unsigned int*, unsigned int*);
+    PERIPHERAL_ERROR (__cdecl* GetButtonMap)(unsigned int, JOYSTICK_BUTTONMAP*);
+    void             (__cdecl* FreeButtonMap)(JOYSTICK_BUTTONMAP*);
+    PERIPHERAL_ERROR (__cdecl* UpdateButtonMap)(JOYSTICK_ID, JOYSTICK_BUTTONMAP_VALUE*);
     ///}
   } PeripheralAddon;
 

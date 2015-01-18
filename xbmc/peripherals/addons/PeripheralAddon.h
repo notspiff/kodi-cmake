@@ -79,12 +79,15 @@ namespace PERIPHERALS
 
     /** @name Joystick methods */
     //@{
-    JoystickActionID GetAction(unsigned int index, const CButtonPrimitive& source);
-    JoystickActionID GetAnalogStick(unsigned int index, unsigned int axisIndex, unsigned int& indexHoriz, unsigned int& indexVert);
-    JoystickActionID GetAccelerometer(unsigned int index, unsigned int axisIndex, unsigned int& indexX, unsigned int& indexY, unsigned int& indexZ);
+    bool GetButtonMap(unsigned int index, ADDON::ButtonMap& buttonMap);
     //@}
 
-    static const char *ToString(PERIPHERAL_ERROR error);
+    static const char        *ToString(PERIPHERAL_ERROR error);
+    static JoystickActionID  ToJoystickID(JOYSTICK_ID id);
+    static JOYSTICK_ID       ToAddonID(JoystickActionID id);
+    static HatDirection      ToHatDirection(JOYSTICK_STATE_HAT state);
+    static HatDirection      ToHatDirection(JOYSTICK_HAT_DIRECTION dir);
+    static SemiAxisDirection ToSemiAxisDirection(JOYSTICK_SEMIAXIS_DIRECTION dir);
 
   protected:
     /*!
@@ -108,8 +111,6 @@ namespace PERIPHERALS
      * @return True when compatible, false otherwise
      */
     static bool IsCompatibleAPIVersion(const ADDON::AddonVersion &minVersion, const ADDON::AddonVersion &version);
-
-    static JoystickActionID GetID(JOYSTICK_ID addonId);
 
     bool LogError(const PERIPHERAL_ERROR error, const char *strMethod) const;
     void LogException(const std::exception &e, const char *strFunctionName) const;

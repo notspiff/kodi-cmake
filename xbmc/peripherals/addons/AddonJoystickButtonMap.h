@@ -19,6 +19,7 @@
  */
 #pragma once
 
+#include "addons/include/xbmc_peripheral_utils.hpp"
 #include "input/joysticks/IJoystickButtonMap.h"
 #include "peripherals/addons/PeripheralAddon.h"
 
@@ -31,19 +32,22 @@ namespace PERIPHERALS
 
     virtual ~CAddonJoystickButtonMap(void) { }
 
-    JoystickActionID GetAction(const CButtonPrimitive& source);
+    virtual bool Load(void);
 
-    JoystickActionID GetAnalogStick(unsigned int  axisIndex,
-                                    unsigned int& indexHoriz,
-                                    unsigned int& indexVert);
+    JoystickActionID GetAction(const CButtonPrimitive& button);
 
-    JoystickActionID GetAccelerometer(unsigned int  axisIndex,
-                                      unsigned int& indexX,
-                                      unsigned int& indexY,
-                                      unsigned int& indexZ);
+    bool GetButtonPrimitive(JoystickActionID id, CButtonPrimitive& button);
+
+    bool GetAnalogStick(JoystickActionID id, int& horizIndex, bool& horizInverted,
+                                             int& vertIndex,  bool& vertInverted);
+
+    bool GetAccelerometer(JoystickActionID id, int& xIndex, bool& xInverted,
+                                               int& yIndex, bool& yInverted,
+                                               int& zIndex, bool& zInverted);
 
   private:
     PERIPHERALS::PeripheralAddonPtr m_addon;
     unsigned int                    m_index;
+    ADDON::ButtonMap                m_buttonMap;
   };
 }

@@ -430,22 +430,7 @@ bool CPeripheralAddon::ProcessEvents(void)
           }
           case JOYSTICK_EVENT_TYPE_RAW_HAT:
           {
-            HatDirection dir(HatDirectionNone);
-            switch (event.HatState())
-            {
-              case JOYSTICK_STATE_HAT_LEFT:       dir = HatDirectionLeft;      break;
-              case JOYSTICK_STATE_HAT_RIGHT:      dir = HatDirectionRight;     break;
-              case JOYSTICK_STATE_HAT_UP:         dir = HatDirectionUp;        break;
-              case JOYSTICK_STATE_HAT_DOWN:       dir = HatDirectionDown;      break;
-              case JOYSTICK_STATE_HAT_LEFT_UP:    dir = HatDirectionLeftUp;    break;
-              case JOYSTICK_STATE_HAT_LEFT_DOWN:  dir = HatDirectionLeftDown;  break;
-              case JOYSTICK_STATE_HAT_RIGHT_UP:   dir = HatDirectionRightUp;   break;
-              case JOYSTICK_STATE_HAT_RIGHT_DOWN: dir = HatDirectionRightDown; break;
-              case JOYSTICK_STATE_HAT_UNPRESSED:
-              default:
-                break;
-            }
-            joystickDevice->OnHatMotion(event.RawIndex(), dir);
+            joystickDevice->OnHatMotion(event.RawIndex(), ToHatDirection(event.HatState()));
             break;
           }
           case JOYSTICK_EVENT_TYPE_RAW_AXIS:
@@ -472,95 +457,26 @@ bool CPeripheralAddon::ProcessEvents(void)
   return false;
 }
 
-JoystickActionID CPeripheralAddon::GetAction(unsigned int index, const CButtonPrimitive& source)
+bool CPeripheralAddon::GetButtonMap(unsigned int index, ADDON::ButtonMap& buttonMap)
 {
-  JOYSTICK_BUTTON_PRIMITIVE sourceStruct;
+  PERIPHERAL_ERROR retVal;
   
-  sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_UNKNOWN;
-  switch (source.Type())
+  JOYSTICK_BUTTONMAP buttonMapStruct;
+
+  try { LogError(retVal = m_pStruct->GetButtonMap(index, &buttonMapStruct), "GetButtonMap()"); }
+  catch (std::exception &e) { LogException(e, "GetButtonMap()"); return false;  }
+
+  if (retVal == PERIPHERAL_NO_ERROR)
   {
-  case ButtonPrimitiveTypeButton:       sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_BUTTON;        break;
-  case ButtonPrimitiveTypeHatDirection: sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_HAT_DIRECTION; break;
-  case ButtonPrimitiveTypeSemiAxis:     sourceStruct.type = JOYSTICK_BUTTON_PRIMITIVE_SEMI_AXIS;     break;
-  default: break;
+    ADDON::ButtonMaps::ToMap(buttonMapStruct, buttonMap);
+
+    try { m_pStruct->FreeButtonMap(&buttonMapStruct); }
+    catch (std::exception &e) { LogException(e, "FreeButtonMap()"); }
+
+    return true;
   }
 
-  sourceStruct.index = source.Index();
-
-  sourceStruct.hat_direction = JOYSTICK_STATE_HAT_UNPRESSED;
-  switch (source.HatDir())
-  {
-  case HatDirectionLeft:  sourceStruct.hat_direction = JOYSTICK_STATE_HAT_LEFT;  break;
-  case HatDirectionRight: sourceStruct.hat_direction = JOYSTICK_STATE_HAT_RIGHT; break;
-  case HatDirectionUp:    sourceStruct.hat_direction = JOYSTICK_STATE_HAT_UP;    break;
-  case HatDirectionDown:  sourceStruct.hat_direction = JOYSTICK_STATE_HAT_DOWN;  break;
-  default: break;
-  }
-
-  sourceStruct.semi_axis_dir = JOYSTICK_SEMI_AXIS_DIRECTION_UNKNOWN;
-  switch (source.SemiAxisDir())
-  {
-  case SemiAxisDirectionNegative: sourceStruct.semi_axis_dir = JOYSTICK_SEMI_AXIS_DIRECTION_NEGATIVE; break;
-  case SemiAxisDirectionPositive: sourceStruct.semi_axis_dir = JOYSTICK_SEMI_AXIS_DIRECTION_POSITIVE; break;
-  default: break;
-  }
-
-  JOYSTICK_ID id = JOYSTICK_ID_BUTTON_UNKNOWN;
-
-  try { id = m_pStruct->GetAction(index, &sourceStruct); }
-  catch (std::exception &e) { LogException(e, "GetJoystickInfo()"); }
-
-  return GetID(id);
-}
-
-JoystickActionID CPeripheralAddon::GetAnalogStick(unsigned int index, unsigned int axisIndex, unsigned int& indexHoriz, unsigned int& indexVert)
-{
-  JOYSTICK_ID id = JOYSTICK_ID_BUTTON_UNKNOWN;
-
-  try { id = m_pStruct->GetAnalogStick(index, axisIndex, &indexHoriz, &indexVert); }
-  catch (std::exception &e) { LogException(e, "GetAnalogStick()"); }
-
-  return GetID(id);
-}
-
-JoystickActionID CPeripheralAddon::GetAccelerometer(unsigned int index, unsigned int axisIndex, unsigned int& indexX, unsigned int& indexY, unsigned int& indexZ)
-{
-  JOYSTICK_ID id = JOYSTICK_ID_BUTTON_UNKNOWN;
-
-  try { id = m_pStruct->GetAccelerometer(index, axisIndex, &indexX, &indexY, &indexZ); }
-  catch (std::exception &e) { LogException(e, "GetAccelerometer()"); }
-
-  return GetID(id);
-}
-
-JoystickActionID CPeripheralAddon::GetID(JOYSTICK_ID addonId)
-{
-  switch (addonId)
-  {
-  case JOYSTICK_ID_BUTTON_A:           return JOY_ID_BUTTON_A;
-  case JOYSTICK_ID_BUTTON_B:           return JOY_ID_BUTTON_B;
-  case JOYSTICK_ID_BUTTON_X:           return JOY_ID_BUTTON_X;
-  case JOYSTICK_ID_BUTTON_Y:           return JOY_ID_BUTTON_Y;
-  //case JOYSTICK_ID_BUTTON_5:           return JOY_ID_BUTTON_C;
-  //case JOYSTICK_ID_BUTTON_6:           return JOY_ID_BUTTON_Z;
-  case JOYSTICK_ID_BUTTON_START:       return JOY_ID_BUTTON_START;
-  case JOYSTICK_ID_BUTTON_SELECT:      return JOY_ID_BUTTON_SELECT;
-  case JOYSTICK_ID_BUTTON_HOME:        return JOY_ID_BUTTON_MODE;
-  case JOYSTICK_ID_BUTTON_UP:          return JOY_ID_BUTTON_UP;
-  case JOYSTICK_ID_BUTTON_DOWN:        return JOY_ID_BUTTON_DOWN;
-  case JOYSTICK_ID_BUTTON_LEFT:        return JOY_ID_BUTTON_LEFT;
-  case JOYSTICK_ID_BUTTON_RIGHT:       return JOY_ID_BUTTON_RIGHT;
-  case JOYSTICK_ID_BUTTON_L:           return JOY_ID_BUTTON_L;
-  case JOYSTICK_ID_BUTTON_R:           return JOY_ID_BUTTON_R;
-  case JOYSTICK_ID_BUTTON_L_STICK:     return JOY_ID_BUTTON_L_STICK;
-  case JOYSTICK_ID_BUTTON_R_STICK:     return JOY_ID_BUTTON_R_STICK;
-  case JOYSTICK_ID_TRIGGER_L:          return JOY_ID_TRIGGER_L;
-  case JOYSTICK_ID_TRIGGER_R:          return JOY_ID_TRIGGER_R;
-  case JOYSTICK_ID_ANALOG_STICK_LEFT:  return JOY_ID_ANALOG_STICK_L;
-  case JOYSTICK_ID_ANALOG_STICK_RIGHT: return JOY_ID_ANALOG_STICK_R;
-  case JOYSTICK_ID_ACCELEROMETER:      return JOY_ID_ACCELEROMETER;
-  default:                             return JOY_ID_BUTTON_UNKNOWN;
-  }
+  return false;
 }
 
 const char *CPeripheralAddon::ToString(const PERIPHERAL_ERROR error)
@@ -582,6 +498,104 @@ const char *CPeripheralAddon::ToString(const PERIPHERAL_ERROR error)
   case PERIPHERAL_ERROR_UNKNOWN:
   default:
     return "unknown error";
+  }
+}
+
+JoystickActionID CPeripheralAddon::ToJoystickID(JOYSTICK_ID id)
+{
+  switch (id)
+  {
+  case JOYSTICK_ID_BUTTON_A:        return JOY_ID_BUTTON_A;
+  case JOYSTICK_ID_BUTTON_B:        return JOY_ID_BUTTON_B;
+  case JOYSTICK_ID_BUTTON_X:        return JOY_ID_BUTTON_X;
+  case JOYSTICK_ID_BUTTON_Y:        return JOY_ID_BUTTON_Y;
+  case JOYSTICK_ID_BUTTON_C:        return JOY_ID_BUTTON_C;
+  case JOYSTICK_ID_BUTTON_Z:        return JOY_ID_BUTTON_Z;
+  case JOYSTICK_ID_BUTTON_START:    return JOY_ID_BUTTON_START;
+  case JOYSTICK_ID_BUTTON_SELECT:   return JOY_ID_BUTTON_SELECT;
+  case JOYSTICK_ID_BUTTON_HOME:     return JOY_ID_BUTTON_MODE;
+  case JOYSTICK_ID_BUTTON_UP:       return JOY_ID_BUTTON_UP;
+  case JOYSTICK_ID_BUTTON_DOWN:     return JOY_ID_BUTTON_DOWN;
+  case JOYSTICK_ID_BUTTON_LEFT:     return JOY_ID_BUTTON_LEFT;
+  case JOYSTICK_ID_BUTTON_RIGHT:    return JOY_ID_BUTTON_RIGHT;
+  case JOYSTICK_ID_BUTTON_L:        return JOY_ID_BUTTON_L;
+  case JOYSTICK_ID_BUTTON_R:        return JOY_ID_BUTTON_R;
+  case JOYSTICK_ID_BUTTON_L_STICK:  return JOY_ID_BUTTON_L_STICK;
+  case JOYSTICK_ID_BUTTON_R_STICK:  return JOY_ID_BUTTON_R_STICK;
+  case JOYSTICK_ID_TRIGGER_L:       return JOY_ID_TRIGGER_L;
+  case JOYSTICK_ID_TRIGGER_R:       return JOY_ID_TRIGGER_R;
+  case JOYSTICK_ID_ANALOG_STICK_L:  return JOY_ID_ANALOG_STICK_L;
+  case JOYSTICK_ID_ANALOG_STICK_R:  return JOY_ID_ANALOG_STICK_R;
+  case JOYSTICK_ID_ACCELEROMETER:   return JOY_ID_ACCELEROMETER;
+  default:                          return JOY_ID_BUTTON_UNKNOWN;
+  }
+}
+
+JOYSTICK_ID CPeripheralAddon::ToAddonID(JoystickActionID id)
+{
+  switch (id)
+  {
+  case JOY_ID_BUTTON_A:        return JOYSTICK_ID_BUTTON_A;
+  case JOY_ID_BUTTON_B:        return JOYSTICK_ID_BUTTON_B;
+  case JOY_ID_BUTTON_X:        return JOYSTICK_ID_BUTTON_X;
+  case JOY_ID_BUTTON_Y:        return JOYSTICK_ID_BUTTON_Y;
+  case JOY_ID_BUTTON_C:        return JOYSTICK_ID_BUTTON_C;
+  case JOY_ID_BUTTON_Z:        return JOYSTICK_ID_BUTTON_Z;
+  case JOY_ID_BUTTON_START:    return JOYSTICK_ID_BUTTON_START;
+  case JOY_ID_BUTTON_SELECT:   return JOYSTICK_ID_BUTTON_SELECT;
+  case JOY_ID_BUTTON_MODE:     return JOYSTICK_ID_BUTTON_HOME;
+  case JOY_ID_BUTTON_UP:       return JOYSTICK_ID_BUTTON_UP;
+  case JOY_ID_BUTTON_DOWN:     return JOYSTICK_ID_BUTTON_DOWN;
+  case JOY_ID_BUTTON_LEFT:     return JOYSTICK_ID_BUTTON_LEFT;
+  case JOY_ID_BUTTON_RIGHT:    return JOYSTICK_ID_BUTTON_RIGHT;
+  case JOY_ID_BUTTON_L:        return JOYSTICK_ID_BUTTON_L;
+  case JOY_ID_BUTTON_R:        return JOYSTICK_ID_BUTTON_R;
+  case JOY_ID_BUTTON_L_STICK:  return JOYSTICK_ID_BUTTON_L_STICK;
+  case JOY_ID_BUTTON_R_STICK:  return JOYSTICK_ID_BUTTON_R_STICK;
+  case JOY_ID_TRIGGER_L:       return JOYSTICK_ID_TRIGGER_L;
+  case JOY_ID_TRIGGER_R:       return JOYSTICK_ID_TRIGGER_R;
+  case JOY_ID_ANALOG_STICK_L:  return JOYSTICK_ID_ANALOG_STICK_L;
+  case JOY_ID_ANALOG_STICK_R:  return JOYSTICK_ID_ANALOG_STICK_R;
+  case JOY_ID_ACCELEROMETER:   return JOYSTICK_ID_ACCELEROMETER;
+  default:                     return JOYSTICK_ID_BUTTON_UNKNOWN;
+  }
+}
+
+HatDirection CPeripheralAddon::ToHatDirection(JOYSTICK_STATE_HAT state)
+{
+  switch (state)
+  {
+  case JOYSTICK_STATE_HAT_LEFT:       return HatDirectionLeft;
+  case JOYSTICK_STATE_HAT_RIGHT:      return HatDirectionRight;
+  case JOYSTICK_STATE_HAT_UP:         return HatDirectionUp;
+  case JOYSTICK_STATE_HAT_DOWN:       return HatDirectionDown;
+  case JOYSTICK_STATE_HAT_LEFT_UP:    return HatDirectionLeftUp;
+  case JOYSTICK_STATE_HAT_LEFT_DOWN:  return HatDirectionLeftDown;
+  case JOYSTICK_STATE_HAT_RIGHT_UP:   return HatDirectionRightUp;
+  case JOYSTICK_STATE_HAT_RIGHT_DOWN: return HatDirectionRightDown;
+  default:                            return HatDirectionNone;
+  }
+}
+
+HatDirection CPeripheralAddon::ToHatDirection(JOYSTICK_HAT_DIRECTION state)
+{
+  switch (state)
+  {
+  case JOYSTICK_HAT_LEFT:   return HatDirectionLeft;
+  case JOYSTICK_HAT_RIGHT:  return HatDirectionRight;
+  case JOYSTICK_HAT_UP:     return HatDirectionUp;
+  case JOYSTICK_HAT_DOWN:   return HatDirectionDown;
+  default:                  return HatDirectionNone;
+  }
+}
+
+SemiAxisDirection CPeripheralAddon::ToSemiAxisDirection(JOYSTICK_SEMIAXIS_DIRECTION dir)
+{
+  switch (dir)
+  {
+  case JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE:  return SemiAxisDirectionNegative;
+  case JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE:  return SemiAxisDirectionPositive;
+  default:                                    return SemiAxisDirectionUnknown;
   }
 }
 

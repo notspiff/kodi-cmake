@@ -53,7 +53,7 @@ public:
   virtual void OnAxisMotion(unsigned int index, float position);
 
 private:
-  float GetAxisState(unsigned int axisIndex) const;
+  float GetAxisState(int axisIndex) const;
 
   IJoystickActionHandler    *m_handler;
   IJoystickButtonMap        *m_buttonMap;

@@ -83,7 +83,7 @@ extern "C"
   ///{
 #ifdef PERIPHERAL_ADDON_JOYSTICKS
   PERIPHERAL_ERROR GetJoystickInfo(unsigned int index, JOYSTICK_INFO* info);
-  void             FreeJoystickInfo(JOYSTICK_INFO* info);
+  void FreeJoystickInfo(JOYSTICK_INFO* info);
 
   /*!
    * @brief Get all events that have occurred since the last call to GetEvents()
@@ -96,9 +96,9 @@ extern "C"
   /*!
    * @brief Look up joystick elements in the button map
    */
-  JOYSTICK_ID GetAction(unsigned int index, JOYSTICK_BUTTON_PRIMITIVE* source);
-  JOYSTICK_ID GetAnalogStick(unsigned int index, unsigned int axis_index, unsigned int* horiz_index, unsigned int* vert_index);
-  JOYSTICK_ID GetAccelerometer(unsigned int index, unsigned int axis_index, unsigned int* x_index, unsigned int* y_index, unsigned int* z_index);
+  PERIPHERAL_ERROR GetButtonMap(unsigned int index, JOYSTICK_BUTTONMAP* button_map);
+  void FreeButtonMap(JOYSTICK_BUTTONMAP* button_map);
+  PERIPHERAL_ERROR UpdateButtonMap(JOYSTICK_ID key, JOYSTICK_BUTTONMAP_VALUE* value);
 #endif
   ///}
 
@@ -120,9 +120,9 @@ extern "C"
     pClient->FreeJoystickInfo               = FreeJoystickInfo;
     pClient->GetEvents                      = GetEvents;
     pClient->FreeEvents                     = FreeEvents;
-    pClient->GetAction                      = GetAction;
-    pClient->GetAnalogStick                 = GetAnalogStick;
-    pClient->GetAccelerometer               = GetAccelerometer;
+    pClient->GetButtonMap                   = GetButtonMap;
+    pClient->FreeButtonMap                  = FreeButtonMap;
+    pClient->UpdateButtonMap                = UpdateButtonMap;
 #endif
   };
 
