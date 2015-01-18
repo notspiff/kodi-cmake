@@ -163,61 +163,6 @@ namespace ADDON
   typedef PeripheralVector<Peripheral, PERIPHERAL_INFO> Peripherals;
 
   /*!
-   * ADDON::JoystickButton
-   *
-   * Wrapper class providing button information. Classes can extend
-   * JoystickButton to inherit button properties.
-   */
-  class JoystickButton
-  {
-  public:
-    JoystickButton(JOYSTICK_ID          id       = JOYSTICK_ID(),
-                   JOYSTICK_BUTTON_TYPE type     = JOYSTICK_BUTTON_TYPE(),
-                   const std::string&   strLabel = "")
-    : m_id(id),
-      m_type(type),
-      m_strLabel(strLabel)
-    {
-    }
-
-    JoystickButton(const JOYSTICK_BUTTON& button)
-    : m_id(button.id),
-      m_type(button.type),
-      m_strLabel(button.label ? button.label : "")
-    {
-    }
-
-    JOYSTICK_ID          ID(void) const    { return m_id; }
-    JOYSTICK_BUTTON_TYPE Type(void) const  { return m_type; }
-    const std::string&   Label(void) const { return m_strLabel; }
-
-    void SetID(JOYSTICK_ID id)                 { m_id = id; }
-    void SetType(JOYSTICK_BUTTON_TYPE type)    { m_type = type; }
-    void SetLabel(const std::string& strLabel) { m_strLabel = strLabel; }
-
-    void ToStruct(JOYSTICK_BUTTON& button) const
-    {
-      button.id    = m_id;
-      button.type  = m_type;
-      button.label = new char[m_strLabel.size() + 1];
-
-      std::strcpy(button.label, m_strLabel.c_str());
-    }
-
-    static void FreeStruct(JOYSTICK_BUTTON& button)
-    {
-      SAFE_DELETE_ARRAY(button.label);
-    }
-
-  private:
-    JOYSTICK_ID          m_id;
-    JOYSTICK_BUTTON_TYPE m_type;
-    std::string          m_strLabel;
-  };
-
-  typedef PeripheralVector<JoystickButton, JOYSTICK_BUTTON> JoystickButtons;
-
-  /*!
    * ADDON::Joystick
    *
    * Wrapper class providing additional joystick information not provided by
@@ -241,17 +186,11 @@ namespace ADDON
     : Peripheral(info.peripheral_info),
       m_strProvider(info.provider ? info.provider : ""),
       m_requestedPort(info.requested_port_num),
-      m_buttonCount(info.virtual_layout.button_count),
-      m_hatCount(info.virtual_layout.hat_count),
-      m_axisCount(info.virtual_layout.axis_count)
+      m_buttonCount(info.button_count),
+      m_hatCount(info.hat_count),
+      m_axisCount(info.axis_count)
     {
       SetType(PERIPHERAL_TYPE_JOYSTICK);
-
-      if (info.physical_layout.buttons)
-      {
-        for (unsigned int i = 0; i < info.physical_layout.button_count; i++)
-          m_buttons.push_back(info.physical_layout.buttons[i]);
-      }
     }
 
     virtual ~Joystick(void) { }
@@ -262,48 +201,37 @@ namespace ADDON
     unsigned int       HatCount(void) const      { return m_hatCount; }
     unsigned int       AxisCount(void) const     { return m_axisCount; }
 
-    const std::vector<JoystickButton>& Buttons(void) const { return m_buttons; }
-
     void SetProvider(const std::string& strProvider)  { m_strProvider   = strProvider; }
     void SetRequestedPort(unsigned int requestedPort) { m_requestedPort = requestedPort; }
     void SetButtonCount(unsigned int buttonCount)     { m_buttonCount   = buttonCount; }
     void SetHatCount(unsigned int hatCount)           { m_hatCount      = hatCount; }
     void SetAxisCount(unsigned int axisCount)         { m_axisCount     = axisCount; }
 
-    std::vector<JoystickButton>& Buttons(void) { return m_buttons; }
-
     void ToStruct(JOYSTICK_INFO& info) const
     {
       Peripheral::ToStruct(info.peripheral_info);
 
-      info.provider = new char[m_strProvider.size() + 1];
-      info.requested_port_num           = m_requestedPort;
-      info.virtual_layout.button_count  = m_buttonCount;
-      info.virtual_layout.hat_count     = m_hatCount;
-      info.virtual_layout.axis_count    = m_axisCount;
-      info.physical_layout.button_count = m_buttons.size();
+      info.provider           = new char[m_strProvider.size() + 1];
+      info.requested_port_num = m_requestedPort;
+      info.button_count       = m_buttonCount;
+      info.hat_count          = m_hatCount;
+      info.axis_count         = m_axisCount;
 
       std::strcpy(info.provider, m_strProvider.c_str());
-
-      JoystickButtons::ToStructs(m_buttons, &info.physical_layout.buttons);
     }
 
     static void FreeStruct(JOYSTICK_INFO& info)
     {
       Peripheral::FreeStruct(info.peripheral_info);
-
       SAFE_DELETE_ARRAY(info.provider);
-
-      JoystickButtons::FreeStructs(info.physical_layout.button_count, info.physical_layout.buttons);
     }
 
   private:
-    std::string                 m_strProvider;
-    unsigned int                m_requestedPort;
-    unsigned int                m_buttonCount;
-    unsigned int                m_hatCount;
-    unsigned int                m_axisCount;
-    std::vector<JoystickButton> m_buttons;
+    std::string  m_strProvider;
+    unsigned int m_requestedPort;
+    unsigned int m_buttonCount;
+    unsigned int m_hatCount;
+    unsigned int m_axisCount;
   };
 
   typedef PeripheralVector<Joystick, JOYSTICK_INFO> Joysticks;
@@ -538,7 +466,7 @@ namespace ADDON
       }
       else
       {
-        buttonMapStruct.keys   = new JOYSTICK_ID[buttonMapStruct.size];
+        buttonMapStruct.keys   = new JOYSTICK_BUTTONMAP_KEY[buttonMapStruct.size];
         buttonMapStruct.values = new JOYSTICK_BUTTONMAP_VALUE[buttonMapStruct.size];
         for (ButtonMap::const_iterator it = buttonMap.begin(); it != buttonMap.end(); ++it)
         {
