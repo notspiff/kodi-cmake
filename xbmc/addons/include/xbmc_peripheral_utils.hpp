@@ -21,25 +21,13 @@
 
 #include "xbmc_peripheral_types.h"
 
-#include <cmath>
 #include <cstring>
 #include <map>
 #include <string>
 #include <vector>
 
-#define DIGITAL_ANALOG_THRESHOLD  0.5f // TODO
-
-#ifndef SAFE_DELETE
-  #define SAFE_DELETE(x)  do { delete (x); (x) = NULL; } while (0)
-#endif
-
-#ifndef SAFE_DELETE_ARRAY
-  #define SAFE_DELETE_ARRAY(x)  do { delete[] (x); (x) = NULL; } while (0)
-#endif
-
-#ifndef CONSTRAIN
-  #define CONSTRAIN(min, value, max)  ((value) < (min) ? (min) : (max) < (value) ? (max) : (value))
-#endif
+#define PERIPHERAL_SAFE_DELETE(x)        do { delete   (x); (x) = NULL; } while (0)
+#define PERIPHERAL_SAFE_DELETE_ARRAY(x)  do { delete[] (x); (x) = NULL; } while (0)
 
 namespace ADDON
 {
@@ -91,7 +79,7 @@ namespace ADDON
         for (unsigned int i = 0; i < structCount; i++)
           THE_CLASS::FreeStruct(structs[i]);
       }
-      SAFE_DELETE_ARRAY(structs);
+      PERIPHERAL_SAFE_DELETE_ARRAY(structs);
     }
   };
 
@@ -149,7 +137,7 @@ namespace ADDON
 
     static void FreeStruct(PERIPHERAL_INFO& info)
     {
-      SAFE_DELETE_ARRAY(info.name);
+      PERIPHERAL_SAFE_DELETE_ARRAY(info.name);
     }
 
   private:
@@ -223,7 +211,7 @@ namespace ADDON
     static void FreeStruct(JOYSTICK_INFO& info)
     {
       Peripheral::FreeStruct(info.peripheral_info);
-      SAFE_DELETE_ARRAY(info.provider);
+      PERIPHERAL_SAFE_DELETE_ARRAY(info.provider);
     }
 
   private:
@@ -426,7 +414,7 @@ namespace ADDON
       AnalogStick().right.index     = horizIndex;
       AnalogStick().right.direction = horizInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
       AnalogStick().up.index        = vertIndex;
-      AnalogStick().up.direction    = vertInverted ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
+      AnalogStick().up.direction    = vertInverted  ? JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE : JOYSTICK_SEMIAXIS_DIRECTION_POSITIVE;
     }
 
     void SetAccelerometer(unsigned int xIndex, bool xInverted, 
@@ -489,8 +477,8 @@ namespace ADDON
 
     static void FreeStruct(JOYSTICK_BUTTONMAP& buttonMapStruct)
     {
-      SAFE_DELETE_ARRAY(buttonMapStruct.keys);
-      SAFE_DELETE_ARRAY(buttonMapStruct.values);
+      PERIPHERAL_SAFE_DELETE_ARRAY(buttonMapStruct.keys);
+      PERIPHERAL_SAFE_DELETE_ARRAY(buttonMapStruct.values);
     }
   };
 }
