@@ -98,7 +98,7 @@ extern "C"
    */
   PERIPHERAL_ERROR GetButtonMap(unsigned int index, JOYSTICK_BUTTONMAP* button_map);
   void FreeButtonMap(JOYSTICK_BUTTONMAP* button_map);
-  PERIPHERAL_ERROR UpdateButtonMap(JOYSTICK_ID key, JOYSTICK_BUTTONMAP_VALUE* value);
+  PERIPHERAL_ERROR UpdateButtonMap(unsigned int index, JOYSTICK_ID key, JOYSTICK_BUTTONMAP_VALUE* value);
 #endif
   ///}
 

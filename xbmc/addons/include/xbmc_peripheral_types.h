@@ -294,7 +294,7 @@ extern "C"
     void             (__cdecl* FreeEvents)(unsigned int, PERIPHERAL_EVENT*);
     PERIPHERAL_ERROR (__cdecl* GetButtonMap)(unsigned int, JOYSTICK_BUTTONMAP*);
     void             (__cdecl* FreeButtonMap)(JOYSTICK_BUTTONMAP*);
-    PERIPHERAL_ERROR (__cdecl* UpdateButtonMap)(JOYSTICK_ID, JOYSTICK_BUTTONMAP_VALUE*);
+    PERIPHERAL_ERROR (__cdecl* UpdateButtonMap)(unsigned int, JOYSTICK_ID, JOYSTICK_BUTTONMAP_VALUE*);
     ///}
   } PeripheralAddon;
 
