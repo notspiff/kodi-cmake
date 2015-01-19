@@ -85,15 +85,29 @@ namespace XBMCAddon
        * heading        : string or unicode - dialog heading.\n
        * list           : string list - list of items.\n
        * autoclose      : [opt] integer - milliseconds to autoclose dialog. (default=do not autoclose)\n
-       * multiselect    : [opt] boolean - True to enable multiselection. (default=off)\n
        * \n
-       * *Returns the position of the highlighted item(s) as an integer or a list of integers.\n
+       * *Returns the position of the highlighted item as an integer.\n
        * \n
        * example:\n
        *   - dialog = xbmcgui.Dialog()\n
        *   - ret = dialog.select('Choose a playlist', ['Playlist #1', 'Playlist #2, 'Playlist #3'])n\n
        */
-      Alternative<int,std::vector<int> > select(const String& heading, const std::vector<String>& list, int autoclose=0, bool multiselect=false) throw (WindowException);
+      int select(const String& heading, const std::vector<String>& list, int autoclose=0) throw (WindowException);
+
+      /**
+       * multiSelect(heading, list) -- Show a multi-select dialog.\n
+       * \n
+       * heading        : string or unicode - dialog heading.\n
+       * list           : string list - list of items.\n
+       * autoclose      : [opt] integer - milliseconds to autoclose dialog. (default=do not autoclose)\n
+       * \n
+       * *Returns the position of the highlighted item(s) as a list of integers.\n
+       * \n
+       * example:\n
+       *   - dialog = xbmcgui.Dialog()\n
+       *   - ret = dialog.multiSelect('Choose a playlist', ['Playlist #1', 'Playlist #2, 'Playlist #3'])n\n
+       */
+      std::vector<int> multiSelect(const String& heading, const std::vector<String>& list, int autoclose=0) throw (WindowException);
 
       /**
        * ok(heading, line1[, line2, line3]) -- Show a dialog 'OK'.\n
