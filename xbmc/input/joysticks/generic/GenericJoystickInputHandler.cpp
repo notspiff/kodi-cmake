@@ -23,8 +23,6 @@
 #include "input/joysticks/IJoystickActionHandler.h"
 #include "input/joysticks/IJoystickButtonMap.h"
 
-#include <algorithm>
-
 #define ANALOG_DIGITAL_THRESHOLD  0.5f
 
 CGenericJoystickInputHandler::CGenericJoystickInputHandler(IJoystickActionHandler *handler, IJoystickButtonMap* buttonMap)
@@ -35,16 +33,28 @@ CGenericJoystickInputHandler::CGenericJoystickInputHandler(IJoystickActionHandle
 
 void CGenericJoystickInputHandler::OnButtonMotion(unsigned int index, bool bPressed)
 {
+  const char pressed = bPressed ? 1 : 0;
+
+  if (m_buttonStates.size() <= index)
+    m_buttonStates.resize(index + 1);
+
+  if (m_buttonStates[index] == pressed)
+    return;
+  
+  char& oldState = m_buttonStates[index];
+
   CButtonPrimitive button(index);
   JoystickActionID action = m_buttonMap->GetAction(button);
 
   if (action)
   {
-    if (bPressed)
+    if (!oldState && pressed)
       m_handler->OnButtonPress(action);
-    else
+    else if (oldState && !pressed)
       m_handler->OnButtonRelease(action);
   }
+
+  oldState = pressed;
 }
 
 void CGenericJoystickInputHandler::OnHatMotion(unsigned int index, HatDirection direction)
@@ -129,8 +139,18 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
   if (m_axisStates[index] == position)
     return;
 
-  m_axisStates[index] = position;
+  float& oldPosition = m_axisStates[index];
 
+  // If the action ID requires multiple axes (analog stick, accelerometer, etc),
+  // then both positive and negative axis directions will resolve to the same
+  // ID, so we start with the positive direction.
+  //
+  // If the action ID corresponds to a semi-axis, then the axis's positive and
+  // negative directions may correspond to different IDs. (For example, in
+  // DirectInput, axis 3 in the positive direction is right trigger, axis 3 in
+  // the negative direction is left trigger.) In this case, we need the ID for
+  // both directions so we can invoke callbacks on both IDs when the position
+  // changes from positive to negative and back without passing through zero.
   CButtonPrimitive positiveAxis(index, SemiAxisDirectionPositive);
   JoystickActionID positiveAction = m_buttonMap->GetAction(positiveAxis);
 
@@ -179,18 +199,36 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
 
   default:
   {
+    // Axis might be overloaded in the positive and negative directions, so
+    // lookup the negative direction too
     CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
     JoystickActionID negativeAction = m_buttonMap->GetAction(negativeAxis);
 
     if (positiveAction)
-      m_handler->OnButtonMotion(positiveAction, std::max(position, 0.0f));
+    {
+      // Notify callback of positive motion. Also, passing through zero will
+      // emit a 0.0f position exactly once until next positive motion.
+      if (position > 0)
+        m_handler->OnButtonMotion(positiveAction, position);
+      else if (oldPosition > 0)
+        m_handler->OnButtonMotion(positiveAction, 0.0f);
+    }
 
     if (negativeAction)
-      m_handler->OnButtonMotion(negativeAction, -1.0f * std::min(position, 0.0f)); // magnitude is >= 0
+    {
+      // Notify callback of negative motion. Also, passing through zero will
+      // emit a 0.0f position exactly once until next negative motion.
+      if (position < 0)
+        m_handler->OnButtonMotion(negativeAction, -1.0f * position); // magnitude is >= 0
+      else if (oldPosition < 0)
+        m_handler->OnButtonMotion(negativeAction, 0.0f);
+    }
 
     break;
   }
   }
+
+  oldPosition = position;
 }
 
 float CGenericJoystickInputHandler::GetAxisState(int axisIndex) const

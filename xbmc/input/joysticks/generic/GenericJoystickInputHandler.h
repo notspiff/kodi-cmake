@@ -27,16 +27,9 @@ class IJoystickActionHandler;
 class IJoystickButtonMap;
 
 /*!
- * \ingroup joysticks_generic
- * \brief Generic implementation of IJoystickInputHandler to handle low level (raw)
- *        joystick events and translate them into joystick actions which are passed
- *        on to the registered IJoystickActionHandler implementation.
- *
- * The generic implementation supports single a double touch and hold
- * actions and basic gesture recognition for panning, swiping, pinching/zooming
- * and rotating.
- *
- * \sa IJoystickInputHandler
+ * \brief Generic implementation of IJoystickInputHandler to translate raw
+ *        actions into physical actions associated with an action ID using the
+ *        provided button map.
  */
 class CGenericJoystickInputHandler : public IJoystickInputHandler
 {
@@ -44,8 +37,6 @@ public:
   CGenericJoystickInputHandler(IJoystickActionHandler *handler, IJoystickButtonMap *buttonMap);
 
   virtual ~CGenericJoystickInputHandler() { }
-
-
 
   // implementation of IJoystickInputHandler
   virtual void OnButtonMotion(unsigned int index, bool bPressed);
@@ -57,6 +48,7 @@ private:
 
   IJoystickActionHandler    *m_handler;
   IJoystickButtonMap        *m_buttonMap;
+  std::vector<char>         m_buttonStates; // std::vector is specialized for <bool>
   std::vector<HatDirection> m_hatStates;
   std::vector<float>        m_axisStates;
 };
