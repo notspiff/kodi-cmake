@@ -64,6 +64,7 @@
 #define SETTING_XML_ATTR_SETTING      "setting"
 #define SETTING_XML_ATTR_BEFORE       "before"
 #define SETTING_XML_ATTR_AFTER        "after"
+#define SETTING_XML_ATTR_HIDE         "hide"
 
 typedef std::pair<int, int> StaticIntegerSettingOption;
 typedef std::vector<StaticIntegerSettingOption> StaticIntegerSettingOptions;

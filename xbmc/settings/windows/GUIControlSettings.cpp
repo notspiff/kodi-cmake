@@ -31,6 +31,7 @@
 #include "dialogs/GUIDialogSlider.h"
 #include "guilib/GUIEditControl.h"
 #include "guilib/GUIImage.h"
+#include "guilib/GUILabelControl.h"
 #include "guilib/GUIRadioButtonControl.h"
 #include "guilib/GUISettingsSliderControl.h"
 #include "guilib/GUISpinControlEx.h"
@@ -543,7 +544,7 @@ bool CGUIControlButtonSetting::OnClick()
     }
     else if (controlFormat == "path")
       SetValid(GetPath((CSettingPath *)m_pSetting));
-    else if (controlFormat == "action")
+    else if (controlFormat == "action" || controlFormat == "infoaction")
     {
       // simply call the OnSettingAction callback and whoever knows what to
       // do can do so (based on the setting's identification
@@ -613,6 +614,12 @@ void CGUIControlButtonSetting::Update(bool updateDisplayOnly /* = false */)
         std::string shortPath;
         if (CUtil::MakeShortenPath(strValue, shortPath, 30))
           strText = shortPath;
+      }
+      else if (controlFormat == "infoaction")
+      {
+        strText = strValue;
+        if (strText.empty())
+          strText = g_localizeStrings.Get(231); // None
       }
     }
   }
@@ -1135,4 +1142,17 @@ CGUIControlSeparatorSetting::CGUIControlSeparatorSetting(CGUIImage *pImage, int 
 }
 
 CGUIControlSeparatorSetting::~CGUIControlSeparatorSetting()
+{ }
+
+CGUIControlLabelSetting::CGUIControlLabelSetting(CGUILabelControl *pLabel, int id)
+    : CGUIControlBaseSetting(id, NULL)
+{
+  m_pLabel = pLabel;
+  if (m_pLabel == NULL)
+    return;
+
+  m_pLabel->SetID(id);
+}
+
+CGUIControlLabelSetting::~CGUIControlLabelSetting()
 { }

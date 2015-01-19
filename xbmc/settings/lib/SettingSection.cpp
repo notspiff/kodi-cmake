@@ -63,6 +63,9 @@ template<class T> void addISetting(const TiXmlNode *node, const T &item, std::ve
 
 CSettingGroup::CSettingGroup(const std::string &id, CSettingsManager *settingsManager /* = NULL */)
   : ISetting(id, settingsManager)
+  , m_label(-1), m_help(-1)
+  , m_labelBeforeSeparator(false)
+  , m_HideSeparator(false)
 { }
 
 CSettingGroup::~CSettingGroup()
@@ -77,6 +80,20 @@ bool CSettingGroup::Deserialize(const TiXmlNode *node, bool update /* = false */
   // handle <visible> conditions
   if (!ISetting::Deserialize(node, update))
     return false;
+
+  const TiXmlElement *element = node->ToElement();
+  if (element == NULL)
+    return false;
+
+  int tmp = -1;
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_LABEL, &tmp) == TIXML_SUCCESS && tmp > 0)
+    m_label = tmp;
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_HELP, &tmp) == TIXML_SUCCESS && tmp > 0)
+    m_help = tmp;
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_BEFORE, &tmp) == TIXML_SUCCESS && tmp > 0)
+    m_labelBeforeSeparator = tmp > 0;
+  if (element->QueryIntAttribute(SETTING_XML_ATTR_HIDE, &tmp) == TIXML_SUCCESS && tmp > 0)
+    m_HideSeparator = tmp > 0;
 
   const TiXmlElement *settingElement = node->FirstChildElement(SETTING_XML_ELM_SETTING);
   while (settingElement != NULL)
