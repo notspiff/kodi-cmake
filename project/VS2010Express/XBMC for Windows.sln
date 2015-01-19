@@ -85,6 +85,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "visVortex", "..\..\xbmc\vis
 		{034B1D02-CA92-455D-8866-DB95BEE49C10} = {034B1D02-CA92-455D-8866-DB95BEE49C10}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libXBMC_adsp", "..\..\lib\addons\library.xbmc.adsp\project\VS2010Express\libXBMC_adsp.vcxproj", "{44F93C4D-85DD-4452-99BB-F1D196174024}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Testsuite|Win32 = Debug Testsuite|Win32
@@ -309,6 +311,12 @@ Global
 		{AFF288D5-8A77-4817-8DD9-364E183CDBF8}.Debug|Win32.Build.0 = Debug|Win32
 		{AFF288D5-8A77-4817-8DD9-364E183CDBF8}.Release|Win32.ActiveCfg = Release|Win32
 		{AFF288D5-8A77-4817-8DD9-364E183CDBF8}.Release|Win32.Build.0 = Release|Win32
+		{44F93C4D-85DD-4452-99BB-F1D196174024}.Debug Testsuite|Win32.ActiveCfg = Debug|Win32
+		{44F93C4D-85DD-4452-99BB-F1D196174024}.Debug Testsuite|Win32.Build.0 = Debug|Win32
+		{44F93C4D-85DD-4452-99BB-F1D196174024}.Debug|Win32.ActiveCfg = Debug|Win32
+		{44F93C4D-85DD-4452-99BB-F1D196174024}.Debug|Win32.Build.0 = Debug|Win32
+		{44F93C4D-85DD-4452-99BB-F1D196174024}.Release|Win32.ActiveCfg = Release|Win32
+		{44F93C4D-85DD-4452-99BB-F1D196174024}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
