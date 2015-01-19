@@ -108,7 +108,8 @@ void CActiveAEDSPProcess::ResetStreamFunctionsSelection()
   m_usedMap.clear();
 }
 
-bool CActiveAEDSPProcess::Create(AEAudioFormat inputFormat, AEAudioFormat outputFormat, bool upmix, AEQuality quality, AE_DSP_STREAMTYPE iStreamType)
+bool CActiveAEDSPProcess::Create(AEAudioFormat inputFormat, AEAudioFormat outputFormat, bool upmix, AEQuality quality, AE_DSP_STREAMTYPE iStreamType,
+                                 enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type, int profile)
 {
   m_InputFormat       = inputFormat;                        /*!< Input format of processed stream */
   m_OutputFormat      = outputFormat;                       /*!< Output format of required stream (set from ADSP system on startup, to have ffmpeg compatible format */
@@ -117,6 +118,9 @@ bool CActiveAEDSPProcess::Create(AEAudioFormat inputFormat, AEAudioFormat output
   m_StreamQuality     = quality;                            /*!< from XBMC on settings selected resample quality, also passed to addons to support different quality */
   m_dataFormat        = AE_FMT_FLOAT;                       /*!< the base stream format, hard set to float */
   m_ActiveMode        = AE_DSP_MASTER_MODE_ID_PASSOVER;     /*!< Reset the pointer for m_MasterModes about active master process, set here during mode selection */
+  m_FFMpegMatrixEncoding  = matrix_encoding;
+  m_FFMpegAudioServiceType= audio_service_type;
+  m_FFMpegProfile         = profile;
 
   CSingleLock lock(m_restartSection);
 
@@ -648,26 +652,145 @@ void CActiveAEDSPProcess::InitFFMpegDSPProcessor()
 
 bool CActiveAEDSPProcess::CreateStreamProfile()
 {
+  bool ret = true;
+
   switch (m_AddonStreamProperties.iBaseType)
   {
     case AE_DSP_ABASE_AC3:
     case AE_DSP_ABASE_EAC3:
-      /// TODO: Add handling for ffmpeg related stream information
+    {
+      unsigned int iProfile;
+      switch (m_FFMpegMatrixEncoding)
+      {
+        case AV_MATRIX_ENCODING_DOLBY:
+          iProfile = AE_DSP_PROFILE_DOLBY_SURROUND;
+          break;
+        case AV_MATRIX_ENCODING_DPLII:
+          iProfile = AE_DSP_PROFILE_DOLBY_PLII;
+          break;
+        case AV_MATRIX_ENCODING_DPLIIX:
+          iProfile = AE_DSP_PROFILE_DOLBY_PLIIX;
+          break;
+        case AV_MATRIX_ENCODING_DPLIIZ:
+          iProfile = AE_DSP_PROFILE_DOLBY_PLIIZ;
+          break;
+        case AV_MATRIX_ENCODING_DOLBYEX:
+          iProfile = AE_DSP_PROFILE_DOLBY_EX;
+          break;
+        case AV_MATRIX_ENCODING_DOLBYHEADPHONE:
+          iProfile = AE_DSP_PROFILE_DOLBY_HEADPHONE;
+          break;
+        case AV_MATRIX_ENCODING_NONE:
+        default:
+          iProfile = AE_DSP_PROFILE_DOLBY_NONE;
+          break;
+      }
+
+      unsigned int iServiceType;
+      switch (m_FFMpegAudioServiceType)
+      {
+        case AV_AUDIO_SERVICE_TYPE_EFFECTS:
+          iServiceType = AE_DSP_SERVICE_TYPE_EFFECTS;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_VISUALLY_IMPAIRED:
+          iServiceType = AE_DSP_SERVICE_TYPE_VISUALLY_IMPAIRED;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_HEARING_IMPAIRED:
+          iServiceType = AE_DSP_SERVICE_TYPE_HEARING_IMPAIRED;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_DIALOGUE:
+          iServiceType = AE_DSP_SERVICE_TYPE_DIALOGUE;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_COMMENTARY:
+          iServiceType = AE_DSP_SERVICE_TYPE_COMMENTARY;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_EMERGENCY:
+          iServiceType = AE_DSP_SERVICE_TYPE_EMERGENCY;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_VOICE_OVER:
+          iServiceType = AE_DSP_SERVICE_TYPE_VOICE_OVER;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_KARAOKE:
+          iServiceType = AE_DSP_SERVICE_TYPE_KARAOKE;
+          break;
+        case AV_AUDIO_SERVICE_TYPE_MAIN:
+        default:
+          iServiceType = AE_DSP_SERVICE_TYPE_MAIN;
+          break;
+      }
       break;
+    }
     case AE_DSP_ABASE_DTS:
     case AE_DSP_ABASE_DTSHD_HRA:
     case AE_DSP_ABASE_DTSHD_MA:
-      /// TODO: Add handling for ffmpeg related stream information
+    {
+
+      unsigned int iProfile;
+      switch (m_FFMpegProfile)
+      {
+        case FF_PROFILE_DTS_ES:
+          iProfile = AE_DSP_PROFILE_DTS_ES;
+          break;
+        case FF_PROFILE_DTS_96_24:
+          iProfile = AE_DSP_PROFILE_DTS_96_24;
+          break;
+        case FF_PROFILE_DTS_HD_HRA:
+          iProfile = AE_DSP_PROFILE_DTS_HD_HRA;
+          break;
+        case FF_PROFILE_DTS_HD_MA:
+          iProfile = AE_DSP_PROFILE_DTS_HD_MA;
+          break;
+        case FF_PROFILE_DTS:
+        default:
+          iProfile = AE_DSP_PROFILE_DTS;
+          break;
+      }
+
+      m_AddonStreamProperties.Profile.dts_dtshd.iProfile = iProfile;
+      m_AddonStreamProperties.Profile.dts_dtshd.bSurroundMatrix = m_FFMpegMatrixEncoding == AV_MATRIX_ENCODING_DOLBY ? true : false;
       break;
+    }
     case AE_DSP_ABASE_TRUEHD:
     case AE_DSP_ABASE_MLP:
-      /// TODO: Add handling for ffmpeg related stream information
+    {
+      unsigned int iProfile;
+      switch (m_FFMpegMatrixEncoding)
+      {
+        case AV_MATRIX_ENCODING_DOLBY:
+          iProfile = AE_DSP_PROFILE_DOLBY_SURROUND;
+          break;
+        case AV_MATRIX_ENCODING_DPLII:
+          iProfile = AE_DSP_PROFILE_DOLBY_PLII;
+          break;
+        case AV_MATRIX_ENCODING_DPLIIX:
+          iProfile = AE_DSP_PROFILE_DOLBY_PLIIX;
+          break;
+        case AV_MATRIX_ENCODING_DPLIIZ:
+          iProfile = AE_DSP_PROFILE_DOLBY_PLIIZ;
+          break;
+        case AV_MATRIX_ENCODING_DOLBYEX:
+          iProfile = AE_DSP_PROFILE_DOLBY_EX;
+          break;
+        case AV_MATRIX_ENCODING_DOLBYHEADPHONE:
+          iProfile = AE_DSP_PROFILE_DOLBY_HEADPHONE;
+          break;
+        case AV_MATRIX_ENCODING_NONE:
+        default:
+          iProfile = AE_DSP_PROFILE_DOLBY_NONE;
+          break;
+      }
+
+      m_AddonStreamProperties.Profile.mlp_truehd.iProfile = iProfile;
       break;
+    }
     case AE_DSP_ABASE_FLAC:
-    default:
       break;
-  };
-  return false;
+    default:
+      ret = false;
+      break;
+  }
+
+  return ret;
 }
 
 void CActiveAEDSPProcess::Destroy()

@@ -158,7 +158,7 @@ public:
    * @param options A bit field of stream options (see: enum AEStreamOptions)
    * @return a new IAEStream that will accept data in the requested format
    */
-  virtual IAEStream *MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo channelLayout, unsigned int options = 0) = 0;
+  virtual IAEStream *MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo channelLayout, unsigned int options = 0 ) = 0;
 
   /**
    * This method will remove the specifyed stream from the engine.
@@ -251,5 +251,10 @@ public:
    * Instruct AE to re-initialize, e.g. after ELD change event
    */
   virtual void DeviceChange() {return; }
+
+  /**
+   * Indicates if dsp addon system is active.
+   */
+  virtual bool HaveDSP() { return false; };
 };
 

@@ -61,6 +61,9 @@ CActiveAEStream::CActiveAEStream(AEAudioFormat *format)
   m_remapper = NULL;
   m_remapBuffer = NULL;
   m_streamResampleRatio = 1.0;
+  m_profile = 0;
+  m_matrixEncoding = AV_MATRIX_ENCODING_NONE;
+  m_audioServiceType = AV_AUDIO_SERVICE_TYPE_MAIN;
 }
 
 CActiveAEStream::~CActiveAEStream()
@@ -444,6 +447,26 @@ bool CActiveAEStream::SetResampleRatio(double ratio)
   return true;
 }
 
+void CActiveAEStream::GetFFmpegInfo(int &profile, enum AVMatrixEncoding &matrix_encoding, enum AVAudioServiceType &audio_service_type)
+{
+  profile = m_profile;
+  matrix_encoding = m_matrixEncoding;
+  audio_service_type = m_audioServiceType;
+}
+
+void CActiveAEStream::SetFFmpegInfo(int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type)
+{
+  if (m_profile != profile ||
+      m_matrixEncoding != matrix_encoding ||
+      m_audioServiceType != audio_service_type)
+  {
+    m_profile = profile;
+    m_matrixEncoding = matrix_encoding;
+    m_audioServiceType = audio_service_type;
+    AE.SetStreamFFmpegInfo(this, m_profile, m_matrixEncoding, m_audioServiceType);
+  }
+}
+
 void CActiveAEStream::FadeVolume(float from, float target, unsigned int time)
 {
   if (time == 0 || AE_IS_RAW(m_format.m_dataFormat))
@@ -457,6 +480,11 @@ bool CActiveAEStream::IsFading()
 {
   CSingleLock lock(m_streamLock);
   return m_streamFading;
+}
+
+bool CActiveAEStream::HaveDSP()
+{
+  return AE.HaveDSP();
 }
 
 const unsigned int CActiveAEStream::GetFrameSize() const

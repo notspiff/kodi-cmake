@@ -59,9 +59,11 @@ public:
   virtual float GetVolume();
   virtual float GetReplayGain();
   virtual float GetAmplification();
+  virtual void GetFFmpegInfo(int &profile, enum AVMatrixEncoding &matrix_encoding, enum AVAudioServiceType &audio_service_type);
   virtual void SetVolume(float volume);
   virtual void SetReplayGain(float factor);
   virtual void SetAmplification(float amplify);
+  virtual void SetFFmpegInfo(int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type);
 
   virtual const unsigned int GetFrameSize() const;
   virtual const unsigned int GetChannelCount() const;
@@ -78,6 +80,7 @@ public:
   virtual bool IsFading();
   virtual void RegisterSlave(IAEStream *stream);
   virtual void Discontinuity();
+  virtual bool HaveDSP();
 
 protected:
 
@@ -101,6 +104,9 @@ protected:
   CSoundPacket *m_remapBuffer;
   IAEResample *m_remapper;
   int m_clockId;
+  int m_profile;
+  enum AVMatrixEncoding m_matrixEncoding;
+  enum AVAudioServiceType m_audioServiceType;
 
   // only accessed by engine
   CActiveAEBufferPool *m_inputBuffers;

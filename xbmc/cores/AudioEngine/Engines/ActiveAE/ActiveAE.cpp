@@ -527,6 +527,13 @@ void CActiveAE::StateMachine(int signal, Protocol *port, Message *msg)
             par->stream->m_resampleBuffers->m_resampleRatio = par->parameter.double_par;
           }
           return;
+        case CActiveAEControlProtocol::STREAMFFMPEGINFO:
+          MsgStreamFFmpegInfo *info;
+          info = (MsgStreamFFmpegInfo*)msg->data;
+          par->stream->m_profile = info->profile;
+          par->stream->m_matrixEncoding = info->matrix_encoding;
+          par->stream->m_audioServiceType = info->audio_service_type;
+          return;
         case CActiveAEControlProtocol::STREAMFADE:
           MsgStreamFade *fade;
           fade = (MsgStreamFade*)msg->data;
@@ -1145,9 +1152,13 @@ void CActiveAE::Configure(AEAudioFormat *desiredFmt)
       }
       if (!(*it)->m_resampleBuffers)
       {
+        bool useDSP = !isRaw ? m_settings.dspaddonsenabled : false;
+
         (*it)->m_resampleBuffers = new CActiveAEBufferPoolResample((*it)->m_inputBuffers->m_format, outputFormat, m_settings.resampleQuality);
         (*it)->m_resampleBuffers->m_changeResampler = (*it)->m_forceResampler;
-        (*it)->m_resampleBuffers->Create(MAX_CACHE_LEVEL*1000, false, m_settings.stereoupmix, m_settings.normalizelevels, !isRaw ? m_settings.dspaddonsenabled : false);
+        if (useDSP)
+          (*it)->m_resampleBuffers->SetExtraData((*it)->m_profile, (*it)->m_matrixEncoding, (*it)->m_audioServiceType);
+        (*it)->m_resampleBuffers->Create(MAX_CACHE_LEVEL*1000, false, m_settings.stereoupmix, m_settings.normalizelevels, useDSP);
       }
       if (m_mode == MODE_TRANSCODE || m_streams.size() > 1)
         (*it)->m_resampleBuffers->m_fillPackets = true;
@@ -2463,6 +2474,11 @@ void CActiveAE::DeviceChange()
   m_controlPort.SendOutMessage(CActiveAEControlProtocol::DEVICECHANGE);
 }
 
+bool CActiveAE::HaveDSP()
+{
+  return m_settings.dspaddonsenabled;
+};
+
 void CActiveAE::OnLostDevice()
 {
   Message *reply;
@@ -2905,6 +2921,17 @@ void CActiveAE::SetStreamResampleRatio(CActiveAEStream *stream, double ratio)
   msg.parameter.double_par = ratio;
   m_controlPort.SendOutMessage(CActiveAEControlProtocol::STREAMRESAMPLERATIO,
                                      &msg, sizeof(MsgStreamParameter));
+}
+
+void CActiveAE::SetStreamFFmpegInfo(CActiveAEStream *stream, int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type)
+{
+  MsgStreamFFmpegInfo msg;
+  msg.stream = stream;
+  msg.profile = profile;
+  msg.matrix_encoding = matrix_encoding;
+  msg.audio_service_type = audio_service_type;
+
+  m_controlPort.SendOutMessage(CActiveAEControlProtocol::STREAMFFMPEGINFO, &msg, sizeof(MsgStreamFFmpegInfo));
 }
 
 void CActiveAE::SetStreamFade(CActiveAEStream *stream, float from, float target, unsigned int millis)
