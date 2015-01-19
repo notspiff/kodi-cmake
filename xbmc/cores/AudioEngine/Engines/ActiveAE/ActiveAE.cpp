@@ -179,6 +179,7 @@ CActiveAE::CActiveAE() :
   m_audioCallback = NULL;
   m_vizInitialized = false;
   m_sinkHasVolume = false;
+  m_aeGUISoundForce = false;
   m_stats.Reset(44100);
 }
 
@@ -550,11 +551,15 @@ void CActiveAE::StateMachine(int signal, Protocol *port, Message *msg)
         case CActiveAEDataProtocol::PLAYSOUND:
           CActiveAESound *sound;
           sound = *(CActiveAESound**)msg->data;
-          if (m_settings.guisoundmode == AE_SOUND_OFF ||
-             (m_settings.guisoundmode == AE_SOUND_IDLE && !m_streams.empty()))
-            return;
           if (sound)
           {
+            m_aeGUISoundForce = m_settings.dspaddonsenabled && sound->GetChannel() != AE_CH_NULL;
+
+            if ((m_settings.guisoundmode == AE_SOUND_OFF ||
+                (m_settings.guisoundmode == AE_SOUND_IDLE && !m_streams.empty())) &&
+                !m_aeGUISoundForce)
+              return;
+
             SoundState st = {sound, 0};
             m_sounds_playing.push_back(st);
             m_extTimeout = 0;
@@ -1202,7 +1207,8 @@ void CActiveAE::Configure(AEAudioFormat *desiredFmt)
   if (!CompareFormat(oldInternalFormat, m_internalFormat))
   {
     if (m_settings.guisoundmode == AE_SOUND_ALWAYS ||
-       (m_settings.guisoundmode == AE_SOUND_IDLE && m_streams.empty()))
+       (m_settings.guisoundmode == AE_SOUND_IDLE && m_streams.empty()) ||
+       m_aeGUISoundForce)
     {
       std::vector<CActiveAESound*>::iterator it;
       for (it = m_sounds.begin(); it != m_sounds.end(); ++it)
@@ -1365,6 +1371,8 @@ void CActiveAE::SStopSound(CActiveAESound *sound)
   {
     if (it->sound == sound)
     {
+      if (sound->GetChannel() != AE_CH_NULL)
+        m_aeGUISoundForce = false;
       m_sounds_playing.erase(it);
       return;
     }
@@ -1389,7 +1397,6 @@ void CActiveAE::DiscardSound(CActiveAESound *sound)
 
 void CActiveAE::ChangeResamplers()
 {
-  
   std::list<CActiveAEStream*>::iterator it;
   for(it=m_streams.begin(); it!=m_streams.end(); ++it)
   {
@@ -2692,8 +2699,9 @@ void CActiveAE::StopSound(CActiveAESound *sound)
  */
 void CActiveAE::ResampleSounds()
 {
-  if (m_settings.guisoundmode == AE_SOUND_OFF ||
-     (m_settings.guisoundmode == AE_SOUND_IDLE && !m_streams.empty()))
+  if ((m_settings.guisoundmode == AE_SOUND_OFF ||
+      (m_settings.guisoundmode == AE_SOUND_IDLE && !m_streams.empty())) &&
+      !m_aeGUISoundForce)
     return;
 
   std::vector<CActiveAESound*>::iterator it;
@@ -2730,6 +2738,24 @@ bool CActiveAE::ResampleSound(CActiveAESound *sound)
   dst_config.dither_bits = CAEUtil::DataFormatToDitherBits(m_internalFormat.m_dataFormat);
 
   IAEResample *resampler = CAEResampleFactory::Create();
+  
+  AEChannel testChannel = sound->GetChannel();
+  CAEChannelInfo outChannels;
+  if (sound->GetSound(true)->config.channels == 1 && testChannel != AE_CH_NULL)
+  {
+    for (unsigned int out=0; out < m_internalFormat.m_channelLayout.Count(); out++)
+    {
+      if (m_internalFormat.m_channelLayout[out] == AE_CH_FC && testChannel != AE_CH_FC) /// To become center clear on position test ??????
+        outChannels += AE_CH_FL;
+      else if (m_internalFormat.m_channelLayout[out] == testChannel)
+        outChannels += AE_CH_FC;
+      else
+        outChannels += m_internalFormat.m_channelLayout[out];
+    }
+  }
+
+  //CActiveAEResample *resampler = new CActiveAEResample();
+
   resampler->Init(dst_config.channel_layout,
                   dst_config.channels,
                   dst_config.sample_rate,
@@ -2744,7 +2770,7 @@ bool CActiveAE::ResampleSound(CActiveAESound *sound)
                   orig_config.dither_bits,
                   false,
                   true,
-                  NULL,
+                  outChannels.Count() > 0 ? &outChannels : NULL,
                   m_settings.resampleQuality);
 
   dst_samples = resampler->CalcDstSampleCount(sound->GetSound(true)->nb_samples,
