@@ -38,18 +38,7 @@ namespace PERIPHERALS
 
     virtual bool InitialiseFeature(const PeripheralFeature feature);
 
-    const std::string& Provider(void) const      { return m_strProvider; }
-    unsigned int       RequestedPort(void) const { return m_requestedPort; }
-    unsigned int       ButtonCount(void) const   { return m_buttonCount; }
-    unsigned int       HatCount(void) const      { return m_hatCount; }
-    unsigned int       AxisCount(void) const     { return m_axisCount; }
-
     void SetDeviceName(const std::string& strName)    { m_strDeviceName = strName; } // Override value in peripherals.xml
-    void SetProvider(const std::string& strProvider)  { m_strProvider   = strProvider; }
-    void SetRequestedPort(unsigned int requestedPort) { m_requestedPort = requestedPort; }
-    void SetButtonCount(unsigned int buttonCount)     { m_buttonCount   = buttonCount; }
-    void SetHatCount(unsigned int hatCount)           { m_hatCount      = hatCount; }
-    void SetAxisCount(unsigned int axisCount)         { m_axisCount     = axisCount; }
 
     virtual void OnButtonMotion(unsigned int index, bool bPressed);
     virtual void OnHatMotion(unsigned int index, HatDirection direction);
@@ -59,10 +48,5 @@ namespace PERIPHERALS
     IJoystickInputHandler*  m_inputHandler;
     IJoystickActionHandler* m_actionHandler;
     IJoystickButtonMap*     m_buttonMap;
-    std::string             m_strProvider;
-    unsigned int            m_requestedPort;
-    unsigned int            m_buttonCount;
-    unsigned int            m_hatCount;
-    unsigned int            m_axisCount;
   };
 }

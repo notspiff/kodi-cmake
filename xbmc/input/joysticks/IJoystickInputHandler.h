@@ -51,7 +51,7 @@ public:
    * \brief Handle axis motion
    *
    * \param index     The index of the raw axis
-   * \param position  The position of the axis in the interval [-1.0, 1.0], inclusive
+   * \param position  The position of the axis in the closed interval [-1.0, 1.0]
    */
   virtual void OnAxisMotion(unsigned int index, float position) = 0;
 };

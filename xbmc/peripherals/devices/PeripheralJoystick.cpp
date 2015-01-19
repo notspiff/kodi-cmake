@@ -32,11 +32,7 @@ CPeripheralJoystick::CPeripheralJoystick(const PeripheralScanResult& scanResult)
   CPeripheral(scanResult),
   m_inputHandler(NULL),
   m_actionHandler(NULL),
-  m_buttonMap(NULL),
-  m_requestedPort(0),
-  m_buttonCount(0),
-  m_hatCount(0),
-  m_axisCount(0)
+  m_buttonMap(NULL)
 {
   m_features.push_back(FEATURE_JOYSTICK);
 }

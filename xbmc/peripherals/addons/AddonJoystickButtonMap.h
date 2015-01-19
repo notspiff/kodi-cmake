@@ -28,26 +28,23 @@ namespace PERIPHERALS
   class CAddonJoystickButtonMap : public IJoystickButtonMap
   {
   public:
-    CAddonJoystickButtonMap(const PERIPHERALS::PeripheralAddonPtr& addon, unsigned int index);
+    CAddonJoystickButtonMap(const PeripheralAddonPtr& addon, unsigned int index);
 
     virtual ~CAddonJoystickButtonMap(void) { }
 
+    // Implementation of IJoystickButtonMap
     virtual bool Load(void);
-
     JoystickActionID GetAction(const CButtonPrimitive& button);
-
     bool GetButtonPrimitive(JoystickActionID id, CButtonPrimitive& button);
-
     bool GetAnalogStick(JoystickActionID id, int& horizIndex, bool& horizInverted,
                                              int& vertIndex,  bool& vertInverted);
-
     bool GetAccelerometer(JoystickActionID id, int& xIndex, bool& xInverted,
                                                int& yIndex, bool& yInverted,
                                                int& zIndex, bool& zInverted);
 
   private:
-    PERIPHERALS::PeripheralAddonPtr m_addon;
-    unsigned int                    m_index;
-    ADDON::ButtonMap                m_buttonMap;
+    const PeripheralAddonPtr m_addon;
+    const unsigned int       m_index;
+    JoystickFeatureMap       m_features;
   };
 }

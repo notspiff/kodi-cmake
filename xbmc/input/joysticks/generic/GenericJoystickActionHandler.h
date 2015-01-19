@@ -58,8 +58,8 @@ public:
    * \brief An analog stick has moved
    *
    * \param id        The ID of the analog stick
-   * \param x         The x coordinate in the interval [-1, 1], inclusive
-   * \param y         The y coordinate in the interval [-1, 1], inclusive
+   * \param x         The x coordinate in the closed interval [-1, 1]
+   * \param y         The y coordinate in the closed interval [-1, 1]
    *
    * \return True if the event was handled otherwise false
    */
@@ -81,9 +81,9 @@ public:
   /*!
    * \brief An accelerometer's acceleration has changed
    *
-   * \param x         The x coordinate in the interval [-1, 1], inclusive
-   * \param y         The y coordinate in the interval [-1, 1], inclusive
-   * \param z         The z coordinate in the interval [-1, 1], inclusive
+   * \param x         The x coordinate in the closed interval [-1, 1]
+   * \param y         The y coordinate in the closed interval [-1, 1]
+   * \param z         The z coordinate in the closed interval [-1, 1]
    *
    * \return True if the event was handled otherwise false
    */

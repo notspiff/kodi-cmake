@@ -94,11 +94,9 @@ extern "C"
   void FreeEvents(unsigned int event_count, PERIPHERAL_EVENT* events);
 
   /*!
-   * @brief Look up joystick elements in the button map
+   * @brief Update joystick feature
    */
-  PERIPHERAL_ERROR GetButtonMap(unsigned int index, JOYSTICK_BUTTONMAP* button_map);
-  void FreeButtonMap(JOYSTICK_BUTTONMAP* button_map);
-  PERIPHERAL_ERROR UpdateButtonMap(unsigned int index, JOYSTICK_ID key, JOYSTICK_BUTTONMAP_VALUE* value);
+  PERIPHERAL_ERROR UpdateJoystickFeature(unsigned int index, JOYSTICK_FEATURE* feature);
 #endif
   ///}
 
@@ -120,9 +118,7 @@ extern "C"
     pClient->FreeJoystickInfo               = FreeJoystickInfo;
     pClient->GetEvents                      = GetEvents;
     pClient->FreeEvents                     = FreeEvents;
-    pClient->GetButtonMap                   = GetButtonMap;
-    pClient->FreeButtonMap                  = FreeButtonMap;
-    pClient->UpdateButtonMap                = UpdateButtonMap;
+    pClient->UpdateJoystickFeature          = UpdateJoystickFeature;
 #endif
   };
 

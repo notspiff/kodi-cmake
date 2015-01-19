@@ -41,6 +41,9 @@ namespace PERIPHERALS
   typedef boost::shared_ptr<CPeripheralAddon> PeripheralAddonPtr;
   typedef std::vector<PeripheralAddonPtr>     PeripheralAddonVector;
 
+  typedef boost::shared_ptr<ADDON::JoystickFeature> JoystickFeaturePtr;
+  typedef std::map<JoystickActionID, JoystickFeaturePtr> JoystickFeatureMap;
+
   class CPeripheralAddon : public ADDON::CAddonDll<DllPeripheral, PeripheralAddon, PERIPHERAL_PROPERTIES>
   {
   public:
@@ -79,15 +82,15 @@ namespace PERIPHERALS
 
     /** @name Joystick methods */
     //@{
-    bool GetButtonMap(unsigned int index, ADDON::ButtonMap& buttonMap);
+    bool GetJoystickFeatures(unsigned int index, JoystickFeatureMap& features);
     //@}
 
-    static const char        *ToString(PERIPHERAL_ERROR error);
-    static JoystickActionID  ToJoystickID(JOYSTICK_ID id);
-    static JOYSTICK_ID       ToAddonID(JoystickActionID id);
-    static HatDirection      ToHatDirection(JOYSTICK_STATE_HAT state);
-    static HatDirection      ToHatDirection(JOYSTICK_HAT_DIRECTION dir);
-    static SemiAxisDirection ToSemiAxisDirection(JOYSTICK_SEMIAXIS_DIRECTION dir);
+    static const char          *ToString(PERIPHERAL_ERROR error);
+    static JoystickActionID    ToJoystickID(JOYSTICK_FEATURE_ID id);
+    static JOYSTICK_FEATURE_ID ToFeatureID(JoystickActionID id);
+    static HatDirection        ToHatDirection(JOYSTICK_STATE_HAT state);
+    static HatDirection        ToHatDirection(JOYSTICK_DRIVER_HAT_DIRECTION dir);
+    static SemiAxisDirection   ToSemiAxisDirection(JOYSTICK_DRIVER_SEMIAXIS_DIRECTION dir);
 
   protected:
     /*!

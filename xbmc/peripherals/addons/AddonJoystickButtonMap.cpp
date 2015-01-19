@@ -30,56 +30,70 @@ CAddonJoystickButtonMap::CAddonJoystickButtonMap(const PERIPHERALS::PeripheralAd
 
 bool CAddonJoystickButtonMap::Load(void)
 {
-  return m_addon->GetButtonMap(m_index, m_buttonMap);
+  return m_addon->GetJoystickFeatures(m_index, m_features);
 }
 
 JoystickActionID CAddonJoystickButtonMap::GetAction(const CButtonPrimitive& source)
 {
-  for (ADDON::ButtonMap::const_iterator it = m_buttonMap.begin(); it != m_buttonMap.end(); ++it)
+  for (JoystickFeatureMap::const_iterator it = m_features.begin(); it != m_features.end(); ++it)
   {
-    const ADDON::ButtonMapValue& value = it->second;
+    const ADDON::JoystickFeature* feature = it->second.get();
 
     bool bMatches(false);
 
-    switch (value.Type())
+    switch (feature->Type())
     {
-    case JOYSTICK_BUTTONMAP_VALUE_BUTTON:
-      if (source.Index() == value.Button().index)
+    case JOYSTICK_DRIVER_TYPE_BUTTON:
+    {
+      const ADDON::DriverButton* button = static_cast<const ADDON::DriverButton*>(feature);
+      if (source.Index() == button->Index())
         bMatches = true;
       break;
+    }
 
-    case JOYSTICK_BUTTONMAP_VALUE_HAT_DIRECTION:
-      if (source.Index()  == value.Hat().index &&
-          source.HatDir() == CPeripheralAddon::ToHatDirection(value.Hat().direction))
+    case JOYSTICK_DRIVER_TYPE_HAT_DIRECTION:
+    {
+      const ADDON::DriverHat* hat = static_cast<const ADDON::DriverHat*>(feature);
+      if (source.Index()  == hat->Index() &&
+          source.HatDir() == CPeripheralAddon::ToHatDirection(hat->Direction()))
         bMatches = true;
       break;
+    }
 
-    case JOYSTICK_BUTTONMAP_VALUE_SEMIAXIS:
-      if (source.Index()       == value.SemiAxis().index &&
-          source.SemiAxisDir() == CPeripheralAddon::ToSemiAxisDirection(value.SemiAxis().direction))
+    case JOYSTICK_DRIVER_TYPE_SEMIAXIS:
+    {
+      const ADDON::DriverSemiAxis* semiaxis = static_cast<const ADDON::DriverSemiAxis*>(feature);
+      if (source.Index()       == semiaxis->Index() &&
+          source.SemiAxisDir() == CPeripheralAddon::ToSemiAxisDirection(semiaxis->Direction()))
         bMatches = true;
       break;
+    }
 
-    case JOYSTICK_BUTTONMAP_VALUE_ANALOG_STICK:
-      if (source.Index() == value.AnalogStick().right.index ||
-          source.Index() == value.AnalogStick().up.index)
+    case JOYSTICK_DRIVER_TYPE_ANALOG_STICK:
+    {
+      const ADDON::DriverAnalogStick* analogStick = static_cast<const ADDON::DriverAnalogStick*>(feature);
+      if (source.Index() == analogStick->XIndex() ||
+          source.Index() == analogStick->YIndex())
         bMatches = true;
       break;
+    }
 
-    case JOYSTICK_BUTTONMAP_VALUE_ACCELEROMETER:
-      if (source.Index() == value.Accelerometer().x.index ||
-          source.Index() == value.Accelerometer().y.index ||
-          source.Index() == value.Accelerometer().z.index)
+    case JOYSTICK_DRIVER_TYPE_ACCELEROMETER:
+    {
+      const ADDON::DriverAccelerometer* accelerometer = static_cast<const ADDON::DriverAccelerometer*>(feature);
+      if (source.Index() == accelerometer->XIndex() ||
+          source.Index() == accelerometer->YIndex() ||
+          source.Index() == accelerometer->ZIndex())
         bMatches = true;
       break;
+    }
 
-    case JOYSTICK_BUTTONMAP_VALUE_UNKNOWN:
     default:
       break;
     }
 
     if (bMatches)
-      return CPeripheralAddon::ToJoystickID(it->first);
+      return it->first;
   }
   return JOY_ID_BUTTON_UNKNOWN;
 }
@@ -88,29 +102,35 @@ bool CAddonJoystickButtonMap::GetButtonPrimitive(JoystickActionID id, CButtonPri
 {
   bool retVal(false);
 
-  const JOYSTICK_ID addonId = CPeripheralAddon::ToAddonID(id);
-  ADDON::ButtonMap::const_iterator it = m_buttonMap.find(addonId);
-  if (it != m_buttonMap.end())
+  JoystickFeatureMap::const_iterator it = m_features.find(id);
+  if (it != m_features.end())
   {
-    switch (it->second.Type())
-    {
-    case JOYSTICK_BUTTONMAP_VALUE_BUTTON:
-      button = CButtonPrimitive(it->second.Button().index);
-      retVal = true;
-      break;
+    const ADDON::JoystickFeature* feature = it->second.get();
 
-    case JOYSTICK_BUTTONMAP_VALUE_HAT_DIRECTION:
+    switch (feature->Type())
     {
-      const HatDirection dir = CPeripheralAddon::ToHatDirection(it->second.Hat().direction);
-      button = CButtonPrimitive(it->second.Hat().index, dir);
+    case JOYSTICK_DRIVER_TYPE_BUTTON:
+    {
+      const ADDON::DriverButton* driverButton = static_cast<const ADDON::DriverButton*>(feature);
+      button = CButtonPrimitive(driverButton->Index());
       retVal = true;
       break;
     }
 
-    case JOYSTICK_BUTTONMAP_VALUE_SEMIAXIS:
+    case JOYSTICK_DRIVER_TYPE_HAT_DIRECTION:
     {
-      const SemiAxisDirection dir = CPeripheralAddon::ToSemiAxisDirection(it->second.SemiAxis().direction);
-      button = CButtonPrimitive(it->second.SemiAxis().index, dir);
+      const ADDON::DriverHat* driverHat = static_cast<const ADDON::DriverHat*>(feature);
+      const HatDirection dir = CPeripheralAddon::ToHatDirection(driverHat->Direction());
+      button = CButtonPrimitive(driverHat->Index(), dir);
+      retVal = true;
+      break;
+    }
+
+    case JOYSTICK_DRIVER_TYPE_SEMIAXIS:
+    {
+      const ADDON::DriverSemiAxis* driverSemiAxis = static_cast<const ADDON::DriverSemiAxis*>(feature);
+      const SemiAxisDirection dir = CPeripheralAddon::ToSemiAxisDirection(driverSemiAxis->Direction());
+      button = CButtonPrimitive(driverSemiAxis->Index(), dir);
       retVal = true;
       break;
     }
@@ -129,19 +149,23 @@ bool CAddonJoystickButtonMap::GetAnalogStick(JoystickActionID id,
 {
   bool retVal(false);
 
-  const JOYSTICK_ID addonId = CPeripheralAddon::ToAddonID(id);
-  ADDON::ButtonMap::const_iterator it = m_buttonMap.find(addonId);
-  if (it != m_buttonMap.end())
+  JoystickFeatureMap::const_iterator it = m_features.find(id);
+  if (it != m_features.end())
   {
-    switch (it->second.Type())
+    const ADDON::JoystickFeature* feature = it->second.get();
+
+    switch (feature->Type())
     {
-    case JOYSTICK_BUTTONMAP_VALUE_ANALOG_STICK:
-      horizIndex    = it->second.AnalogStick().right.index;
-      horizInverted = it->second.AnalogStick().right.direction == JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE;
-      vertIndex     = it->second.AnalogStick().up.index;
-      vertInverted  = it->second.AnalogStick().up.direction == JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE;
+    case JOYSTICK_DRIVER_TYPE_ANALOG_STICK:
+    {
+      const ADDON::DriverAnalogStick* driverAnalogStick = static_cast<const ADDON::DriverAnalogStick*>(feature);
+      horizIndex    = driverAnalogStick->XIndex();
+      horizInverted = driverAnalogStick->XInverted();
+      vertIndex     = driverAnalogStick->YIndex();
+      vertInverted  = driverAnalogStick->YInverted();
       retVal        = true;
       break;
+    }
 
     default:
       break;
@@ -158,21 +182,25 @@ bool CAddonJoystickButtonMap::GetAccelerometer(JoystickActionID id,
 {
   bool retVal(false);
 
-  const JOYSTICK_ID addonId = CPeripheralAddon::ToAddonID(id);
-  ADDON::ButtonMap::const_iterator it = m_buttonMap.find(addonId);
-  if (it != m_buttonMap.end())
+  JoystickFeatureMap::const_iterator it = m_features.find(id);
+  if (it != m_features.end())
   {
-    switch (it->second.Type())
+    const ADDON::JoystickFeature* feature = it->second.get();
+
+    switch (feature->Type())
     {
-    case JOYSTICK_BUTTONMAP_VALUE_ACCELEROMETER:
-      xIndex    = it->second.Accelerometer().x.index;
-      xInverted = it->second.Accelerometer().x.direction == JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE;
-      yIndex    = it->second.Accelerometer().y.index;
-      yInverted = it->second.Accelerometer().y.direction == JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE;
-      zIndex    = it->second.Accelerometer().z.index;
-      zInverted = it->second.Accelerometer().z.direction == JOYSTICK_SEMIAXIS_DIRECTION_NEGATIVE;
+    case JOYSTICK_DRIVER_TYPE_ACCELEROMETER:
+    {
+      const ADDON::DriverAccelerometer* driverAccelerometer = static_cast<const ADDON::DriverAccelerometer*>(feature);
+      xIndex    = driverAccelerometer->XIndex();
+      xInverted = driverAccelerometer->XInverted();
+      yIndex    = driverAccelerometer->YIndex();
+      yInverted = driverAccelerometer->YInverted();
+      zIndex    = driverAccelerometer->ZIndex();
+      zInverted = driverAccelerometer->ZInverted();
       retVal    = true;
       break;
+    }
 
     default:
       break;
