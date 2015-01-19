@@ -19,6 +19,8 @@
  *
  */
 
+#include "cores/AudioEngine/Utils/AEChannelInfo.h"
+#include "cores/AudioEngine/Utils/AEAudioFormat.h"
 #include "cores/AudioEngine/Interfaces/AE.h"
 #include "cores/AudioEngine/Interfaces/AEResample.h"
 
@@ -45,6 +47,11 @@ public:
   int CalcDstSampleCount(int src_samples, int dst_rate, int src_rate);
   int GetSrcBufferSize(int samples);
   int GetDstBufferSize(int samples);
+  static uint64_t GetAVChannelLayout(CAEChannelInfo &info);
+  static CAEChannelInfo GetAEChannelLayout(uint64_t layout);
+  static AVSampleFormat GetAVSampleFormat(AEDataFormat format);
+  static uint64_t GetAVChannel(enum AEChannel aechannel);
+  int GetAVChannelIndex(enum AEChannel aechannel, uint64_t layout);
 
 protected:
   bool m_loaded;
