@@ -91,6 +91,8 @@ namespace MUSIC_INFO
 #define TMSG_CECACTIVATESOURCE    317
 #define TMSG_CECSTANDBY           318
 #define TMSG_SETVIDEORESOLUTION   319
+#define TMSG_AUDIODSPENGINESTART  320
+#define TMSG_AUDIODSPENGINESTOP   321
 
 #define TMSG_NETWORKMESSAGE         500
 
@@ -224,6 +226,8 @@ public:
   std::string GetResponse();
   int SetResponse(std::string response);
   void ExecBuiltIn(const std::string &command, bool wait = false);
+  bool AudioDSPEngineStart();
+  bool AudioDSPEngineStop();
 
   void NetworkMessage(int dwMessage, int dwParam = 0);
 

@@ -63,6 +63,7 @@ struct AudioSettings
   bool stereoupmix;
   bool normalizelevels;
   bool passthrough;
+  bool dspaddonsenabled;
   int config;
   int guisoundmode;
   unsigned int samplerate;

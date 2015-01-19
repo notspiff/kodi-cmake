@@ -22,6 +22,7 @@
 #include "addons/AddonDatabase.h"
 #include "addons/AddonInstaller.h"
 #include "addons/AddonManager.h"
+#include "cores/AudioEngine/DSPAddons/ActiveAEDSP.h"
 #include "dialogs/GUIDialogYesNo.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "filesystem/File.h"
