@@ -221,6 +221,8 @@
 #include "profiles/dialogs/GUIDialogProfileSettings.h"
 #include "profiles/dialogs/GUIDialogLockSettings.h"
 #include "settings/dialogs/GUIDialogContentSettings.h"
+#include "settings/dialogs/GUIDialogAudioDSPManager.h"
+#include "settings/dialogs/GUIDialogAudioDSPSettings.h"
 #include "dialogs/GUIDialogBusy.h"
 #include "dialogs/GUIDialogKeyboardGeneric.h"
 #include "dialogs/GUIDialogYesNo.h"
@@ -1389,6 +1391,8 @@ bool CApplication::Initialize()
     g_windowManager.Add(new CGUIDialogVisualisationPresetList);
     g_windowManager.Add(new CGUIDialogVideoSettings);
     g_windowManager.Add(new CGUIDialogAudioSubtitleSettings);
+    g_windowManager.Add(new CGUIDialogAudioDSPManager);
+    g_windowManager.Add(new CGUIDialogAudioDSPSettings);
     g_windowManager.Add(new CGUIDialogVideoBookmarks);
     // Don't add the filebrowser dialog - it's created and added when it's needed
     g_windowManager.Add(new CGUIDialogNetworkSetup);
@@ -3379,6 +3383,8 @@ bool CApplication::Cleanup()
     g_windowManager.Delete(WINDOW_DIALOG_MEDIA_SOURCE);
     g_windowManager.Delete(WINDOW_DIALOG_VIDEO_OSD_SETTINGS);
     g_windowManager.Delete(WINDOW_DIALOG_AUDIO_OSD_SETTINGS);
+    g_windowManager.Delete(WINDOW_DIALOG_AUDIO_DSP_OSD_SETTINGS);
+    g_windowManager.Delete(WINDOW_DIALOG_AUDIO_DSP_MANAGER);
     g_windowManager.Delete(WINDOW_DIALOG_VIDEO_BOOKMARKS);
     g_windowManager.Delete(WINDOW_DIALOG_CONTENT_SETTINGS);
     g_windowManager.Delete(WINDOW_DIALOG_FAVOURITES);

@@ -25,7 +25,7 @@
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks)]</visible>
+			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VideoBookmarks)]</visible>
 		</control>
 		<control type="slider" id="87">
 			<description>Seek Slider</description>
@@ -40,7 +40,7 @@
 			<textureslidernib>osd_slider_nibNF.png</textureslidernib>
 			<textureslidernibfocus>osd_slider_nib.png</textureslidernibfocus>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks) | VideoPlayer.Content(LiveTV)]</visible>
+			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VideoBookmarks) | VideoPlayer.Content(LiveTV)]</visible>
 		</control>
 		<!-- !LiveTV -->
 		<control type="grouplist" id="100">
@@ -49,7 +49,7 @@
 			<orientation>horizontal</orientation>
 			<itemgap>0</itemgap>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks)]</visible>
+			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VideoBookmarks)]</visible>
 			<visible>!VideoPlayer.Content(LiveTV)</visible>
 			<onup>1000</onup>
 			<onleft>254</onleft>
@@ -112,8 +112,23 @@
 				<onclick>PlayerControl(Next)</onclick>
 			</control>
 			<control type="image" id="2200">
-				<width>270</width>
+				<width>215</width>
 				<texture>-</texture>
+			</control>
+			<control type="button" id="256">
+        <enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
+				<animation effect="fade" start="100" end="0" time="100" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
+				<animation effect="slide" start="0,0" end="55,0" time="0" condition="!VideoPlayer.IsStereoscopic">Conditional</animation>-->
+				<width>55</width>
+				<height>55</height>
+				<label>15047</label>
+				<font>-</font>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<onup>1000</onup>
+				<ondown>1000</ondown>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
+				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
 			</control>
 			<control type="button" id="255">
 				<enable>VideoPlayer.IsStereoscopic</enable>
@@ -186,11 +201,11 @@
 		</control>
 		<!-- LiveTV -->
 		<control type="grouplist" id="100">
-			<left>325</left>
+			<left>315</left>
 			<top>60r</top>
 			<defaultcontrol always="true">301</defaultcontrol>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks) | Window.IsVisible(PVROSDChannels) | Window.IsVisible(PVROSDGuide)]</visible>
+			<visible>![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(PVROSDChannels) | Window.IsVisible(PVROSDGuide)]</visible>
 			<visible>VideoPlayer.Content(LiveTV)</visible>
 			<onup>1000</onup>
 			<onleft>353</onleft>
@@ -281,8 +296,21 @@
 				<onclick>Dialog.Close(VideoOSD)</onclick>
 			</control>
 			<control type="image" id="2300">
-				<width>215</width>
+				<width>170</width>
 				<texture>-</texture>
+			</control>
+			<control type="button" id="356">
+        <enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
+				<animation effect="fade" start="100" end="0" time="100" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
+				<animation effect="slide" start="0,0" end="55,0" time="0" condition="!VideoPlayer.IsStereoscopic">Conditional</animation>-->
+				<width>55</width>
+				<height>55</height>
+				<label>15047</label>
+				<font>-</font>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
+				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
 			</control>
 			<control type="button" id="354">
 				<enable>VideoPlayer.IsStereoscopic</enable>
@@ -470,7 +498,7 @@
 			<visible>Control.HasFocus(520) | Control.HasFocus(255) | ControlGroup(500).HasFocus</visible>
 		</control>
 		<control type="grouplist" id="500">
-			<visible>VideoPlayer.IsStereoscopic + ![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks)]</visible>
+			<visible>VideoPlayer.IsStereoscopic + ![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VideoBookmarks)]</visible>
 			<animation effect="fade" time="200">VisibleChange</animation>
 			<right>200</right>
 			<bottom>45</bottom>
@@ -569,7 +597,7 @@
 			<visible>Control.HasFocus(570) | Control.HasFocus(354) | ControlGroup(550).HasFocus</visible>
 		</control>
 		<control type="grouplist" id="550">
-			<visible>videoplayer.isstereoscopic + ![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(VideoBookmarks) | Window.IsVisible(PVROSDChannels) | Window.IsVisible(PVROSDGuide)]</visible>
+			<visible>videoplayer.isstereoscopic + ![Window.IsVisible(SliderDialog) | Window.IsVisible(OSDVideoSettings) | Window.IsVisible(OSDAudioSettings) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VideoBookmarks) | Window.IsVisible(PVROSDChannels) | Window.IsVisible(PVROSDGuide)]</visible>
 			<animation effect="fade" time="200">VisibleChange</animation>
 			<right>145</right>
 			<bottom>45</bottom>
