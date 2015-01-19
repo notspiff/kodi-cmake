@@ -87,13 +87,13 @@ namespace XBMCAddon
        * autoclose      : [opt] integer - milliseconds to autoclose dialog. (default=do not autoclose)\n
        * multiselect    : [opt] boolean - True to enable multiselection. (default=off)\n
        * \n
-       * *Note, Returns the position of the highlighted item as an integer but list of strings of selection for multiselect.\n
+       * *Returns the position of the highlighted item(s) as an integer or a list of integers.\n
        * \n
        * example:\n
        *   - dialog = xbmcgui.Dialog()\n
        *   - ret = dialog.select('Choose a playlist', ['Playlist #1', 'Playlist #2, 'Playlist #3'])n\n
        */
-      Alternative<int,std::vector<String> > select(const String& heading, const std::vector<String>& list, int autoclose=0, bool multiselect=false) throw (WindowException);
+      Alternative<int,std::vector<int> > select(const String& heading, const std::vector<String>& list, int autoclose=0, bool multiselect=false) throw (WindowException);
 
       /**
        * ok(heading, line1[, line2, line3]) -- Show a dialog 'OK'.\n
