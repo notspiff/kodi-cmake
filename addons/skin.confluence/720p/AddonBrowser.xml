@@ -47,12 +47,12 @@
 			</control>
 		</control>
 		<control type="group">
-			<left>-250</left>
+			<left>-290</left>
 			<include>SideBladeLeft</include>
 			<control type="grouplist" id="9000">
 				<left>0</left>
 				<top>110</top>
-				<width>250</width>
+				<width>290</width>
 				<height>600</height>
 				<onleft>9000</onleft>
 				<onright>50</onright>
@@ -61,7 +61,7 @@
 				<onback>50</onback>
 				<itemgap>0</itemgap>
 				<control type="label" id="200">
-					<width>250</width>
+					<width>290</width>
 					<height>35</height>
 					<font>font12</font>
 					<label>31006</label>
@@ -71,7 +71,7 @@
 				</control>
 				<control type="button" id="2">
 					<description>View As button</description>
-					<textwidth>235</textwidth>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>-</label>
 				</control>
@@ -90,7 +90,7 @@
 					<usealttexture>Container.SortDirection(Ascending)</usealttexture>
 				</control>
 				<control type="label" id="201">
-					<width>250</width>
+					<width>290</width>
 					<height>35</height>
 					<font>font12</font>
 					<label>31026</label>
@@ -100,7 +100,7 @@
 				</control>
 				<control type="button" id="5">
 					<description>addon-updates</description>
-					<textwidth>235</textwidth>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>24063</label>
 				</control>
