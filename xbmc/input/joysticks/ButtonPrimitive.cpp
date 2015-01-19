@@ -24,31 +24,31 @@ CButtonPrimitive::CButtonPrimitive(void)
   : m_type(),
     m_index(0),
     m_hatDirection(),
-    m_axisDirection()
+    m_semiAxisDirection()
 {
 }
 
-CButtonPrimitive::CButtonPrimitive(unsigned int index)
+CButtonPrimitive::CButtonPrimitive(unsigned int buttonIndex)
   : m_type(ButtonPrimitiveTypeButton),
-    m_index(index),
+    m_index(buttonIndex),
     m_hatDirection(),
-    m_axisDirection()
+    m_semiAxisDirection()
 {
 }
 
-CButtonPrimitive::CButtonPrimitive(unsigned int index, HatDirection direction)
+CButtonPrimitive::CButtonPrimitive(unsigned int hatIndex, HatDirection direction)
   : m_type(ButtonPrimitiveTypeHatDirection),
-    m_index(index),
+    m_index(hatIndex),
     m_hatDirection(direction),
-    m_axisDirection()
+    m_semiAxisDirection()
 {
 }
 
-CButtonPrimitive::CButtonPrimitive(unsigned int index, SemiAxisDirection direction)
+CButtonPrimitive::CButtonPrimitive(unsigned int axisIndex, SemiAxisDirection direction)
   : m_type(ButtonPrimitiveTypeSemiAxis),
-    m_index(index),
+    m_index(axisIndex),
     m_hatDirection(),
-    m_axisDirection(direction)
+    m_semiAxisDirection(direction)
 {
 }
 
@@ -63,8 +63,7 @@ bool CButtonPrimitive::operator==(const CButtonPrimitive& rhs) const
     case ButtonPrimitiveTypeHatDirection:
       return m_index == rhs.m_index && m_hatDirection == rhs.m_hatDirection;
     case ButtonPrimitiveTypeSemiAxis:
-      return m_index == rhs.m_index && m_axisDirection == rhs.m_axisDirection;
-    case ButtonPrimitiveTypeUnknown:
+      return m_index == rhs.m_index && m_semiAxisDirection == rhs.m_semiAxisDirection;
     default:
       return true;
     }
@@ -91,9 +90,21 @@ bool CButtonPrimitive::operator<(const CButtonPrimitive& rhs) const
 
   if (m_type == ButtonPrimitiveTypeSemiAxis)
   {
-    if (m_axisDirection < rhs.m_axisDirection) return true;
-    if (m_axisDirection > rhs.m_axisDirection) return false;
+    if (m_semiAxisDirection < rhs.m_semiAxisDirection) return true;
+    if (m_semiAxisDirection > rhs.m_semiAxisDirection) return false;
   }
 
   return false;
+}
+
+bool CButtonPrimitive::IsValid(void) const
+{
+  return m_type == ButtonPrimitiveTypeButton ||
+        (m_type == ButtonPrimitiveTypeHatDirection && (m_hatDirection == HatDirectionLeft  ||
+                                                       m_hatDirection == HatDirectionRight ||
+                                                       m_hatDirection == HatDirectionUp    ||
+                                                       m_hatDirection == HatDirectionDown))  ||
+        (m_type == ButtonPrimitiveTypeSemiAxis && (m_semiAxisDirection == SemiAxisDirectionPositive ||
+                                                   m_semiAxisDirection == SemiAxisDirectionNegative));
+                                                   
 }

@@ -35,24 +35,24 @@ class CButtonPrimitive
 {
 public:
   /*!
-   * \brief
+   * \brief Construct an invalid button primitive
    */
   CButtonPrimitive(void);
 
   /*!
-   * \brief
+   * \brief Construct an button primitive representing a button press
    */
-  CButtonPrimitive(unsigned int index);
+  CButtonPrimitive(unsigned int buttonIndex);
 
   /*!
-   * \brief
+   * \brief Construct an button primitive representing a cardinal hat direction
    */
-  CButtonPrimitive(unsigned int index, HatDirection direction);
+  CButtonPrimitive(unsigned int hatIndex, HatDirection direction);
 
   /*!
-   * \brief
+   * \brief Construct an button primitive representing a semi-axis
    */
-  CButtonPrimitive(unsigned int index, SemiAxisDirection direction);
+  CButtonPrimitive(unsigned int axisIndex, SemiAxisDirection direction);
 
   bool operator==(const CButtonPrimitive& rhs) const;
   bool operator<(const CButtonPrimitive& rhs) const;
@@ -62,14 +62,21 @@ public:
   bool operator<=(const CButtonPrimitive& rhs) const { return   operator<(rhs) || operator==(rhs); }
   bool operator>=(const CButtonPrimitive& rhs) const { return  !operator<(rhs); }
 
-  ButtonPrimitiveType Type() const        { return m_type; }
-  unsigned int        Index() const       { return m_index; }
-  HatDirection        HatDir() const      { return m_hatDirection; }
-  SemiAxisDirection   SemiAxisDir() const { return m_axisDirection; }
+  ButtonPrimitiveType Type(void) const        { return m_type; }
+  unsigned int        Index(void) const       { return m_index; }
+  HatDirection        HatDir(void) const      { return m_hatDirection; }
+  SemiAxisDirection   SemiAxisDir(void) const { return m_semiAxisDirection; }
+
+  /*!
+   * \brief A button primitive is valid if has a known type and
+   *        - for hats, is a cardinal direction
+   *        - for semi-axes, is a positive or negative direction
+   */
+  bool IsValid(void) const;
 
 private:
   ButtonPrimitiveType m_type;
   unsigned int        m_index;
   HatDirection        m_hatDirection;
-  SemiAxisDirection   m_axisDirection;
+  SemiAxisDirection   m_semiAxisDirection;
 };
