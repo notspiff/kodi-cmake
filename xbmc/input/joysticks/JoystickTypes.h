@@ -75,7 +75,7 @@ enum HatDirection
  */
 enum SemiAxisDirection
 {
-  SemiAxisDirectionNegative = -1,
-  SemiAxisDirectionUnknown  =  0,
-  SemiAxisDirectionPositive =  1,
+  SemiAxisDirectionNegative = -1,  // semiaxis lies in the interval [-1.0, 0.0]
+  SemiAxisDirectionUnknown  =  0,  // semiaxis is unknown or invalid
+  SemiAxisDirectionPositive =  1,  // semiaxis lies in the interval [0.0, 1.0]
 };

@@ -23,12 +23,8 @@
 
 /*!
  * \ingroup joysticks
- * \brief Interface (implements IJoystickInputHandling) defining methods to handle
- *        raw joystick events (buttons, hats, axes).
- *
- * This interface should be implemented on platforms only supporting low level
- * (raw) joystick events for buttons, hats and axes and with no button mapping
- * or gesture recognition logic.
+ * \brief Interface defining methods to handle raw joystick events (buttons,
+ *        hats, axes)
  */
 class IJoystickInputHandler
 {
@@ -36,27 +32,26 @@ public:
   virtual ~IJoystickInputHandler() { }
 
   /*!
-   * \brief Handle a joystick event
+   * \brief Handle button motion
    *
-   * TODO: doxy
-   *
-   * Handles the given joystick event at the given location.
-   * This takes into account all the currently active pointers
-   * which need to be updated before calling this method to
-   * actually interpret and handle the changes in touch.
-   *
-   * \param event     The event type (button, hat, axis)
-   * \param index     The index of the button/hat/axis
-   * \param timeNs    The time (in nanoseconds) when this touch occurred
-   * \param bPressed  The state of the button for button events
-   * \param direction The state of the hat for hat events
-   * \param axisPos   The state of the axis for axis events
-   *
-   * \return True if the event was handled otherwise false.
+   * \param index     The index of the raw button
+   * \param bPressed  true for press motion, false for release motion
    */
   virtual void OnButtonMotion(unsigned int index, bool bPressed) = 0;
 
+  /*!
+   * \brief Handle hat motion
+   *
+   * \param index      The index of the raw hat
+   * \param direction  The direction the hat is now being pressed
+   */
   virtual void OnHatMotion(unsigned int index, HatDirection direction) = 0;
 
+  /*!
+   * \brief Handle axis motion
+   *
+   * \param index     The index of the raw axis
+   * \param position  The position of the axis in the interval [-1.0, 1.0], inclusive
+   */
   virtual void OnAxisMotion(unsigned int index, float position) = 0;
 };
