@@ -27,23 +27,76 @@
 /*!
  * \ingroup joysticks
  *
- * \brief IJoystickButtonMap
+ * \brief Button map interface to translate between raw button/hat/axis elements
+ *        and physical joystick features.
  */
 class IJoystickButtonMap
 {
 public:
   virtual ~IJoystickButtonMap() { }
-  
+
+  /*!
+   * \brief Load the button map into memory
+   *
+   * \return true if button map is ready to start translating buttons, false otherwise
+   */
   virtual bool Load(void) = 0;
 
+  /*!
+   * \brief Get the action ID associated with a raw button, a raw hat
+   *        direction, or a raw semi-axis
+   *
+   * \param button The raw button primitive
+   *
+   * \return The ID, or UNKNOWN if button primitive isn't associated with an
+   *         action ID
+   */
   virtual JoystickActionID GetAction(const CButtonPrimitive& button) = 0;
 
+  /*!
+   * \brief Get the raw button, raw hat direction or raw semi-axis associated
+   *        with the given button/trigger ID
+   *
+   * \param id      The action ID. ID must correspond to a single button
+   *                primitive, so no analog sticks or accelerometers.
+   * \param button  The resolved button primitive
+   *
+   * \return true if the ID resolved to a button primitive, false if the ID was
+   *         invalid or resolved to an analog stick/accelerometer
+   */
   virtual bool GetButtonPrimitive(JoystickActionID id, CButtonPrimitive& button) = 0;
 
+  /*!
+   * \brief Get the raw axis indices and polarity for the given analog stick ID
+   *
+   * \param horizIndex     The index of the axis corresponding to the analog
+   *                       stick's horizontal motion, or -1 if unknown
+   * \param horizInverted  false if right is positive, true if right is negative
+   * \param vertIndex      The index of the axis corresponding to the analog
+   *                       stick's vertical motion, or -1 if unknown
+   * \param vertInverted   false if up is positive, true if up is negative
+   *
+   * \return true if the ID resolved to at least one axis (remaining axis may be -1)
+   */
   virtual bool GetAnalogStick(JoystickActionID id, int& horizIndex, bool& horizInverted,
-                                                    int& vertIndex,  bool& vertInverted) = 0;
+                                                   int& vertIndex,  bool& vertInverted) = 0;
 
+  /*!
+   * \brief Get the raw axis indices and polarity for the given accelerometer ID
+   *
+   * \param xIndex     The index of the axis corresponding to the accelerometer's
+   *                   X-axis, or -1 if unknown
+   * \param xInverted  false if positive X is positive, true if positive X is negative
+   * \param yIndex     The index of the axis corresponding to the accelerometer's
+   *                   Y-axis, or -1 if unknown
+   * \param yInverted  false if positive Y is positive, true if positive Y is negative
+   * \param zIndex     The index of the axis corresponding to the accelerometer's
+   *                   Z-axis, or -1 if unknown
+   * \param zInverted  false if positive X is positive, true if positive Z is negative
+   *
+   * \return true if the ID resolved to at least one axis (remaining axes may be -1)
+   */
   virtual bool GetAccelerometer(JoystickActionID id, int& xIndex, bool& xInverted,
-                                                      int& yIndex, bool& yInverted,
-                                                      int& zIndex, bool& zInverted) = 0;
+                                                     int& yIndex, bool& yInverted,
+                                                     int& zIndex, bool& zInverted) = 0;
 };
