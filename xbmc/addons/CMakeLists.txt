@@ -2,6 +2,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             AddonCallbacksCodec.cpp
             AddonCallbacks.cpp
             AddonCallbacksGUI.cpp
+            AddonCallbacksPeripheral.cpp
             AddonCallbacksPVR.cpp
             Addon.cpp
             AddonDatabase.cpp

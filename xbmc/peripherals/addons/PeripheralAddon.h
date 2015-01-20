@@ -72,7 +72,7 @@ namespace PERIPHERALS
     int          GetPeripheralsWithFeature(std::vector<CPeripheral*> &results, const PeripheralFeature feature) const;
     size_t       GetNumberOfPeripherals(void) const;
     size_t       GetNumberOfPeripheralsWithId(const int iVendorId, const int iProductId) const;
-    void         GetDirectory(const CStdString &strPath, CFileItemList &items) const;
+    void         GetDirectory(const std::string &strPath, CFileItemList &items) const;
 
     /** @name Peripheral add-on methods */
     //@{

@@ -40,12 +40,12 @@ namespace PERIPHERALS
     virtual void         Register(CPeripheral *peripheral);
     virtual void         GetFeatures(std::vector<PeripheralFeature> &features) const;
     virtual bool         HasFeature(const PeripheralFeature feature) const;
-    virtual CPeripheral* GetPeripheral(const CStdString &strLocation) const;
-    virtual CPeripheral* GetByPath(const CStdString &strPath) const;
+    virtual CPeripheral* GetPeripheral(const std::string &strLocation) const;
+    virtual CPeripheral* GetByPath(const std::string &strPath) const;
     virtual int          GetPeripheralsWithFeature(std::vector<CPeripheral *> &results, const PeripheralFeature feature) const;
     virtual size_t       GetNumberOfPeripherals(void) const;
     virtual size_t       GetNumberOfPeripheralsWithId(const int iVendorId, const int iProductId) const;
-    virtual void         GetDirectory(const CStdString &strPath, CFileItemList &items) const;
+    virtual void         GetDirectory(const std::string &strPath, CFileItemList &items) const;
 
     bool SplitLocation(const std::string& strLocation, PeripheralAddonPtr& addon, unsigned int& peripheralIndex) const;
 

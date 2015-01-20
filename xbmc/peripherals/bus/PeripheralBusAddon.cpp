@@ -151,7 +151,7 @@ bool CPeripheralBusAddon::HasFeature(const PeripheralFeature feature) const
   return bReturn;
 }
 
-CPeripheral *CPeripheralBusAddon::GetPeripheral(const CStdString &strLocation) const
+CPeripheral *CPeripheralBusAddon::GetPeripheral(const std::string &strLocation) const
 {
   CPeripheral*       peripheral(NULL);
   PeripheralAddonPtr addon;
@@ -165,7 +165,7 @@ CPeripheral *CPeripheralBusAddon::GetPeripheral(const CStdString &strLocation) c
   return peripheral;
 }
 
-CPeripheral *CPeripheralBusAddon::GetByPath(const CStdString &strPath) const
+CPeripheral *CPeripheralBusAddon::GetByPath(const std::string &strPath) const
 {
   CSingleLock lock(m_critSection);
 
@@ -206,9 +206,9 @@ size_t CPeripheralBusAddon::GetNumberOfPeripheralsWithId(const int iVendorId, co
   return iReturn;
 }
 
-void CPeripheralBusAddon::GetDirectory(const CStdString &strPath, CFileItemList &items) const
+void CPeripheralBusAddon::GetDirectory(const std::string &strPath, CFileItemList &items) const
 {
-  CStdString strDevPath;
+  std::string strDevPath;
   CSingleLock lock(m_critSection);
   for (PeripheralAddonVector::const_iterator itAddon = m_addons.begin(); itAddon != m_addons.end(); ++itAddon)
     (*itAddon)->GetDirectory(strPath, items);

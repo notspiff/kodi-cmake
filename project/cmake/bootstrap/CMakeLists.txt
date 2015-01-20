@@ -195,6 +195,7 @@ function(add_addon_separate entry)
      "${id}" MATCHES "^screensavers?\\." OR
      "${id}" MATCHES "^audiodecoder\\." OR
      "${id}" MATCHES "^audioencoder\\." OR
+     "${id}" MATCHES "^peripheral\\." OR
      "${id}" MATCHES "^pvr\\." OR
      "${id}" MATCHES "^vfs\\.")
    add_git_cmake(${id} ${repo} ${hash})

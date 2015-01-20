@@ -302,9 +302,9 @@ size_t CPeripheralAddon::GetNumberOfPeripheralsWithId(const int iVendorId, const
   return iReturn;
 }
 
-void CPeripheralAddon::GetDirectory(const CStdString &strPath, CFileItemList &items) const
+void CPeripheralAddon::GetDirectory(const std::string &strPath, CFileItemList &items) const
 {
-  CStdString strDevPath;
+  std::string strDevPath;
   CSingleLock lock(m_critSection);
   for (std::map<unsigned int, CPeripheral*>::const_iterator it = m_peripherals.begin(); it != m_peripherals.end(); ++it)
   {

@@ -1,0 +1,5 @@
+xbmc/input                   input
+xbmc/input/touch             input/touch
+xbmc/input/touch/generic     input/touch_generic
+xbmc/input/joysticks         input/joysticks
+xbmc/input/joysticks/generic input/joysticks_generic

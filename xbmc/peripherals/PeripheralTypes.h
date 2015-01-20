@@ -143,7 +143,7 @@ namespace PERIPHERALS
         return PERIPHERAL_TUNER;
       else if (strTypeLowerCase == "imon")
         return PERIPHERAL_IMON;
-      else if (strTypeLowerCase.Equals("joystick"))
+      else if (strTypeLowerCase =="joystick")
         return PERIPHERAL_JOYSTICK;
 
       return PERIPHERAL_UNKNOWN;

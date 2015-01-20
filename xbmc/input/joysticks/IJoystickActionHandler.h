@@ -20,6 +20,7 @@
 #pragma once
 
 #include "JoystickTypes.h"
+#include <vector>
 
 /*!
  * \ingroup joysticks

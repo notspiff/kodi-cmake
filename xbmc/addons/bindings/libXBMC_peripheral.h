@@ -81,20 +81,20 @@ public:
   {
     m_handle = handle;
 
-    std::string libBasePath;
-    libBasePath  = ((cb_array*)m_handle)->libPath;
-    libBasePath += PERIPHERAL_HELPER_DLL;
+//    std::string libBasePath;
+//    libBasePath  = ((cb_array*)m_handle)->libPath;
+//    libBasePath += PERIPHERAL_HELPER_DLL;
 
-#if defined(ANDROID)
-      struct stat st;
-      if (stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + PERIPHERAL_HELPER_DLL_NAME;
-      }
-#endif
+//#if defined(ANDROID)
+//      struct stat st;
+//      if (stat(libBasePath.c_str(),&st) != 0)
+//      {
+//        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
+//        libBasePath = tempbin + "/" + PERIPHERAL_HELPER_DLL_NAME;
+//      }
+//#endif
 
-    m_libXBMC_peripheral = dlopen(libBasePath.c_str(), RTLD_LAZY);
+    m_libXBMC_peripheral = dlopen(NULL, RTLD_LAZY);
     if (m_libXBMC_peripheral == NULL)
     {
       fprintf(stderr, "Unable to load %s\n", dlerror());
