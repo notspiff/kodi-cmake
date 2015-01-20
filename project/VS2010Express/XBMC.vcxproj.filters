@@ -319,8 +319,14 @@
     <Filter Include="video\videosync">
       <UniqueIdentifier>{9775d5c0-c640-4606-a625-e6cdcf9f959e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cores\dvdplayer\DVDCodecs\Overlay\contrib">
-      <UniqueIdentifier>{43526341-7b96-462d-9f71-685e426251ec}</UniqueIdentifier>
+    <Filter Include="input\joysticks">
+      <UniqueIdentifier>{eb6a9381-9d8f-4539-b82c-12a146cb350f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\joysticks\generic">
+      <UniqueIdentifier>{d973c9ea-09b4-453f-9ef9-bf74f50f8778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="peripherals\addons">
+      <UniqueIdentifier>{79accf60-e1c8-4541-9447-06b188cfa488}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2385,9 +2391,6 @@
     <ClCompile Include="..\..\xbmc\utils\RecentlyAddedJob.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\input\windows\WINJoystick.cpp">
-      <Filter>input\windows</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\filesystem\ImageFile.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
@@ -3065,20 +3068,29 @@
     <ClCompile Include="..\..\xbmc\cores\DataCacheCore.cpp">
       <Filter>cores</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\filesystem\OverrideDirectory.cpp">
-      <Filter>filesystem</Filter>
+    <ClCompile Include="..\..\xbmc\addons\AddonCallbacksPeripheral.cpp">
+      <Filter>addons</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\filesystem\OverrideFile.cpp">
-      <Filter>filesystem</Filter>
+    <ClCompile Include="..\..\xbmc\peripherals\bus\PeripheralBusAddon.cpp">
+      <Filter>peripherals\bus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\contrib\cc_decoder.c">
-      <Filter>cores\dvdplayer\DVDCodecs\Overlay\contrib</Filter>
+    <ClCompile Include="..\..\xbmc\peripherals\devices\PeripheralJoystick.cpp">
+      <Filter>peripherals\devices</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\contrib\cc_decoder708.cpp">
-      <Filter>cores\dvdplayer\DVDCodecs\Overlay\contrib</Filter>
+    <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickActionHandler.cpp">
+      <Filter>input\joysticks\generic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxCC.cpp">
-      <Filter>cores\dvdplayer\DVDDemuxers</Filter>
+    <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.cpp">
+      <Filter>input\joysticks\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.cpp">
+      <Filter>peripherals\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\peripherals\addons\PeripheralAddon.cpp">
+      <Filter>peripherals\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\input\joysticks\InputPrimitive.cpp">
+      <Filter>input\joysticks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -5393,9 +5405,6 @@
     <ClInclude Include="..\..\xbmc\utils\RecentlyAddedJob.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\windows\WINJoystick.h">
-      <Filter>input\windows</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\filesystem\ImageFile.h">
       <Filter>filesystem</Filter>
     </ClInclude>
@@ -5982,20 +5991,41 @@
     <ClInclude Include="..\..\xbmc\cores\DataCacheCore.h">
       <Filter>cores</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\OverrideDirectory.h">
-      <Filter>filesystem</Filter>
+    <ClInclude Include="..\..\xbmc\addons\AddonCallbacksPeripheral.h">
+      <Filter>addons</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\filesystem\OverrideFile.h">
-      <Filter>filesystem</Filter>
+    <ClInclude Include="..\..\xbmc\peripherals\bus\PeripheralBusAddon.h">
+      <Filter>peripherals\bus</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\contrib\cc_decoder.h">
-      <Filter>cores\dvdplayer\DVDCodecs\Overlay\contrib</Filter>
+    <ClInclude Include="..\..\xbmc\peripherals\devices\PeripheralJoystick.h">
+      <Filter>peripherals\devices</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDCodecs\Overlay\contrib\cc_decoder708.h">
-      <Filter>cores\dvdplayer\DVDCodecs\Overlay\contrib</Filter>
+    <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickActionHandler.h">
+      <Filter>input\joysticks\generic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\cores\dvdplayer\DVDDemuxers\DVDDemuxCC.h">
-      <Filter>cores\dvdplayer\DVDDemuxers</Filter>
+    <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.h">
+      <Filter>input\joysticks\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickActionHandler.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickButtonMap.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickInputHandler.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\JoystickTypes.h">
+      <Filter>input\joysticks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.h">
+      <Filter>peripherals\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\peripherals\addons\PeripheralAddon.h">
+      <Filter>peripherals\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\InputPrimitive.h">
+      <Filter>input\joysticks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13486,7 +13486,12 @@ msgctxt "#35009"
 msgid "Do not use the custom keymap for this device"
 msgstr ""
 
-#empty strings from id 35010 to 35099
+#: xbmc/addons/Addon.cpp
+msgctxt "#35010"
+msgid "Peripheral add-ons"
+msgstr ""
+
+#empty strings from id 35011 to 35099
 
 #: system/settings/settings.xml
 msgctxt "#35100"

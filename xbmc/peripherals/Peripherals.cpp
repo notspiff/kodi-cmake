@@ -23,12 +23,14 @@
 #include "devices/PeripheralBluetooth.h"
 #include "devices/PeripheralDisk.h"
 #include "devices/PeripheralHID.h"
+#include "devices/PeripheralJoystick.h"
 #include "devices/PeripheralNIC.h"
 #include "devices/PeripheralNyxboard.h"
 #include "devices/PeripheralTuner.h"
 #include "devices/PeripheralCecAdapter.h"
 #include "devices/PeripheralImon.h"
 #include "bus/PeripheralBusUSB.h"
+#include "bus/PeripheralBusAddon.h"
 #include "dialogs/GUIDialogPeripheralManager.h"
 
 #if defined(HAVE_LIBCEC)
@@ -87,6 +89,7 @@ void CPeripherals::Initialise(void)
 #if defined(HAVE_LIBCEC)
     m_busses.push_back(new CPeripheralBusCEC(this));
 #endif
+    m_busses.push_back(new CPeripheralBusAddon(this));
 
     /* initialise all known busses */
     for (int iBusPtr = (int)m_busses.size() - 1; iBusPtr >= 0; iBusPtr--)
@@ -285,6 +288,10 @@ CPeripheral *CPeripherals::CreatePeripheral(CPeripheralBus &bus, const Periphera
 
   case PERIPHERAL_IMON:
     peripheral = new CPeripheralImon(mappedResult);
+    break;
+
+  case PERIPHERAL_JOYSTICK:
+    peripheral = new CPeripheralJoystick(mappedResult);
     break;
 
   default:
@@ -677,6 +684,10 @@ bool CPeripherals::ToggleDeviceState(CecStateChange mode /*= STATE_SWITCH_TOGGLE
 
 bool CPeripherals::GetNextKeypress(float frameTime, CKey &key)
 {
+  CPeripheralBusAddon* addonBus = static_cast<CPeripheralBusAddon*>(g_peripherals.GetBusByType(PERIPHERAL_BUS_ADDON));
+  if (addonBus)
+    addonBus->ProcessEvents();
+
   vector<CPeripheral *> peripherals;
   if (SupportsCEC() && GetPeripheralsWithFeature(peripherals, FEATURE_CEC))
   {

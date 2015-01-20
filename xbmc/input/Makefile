@@ -4,7 +4,6 @@ SRCS=ButtonTranslator.cpp \
      KeyboardLayoutConfiguration.cpp \
      KeyboardStat.cpp \
      MouseStat.cpp \
-     SDLJoystick.cpp \
      XBMC_keytable.cpp \
      
 LIB=input.a

@@ -66,6 +66,7 @@ DIRECTORY_ARCHIVES=$(DVDPLAYER_ARCHIVES) \
                    xbmc/music/windows/musicwindows.a \
                    xbmc/network/websocket/websocket.a \
                    xbmc/network/network.a \
+                   xbmc/peripherals/addons/peripheral-addons.a \
                    xbmc/peripherals/bus/peripheral-bus.a \
                    xbmc/peripherals/devices/peripheral-devices.a \
                    xbmc/peripherals/dialogs/peripheral-dialogs.a \
@@ -148,6 +149,8 @@ INSTALL_FILTER += .*repository\.pvr-ios\.xbmc\.org.*
 INSTALL_FILTER += .*repository\.pvr-win32\.xbmc\.org.*
 INSTALL_FILTER += .*repository\.pvr-osx.*\.xbmc\.org.*
 ifeq (@USE_ANDROID@,1)
+DIRECTORY_ARCHIVES += xbmc/input/joysticks/input_joysticks.a
+DIRECTORY_ARCHIVES += xbmc/input/joysticks/generic/input_joysticks_generic.a
 DIRECTORY_ARCHIVES += xbmc/input/linux/input_linux.a
 DIRECTORY_ARCHIVES += xbmc/input/touch/input_touch.a
 DIRECTORY_ARCHIVES += xbmc/input/touch/generic/input_touch_generic.a
@@ -156,6 +159,8 @@ DIRECTORY_ARCHIVES += xbmc/powermanagement/android/powermanagement_android.a
 DIRECTORY_ARCHIVES += xbmc/storage/android/storage_android.a
 DIRECTORY_ARCHIVES += xbmc/windowing/X11/windowing_X11.a
 else
+DIRECTORY_ARCHIVES += xbmc/input/joysticks/input_joysticks.a
+DIRECTORY_ARCHIVES += xbmc/input/joysticks/generic/input_joysticks_generic.a
 DIRECTORY_ARCHIVES += xbmc/input/linux/input_linux.a
 DIRECTORY_ARCHIVES += xbmc/network/linux/network_linux.a
 DIRECTORY_ARCHIVES += xbmc/powermanagement/linux/powermanagement_linux.a
@@ -251,6 +256,7 @@ LIBADDON_DIRS=\
 	lib/addons/library.xbmc.codec \
 	lib/addons/library.xbmc.pvr \
 	lib/addons/library.xbmc.gui \
+	lib/addons/library.xbmc.peripheral \
 
 CONFLUENCE_MEDIA=addons/skin.confluence/media
 SKIN_DIRS=$(CONFLUENCE_MEDIA)
@@ -398,6 +404,7 @@ libaddon: exports
 	$(MAKE) -C lib/addons/library.xbmc.addon
 	$(MAKE) -C lib/addons/library.xbmc.codec
 	$(MAKE) -C lib/addons/library.xbmc.gui
+	$(MAKE) -C lib/addons/library.xbmc.peripheral
 	$(MAKE) -C lib/addons/library.xbmc.pvr
 dvdpcodecs: dllloader
 	$(MAKE) -C lib/libdvd
@@ -443,6 +450,11 @@ endif
 imagelib: dllloader
 	$(MAKE) -C lib/cximage-6.0
 
+peripheraladdons: exports
+ifeq (@USE_PERIPHERAL_ADDONS@,1)
+	$(MAKE) -C peripheral-addons
+endif
+
 pvraddons: exports
 ifeq (@USE_PVR_ADDONS@,1)
 	$(MAKE) -C pvr-addons
@@ -452,7 +464,8 @@ codecs: papcodecs dvdpcodecs dvdpextcodecs
 
 libs: $(LIBSSE4) libhdhomerun imagelib libexif system/libcpluff-@ARCH@.so $(CMYTH)
 
-externals: codecs libs visualizations screensavers libaddon pvraddons
+externals: codecs libs visualizations screensavers libaddon pvraddons \
+	peripheraladdons
 
 xcode_depends: \
 	codecs libs visualizations screensavers eventclients skins libaddon \
@@ -700,11 +713,16 @@ clean-pvraddons:
 ifeq (@USE_PVR_ADDONS@,1)
 	if test -f pvr-addons/Makefile; then $(MAKE) -C pvr-addons clean; fi;
 endif
+clean-peripheraladdons:
+ifeq (@USE_PERIPHERAL_ADDONS@,1)
+	if test -f peripheral-addons/Makefile; then $(MAKE) -C peripheral-addons clean; fi;
+endif
 
 clean-codecs: clean-dvdpcodecs clean-papcodecs
 
-clean-externals: clean-codecs clean-eventclients clean-libs \
-	clean-screensavers clean-visualisations clean-libaddons clean-pvraddons
+clean-externals: clean-codecs clean-eventclients clean-xbmctex clean-libs \
+	clean-screensavers clean-visualisations clean-libaddons clean-pvraddons \
+	clean-peripheraladdons
 
 ifeq (1,@GTEST_CONFIGURED@)
 check: testsuite

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Button mappings:                                                        -->
+<!--                                                                         -->
+<!-- Generic        Xbox           Sony        N64       Wii (classic)       -->
+<!--                                                                         -->
+<!-- 1              A              Cross       A         A                   -->
+<!-- 2              B              Circle      B         B                   -->
+<!-- 3              X              Square      C-down    X/One               -->
+<!-- 4              Y              Triangle    C-left    Y/Two               -->
+<!-- 5              Black                      C-right   C                   -->
+<!-- 6              White                      C-up                          -->
+<!-- Start          Start          Start       Start     Plus                -->
+<!-- Select         Back           Select                Minus               -->
+<!-- L1             LB             L1          L         L                   -->
+<!-- R1             RB             R1          R         R                   -->
+<!-- L2                            L2                    ZL                  -->
+<!-- R2                            R2                    ZR                  -->
+<!-- L3             L stick        L stick                                   -->
+<!-- R3             R stick        R stick                                   -->
+<!-- Home           Guide                                Home                -->
+<!-- Power                                               Power               -->
+<!--                                                                         -->
+<!-- Hat mappings:                                                           -->
+<!--                                                                         -->
+<!-- Generic        Xbox           Sony        N64       Wii                 -->
+<!--                                                                         -->
+<!-- Up             Up             Up          Up        Up                  -->
+<!-- Down           Down           Down        Down      Down                -->
+<!-- Left           Left           Left        Left      Left                -->
+<!-- Right          Right          Right       Right     Right               -->
+<!--                                                                         -->
+<!-- Trigger mappings:                                                       -->
+<!--                                                                         -->
+<!-- Generic        Xbox           Sony        N64       Wii                 -->
+<!--                                                                         -->
+<!-- LT             LT             L2          Z                             -->
+<!-- RT             RT             R2                                        -->
+<!--                                                                         -->
+<!-- Axis mappings:                                                          -->
+<!--                                                                         -->
+<!-- Generic        Xbox           Sony        N64       Wii                 -->
+<!--                                                                         -->
+<!-- Left joy       Left joy       Left joy    Left joy  Left joy            -->
+<!-- Right joy      Right joy      Right joy             Accel/Right joy     -->
+
+<keymap>
+  <global>
+    <joystick>
+      <a>Select</a>
+      <b>Back</b>
+      <c>ContextMenu</c>
+      <d>FullScreen</d>
+      <e></e>
+      <f></f>
+      <start></start>
+      <select></select>
+      <r1></r1>
+      <l1></l1>
+      <r2></r2>
+      <rsick></rstick>
+      <lstick></lstick>
+      <home>ActivateWindow(Home)</home>
+      <power></power>
+
+      <up>Up</up>
+      <down>Down</down>
+      <left>Left</left>
+      <right>Right</right>
+
+      <left_joy_up>Up</up>
+      <left_joy_down>Down</down>
+      <left_joy_left>Left</left>
+      <left_joy_right>Right</right>
+      <right_joy_up>Up</up>
+      <right_joy_down>Down</down>
+      <right_joy_left>Left</left>
+      <right_joy_right>Right</right>
+    </joystick>
+  </Addon>
+</keymap>

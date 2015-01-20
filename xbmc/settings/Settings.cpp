@@ -38,11 +38,6 @@
 #include "guilib/StereoscopicsManager.h"
 #include "input/KeyboardLayout.h"
 #include "input/MouseStat.h"
-#if defined(TARGET_WINDOWS)
-#include "input/windows/WINJoystick.h"
-#elif defined(HAS_SDL_JOYSTICK)
-#include "input/SDLJoystick.h"
-#endif // defined(HAS_SDL_JOYSTICK)
 #if defined(TARGET_POSIX)
 #include "linux/LinuxTimezone.h"
 #endif // defined(TARGET_POSIX)
@@ -267,9 +262,6 @@ void CSettings::Uninitialize()
   m_settingsManager->UnregisterCallback(&g_charsetConverter);
   m_settingsManager->UnregisterCallback(&g_graphicsContext);
   m_settingsManager->UnregisterCallback(&g_langInfo);
-#if defined(TARGET_WINDOWS) || defined(HAS_SDL_JOYSTICK)
-  m_settingsManager->UnregisterCallback(&g_Joystick);
-#endif
   m_settingsManager->UnregisterCallback(&g_Mouse);
   m_settingsManager->UnregisterCallback(&CNetworkServices::Get());
   m_settingsManager->UnregisterCallback(&g_passwordManager);
@@ -746,12 +738,6 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("locale.language");
   settingSet.insert("locale.country");
   m_settingsManager->RegisterCallback(&g_langInfo, settingSet);
-
-#if defined(HAS_SDL_JOYSTICK)
-  settingSet.clear();
-  settingSet.insert("input.enablejoystick");
-  m_settingsManager->RegisterCallback(&g_Joystick, settingSet);
-#endif
 
   settingSet.clear();
   settingSet.insert("input.enablemouse");
