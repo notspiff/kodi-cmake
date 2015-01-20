@@ -139,7 +139,8 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
   if (m_axisStates[index] == position)
     return;
 
-  float& oldPosition = m_axisStates[index];
+  float oldPosition = m_axisStates[index];
+  m_axisStates[index] = position;
 
   CButtonPrimitive positiveAxis(index, SemiAxisDirectionPositive);
   CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
@@ -228,8 +229,6 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
         m_handler->OnButtonMotion(negativeAction, 0.0f);
     }
   }
-
-  oldPosition = position;
 }
 
 float CGenericJoystickInputHandler::GetAxisState(int axisIndex) const
