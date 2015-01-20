@@ -30,7 +30,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class CButtonPrimitive;
+class CInputPrimitive;
 class IJoystickInputHandler;
 
 namespace PERIPHERALS

@@ -22,7 +22,7 @@
 #include "AddonJoystickButtonMap.h"
 #include "addons/AddonManager.h"
 #include "filesystem/SpecialProtocol.h"
-#include "input/joysticks/ButtonPrimitive.h"
+#include "input/joysticks/InputPrimitive.h"
 #include "peripherals/Peripherals.h"
 #include "peripherals/bus/PeripheralBusAddon.h"
 #include "peripherals/devices/PeripheralJoystick.h"

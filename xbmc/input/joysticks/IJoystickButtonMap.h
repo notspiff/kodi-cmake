@@ -19,7 +19,7 @@
  */
 #pragma once
 
-#include "ButtonPrimitive.h"
+#include "InputPrimitive.h"
 
 #include <stdint.h>
 #include <string>
@@ -43,15 +43,14 @@ public:
   virtual bool Load(void) = 0;
 
   /*!
-   * \brief Get the action ID associated with a raw button, a raw hat
-   *        direction, or a raw semi-axis
+   * \brief Get the action ID associated with in input primitive
    *
-   * \param button The raw button primitive
+   * \param button The input primitive (a button, hat direction or semi-axis)
    *
-   * \return The ID, or UNKNOWN if button primitive isn't associated with an
+   * \return The ID, or UNKNOWN if input primitive isn't associated with an
    *         action ID
    */
-  virtual JoystickActionID GetAction(const CButtonPrimitive& button) = 0;
+  virtual JoystickActionID GetAction(const CInputPrimitive& button) = 0;
 
   /*!
    * \brief Get the raw button, raw hat direction or raw semi-axis associated
@@ -59,12 +58,12 @@ public:
    *
    * \param id      The action ID. ID must correspond to a single button
    *                primitive, so no analog sticks or accelerometers.
-   * \param button  The resolved button primitive
+   * \param button  The resolved input primitive
    *
-   * \return true if the ID resolved to a button primitive, false if the ID was
+   * \return true if the ID resolved to an input primitive, false if the ID was
    *         invalid or resolved to an analog stick/accelerometer
    */
-  virtual bool GetButtonPrimitive(JoystickActionID id, CButtonPrimitive& button) = 0;
+  virtual bool GetInputPrimitive(JoystickActionID id, CInputPrimitive& button) = 0;
 
   /*!
    * \brief Get the raw axis indices and polarity for the given analog stick ID

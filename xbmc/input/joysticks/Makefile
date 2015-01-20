@@ -1,4 +1,4 @@
-SRCS=ButtonPrimitive.cpp \
+SRCS=InputPrimitive.cpp \
 
 LIB=input_joysticks.a
 

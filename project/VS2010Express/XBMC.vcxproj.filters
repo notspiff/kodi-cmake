@@ -3101,14 +3101,14 @@
     <ClCompile Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.cpp">
       <Filter>input\joysticks\generic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\input\joysticks\ButtonPrimitive.cpp">
-      <Filter>input\joysticks</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\peripherals\addons\AddonJoystickButtonMap.cpp">
       <Filter>peripherals\addons</Filter>
     </ClCompile>
     <ClCompile Include="..\..\xbmc\peripherals\addons\PeripheralAddon.cpp">
       <Filter>peripherals\addons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\xbmc\input\joysticks\InputPrimitive.cpp">
+      <Filter>input\joysticks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -6070,9 +6070,6 @@
     <ClInclude Include="..\..\xbmc\input\joysticks\generic\GenericJoystickInputHandler.h">
       <Filter>input\joysticks\generic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\input\joysticks\ButtonPrimitive.h">
-      <Filter>input\joysticks</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\input\joysticks\IJoystickActionHandler.h">
       <Filter>input\joysticks</Filter>
     </ClInclude>
@@ -6090,6 +6087,9 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\peripherals\addons\PeripheralAddon.h">
       <Filter>peripherals\addons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\input\joysticks\InputPrimitive.h">
+      <Filter>input\joysticks</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
