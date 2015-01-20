@@ -438,7 +438,7 @@ bool CPeripheralAddon::ProcessEvents(void)
 bool CPeripheralAddon::GetJoystickFeatures(unsigned int index, JoystickFeatureMap& features)
 {
   PERIPHERAL_ERROR retVal;
-  
+
 
   JOYSTICK_INFO joystickStruct;
 
@@ -551,11 +551,11 @@ HatDirection CPeripheralAddon::ToHatDirection(JOYSTICK_STATE_HAT state)
 {
   switch (state)
   {
-  case JOYSTICK_DRIVER_HAT_LEFT:   return HatDirectionLeft;
-  case JOYSTICK_DRIVER_HAT_RIGHT:  return HatDirectionRight;
-  case JOYSTICK_DRIVER_HAT_UP:     return HatDirectionUp;
-  case JOYSTICK_DRIVER_HAT_DOWN:   return HatDirectionDown;
-  default:                         return HatDirectionNone;
+  case JOYSTICK_STATE_HAT_LEFT:   return HatDirectionLeft;
+  case JOYSTICK_STATE_HAT_RIGHT:  return HatDirectionRight;
+  case JOYSTICK_STATE_HAT_UP:     return HatDirectionUp;
+  case JOYSTICK_STATE_HAT_DOWN:   return HatDirectionDown;
+  default:                        return HatDirectionNone;
   }
 }
 
