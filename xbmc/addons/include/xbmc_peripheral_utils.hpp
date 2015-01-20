@@ -193,6 +193,7 @@ namespace ADDON
     virtual void ToStruct(JOYSTICK_FEATURE& feature) const
     {
       feature.id           = m_id;
+      feature.driver_type  = Type();
       feature.name         = new char[m_name.size()        + 1];
       feature.symbol_color = new char[m_symbolColor.size() + 1];
       feature.color        = new char[m_color.size()       + 1];
