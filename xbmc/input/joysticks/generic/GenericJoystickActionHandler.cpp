@@ -50,11 +50,6 @@ bool CGenericJoystickActionHandler::OnAnalogStickMotion(JoystickActionID id, flo
   return false; // TODO
 }
 
-bool CGenericJoystickActionHandler::OnAnalogStickThreshold(JoystickActionID, bool bPressed, HatDirection direction)
-{
-  return false; // TODO
-}
-
 bool CGenericJoystickActionHandler::OnAccelerometerMotion(JoystickActionID, float x, float y, float z)
 {
   return false; // TODO

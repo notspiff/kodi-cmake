@@ -31,8 +31,7 @@ public:
   virtual ~IJoystickActionHandler(void) { }
 
   /*!
-   * \brief A physical button has been pressed/released or a button motion has
-   *        passed a threshold
+   * \brief A button has been pressed
    *
    * \param id        The ID of the button or trigger
    * \param bPressed  The new state of the button or trigger
@@ -51,10 +50,40 @@ public:
    */
   virtual bool OnButtonMotion(JoystickActionID id, float magnitude) { return false; }
 
+  /*!
+   * \brief A button has been held past a timeout
+   *
+   * \param id        The ID of the button or trigger
+   *
+   * \return True if the event was handled otherwise false
+   */
   virtual bool OnButtonHold(JoystickActionID id) { return false; }
+
+  /*!
+   * \brief A button has been pressed twice within a small timeframe
+   *
+   * \param id        The ID of the button or trigger
+   *
+   * \return True if the event was handled otherwise false
+   */
   virtual bool OnButtonDoublePress(JoystickActionID id) { return false; }
+
+  /*!
+   * \brief Multiple buttons have been pressed within a small timeframe
+   *
+   * \param ids        The IDs in order of pressed
+   *
+   * \return True if the event was handled otherwise false
+   */
   virtual bool OnMultiPress(const std::vector<JoystickActionID>& ids) { return false; }
 
+  /*!
+   * \brief A button has been released
+   *
+   * \param id        The ID of the button or trigger
+   *
+   * \return True if the event was handled otherwise false
+   */
   virtual bool OnButtonRelease(JoystickActionID id) { return false; }
 
   /*!
@@ -69,19 +98,6 @@ public:
   virtual bool OnAnalogStickMotion(JoystickActionID id, float x, float y) { return false; }
 
   /*!
-   * \brief An analog stick's magnitude has crossed a threshold of 0.5 in a
-   *        cardinal or intercardinal direction
-   *
-   * \param id        The ID of the analog stick
-   * \param bPressed  True when activated (threshold >= 0.5), false when centered
-   * \param direction If bPressed is false then direction is HatDirectionNone; otherwise,
-   *                  direction is the direction closest to the displaced stick
-   *
-   * \return True if the event was handled otherwise false
-   */
-  virtual bool OnAnalogStickThreshold(JoystickActionID, bool bPressed, HatDirection direction = HatDirectionNone) { return false; }
-
-  /*!
    * \brief An accelerometer's acceleration has changed
    *
    * \param x         The x coordinate in the closed interval [-1, 1]
@@ -90,5 +106,5 @@ public:
    *
    * \return True if the event was handled otherwise false
    */
-  virtual bool OnAccelerometerMotion(JoystickActionID, float x, float y, float z) { return false; }
+  virtual bool OnAccelerometerMotion(JoystickActionID id, float x, float y, float z) { return false; }
 };
