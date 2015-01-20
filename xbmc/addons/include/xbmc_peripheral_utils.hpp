@@ -245,6 +245,8 @@ namespace ADDON
 
     virtual JoystickFeature* Clone(void) const { return new DriverButton(*this); }
 
+    virtual JOYSTICK_DRIVER_TYPE Type(void) const { return JOYSTICK_DRIVER_TYPE_BUTTON; }
+
     int Index(void) const { return m_index; }
 
     void SetIndex(int index) { m_index = index; }
@@ -283,6 +285,8 @@ namespace ADDON
     }
 
     virtual JoystickFeature* Clone(void) const { return new DriverHat(*this); }
+
+    virtual JOYSTICK_DRIVER_TYPE Type(void) const { return JOYSTICK_DRIVER_TYPE_HAT_DIRECTION; }
 
     int                           Index(void) const     { return m_index; }
     JOYSTICK_DRIVER_HAT_DIRECTION Direction(void) const { return m_direction; }
@@ -326,6 +330,8 @@ namespace ADDON
     }
 
     virtual JoystickFeature* Clone(void) const { return new DriverSemiAxis(*this); }
+
+    virtual JOYSTICK_DRIVER_TYPE Type(void) const { return JOYSTICK_DRIVER_TYPE_SEMIAXIS; }
 
     int                                Index(void) const     { return m_index; }
     JOYSTICK_DRIVER_SEMIAXIS_DIRECTION Direction(void) const { return m_direction; }
@@ -375,6 +381,8 @@ namespace ADDON
     }
 
     virtual JoystickFeature* Clone(void) const { return new DriverAnalogStick(*this); }
+
+    virtual JOYSTICK_DRIVER_TYPE Type(void) const { return JOYSTICK_DRIVER_TYPE_ANALOG_STICK; }
 
     int  XIndex(void) const    { return m_xIndex; }
     bool XInverted(void) const { return m_xInverted; }
@@ -438,6 +446,8 @@ namespace ADDON
     }
 
     virtual JoystickFeature* Clone(void) const { return new DriverAccelerometer(*this); }
+
+    virtual JOYSTICK_DRIVER_TYPE Type(void) const { return JOYSTICK_DRIVER_TYPE_ACCELEROMETER; }
 
     unsigned int XIndex(void) const    { return m_xIndex; }
     bool         XInverted(void) const { return m_xInverted; }
