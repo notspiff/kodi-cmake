@@ -258,10 +258,10 @@ extern "C"
   typedef enum JOYSTICK_STATE_HAT
   {
     JOYSTICK_STATE_HAT_UNPRESSED  = 0x0,    /*!< @brief no directions are pressed */
-    JOYSTICK_STATE_HAT_LEFT       = 0x4,    /*!< @brief only left is pressed */
-    JOYSTICK_STATE_HAT_RIGHT      = 0x8,    /*!< @brief only right is pressed */
-    JOYSTICK_STATE_HAT_UP         = 0x1,    /*!< @brief only up is pressed */
-    JOYSTICK_STATE_HAT_DOWN       = 0x2,    /*!< @brief only down is pressed */
+    JOYSTICK_STATE_HAT_LEFT       = 0x1,    /*!< @brief only left is pressed */
+    JOYSTICK_STATE_HAT_RIGHT      = 0x2,    /*!< @brief only right is pressed */
+    JOYSTICK_STATE_HAT_UP         = 0x4,    /*!< @brief only up is pressed */
+    JOYSTICK_STATE_HAT_DOWN       = 0x8,    /*!< @brief only down is pressed */
     JOYSTICK_STATE_HAT_LEFT_UP    = JOYSTICK_STATE_HAT_LEFT  | JOYSTICK_STATE_HAT_UP,
     JOYSTICK_STATE_HAT_LEFT_DOWN  = JOYSTICK_STATE_HAT_LEFT  | JOYSTICK_STATE_HAT_DOWN,
     JOYSTICK_STATE_HAT_RIGHT_UP   = JOYSTICK_STATE_HAT_RIGHT | JOYSTICK_STATE_HAT_UP,
