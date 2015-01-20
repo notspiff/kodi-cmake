@@ -41,7 +41,7 @@ namespace PERIPHERALS
   typedef boost::shared_ptr<CPeripheralAddon> PeripheralAddonPtr;
   typedef std::vector<PeripheralAddonPtr>     PeripheralAddonVector;
 
-  typedef boost::shared_ptr<ADDON::JoystickFeature> JoystickFeaturePtr;
+  typedef boost::shared_ptr<ADDON::JoystickFeature>      JoystickFeaturePtr;
   typedef std::map<JoystickActionID, JoystickFeaturePtr> JoystickFeatureMap;
 
   class CPeripheralAddon : public ADDON::CAddonDll<DllPeripheral, PeripheralAddon, PERIPHERAL_PROPERTIES>
@@ -86,11 +86,6 @@ namespace PERIPHERALS
     //@}
 
     static const char          *ToString(PERIPHERAL_ERROR error);
-    static JoystickActionID    ToJoystickID(JOYSTICK_FEATURE_ID id);
-    static JOYSTICK_FEATURE_ID ToFeatureID(JoystickActionID id);
-    static HatDirection        ToHatDirection(JOYSTICK_STATE_HAT state);
-    static HatDirection        ToHatDirection(JOYSTICK_DRIVER_HAT_DIRECTION dir);
-    static SemiAxisDirection   ToSemiAxisDirection(JOYSTICK_DRIVER_SEMIAXIS_DIRECTION dir);
 
   protected:
     /*!
@@ -100,6 +95,10 @@ namespace PERIPHERALS
     virtual bool CheckAPIVersion(void);
 
   private:
+    static JoystickActionID    ToJoystickID(JOYSTICK_FEATURE_ID id);
+    static JOYSTICK_FEATURE_ID ToFeatureID(JoystickActionID id);
+    static HatDirection        ToHatDirection(JOYSTICK_STATE_HAT state);
+
     /*!
      * @brief Resets all class members to their defaults. Called by the constructors
      */

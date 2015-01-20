@@ -551,37 +551,11 @@ HatDirection CPeripheralAddon::ToHatDirection(JOYSTICK_STATE_HAT state)
 {
   switch (state)
   {
-  case JOYSTICK_STATE_HAT_LEFT:       return HatDirectionLeft;
-  case JOYSTICK_STATE_HAT_RIGHT:      return HatDirectionRight;
-  case JOYSTICK_STATE_HAT_UP:         return HatDirectionUp;
-  case JOYSTICK_STATE_HAT_DOWN:       return HatDirectionDown;
-  case JOYSTICK_STATE_HAT_LEFT_UP:    return HatDirectionLeftUp;
-  case JOYSTICK_STATE_HAT_LEFT_DOWN:  return HatDirectionLeftDown;
-  case JOYSTICK_STATE_HAT_RIGHT_UP:   return HatDirectionRightUp;
-  case JOYSTICK_STATE_HAT_RIGHT_DOWN: return HatDirectionRightDown;
-  default:                            return HatDirectionNone;
-  }
-}
-
-HatDirection CPeripheralAddon::ToHatDirection(JOYSTICK_DRIVER_HAT_DIRECTION state)
-{
-  switch (state)
-  {
   case JOYSTICK_DRIVER_HAT_LEFT:   return HatDirectionLeft;
   case JOYSTICK_DRIVER_HAT_RIGHT:  return HatDirectionRight;
   case JOYSTICK_DRIVER_HAT_UP:     return HatDirectionUp;
   case JOYSTICK_DRIVER_HAT_DOWN:   return HatDirectionDown;
-  default:                  return HatDirectionNone;
-  }
-}
-
-SemiAxisDirection CPeripheralAddon::ToSemiAxisDirection(JOYSTICK_DRIVER_SEMIAXIS_DIRECTION dir)
-{
-  switch (dir)
-  {
-  case JOYSTICK_DRIVER_SEMIAXIS_DIRECTION_NEGATIVE:  return SemiAxisDirectionNegative;
-  case JOYSTICK_DRIVER_SEMIAXIS_DIRECTION_POSITIVE:  return SemiAxisDirectionPositive;
-  default:                                    return SemiAxisDirectionUnknown;
+  default:                         return HatDirectionNone;
   }
 }
 

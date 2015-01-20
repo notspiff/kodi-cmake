@@ -31,7 +31,7 @@ using namespace PERIPHERALS;
 CPeripheralJoystick::CPeripheralJoystick(const PeripheralScanResult& scanResult) :
   CPeripheral(scanResult),
   m_inputHandler(NULL),
-  m_actionHandler(NULL),
+  m_actionHandler(new CGenericJoystickActionHandler),
   m_buttonMap(NULL)
 {
   m_features.push_back(FEATURE_JOYSTICK);
@@ -60,9 +60,9 @@ bool CPeripheralJoystick::InitialiseFeature(const PeripheralFeature feature)
         unsigned int index;
         if (addonBus->SplitLocation(m_strLocation, addon, index))
         {
-          m_actionHandler = new CGenericJoystickActionHandler;
-          m_buttonMap     = new CAddonJoystickButtonMap(addon, index);
-          m_inputHandler  = new CGenericJoystickInputHandler(m_actionHandler, m_buttonMap);
+          m_buttonMap = new CAddonJoystickButtonMap(addon, index);
+          if (m_buttonMap->Load())
+            m_inputHandler  = new CGenericJoystickInputHandler(m_actionHandler, m_buttonMap);
         }
         else
           CLog::Log(LOGERROR, "CPeripheralJoystick: Invalid location (%s)", m_strLocation.c_str());

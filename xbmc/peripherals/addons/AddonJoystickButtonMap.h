@@ -19,9 +19,10 @@
  */
 #pragma once
 
-#include "addons/include/xbmc_peripheral_utils.hpp"
 #include "input/joysticks/IJoystickButtonMap.h"
 #include "peripherals/addons/PeripheralAddon.h"
+
+#include <map>
 
 namespace PERIPHERALS
 {
@@ -43,8 +44,13 @@ namespace PERIPHERALS
                                                int& zIndex, bool& zInverted);
 
   private:
+    static std::map<CButtonPrimitive, JoystickActionID> GetActionMap(const JoystickFeatureMap& features);
+    static HatDirection      ToHatDirection(JOYSTICK_DRIVER_HAT_DIRECTION driverDirection);
+    static SemiAxisDirection ToSemiAxisDirection(JOYSTICK_DRIVER_SEMIAXIS_DIRECTION dir);
+
     const PeripheralAddonPtr m_addon;
     const unsigned int       m_index;
+    std::map<CButtonPrimitive, JoystickActionID> m_actions;
     JoystickFeatureMap       m_features;
   };
 }

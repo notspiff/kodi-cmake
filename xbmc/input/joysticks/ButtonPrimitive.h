@@ -31,6 +31,11 @@ enum ButtonPrimitiveType
   ButtonPrimitiveTypeSemiAxis,
 };
 
+/*!
+ * An input primitive is a basic element that emits input events. This can be a
+ * button, one of the four direction arrows on a dpad, or the positive or
+ * negative half of an axis.
+ */
 class CButtonPrimitive
 {
 public:
@@ -45,12 +50,14 @@ public:
   CButtonPrimitive(unsigned int buttonIndex);
 
   /*!
-   * \brief Construct an button primitive representing a cardinal hat direction
+   * \brief Construct an button primitive representing one of the four direction
+   *        arrows on a dpad
    */
   CButtonPrimitive(unsigned int hatIndex, HatDirection direction);
 
   /*!
-   * \brief Construct an button primitive representing a semi-axis
+   * \brief Construct an button primitive representing the positive or negative
+   *        half of an axis
    */
   CButtonPrimitive(unsigned int axisIndex, SemiAxisDirection direction);
 

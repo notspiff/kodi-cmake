@@ -141,73 +141,77 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
 
   float& oldPosition = m_axisStates[index];
 
-  // If the action ID requires multiple axes (analog stick, accelerometer, etc),
-  // then both positive and negative axis directions will resolve to the same
-  // ID, so we start with the positive direction.
-  //
-  // If the action ID corresponds to a semi-axis, then the axis's positive and
-  // negative directions may correspond to different IDs. (For example, in
-  // DirectInput, axis 3 in the positive direction is right trigger, axis 3 in
-  // the negative direction is left trigger.) In this case, we need the ID for
-  // both directions so we can invoke callbacks on both IDs when the position
-  // changes from positive to negative and back without passing through zero.
   CButtonPrimitive positiveAxis(index, SemiAxisDirectionPositive);
-  JoystickActionID positiveAction = m_buttonMap->GetAction(positiveAxis);
+  CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
 
-  switch (positiveAction)
-  {
-  case JOY_ID_ANALOG_STICK_L:
-  case JOY_ID_ANALOG_STICK_R:
-  {
-    int  horizIndex;
-    bool horizInverted;
-    int  vertIndex;
-    bool vertInverted;
+  JoystickActionID positiveAction = m_buttonMap->GetAction(positiveAxis);  
+  JoystickActionID negativeAction = m_buttonMap->GetAction(negativeAxis);
 
-    if (m_buttonMap->GetAnalogStick(positiveAction,
-                                    horizIndex, horizInverted,
-                                    vertIndex,  vertInverted))
-    {
-      const float horizPos = GetAxisState(horizIndex) * (horizInverted ? -1.0f : 1.0f);
-      const float vertPos  = GetAxisState(vertIndex)  * (vertInverted  ? -1.0f : 1.0f);
-      m_handler->OnAnalogStickMotion(positiveAction, horizPos, vertPos);
-    }
-    break;
+  if (!positiveAction && !negativeAction)
+  {
+    // No actions to send to callback
   }
-
-  case JOY_ID_ACCELEROMETER:
+  else if (positiveAction == negativeAction)
   {
-    int  xIndex;
-    bool xInverted;
-    int  yIndex;
-    bool yInverted;
-    int  zIndex;
-    bool zInverted;
-
-    if (m_buttonMap->GetAccelerometer(positiveAction,
-                                      xIndex, xInverted,
-                                      yIndex, yInverted,
-                                      zIndex, zInverted))
+    // Check features that require an entire axis
+    switch (positiveAction)
     {
-      const float xPos = GetAxisState(xIndex) * (xInverted ? -1.0f : 1.0f);
-      const float yPos = GetAxisState(yIndex) * (yInverted ? -1.0f : 1.0f);
-      const float zPos = GetAxisState(zIndex) * (zInverted ? -1.0f : 1.0f);
-      m_handler->OnAccelerometerMotion(positiveAction, xPos, yPos, zPos);
-    }
-    break;
-  }
+    case JOY_ID_ANALOG_STICK_L:
+    case JOY_ID_ANALOG_STICK_R:
+    {
+      // Analog sticks require two axes
+      int  horizIndex;
+      bool horizInverted;
+      int  vertIndex;
+      bool vertInverted;
 
-  default:
+      if (m_buttonMap->GetAnalogStick(positiveAction,
+                                      horizIndex, horizInverted,
+                                      vertIndex,  vertInverted))
+      {
+        const float horizPos = GetAxisState(horizIndex) * (horizInverted ? -1.0f : 1.0f);
+        const float vertPos  = GetAxisState(vertIndex)  * (vertInverted  ? -1.0f : 1.0f);
+        m_handler->OnAnalogStickMotion(positiveAction, horizPos, vertPos);
+      }
+      break;
+    }
+
+    case JOY_ID_ACCELEROMETER:
+    {
+      // Accelerometers require three axes
+      int  xIndex;
+      bool xInverted;
+      int  yIndex;
+      bool yInverted;
+      int  zIndex;
+      bool zInverted;
+
+      if (m_buttonMap->GetAccelerometer(positiveAction,
+                                        xIndex, xInverted,
+                                        yIndex, yInverted,
+                                        zIndex, zInverted))
+      {
+        const float xPos = GetAxisState(xIndex) * (xInverted ? -1.0f : 1.0f);
+        const float yPos = GetAxisState(yIndex) * (yInverted ? -1.0f : 1.0f);
+        const float zPos = GetAxisState(zIndex) * (zInverted ? -1.0f : 1.0f);
+        m_handler->OnAccelerometerMotion(positiveAction, xPos, yPos, zPos);
+      }
+      break;
+    }
+
+    default:
+      break;
+    }
+  }
+  else // positiveAction != negativeAction
   {
-    // Axis might be overloaded in the positive and negative directions, so
-    // lookup the negative direction too
-    CButtonPrimitive negativeAxis(index, SemiAxisDirectionNegative);
-    JoystickActionID negativeAction = m_buttonMap->GetAction(negativeAxis);
+    // Positive and negative directions are mapped to different actions, so we
+    // must be dealing with a button or trigger
 
     if (positiveAction)
     {
-      // Notify callback of positive motion. Also, passing through zero will
-      // emit a 0.0f position exactly once until next positive motion.
+      // If position passes through zero, 0.0f is sent exactly once until the
+      // position becomes positive again
       if (position > 0)
         m_handler->OnButtonMotion(positiveAction, position);
       else if (oldPosition > 0)
@@ -216,16 +220,13 @@ void CGenericJoystickInputHandler::OnAxisMotion(unsigned int index, float positi
 
     if (negativeAction)
     {
-      // Notify callback of negative motion. Also, passing through zero will
-      // emit a 0.0f position exactly once until next negative motion.
+      // If position passes through zero, 0.0f is sent exactly once until the
+      // position becomes negative again
       if (position < 0)
         m_handler->OnButtonMotion(negativeAction, -1.0f * position); // magnitude is >= 0
       else if (oldPosition < 0)
         m_handler->OnButtonMotion(negativeAction, 0.0f);
     }
-
-    break;
-  }
   }
 
   oldPosition = position;
