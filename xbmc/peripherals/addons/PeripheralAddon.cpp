@@ -452,7 +452,7 @@ bool CPeripheralAddon::GetJoystickFeatures(unsigned int index, JoystickFeatureMa
     for (std::vector<ADDON::JoystickFeature*>::const_iterator it = joystick.Features().begin(); it != joystick.Features().end(); ++it)
     {
       // Skip invalid features
-      if (ToJoystickID((*it)->ID()) && (*it)->Type())
+      if (*it && ToJoystickID((*it)->ID()) && (*it)->Type())
         features[ToJoystickID((*it)->ID())] = JoystickFeaturePtr((*it)->Clone());
     }
 
