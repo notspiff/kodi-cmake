@@ -185,7 +185,7 @@ foreach(addon ${addons})
         endif()
 
         # download and extract the addon
-        if(NOT EXISTS ${BUILD_DIR}/download/${archive_name}.tar.gz)
+# TODO        if(NOT EXISTS ${BUILD_DIR}/download/${archive_name}.tar.gz)
           # cleanup any of the previously downloaded archives of this addon
           file(GLOB archives "${BUILD_DIR}/download/${id}*.tar.gz")
           if(archives)
@@ -199,7 +199,7 @@ foreach(addon ${addons})
           if(NOT ${retcode} EQUAL 0)
             message(FATAL_ERROR "ERROR downloading ${url} - status: ${dlstatus} log: ${dllog}")
           endif()
-        endif()
+# TODO        endif()
 
         # remove any previously extracted version of the addon
         if(EXISTS "${BUILD_DIR}/${id}")
