@@ -30,6 +30,8 @@
 #include "interfaces/legacy/mod_python/Cookie.h"
 #include "interfaces/legacy/mod_python/HttpRequest.h"
 #include "interfaces/legacy/mod_python/ModuleXbmcmod_python.h"
+#include "interfaces/legacy/mod_python/Session.h"
+#include "interfaces/legacy/mod_python/Table.h"
 
 using namespace XBMCAddon;
 using namespace xbmcmod_python;
@@ -47,8 +49,10 @@ using namespace xbmcmod_python;
 
 %include "interfaces/legacy/mod_python/HttpRequest.h"
 %include "interfaces/legacy/mod_python/Cookie.h"
+%include "interfaces/legacy/mod_python/Table.h"
+%include "interfaces/legacy/mod_python/Session.h"
 
-%feature("knownapitypes") XBMCAddon::xbmcmod_python "XBMCAddon::xbmcmod_python::Cookie, xbmcmod_python::Table"
+%feature("knownapitypes") XBMCAddon::xbmcmod_python "XBMCAddon::xbmcmod_python::Cookie, xbmcmod_python::Session, xbmcmod_python::Table"
 
 %{
 #endif
