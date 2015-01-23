@@ -1,4 +1,5 @@
-set(SOURCES PVRGUIInfo.cpp
+set(SOURCES PVRActionListener.cpp
+            PVRGUIInfo.cpp
             PVRManager.cpp
             PVRDatabase.cpp)
 
