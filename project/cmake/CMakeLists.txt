@@ -282,7 +282,28 @@ configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-config.cmake.in
 configure_file(${CORE_SOURCE_DIR}/project/cmake/templates/kodi-addon-helpers.cmake.in
                ${CORE_BUILD_DIR}/modules/kodi-addon-helpers.cmake @ONLY)
 
-prepare_addon_env()
+# For preparing the addon environment
+set(BINDING_TARGETS)
+foreach(binding ${addon_bindings})
+  get_filename_component(file ${binding} NAME)
+  set(BINDING_TARGET ${CORE_BUILD_DIR}/include/kodi/${file})
+  list(APPEND BINDING_TARGETS ${BINDING_TARGET})
+  add_custom_command(OUTPUT ${BINDING_TARGET}
+                     DEPENDS ${binding}
+                     COMMAND ${CMAKE_COMMAND} -E copy ${binding} ${BINDING_TARGET})
+  file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/xbmc/${file}
+"#pragma once
+#warning \"Including xbmc/${file} is deprecated, use kodi/${file}\"
+#include \"kodi/${file}\"
+")
+endforeach()
+add_custom_command(OUTPUT ${CORE_BUILD_DIR}/lib/kodi/addoptions.cmake
+                   DEPENDS scripts/common/addoptions.cmake
+                   COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/scripts/common/addoptions.cmake
+                           ${CORE_BUILD_DIR}/lib/kodi/addoptions.cmake)
+add_custom_target(prepare-addon-env ALL DEPENDS ${BINDING_TARGETS}
+                                   ${CORE_BUILD_DIR}/lib/kodi/addoptions.cmake)
+add_dependencies(kodi-platform prepare-addon-env)
 
 include(scripts/${CORE_SYSTEM_NAME}/install.cmake)
 
