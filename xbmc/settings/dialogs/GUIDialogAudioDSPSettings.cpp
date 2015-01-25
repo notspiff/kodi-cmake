@@ -395,7 +395,7 @@ void CGUIDialogAudioDSPSettings::Save()
     return;
 
   // prompt user if they are sure
-  if (!CGUIDialogYesNo::ShowAndGetInput(15032, 750, 0, 12377))
+  if (!CGUIDialogYesNo::ShowAndGetInput(12376, 750, 0, 12377))
     return;
 
   // reset the settings
@@ -557,7 +557,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
 
   ///-----------------------
 
-  AddButton(groupSaveAsDefault, SETTING_AUDIO_MAIN_MAKE_DEFAULT, 15032, 0);
+  AddButton(groupSaveAsDefault, SETTING_AUDIO_MAIN_MAKE_DEFAULT, 12376, 0);
 
   m_Menus.clear();
 
