@@ -880,11 +880,6 @@ AE_DSP_STREAMTYPE CActiveAEDSP::LoadCurrentAudioSettings(void)
 /*! @name Backend methods */
 //@{
 
-bool CActiveAEDSP::OnAction(const CAction &action)
-{
-  return false;
-}
-
 bool CActiveAEDSP::IsProcessing(void) const
 {
   return m_isActive && m_usedProcessesCnt > 0;

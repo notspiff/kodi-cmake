@@ -131,14 +131,6 @@ namespace ActiveAE
   /*! @name Settings and action callback methods */
   //@{
     virtual void OnSettingAction(const CSetting *setting);
-
-    /*!
-     * @brief Handle audio DSP specific cActions
-     * @param action The action to process
-     * @return True if action could be handled, false otherwise.
-     * @note OnAction currently unused
-     */
-    bool OnAction(const CAction &action);
   //@}
 
   /*! @name Backend methods */

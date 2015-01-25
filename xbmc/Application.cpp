@@ -2734,10 +2734,6 @@ bool CApplication::OnAction(const CAction &action)
   if (g_PVRManager.OnAction(action))
     return true;
 
-  // forward action to CActiveAEDSP and break if it was able to handle it
-  if (CActiveAEDSP::Get().OnAction(action))
-    return true;
-
   // forward action to graphic context and see if it can handle it
   if (CStereoscopicsManager::Get().OnAction(action))
     return true;
