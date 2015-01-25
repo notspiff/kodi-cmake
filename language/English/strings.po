@@ -7086,7 +7086,7 @@ msgctxt "#15031"
 msgid "Audio DSP settings - Audio information"
 msgstr ""
 
-#empty string from id 15030
+#empty string from id 15032
 
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15033"
