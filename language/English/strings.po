@@ -6745,6 +6745,8 @@ msgctxt "#14060"
 msgid "Unknown type cache - Internet"
 msgstr ""
 
+#: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
+#. Name of a class/preset for audio DSP
 msgctxt "#14061"
 msgid "Auto"
 msgstr ""
@@ -6946,41 +6948,45 @@ msgctxt "#14104"
 msgid "Show simplified menu"
 msgstr ""
 
-#empty strings from id 14105 to 15011
-=======
-#empty strings from id 14101 to 15000
+#empty strings from id 14105 to 15000
 
-#. Name of dsp process base class, positions from 15001-15007 must be in the same line
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15001"
 msgid "Basic"
 msgstr ""
 
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15002"
 msgid "Music"
 msgstr ""
 
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15003"
 msgid "Video"
 msgstr ""
 
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15004"
 msgid "Games"
 msgstr ""
 
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15005"
 msgid "Application"
 msgstr ""
 
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15006"
 msgid "Phone"
 msgstr ""
 
+#. Name of a class/preset for audio DSP
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15007"
 msgid "Message"
