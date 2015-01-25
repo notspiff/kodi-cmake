@@ -4986,10 +4986,11 @@ msgstr ""
 
 #empty strings from id 12374 to 12375
 
+#: xbmc\settings\dialogs\GUIDialogAudioDSPSettings.cpp
 #: xbmc\video\dialogs\GUIDialogAudioSubtitleSettings.cpp
 #: xbmc\video\dialogs\GUIDialogVideoSettings.cpp
 msgctxt "#12376"
-msgid "Set as default for all videos"
+msgid "Set as default"
 msgstr ""
 
 #: xbmc\video\dialogs\GUIDialogAudioSubtitleSettings.cpp
@@ -7085,10 +7086,7 @@ msgctxt "#15031"
 msgid "Audio DSP settings - Audio information"
 msgstr ""
 
-#: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
-msgctxt "#15032"
-msgid "Set as default"
-msgstr ""
+#empty string from id 15030
 
 #: xbmc/settings/dialogs/GUIDialogAudioDSPSettings.cpp
 msgctxt "#15033"
