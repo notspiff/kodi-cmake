@@ -602,7 +602,7 @@
 				<textcolor>grey2</textcolor>
 				<focusedcolor>white</focusedcolor>
 				<texturefocus border="5">button-focus2.png</texturefocus>
-				<label>15065</label>
+				<label>14070</label>
 				<align>center</align>
 			</control>
 			<control type="button" id="24">
