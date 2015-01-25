@@ -7150,18 +7150,10 @@ msgstr ""
 
 #: xbmc/cores/AudioEngine/DSPAddons/ActiveAEDSP.cpp
 msgctxt "#15049"
-msgid "The audio DSP has been enabled without any"
+msgid "The audio DSP has been enabled without any enabled DSP Add-on. Enable at least one Add-on in order to use the audio DSP functionality."
 msgstr ""
 
-#: xbmc/cores/AudioEngine/DSPAddons/ActiveAEDSP.cpp
-msgctxt "#15050"
-msgid "enabled DSP Add-on. Enable at least one Add-on"
-msgstr ""
-
-#: xbmc/cores/AudioEngine/DSPAddons/ActiveAEDSP.cpp
-msgctxt "#15051"
-msgid "in order to use the audio DSP functionality."
-msgstr ""
+#empty strings from id 15050 to 15051
 
 msgctxt "#15052"
 msgid "Password"
