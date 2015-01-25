@@ -6784,6 +6784,7 @@ msgctxt "#14069"
 msgid "Apply these settings now?"
 msgstr ""
 
+#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
 msgctxt "#14070"
 msgid "Apply changes now"
 msgstr ""
@@ -7220,10 +7221,7 @@ msgctxt "#15064"
 msgid "Enable continues saving"
 msgstr ""
 
-#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
-msgctxt "#15065"
-msgid "Apply changes"
-msgstr ""
+#empty string id 15065
 
 #: addons/skin.confluence/720p/DialogAudioDSPManager.xml
 msgctxt "#15066"
