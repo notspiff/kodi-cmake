@@ -81,6 +81,7 @@ private:
   bool OpenAudioDSPMenu(unsigned int setupEntry);
   int FindCategoryIndex(const std::string &catId);
 
+  static const int                            m_StreamTypeNameTable[];                  /*!< Table for stream type strings related to type id */
   AE_DSP_STREAM_ID                            m_ActiveStreamId;                         /*!< The on dialog selectable stream identifier */
   ActiveAE::CActiveAEDSPProcessPtr            m_ActiveStreamProcess;                    /*!< On dialog adjustable dsp processing class */
   AE_DSP_STREAMTYPE                           m_streamTypeUsed;                         /*!< The currently available stream type */

@@ -81,11 +81,23 @@
 
 #define CONTROL_SETTINGS_LABEL                    2
 
-/*! Label list id */
-#define INPUT_TYPE_LABEL_START                    15001
-
 using namespace std;
 using namespace ActiveAE;
+
+/*!
+ * Contains string name id's related to the AE_DSP_ASTREAM_ values
+ */
+const int CGUIDialogAudioDSPSettings::m_StreamTypeNameTable[] =
+{
+  15001,  //!< "Basic"
+  15002,  //!< "Music"
+  15003,  //!< "Video"
+  15004,  //!< "Games"
+  15005,  //!< "Application"
+  15006,  //!< "Phone"
+  15007,  //!< "Message"
+  14061   //!< "Auto"
+};
 
 CGUIDialogAudioDSPSettings::CGUIDialogAudioDSPSettings()
   : CGUIDialogSettingsManualBase(WINDOW_DIALOG_AUDIO_DSP_OSD_SETTINGS, "DialogAudioDSPSettings.xml")
@@ -475,21 +487,21 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
     /* about size() > 1, it is always the fallback (ignore of master processing) present. */
     StaticIntegerSettingOptions modeEntries;
     if (m_MasterModes[AE_DSP_ASTREAM_BASIC].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_BASIC,   AE_DSP_ASTREAM_BASIC));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_BASIC],   AE_DSP_ASTREAM_BASIC));
     if (m_MasterModes[AE_DSP_ASTREAM_MUSIC].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_MUSIC,   AE_DSP_ASTREAM_MUSIC));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_MUSIC],   AE_DSP_ASTREAM_MUSIC));
     if (m_MasterModes[AE_DSP_ASTREAM_MOVIE].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_MOVIE,   AE_DSP_ASTREAM_MOVIE));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_MOVIE],   AE_DSP_ASTREAM_MOVIE));
     if (m_MasterModes[AE_DSP_ASTREAM_GAME].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_GAME,    AE_DSP_ASTREAM_GAME));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_GAME],    AE_DSP_ASTREAM_GAME));
     if (m_MasterModes[AE_DSP_ASTREAM_APP].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_APP,     AE_DSP_ASTREAM_APP));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_APP],     AE_DSP_ASTREAM_APP));
     if (m_MasterModes[AE_DSP_ASTREAM_MESSAGE].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_MESSAGE, AE_DSP_ASTREAM_MESSAGE));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_MESSAGE], AE_DSP_ASTREAM_MESSAGE));
     if (m_MasterModes[AE_DSP_ASTREAM_PHONE].size() > 1)
-      modeEntries.push_back(pair<int, int>(INPUT_TYPE_LABEL_START+AE_DSP_ASTREAM_PHONE,   AE_DSP_ASTREAM_PHONE));
+      modeEntries.push_back(pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_PHONE],   AE_DSP_ASTREAM_PHONE));
     if (modesAvailable > 1 && m_MasterModes[m_streamTypeUsed].size() > 1)
-      modeEntries.insert(modeEntries.begin(), pair<int, int>(14061, AE_DSP_ASTREAM_AUTO));
+      modeEntries.insert(modeEntries.begin(), pair<int, int>(m_StreamTypeNameTable[AE_DSP_ASTREAM_AUTO], AE_DSP_ASTREAM_AUTO));
 
     AddSpinner(groupAudioModeSel,
                 SETTING_AUDIO_MAIN_STREAMTYPE, 15021, 0,
