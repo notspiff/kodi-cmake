@@ -784,7 +784,7 @@ void CActiveAEDSP::ShowDialogNoAddonsEnabled(void)
   if (!IsActivated())
     return;
 
-  CGUIDialogOK::ShowAndGetInput(15048, 15049, 15050, 15051);
+  CGUIDialogOK::ShowAndGetInput(15048, 15049, 0, 0);
 
   vector<string> params;
   params.push_back("addons://disabled/xbmc.adspaddon");
