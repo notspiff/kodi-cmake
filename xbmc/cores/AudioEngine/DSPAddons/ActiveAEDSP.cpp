@@ -787,7 +787,7 @@ void CActiveAEDSP::ShowDialogNoAddonsEnabled(void)
   CGUIDialogOK::ShowAndGetInput(15048, 15049, 0, 0);
 
   vector<string> params;
-  params.push_back("addons://disabled/xbmc.adspaddon");
+  params.push_back("addons://disabled/kodi.adsp");
   params.push_back("return");
   g_windowManager.ActivateWindow(WINDOW_ADDON_BROWSER, params);
 }

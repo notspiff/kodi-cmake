@@ -90,7 +90,7 @@ static const TypeMapping types[] =
    {"xbmc.addon.executable",             ADDON_EXECUTABLE,           1043, "DefaultAddonProgram.png" },
    {"xbmc.audioencoder",                 ADDON_AUDIOENCODER,         200,  "DefaultAddonAudioEncoder.png" },
    {"xbmc.service",                      ADDON_SERVICE,             24018, "DefaultAddonService.png" },
-   {"xbmc.adspaddon",                    ADDON_ADSPDLL,             24025, "DefaultAddonAudioDSP.png" }};
+   {"kodi.adsp",                         ADDON_ADSPDLL,             24025, "DefaultAddonAudioDSP.png" }};
 
 const std::string TranslateType(const ADDON::TYPE &type, bool pretty/*=false*/)
 {
