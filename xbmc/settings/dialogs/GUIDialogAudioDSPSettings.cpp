@@ -192,7 +192,7 @@ bool CGUIDialogAudioDSPSettings::OnMessage(CGUIMessage &message)
             else if (setting->GetId().substr(0, 27) == SETTING_STREAM_INFO_MODE_CPU_USAGE)
             {
               if (!OpenAudioDSPMenu(m_ActiveModesData[strtol(setting->GetId().substr(27).c_str(), NULL, 0)].MenuListPtr))
-                CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(15031), g_localizeStrings.Get(15095));
+                CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, g_localizeStrings.Get(15031), g_localizeStrings.Get(416));
             }
           }
         }
@@ -726,7 +726,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
       return;
     }
     m_InputChannels = StringUtils::Format("%i", m_ActiveStreamProcess->GetInputChannels());
-    AddInfoStringButton(group, SETTING_STREAM_INFO_INPUT_CHANNELS, 15091, 0, m_InputChannels);
+    AddInfoStringButton(group, SETTING_STREAM_INFO_INPUT_CHANNELS, 21444, 0, m_InputChannels);
     m_InputChannelNames = m_ActiveStreamProcess->GetInputChannelNames();
     AddInfoStringButton(group, SETTING_STREAM_INFO_INPUT_CHANNEL_NAMES, 15093, 0, m_InputChannelNames);
     m_InputSamplerate = StringUtils::Format("%i Hz", (int)m_ActiveStreamProcess->GetInputSamplerate());
@@ -739,7 +739,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
       return;
     }
     m_OutputChannels = StringUtils::Format("%i", m_ActiveStreamProcess->GetOutputChannels());
-    AddInfoStringButton(group, SETTING_STREAM_INFO_OUTPUT_CHANNELS, 15091, 0, m_OutputChannels);
+    AddInfoStringButton(group, SETTING_STREAM_INFO_OUTPUT_CHANNELS, 21444, 0, m_OutputChannels);
     m_OutputChannelNames = m_ActiveStreamProcess->GetOutputChannelNames();
     AddInfoStringButton(group, SETTING_STREAM_INFO_OUTPUT_CHANNEL_NAMES, 15093, 0, m_OutputChannelNames);
     m_OutputSamplerate = StringUtils::Format("%i Hz", (int)m_ActiveStreamProcess->GetOutputSamplerate());
