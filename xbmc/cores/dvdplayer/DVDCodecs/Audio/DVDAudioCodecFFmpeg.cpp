@@ -227,13 +227,15 @@ enum AVMatrixEncoding CDVDAudioCodecFFmpeg::GetMatrixEncoding()
 
 enum AVAudioServiceType CDVDAudioCodecFFmpeg::GetAudioServiceType()
 {
-  if (m_pCodecContext) return m_pCodecContext->audio_service_type;
+  if (m_pCodecContext)
+    return m_pCodecContext->audio_service_type;
   return AV_AUDIO_SERVICE_TYPE_MAIN;
 }
 
 int CDVDAudioCodecFFmpeg::GetProfile()
 {
-  if (m_pCodecContext) return m_pCodecContext->profile;
+  if (m_pCodecContext)
+    return m_pCodecContext->profile;
   return 0;
 }
 
