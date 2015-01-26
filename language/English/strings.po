@@ -12604,7 +12604,11 @@ msgctxt "#24025"
 msgid "Audio DSP"
 msgstr ""
 
-#empty string id 24026
+#: xbmc\video\dialogs\GUIDialogAudioSubtitleSettings.cpp
+#: To open dsp submenu
+msgctxt "#24026"
+msgid "Audio DSP ..."
+msgstr ""
 
 #: xbmc/addons/addon.cpp
 msgctxt "#24027"
