@@ -112,23 +112,8 @@
 				<onclick>PlayerControl(Next)</onclick>
 			</control>
 			<control type="image" id="2200">
-				<width>215</width>
+				<width>270</width>
 				<texture>-</texture>
-			</control>
-			<control type="button" id="256">
-				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
-				<animation effect="fade" start="100" end="0" time="100" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
-				<animation effect="slide" start="0,0" end="55,0" time="0" condition="!VideoPlayer.IsStereoscopic">Conditional</animation>-->
-				<width>55</width>
-				<height>55</height>
-				<label>15047</label>
-				<font>-</font>
-				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
-				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
-				<onup>1000</onup>
-				<ondown>1000</ondown>
-				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
-				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
 			</control>
 			<control type="button" id="255">
 				<enable>VideoPlayer.IsStereoscopic</enable>
@@ -163,13 +148,16 @@
 				<ondown>1000</ondown>
 				<onclick>ActivateWindow(OSDVideoSettings)</onclick>
 			</control>
-			<control type="button" id="252">
+			<control type="togglebutton" id="252">
 				<width>55</width>
 				<height>55</height>
 				<label>13396</label>
 				<font>-</font>
 				<texturefocus>OSDAudioFO.png</texturefocus>
 				<texturenofocus>OSDAudioNF.png</texturenofocus>
+				<usealttexture>system.getbool(audiooutput.dspaddonsenabled)</usealttexture>
+				<alttexturefocus>OSDDSPAudioOnFO.png</alttexturefocus>
+				<alttexturenofocus>OSDDSPAudioOnNF.png</alttexturenofocus>
 				<onup>1000</onup>
 				<ondown>1000</ondown>
 				<onclick>ActivateWindow(OSDAudioSettings)</onclick>
@@ -296,21 +284,8 @@
 				<onclick>Dialog.Close(VideoOSD)</onclick>
 			</control>
 			<control type="image" id="2300">
-				<width>170</width>
+				<width>215</width>
 				<texture>-</texture>
-			</control>
-			<control type="button" id="356">
-				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
-				<animation effect="fade" start="100" end="0" time="100" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
-				<animation effect="slide" start="0,0" end="55,0" time="0" condition="!VideoPlayer.IsStereoscopic">Conditional</animation>-->
-				<width>55</width>
-				<height>55</height>
-				<label>15047</label>
-				<font>-</font>
-				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
-				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
-				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
-				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
 			</control>
 			<control type="button" id="354">
 				<enable>VideoPlayer.IsStereoscopic</enable>
@@ -341,13 +316,16 @@
 				<texturenofocus>OSDVideoNF.png</texturenofocus>
 				<onclick>ActivateWindow(OSDVideoSettings)</onclick>
 			</control>
-			<control type="button" id="352">
+			<control type="togglebutton" id="352">
 				<width>55</width>
 				<height>55</height>
 				<label>13396</label>
 				<font>-</font>
 				<texturefocus>OSDAudioFO.png</texturefocus>
 				<texturenofocus>OSDAudioNF.png</texturenofocus>
+				<usealttexture>system.getbool(audiooutput.dspaddonsenabled)</usealttexture>
+				<alttexturefocus>OSDDSPAudioOnFO.png</alttexturefocus>
+				<alttexturenofocus>OSDDSPAudioOnNF.png</alttexturenofocus>
 				<onclick>ActivateWindow(OSDAudioSettings)</onclick>
 			</control>
 			<control type="togglebutton" id="353">
