@@ -163,12 +163,6 @@ public:
   virtual void SetAmplification(float amplify) = 0;
 
   /**
-   * Gets the stream ffmpeg informations if present.
-   * @return infos
-   */
-  virtual void GetFFmpegInfo(int &profile, enum AVMatrixEncoding &matrix_encoding, enum AVAudioServiceType &audio_service_type) = 0;
-
-  /**
    * Sets the stream ffmpeg informations if present.
    + @param profile
    * @param matrix_encoding

@@ -59,7 +59,6 @@ public:
   virtual float GetVolume();
   virtual float GetReplayGain();
   virtual float GetAmplification();
-  virtual void GetFFmpegInfo(int &profile, enum AVMatrixEncoding &matrix_encoding, enum AVAudioServiceType &audio_service_type);
   virtual void SetVolume(float volume);
   virtual void SetReplayGain(float factor);
   virtual void SetAmplification(float amplify);

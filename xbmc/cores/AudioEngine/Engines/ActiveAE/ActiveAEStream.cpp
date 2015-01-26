@@ -447,13 +447,6 @@ bool CActiveAEStream::SetResampleRatio(double ratio)
   return true;
 }
 
-void CActiveAEStream::GetFFmpegInfo(int &profile, enum AVMatrixEncoding &matrix_encoding, enum AVAudioServiceType &audio_service_type)
-{
-  profile = m_profile;
-  matrix_encoding = m_matrixEncoding;
-  audio_service_type = m_audioServiceType;
-}
-
 void CActiveAEStream::SetFFmpegInfo(int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type)
 {
   if (m_profile != profile ||
