@@ -7154,26 +7154,23 @@ msgctxt "#15049"
 msgid "The audio DSP has been enabled without any enabled DSP Add-on. Enable at least one Add-on in order to use the audio DSP functionality."
 msgstr ""
 
-#empty strings from id 15050 to 15051
+#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
+#: Name of a list with amount of entries behind on GUI
+msgctxt "#15050"
+msgid "Available modes"
+msgstr ""
+
+#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
+#: Name of a list with amount of entries behind on GUI
+msgctxt "#15051"
+msgid "Active modes"
+msgstr ""
 
 msgctxt "#15052"
 msgid "Password"
 msgstr ""
 
-#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
-msgctxt "#15053"
-msgid "Available"
-msgstr ""
-
-#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
-msgctxt "#15054"
-msgid "Active"
-msgstr ""
-
-#: addons/skin.confluence/720p/DialogAudioDSPManager.xml
-msgctxt "#15055"
-msgid "Modes"
-msgstr ""
+#empty strings from id 15053 to 15055
 
 #: addons/skin.confluence/720p/DialogAudioDSPManager.xml
 msgctxt "#15056"
