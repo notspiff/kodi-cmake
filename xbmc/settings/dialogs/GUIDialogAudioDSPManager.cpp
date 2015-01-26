@@ -667,52 +667,12 @@ bool CGUIDialogAudioDSPManager::OnContextButton(int itemNumber, CONTEXT_BUTTON b
         hookData.category       = AE_DSP_MENUHOOK_ALL;
         hookData.data.iStreamId = -1;
 
-        if (m_bContainsChanges)
-        {
-          if (m_bContinousSaving)
-          {
-            SaveList();
-          }
-          else
-          {
-            if (CGUIDialogYesNo::ShowAndGetInput(19098, 15078, -1, 15079))
-            {
-              SaveList();
-            }
-            else
-            {
-              m_bContainsChanges = false;
-            }
-          }
-        }
-
-        m_iLastSelected[LIST_AVAILABLE] = m_availableViewControl.GetSelectedItem();
-        m_iLastSelected[LIST_ACTIVE]    = m_activeViewControl.GetSelectedItem();
-
-        // save control states and currently selected item of group
-        SaveControlStates();
-
-        Close();
+        /*!
+         * @note the addon dialog becomes always opened on the back of Kodi ones for this reason a
+         * "<animation effect="fade" start="100" end="0" time="400" condition="Window.IsVisible(Addon)">Conditional</animation>"
+         * on skin is needed to hide dialog.
+         */
         addon->CallMenuHook(hook, hookData);
-
-        if (!g_windowManager.Initialized())
-          return false; // don't do anything
-
-        m_closing = false;
-        m_bModal = true;
-        // set running before it's added to the window manager, else the auto-show code
-        // could show it as well if we are in a different thread from
-        // the main rendering thread (this should really be handled via
-        // a thread message though IMO)
-        m_active = true;
-        g_windowManager.RouteToWindow(this);
-
-        // active this window...
-        CGUIMessage msg(GUI_MSG_WINDOW_INIT, 0, 0);
-        OnMessage(msg);
-
-        if (!m_windowLoaded)
-          Close(true);
       }
     }
     else
