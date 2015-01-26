@@ -2,7 +2,6 @@
 <window>
 	<defaultcontrol>5</defaultcontrol>
 	<coordinates>
-		<system>1</system>
 		<left>240</left>
 		<top>60</top>
 	</coordinates>
@@ -50,10 +49,6 @@
 				<onclick>PreviousMenu</onclick>
 				<texturefocus>DialogCloseButton-focus.png</texturefocus>
 				<texturenofocus>DialogCloseButton.png</texturenofocus>
-				<onleft>2</onleft>
-				<onright>2</onright>
-				<onup>2</onup>
-				<ondown>2</ondown>
 				<visible>system.getbool(input.enablemouse)</visible>
 			</control>
 			<control type="grouplist" id="5">
