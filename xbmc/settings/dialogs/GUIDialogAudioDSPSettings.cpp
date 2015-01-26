@@ -1014,48 +1014,12 @@ bool CGUIDialogAudioDSPSettings::OpenAudioDSPMenu(unsigned int setupEntry)
       break;
   }
 
-  m_MenuHierarchy.push_back(m_iCategory);
-  m_MenuPositions[m_categories[m_iCategory]->GetId()] = GetFocusedControlID();
-  Close();
+  /*!
+   * @note the addon dialog becomes always opened on the back of Kodi ones for this reason a
+   * "<animation effect="fade" start="100" end="0" time="400" condition="Window.IsVisible(Addon)">Conditional</animation>"
+   * on skin is needed to hide dialog.
+   */
   addon->CallMenuHook(hook, hookData);
 
-  //Lock graphic context here as it is sometimes called from non rendering threads
-  //maybe we should have a critical section per window instead??
-  CSingleLock lock(g_graphicsContext);
-
-  if (CActiveAEDSP::Get().GetProcessingStreamsAmount() == 0 || !g_windowManager.Initialized())
-  {
-    m_iCategory = FindCategoryIndex(SETTING_AUDIO_CAT_MAIN);
-    m_MenuHierarchy.clear();
-    return true; // don't do anything
-  }
-
-  m_closing = false;
-  m_bModal = true;
-  // set running before it's added to the window manager, else the auto-show code
-  // could show it as well if we are in a different thread from
-  // the main rendering thread (this should really be handled via
-  // a thread message though IMO)
-  m_active = true;
-  g_windowManager.RouteToWindow(this);
-
-  // active this window...
-  CGUIMessage msg(GUI_MSG_WINDOW_INIT, 0, 0);
-  OnMessage(msg);
-
-  m_iCategory = m_MenuHierarchy.back();
-  m_MenuHierarchy.pop_back();
-  CreateSettings();
-
-  SET_CONTROL_LABEL(CONTROL_SETTINGS_LABEL, g_localizeStrings.Get(m_MenuName));
-  SET_CONTROL_FOCUS(m_MenuPositions[m_categories[m_iCategory]->GetId()], 0);
-
-  if (!m_windowLoaded)
-  {
-    m_iCategory = FindCategoryIndex(SETTING_AUDIO_CAT_MAIN);
-    Close(true);
-  }
-
-  lock.Leave();
   return true;
 }
