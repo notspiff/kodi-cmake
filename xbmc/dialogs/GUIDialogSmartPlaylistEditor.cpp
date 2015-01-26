@@ -31,6 +31,7 @@
 #include "FileItem.h"
 #include "guilib/Key.h"
 #include "guilib/LocalizeStrings.h"
+#include "utils/log.h"
 
 using namespace std;
 
@@ -140,6 +141,31 @@ bool CGUIDialogSmartPlaylistEditor::OnMessage(CGUIMessage& message)
         UpdateRuleControlButtons();
 
       HighlightItem(-1);
+    }
+    break;
+  case GUI_MSG_WINDOW_INIT:
+    {
+      const std::string& startupList = message.GetStringParam(1);
+      std::string type = message.GetStringParam(2);
+      if (!startupList.empty())
+      {
+        // guess type
+        if (type.empty())
+        {
+          if (startupList.find("video") > -1)
+            type = "video";
+          else if (startupList.find("music") > -1)
+            type = "songs";
+          else
+            CLog::Log(LOGWARNING, "%s: Type not detected, ignoring parameter", __FUNCTION__);
+        }
+        if (!type.empty())
+        {
+          m_playlist.Load(startupList);
+          m_playlist.SetType(type);
+          m_path = startupList;
+        }
+      }
     }
     break;
   }
