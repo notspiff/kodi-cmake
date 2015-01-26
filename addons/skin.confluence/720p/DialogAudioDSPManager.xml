@@ -5,7 +5,6 @@
 	<include>dialogeffect</include>
 	<allowoverlay>no</allowoverlay>
 	<coordinates>
-		<system>1</system>
 		<left>40</left>
 		<top>40</top>
 	</coordinates>
@@ -34,10 +33,6 @@
 				<onclick>PreviousMenu</onclick>
 				<texturefocus>DialogCloseButton-focus.png</texturefocus>
 				<texturenofocus>DialogCloseButton.png</texturenofocus>
-				<onleft>1</onleft>
-				<onright>1</onright>
-				<onup>1</onup>
-				<ondown>1</ondown>
 				<visible>system.getbool(input.enablemouse)</visible>
 				<include>VisibleFadeEffect</include>
 			</control>
@@ -203,13 +198,13 @@
 				<width>570</width>
 				<height>360</height>
 				<control type="label">
-					<description>blue label for available modes</description>
+					<description>blue available modes</description>
 					<left>25</left>
 					<top>2</top>
 					<width>550</width>
 					<height>30</height>
 					<font>font12_title</font>
-					<label>$LOCALIZE[15053] $LOCALIZE[15055] ($INFO[Container(20).NumItems])</label>
+					<label>$LOCALIZE[15050] ($INFO[Container(20).NumItems])</label>
 					<align>center</align>
 					<aligny>center</aligny>
 					<textcolor>blue</textcolor>
@@ -373,13 +368,13 @@
 				<width>570</width>
 				<height>360</height>
 				<control type="label">
-					<description>blue active modes label</description>
+					<description>blue active modes</description>
 					<left>10</left>
 					<top>2</top>
 					<width>550</width>
 					<height>30</height>
 					<font>font12_title</font>
-					<label>$LOCALIZE[15054] $LOCALIZE[15055] ($INFO[Container(21).NumItems]) </label>
+					<label>$LOCALIZE[15051] ($INFO[Container(21).NumItems])</label>
 					<align>center</align>
 					<aligny>center</aligny>
 					<textcolor>blue</textcolor>
