@@ -103,9 +103,6 @@ protected:
   CSoundPacket *m_remapBuffer;
   IAEResample *m_remapper;
   int m_clockId;
-  int m_profile;
-  enum AVMatrixEncoding m_matrixEncoding;
-  enum AVAudioServiceType m_audioServiceType;
 
   // only accessed by engine
   CActiveAEBufferPool *m_inputBuffers;
@@ -126,6 +123,9 @@ protected:
   float m_fadingBase;
   float m_fadingTarget;
   int m_fadingTime;
+  int m_profile;
+  enum AVMatrixEncoding m_matrixEncoding;
+  enum AVAudioServiceType m_audioServiceType;
   bool m_forceResampler;
 };
 }
