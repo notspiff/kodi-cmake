@@ -449,15 +449,7 @@ bool CActiveAEStream::SetResampleRatio(double ratio)
 
 void CActiveAEStream::SetFFmpegInfo(int profile, enum AVMatrixEncoding matrix_encoding, enum AVAudioServiceType audio_service_type)
 {
-  if (m_profile != profile ||
-      m_matrixEncoding != matrix_encoding ||
-      m_audioServiceType != audio_service_type)
-  {
-    m_profile = profile;
-    m_matrixEncoding = matrix_encoding;
-    m_audioServiceType = audio_service_type;
-    AE.SetStreamFFmpegInfo(this, m_profile, m_matrixEncoding, m_audioServiceType);
-  }
+  AE.SetStreamFFmpegInfo(this, profile, matrix_encoding, audio_service_type);
 }
 
 void CActiveAEStream::FadeVolume(float from, float target, unsigned int time)
