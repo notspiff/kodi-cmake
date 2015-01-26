@@ -628,6 +628,7 @@
 			<height>45</height>
 			<visible>VideoPlayer.Content(LiveTV)</visible>
 			<include>VisibleFadeEffect</include>
+			<animation effect="slide" start="0,0" end="20,0" time="0" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
 			<control type="button" id="600">
 				<left>20</left>
 				<top>2</top>
@@ -707,7 +708,7 @@
 				<enable>Player.CanRecord</enable>
 				<animation effect="fade" start="100" end="30" time="100" condition="!Player.CanRecord">Conditional</animation>
 			</control>
-			<control type="togglebutton" id="608">
+			<control type="button" id="608">
 				<left>220</left>
 				<top>2</top>
 				<width>39</width>
@@ -715,21 +716,19 @@
 				<label>-</label>
 				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
 				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
-				<usealttexture>!system.getbool(audiooutput.dspaddonsenabled)</usealttexture>
-				<alttexturefocus>OSDDSPAudioOffFO.png</alttexturefocus>
-				<alttexturenofocus>OSDDSPAudioOffNF.png</alttexturenofocus>
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
 				<onleft>605</onleft>
 				<onright>50</onright>
 				<onup>610</onup>
 				<ondown>611</ondown>
 				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
-				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
 			</control>
 		</control>
 		<control type="group" id="9005">
 			<visible>Player.HasMedia</visible>
 			<visible>!VideoPlayer.Content(LiveTV)</visible>
 			<include>VisibleFadeEffect</include>
+			<animation effect="slide" start="0,0" end="20,0" time="0" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
 			<width>250</width>
 			<height>45</height>
 			<defaultcontrol always="true">603</defaultcontrol>
@@ -923,7 +922,7 @@
 					<onback>50</onback>
 				</control>
 			</control>
-			<control type="togglebutton" id="608">
+			<control type="button" id="608">
 				<left>245</left>
 				<top>2</top>
 				<width>39</width>
@@ -931,15 +930,12 @@
 				<label>-</label>
 				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
 				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
-				<usealttexture>!system.getbool(audiooutput.dspaddonsenabled)</usealttexture>
-				<alttexturefocus>OSDDSPAudioOffFO.png</alttexturefocus>
-				<alttexturenofocus>OSDDSPAudioOffNF.png</alttexturenofocus>
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
 				<onleft>605</onleft>
 				<onright>50</onright>
 				<onup>610</onup>
 				<ondown>611</ondown>
 				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
-				<enable>system.getbool(audiooutput.dspaddonsenabled)</enable>
 			</control>
 		</control>
 		<control type="radiobutton" id="611">
