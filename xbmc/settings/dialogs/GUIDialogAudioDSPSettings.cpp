@@ -539,7 +539,7 @@ void CGUIDialogAudioDSPSettings::InitializeSettings()
   // audio settings
   // audio volume setting
   m_volume = g_application.GetVolume(false);
-  if (!g_application.m_pPlayer->HasVideo())
+  if (!g_windowManager.IsWindowActive(WINDOW_DIALOG_AUDIO_OSD_SETTINGS))
   {
     CSettingNumber *settingAudioVolume = AddSlider(groupAudioVolumeSel, SETTING_AUDIO_MAIN_VOLUME, 13376, 0, m_volume, 14054, VOLUME_MINIMUM, VOLUME_MAXIMUM / 100.0f, VOLUME_MAXIMUM);
     static_cast<CSettingControlSlider*>(settingAudioVolume->GetControl())->SetFormatter(SettingFormatterPercentAsDecibel);
