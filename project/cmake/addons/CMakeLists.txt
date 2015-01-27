@@ -215,6 +215,9 @@ foreach(id ${downloaded_addons})
                       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
                       CMAKE_ARGS ${BUILD_ARGS})
 
+  # add "kodi-platform" as a dependency to every addon
+  add_dependencies(${id} kodi-platform)
+
   set(${id}_DEPENDS_DIR ${BUILD_DIR}/${id}/depends)
 
   if(EXISTS ${${id}_DEPENDS_DIR})
