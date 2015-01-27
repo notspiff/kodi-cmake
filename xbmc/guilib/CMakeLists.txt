@@ -24,6 +24,7 @@ set(SOURCES AnimatedGif.cpp
             GUIFadeLabelControl.cpp
             GUIFixedListContainer.cpp
             GUIFont.cpp
+            GUIFontCache.cpp
             GUIFontManager.cpp
             GUIFontTTF.cpp
             GUIImage.cpp
