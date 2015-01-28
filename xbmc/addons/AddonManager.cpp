@@ -37,6 +37,10 @@
 #ifdef HAS_SCREENSAVER
 #include "ScreenSaver.h"
 #endif
+#ifdef HAS_ADSPADDONS
+#include "DllAudioDSP.h"
+#include "cores/AudioEngine/DSPAddons/ActiveAEDSP.h"
+#endif
 #ifdef HAS_PVRCLIENTS
 #include "DllPVRClient.h"
 #include "pvr/addons/PVRClient.h"
@@ -115,6 +119,7 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
     case ADDON_SCREENSAVER:
     case ADDON_PVRDLL:
     case ADDON_AUDIODECODER:
+    case ADDON_ADSPDLL:
     case ADDON_AUDIOENCODER:
     case ADDON_VFS:
       { // begin temporary platform handling for Dlls
@@ -165,6 +170,8 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
         }
         else if (type == ADDON_AUDIODECODER)
           return AddonPtr(new CAudioDecoder(props));
+        else if (type == ADDON_ADSPDLL)
+          return AddonPtr(new ActiveAE::CActiveAEDSPAddon(props));
         else if (type == ADDON_AUDIOENCODER)
           return AddonPtr(new CAudioEncoder(props));
         else if (type == ADDON_VFS)
@@ -351,7 +358,7 @@ void CAddonMgr::RemoveFromUpdateableAddons(AddonPtr &pAddon)
 {
   CSingleLock lock(m_critSection);
   VECADDONS::iterator it = std::find(m_updateableAddons.begin(), m_updateableAddons.end(), pAddon);
-  
+
   if(it != m_updateableAddons.end())
   {
     m_updateableAddons.erase(it);
@@ -671,6 +678,8 @@ AddonPtr CAddonMgr::AddonFromProps(AddonProps& addonProps)
       return AddonPtr(new PVR::CPVRClient(addonProps));
     case ADDON_AUDIODECODER:
       return AddonPtr(new CAudioDecoder(addonProps));
+    case ADDON_ADSPDLL:
+      return AddonPtr(new ActiveAE::CActiveAEDSPAddon(addonProps));
     case ADDON_AUDIOENCODER:
       return AddonPtr(new CAudioEncoder(addonProps));
     case ADDON_VFS:

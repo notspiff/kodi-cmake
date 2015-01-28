@@ -859,6 +859,16 @@ void CApplicationMessenger::ProcessMessage(ThreadMessage *pMsg)
       g_peripherals.ToggleDeviceState(STATE_STANDBY);
       break;
     }
+    case TMSG_AUDIODSPENGINESTART:
+    {
+      g_application.StartAudioDSPEngine();
+      break;
+    }
+    case TMSG_AUDIODSPENGINESTOP:
+    {
+      g_application.StopAudioDSPEngine();
+      break;
+    }
     case TMSG_START_ANDROID_ACTIVITY:
     {
 #if defined(TARGET_ANDROID)
@@ -1427,4 +1437,26 @@ void CApplicationMessenger::CECStandby()
 {
   ThreadMessage tMsg = {TMSG_CECSTANDBY};
   SendMessage(tMsg, false);
+}
+
+bool CApplicationMessenger::AudioDSPEngineStart()
+{
+  bool result;
+
+  ThreadMessage tMsg = {TMSG_AUDIODSPENGINESTART};
+  tMsg.lpVoid = (void*)&result;
+  SendMessage(tMsg, false);
+
+  return result;
+}
+
+bool CApplicationMessenger::AudioDSPEngineStop()
+{
+  bool result;
+
+  ThreadMessage tMsg = {TMSG_AUDIODSPENGINESTOP};
+  tMsg.lpVoid = (void*)&result;
+  SendMessage(tMsg, false);
+
+  return result;
 }

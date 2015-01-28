@@ -153,6 +153,8 @@ public:
    */
   bool StartPVRManager();
   void StopPVRManager();
+  void StartAudioDSPEngine();
+  void StopAudioDSPEngine();
   bool IsCurrentThread() const;
   void Stop(int exitCode);
   void RestartApp();

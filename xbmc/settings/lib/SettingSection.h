@@ -50,6 +50,58 @@ public:
   virtual bool Deserialize(const TiXmlNode *node, bool update = false);
 
   /*!
+   \brief Gets the localizeable label ID of the setting group.
+
+   \return Localizeable label ID of the setting group
+   */
+  const int GetLabel() const { return m_label; }
+  /*!
+   \brief Sets the localizeable label ID of the setting group.
+
+   \param label Localizeable label ID of the setting group
+   */
+  void SetLabel(int label) { m_label = label; }
+  /*!
+   \brief Gets the position of localizeable label ID of the setting group 
+   behind or before a separator.
+
+   \return The wanted position
+   */
+  bool LabelBeforeSeparator() { return m_labelBeforeSeparator; }
+  /*!
+   \brief Sets the position of localizeable label ID of the setting group.
+   behind or before a separator.
+
+   \param before The wanted position
+   */
+  void SetLabelBeforeSeparator(bool before) { m_labelBeforeSeparator = before; }
+  /*!
+   \brief Gets the position of localizeable label ID of the setting group.
+   behind or before a separator.
+
+   \return The wanted position
+   */
+  bool HideSeparator() { return m_HideSeparator; }
+  /*!
+   \brief Sets the position of localizeable label ID of the setting group.
+   behind or before a separator.
+
+   \param before The wanted position
+   */
+  void SetHideSeparator(bool hide) { m_HideSeparator = hide; }
+  /*!
+   \brief Gets the localizeable help ID of the setting group.
+
+   \return Localizeable help ID of the setting group
+   */
+  const int GetHelp() const { return m_help; }
+  /*!
+   \brief Sets the localizeable help ID of the setting group.
+
+   \param label Localizeable help ID of the setting group
+   */
+  void SetHelp(int help) { m_help = help; }
+  /*!
    \brief Gets the full list of settings belonging to the setting group.
 
    \return Full list of settings belonging to the setting group
@@ -69,6 +121,10 @@ public:
   void AddSettings(const SettingList &settings);
 
 private:
+  int m_label;
+  int m_help;
+  bool m_labelBeforeSeparator;
+  bool m_HideSeparator;
   SettingList m_settings;
 };
 

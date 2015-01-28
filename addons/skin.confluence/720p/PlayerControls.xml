@@ -2,17 +2,17 @@
 <window type="dialog">
 	<defaultcontrol always="true">100</defaultcontrol>
 	<include>dialogeffect</include>
-	<visible>Player.HasMedia + Window.IsActive(PlayerControls) + !Window.IsActive(FullscreenVideo) + !Window.IsActive(Visualisation)</visible>
+	<visible>Player.HasMedia + Window.IsActive(PlayerControls) + !Window.IsActive(FullscreenVideo) + !Window.IsActive(Visualisation) + !Window.IsVisible(OSDAudioDSPSettings) + !Window.IsVisible(Addon)</visible>
 	<coordinates>
 		<system>1</system>
-		<left>390</left>
+		<left>370</left>
 		<top>250</top>
 	</coordinates>
 	<controls>
 		<control type="image">
 			<left>5</left>
 			<top>156</top>
-			<width>483</width>
+			<width>523</width>
 			<height>53</height>
 			<texture flipy="true" border="20,20,20,2">InfoMessagePanel.png</texture>
 		</control>
@@ -134,6 +134,7 @@
 			</control>
 			<control type="group">
 				<animation effect="slide" start="0,0" end="40,0" time="0" condition="!Player.HasAudio">Conditional</animation>
+				<animation effect="slide" start="0,0" end="40,0" time="0" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
 				<control type="button" id="607">
 					<left>325</left>
 					<top>0</top>
@@ -239,7 +240,7 @@
 					<alttexturefocus>OSDLyricsFO.png</alttexturefocus>
 					<alttexturenofocus>OSDLyricsNF.png</alttexturenofocus>
 					<onleft>608</onleft>
-					<onright>600</onright>
+					<onright>610</onright>
 					<onup>100</onup>
 					<ondown>100</ondown>
 					<onclick>Close</onclick>
@@ -252,6 +253,21 @@
 					<visible>Player.HasAudio</visible>
 					<visible>!VideoPlayer.Content(LiveTV)</visible>
 				</control>
+			</control>
+			<control type="button" id="610">
+				<left>445</left>
+				<top>0</top>
+				<width>40</width>
+				<height>40</height>
+				<label>-</label>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
+				<onleft>609</onleft>
+				<onright>600</onright>
+				<onup>100</onup>
+				<ondown>100</ondown>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
 			</control>
 		</control>
 		<control type="group" id="100">
@@ -369,7 +385,7 @@
 				<texturefocus>OSDRecordOffFO.png</texturefocus>
 				<texturenofocus>OSDRecordOffNF.png</texturenofocus>
 				<onleft>705</onleft>
-				<onright>701</onright>
+				<onright>707</onright>
 				<onup>300</onup>
 				<ondown>200</ondown>
 				<onclick>PlayerControl(record)</onclick>
@@ -377,13 +393,28 @@
 				<animation effect="fade" start="100" end="30" time="100" condition="!Player.CanRecord">Conditional</animation>
 				<visible>VideoPlayer.Content(LiveTV)</visible>
 			</control>
+			<control type="button" id="707">
+				<left>445</left>
+				<top>0</top>
+				<width>40</width>
+				<height>40</height>
+				<label>-</label>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
+				<onleft>706</onleft>
+				<onright>701</onright>
+				<onup>300</onup>
+				<ondown>200</ondown>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
+			</control>
 		</control>
 		<!-- Music Info -->
 		<control type="image">
 			<description>gradient</description>
 			<left>0</left>
 			<top>0</top>
-			<width>500</width>
+			<width>540</width>
 			<height>165</height>
 			<colordiffuse>CCFFFFFF</colordiffuse>
 			<visible>Window.IsVisible(home)</visible>
@@ -400,7 +431,7 @@
 		</control>
 		<control type="button">
 			<description>Close Window button</description>
-			<left>420</left>
+			<left>460</left>
 			<top>5</top>
 			<width>64</width>
 			<height>32</height>

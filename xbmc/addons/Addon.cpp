@@ -91,7 +91,8 @@ static const TypeMapping types[] =
    {"xbmc.audioencoder",                 ADDON_AUDIOENCODER,         200,  "DefaultAddonAudioEncoder.png" },
    {"kodi.audiodecoder",                 ADDON_AUDIODECODER,         201,  "DefaultAddonAudioDecoder.png" },
    {"kodi.vfs",                          ADDON_VFS,                  204,  "DefaultAddonVfs.png" },
-   {"xbmc.service",                      ADDON_SERVICE,             24018, "DefaultAddonService.png" }};
+   {"xbmc.service",                      ADDON_SERVICE,             24018, "DefaultAddonService.png" },
+   {"kodi.adsp",                         ADDON_ADSPDLL,             24025, "DefaultAddonAudioDSP.png" }};
 
 const std::string TranslateType(const ADDON::TYPE &type, bool pretty/*=false*/)
 {
@@ -322,7 +323,7 @@ bool CAddon::MeetsVersion(const AddonVersion &version) const
   // if the addon is one of xbmc's extension point definitions (addonid starts with "xbmc.")
   // and the minversion is "0.0.0" i.e. no <backwards-compatibility> tag has been specified
   // we need to assume that the current version is not backwards-compatible and therefore check against the actual version
-  if (StringUtils::StartsWithNoCase(m_props.id, "xbmc.") && m_props.minversion.empty())
+  if ((StringUtils::StartsWithNoCase(m_props.id, "xbmc.") || StringUtils::StartsWithNoCase(m_props.id, "kodi.")) && m_props.minversion.empty())
     return m_props.version == version;
 
   return m_props.minversion <= version && version <= m_props.version;
@@ -357,6 +358,9 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       break;
     case ADDON_PVRDLL:
       ext = ADDON_PVRDLL_EXT;
+      break;
+    case ADDON_ADSPDLL:
+      ext = ADDON_DSP_AUDIO_EXT;
       break;
     case ADDON_SCRIPT:
     case ADDON_SCRIPT_LIBRARY:
@@ -394,6 +398,7 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_SCRAPER_TVSHOWS:
       case ADDON_SCRAPER_LIBRARY:
       case ADDON_PVRDLL:
+      case ADDON_ADSPDLL:
       case ADDON_PLUGIN:
       case ADDON_SERVICE:
       case ADDON_REPOSITORY:

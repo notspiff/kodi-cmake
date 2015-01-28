@@ -25,7 +25,7 @@
 			<onup>100</onup>
 			<ondown>100</ondown>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(VisualisationPresetList)]</visible>
+			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VisualisationPresetList) | Window.IsVisible(Addon)]</visible>
 		</control>
 		<control type="slider" id="87">
 			<description>Seek Slider</description>
@@ -40,13 +40,13 @@
 			<textureslidernib>osd_slider_nibNF.png</textureslidernib>
 			<textureslidernibfocus>osd_slider_nib.png</textureslidernibfocus>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(VisualisationPresetList)]</visible>
+			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VisualisationPresetList) | Window.IsVisible(Addon)]</visible>
 		</control>
 		<control type="group" id="100">
 			<left>325</left>
 			<top>60r</top>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(VisualisationPresetList)]</visible>
+			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(VisualisationPresetList) | Window.IsVisible(Addon)]</visible>
 			<control type="button" id="600">
 				<left>0</left>
 				<top>0</top>
@@ -224,18 +224,34 @@
 				<alttexturenofocus>OSDRandomOnNF.png</alttexturenofocus>
 				<onclick>PlayerControl(Random)</onclick>
 				<onleft>606</onleft>
-				<onright>701</onright>
+				<onright>700</onright>
 				<onup>1000</onup>
 				<ondown>1000</ondown>
 			</control>
 		</control>
 		<control type="group">
-			<left>300r</left>
+			<left>355r</left>
 			<top>60r</top>
 			<animation effect="fade" time="200">VisibleChange</animation>
-			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(VisualisationPresetList)]</visible>
-			<control type="togglebutton" id="701">
+			<visible>![Window.IsVisible(AddonSettings) | Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(SelectDialog) | Window.IsVisible(VisualisationPresetList) | Window.IsVisible(Addon)]</visible>
+			<control type="button" id="700">
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
 				<left>0</left>
+				<top>0</top>
+				<width>55</width>
+				<height>55</height>
+				<label>15047</label>
+				<font>-</font>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<onleft>607</onleft>
+				<onright>701</onright>
+				<onup>1000</onup>
+				<ondown>1000</ondown>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
+			</control>
+			<control type="togglebutton" id="701">
+				<left>55</left>
 				<top>0</top>
 				<width>55</width>
 				<height>55</height>
@@ -245,7 +261,7 @@
 				<texturenofocus>OSDLyricsNF.png</texturenofocus>
 				<alttexturefocus>OSDLyricsFO.png</alttexturefocus>
 				<alttexturenofocus>OSDLyricsNF.png</alttexturenofocus>
-				<onleft>607</onleft>
+				<onleft>700</onleft>
 				<onright>500</onright>
 				<onup>1000</onup>
 				<ondown>1000</ondown>
@@ -257,7 +273,7 @@
 				<usealttexture>IsEmpty(Skin.String(LyricScript_Path))</usealttexture>
 			</control>
 			<control type="button" id="500">
-				<left>55</left>
+				<left>110</left>
 				<top>0</top>
 				<width>55</width>
 				<height>55</height>
@@ -271,7 +287,7 @@
 				<ondown>1000</ondown>
 			</control>
 			<control type="button" id="702">
-				<left>110</left>
+				<left>165</left>
 				<top>0</top>
 				<width>55</width>
 				<height>55</height>
@@ -286,7 +302,7 @@
 				<onclick>Addon.Default.OpenSettings(xbmc.player.musicviz)</onclick>
 			</control>
 			<control type="button" id="703">
-				<left>165</left>
+				<left>220</left>
 				<top>0</top>
 				<width>55</width>
 				<height>55</height>
@@ -301,7 +317,7 @@
 				<onclick>ActivateWindow(122)</onclick>
 			</control>
 			<control type="button" id="704">
-				<left>220</left>
+				<left>275</left>
 				<top>0</top>
 				<width>55</width>
 				<height>55</height>

@@ -69,7 +69,7 @@
 			<texture>black-back.png</texture>
 			<animation effect="fade" time="400">Visible</animation>
 			<animation effect="fade" time="200">Hidden</animation>
-			<visible>Window.IsActive(MovieInformation) | Window.IsActive(MusicInformation) | Window.IsActive(SongInformation) | Window.IsActive(FileBrowser) | Window.IsActive(TextViewer) | Window.IsActive(AddonSettings) | Window.IsActive(ContentSettings) | Window.IsActive(SelectDialog) | Window.IsActive(FileStackingDialog) | Window.IsActive(MediaSource) | Window.IsActive(PictureInfo) | Window.IsActive(PlayerControls) | Window.IsActive(VirtualKeyboard) | Window.IsActive(NumericInput) | Window.IsActive(ProfileSettings) | Window.IsActive(LockSettings) | Window.IsActive(SmartPlaylistEditor) | Window.IsActive(SmartPlaylistRule) | Window.IsActive(script-RSS_Editor-rssEditor.xml) | Window.IsActive(script-RSS_Editor-setEditor.xml) | Window.IsActive(AddonInformation) | Window.IsActive(Peripherals) | Window.IsActive(PeripheralSettings) | Window.IsActive(script-cu-lrclyrics-main.xml) | Window.IsActive(PVRChannelManager) | Window.IsActive(MediaFilter)</visible>
+			<visible>Window.IsActive(MovieInformation) | Window.IsActive(MusicInformation) | Window.IsActive(SongInformation) | Window.IsActive(FileBrowser) | Window.IsActive(TextViewer) | Window.IsActive(AddonSettings) | Window.IsActive(ContentSettings) | Window.IsActive(SelectDialog) | Window.IsActive(FileStackingDialog) | Window.IsActive(MediaSource) | Window.IsActive(PictureInfo) | Window.IsActive(PlayerControls) | Window.IsActive(VirtualKeyboard) | Window.IsActive(NumericInput) | Window.IsActive(ProfileSettings) | Window.IsActive(LockSettings) | Window.IsActive(SmartPlaylistEditor) | Window.IsActive(SmartPlaylistRule) | Window.IsActive(script-RSS_Editor-rssEditor.xml) | Window.IsActive(script-RSS_Editor-setEditor.xml) | Window.IsActive(AddonInformation) | Window.IsActive(Peripherals) | Window.IsActive(PeripheralSettings) | Window.IsActive(script-cu-lrclyrics-main.xml) | Window.IsActive(PVRChannelManager) | Window.IsActive(MediaFilter) | Window.IsActive(DialogAudioDSPManager.xml)</visible>
 		</control>
 	</include>
 	<include name="WindowTitleCommons">
@@ -86,7 +86,7 @@
 	</include>
 	<include name="ButtonCommonValues">
 		<height>40</height>
-		<width>250</width>
+		<width>290</width>
 		<textoffsetx>10</textoffsetx>
 		<textwidth>200</textwidth>
 		<aligny>center</aligny>
@@ -144,15 +144,15 @@
 		<pulseonselect>false</pulseonselect>
 	</include>
 	<include name="SideBladeLeft">
-		<animation effect="slide" start="0,0" end="250,0" time="400" tween="quadratic" easing="out" condition="ControlGroup(9000).HasFocus | Control.HasFocus(9001) | Control.HasFocus(8999)">Conditional</animation>
-		<animation effect="slide" start="0,0" end="-300,0" time="400" tween="quadratic" easing="out" condition="ControlGroup(9000).HasFocus | Control.HasFocus(9001)">WindowClose</animation>
-		<animation effect="slide" start="0,0" end="-50,0" time="300" tween="quadratic" easing="out" condition="![ControlGroup(9000).HasFocus | Control.HasFocus(9001)]">WindowClose</animation>
-		<animation effect="slide" start="-50,0" end="0,0" time="300" tween="quadratic" easing="out">WindowOpen</animation>
+		<animation effect="slide" start="0,0" end="290,0" time="400" tween="quadratic" easing="out" condition="[ControlGroup(9000).HasFocus | Control.HasFocus(9001) | Control.HasFocus(8999)] + ![Window.IsVisible(OSDAudioDSPSettings) | Window.IsVisible(Addon)]">Conditional</animation>
+		<animation effect="slide" start="0,0" end="-340,0" time="400" tween="quadratic" easing="out" condition="ControlGroup(9000).HasFocus | Control.HasFocus(9001)">WindowClose</animation>
+		<animation effect="slide" start="0,0" end="-90,0" time="300" tween="quadratic" easing="out" condition="![ControlGroup(9000).HasFocus | Control.HasFocus(9001)]">WindowClose</animation>
+		<animation effect="slide" start="-90,0" end="0,0" time="300" tween="quadratic" easing="out">WindowOpen</animation>
 		<control type="button" id="8999">
 			<description>Fake button for mouse control</description>
 			<left>0</left>
 			<top>0</top>
-			<width>250</width>
+			<width>290</width>
 			<height>720</height>
 			<label>-</label>
 			<font>-</font>
@@ -161,7 +161,7 @@
 			<visible>true</visible>
 		</control>
 		<control type="button" id="9001">
-			<left>250</left>
+			<left>290</left>
 			<top>260</top>
 			<width>42</width>
 			<height>128</height>
@@ -172,13 +172,13 @@
 		<control type="image">
 			<left>0</left>
 			<top>0</top>
-			<width>260</width>
+			<width>300</width>
 			<height>720</height>
 			<texture border="0,0,10,0">MediaBladeSub.png</texture>
 		</control>
 		<control type="image">
 			<description>LOGO</description>
-			<left>15</left>
+			<left>35</left>
 			<top>0</top>
 			<width>220</width>
 			<height>80</height>
@@ -393,7 +393,7 @@
 			<description>gradient</description>
 			<left>0</left>
 			<top>0</top>
-			<width>500</width>
+			<width>540</width>
 			<height>165</height>
 			<colordiffuse>DDFFFFFF</colordiffuse>
 			<texture border="20">OverlayDialogBackground.png</texture>
@@ -411,7 +411,7 @@
 			<left>160</left>
 			<top>20</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[MusicPlayer.Artist]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -424,7 +424,7 @@
 			<left>160</left>
 			<top>43</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[Player.Title]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -439,7 +439,7 @@
 			<left>160</left>
 			<top>70</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[MusicPlayer.Album]$INFO[musicplayer.discnumber, - $LOCALIZE[427]:]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -452,7 +452,7 @@
 			<left>160</left>
 			<top>95</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[MusicPlayer.Time]$INFO[MusicPlayer.Duration, / ]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -465,7 +465,7 @@
 			<left>160</left>
 			<top>120</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>[COLOR=blue]$LOCALIZE[19031] :[/COLOR] $INFO[MusicPlayer.offset(1).Title]</label>
 			<align>right</align>
 			<aligny>center</aligny>
@@ -479,7 +479,7 @@
 			<description>gradient</description>
 			<left>0</left>
 			<top>0</top>
-			<width>500</width>
+			<width>540</width>
 			<height>165</height>
 			<colordiffuse>DDFFFFFF</colordiffuse>
 			<texture border="20">OverlayDialogBackground.png</texture>
@@ -498,7 +498,7 @@
 			<left>160</left>
 			<top>20</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[VideoPlayer.Studio]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -512,7 +512,7 @@
 			<left>160</left>
 			<top>20</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[VideoPlayer.tvshowtitle]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -526,7 +526,7 @@
 			<left>160</left>
 			<top>20</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[VideoPlayer.Artist]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -542,7 +542,7 @@
 			<left>160</left>
 			<top>43</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[Player.Title]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -557,7 +557,7 @@
 			<left>160</left>
 			<top>70</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[VideoPlayer.Genre]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -570,7 +570,7 @@
 			<left>160</left>
 			<top>70</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[VideoPlayer.Album]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -584,7 +584,7 @@
 			<left>160</left>
 			<top>70</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$LOCALIZE[20373] $INFO[VideoPlayer.Season] - $LOCALIZE[20359] $INFO[VideoPlayer.episode]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -598,7 +598,7 @@
 			<left>160</left>
 			<top>95</top>
 			<height>30</height>
-			<width>325</width>
+			<width>365</width>
 			<label>$INFO[VideoPlayer.Time]$INFO[VideoPlayer.Duration, / ]</label>
 			<align>left</align>
 			<aligny>center</aligny>
@@ -609,7 +609,7 @@
 	</include>
 	<include name="CommonNowPlaying_Controls">
 		<control type="label" id="202">
-			<width>250</width>
+			<width>290</width>
 			<height>35</height>
 			<font>font12</font>
 			<label>31023</label>
@@ -624,10 +624,11 @@
 			<visible>false</visible>
 		</control>
 		<control type="group" id="9006">
-			<width>250</width>
+			<width>290</width>
 			<height>45</height>
 			<visible>VideoPlayer.Content(LiveTV)</visible>
 			<include>VisibleFadeEffect</include>
+			<animation effect="slide" start="0,0" end="20,0" time="0" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
 			<control type="button" id="600">
 				<left>20</left>
 				<top>2</top>
@@ -700,18 +701,34 @@
 				<texturefocus>OSDRecordOffFO.png</texturefocus>
 				<texturenofocus>OSDRecordOffNF.png</texturenofocus>
 				<onleft>604</onleft>
-				<onright>50</onright>
+				<onright>608</onright>
 				<onup>610</onup>
 				<ondown>611</ondown>
 				<onclick>PlayerControl(record)</onclick>
 				<enable>Player.CanRecord</enable>
 				<animation effect="fade" start="100" end="30" time="100" condition="!Player.CanRecord">Conditional</animation>
 			</control>
+			<control type="button" id="608">
+				<left>220</left>
+				<top>2</top>
+				<width>39</width>
+				<height>39</height>
+				<label>-</label>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
+				<onleft>605</onleft>
+				<onright>50</onright>
+				<onup>610</onup>
+				<ondown>611</ondown>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
+			</control>
 		</control>
 		<control type="group" id="9005">
 			<visible>Player.HasMedia</visible>
 			<visible>!VideoPlayer.Content(LiveTV)</visible>
 			<include>VisibleFadeEffect</include>
+			<animation effect="slide" start="0,0" end="20,0" time="0" condition="!system.getbool(audiooutput.dspaddonsenabled)">Conditional</animation>
 			<width>250</width>
 			<height>45</height>
 			<defaultcontrol always="true">603</defaultcontrol>
@@ -899,11 +916,26 @@
 					<alttexturenofocus>OSDRandomOnNF.png</alttexturenofocus>
 					<onclick>PlayerControl(Random)</onclick>
 					<onleft>604</onleft>
-					<onright>50</onright>
+					<onright>608</onright>
 					<onup>610</onup>
 					<ondown>611</ondown>
 					<onback>50</onback>
 				</control>
+			</control>
+			<control type="button" id="608">
+				<left>245</left>
+				<top>2</top>
+				<width>39</width>
+				<height>39</height>
+				<label>-</label>
+				<texturefocus>OSDDSPAudioOnFO.png</texturefocus>
+				<texturenofocus>OSDDSPAudioOnNF.png</texturenofocus>
+				<visible>system.getbool(audiooutput.dspaddonsenabled)</visible>
+				<onleft>605</onleft>
+				<onright>50</onright>
+				<onup>610</onup>
+				<ondown>611</ondown>
+				<onclick>ActivateWindow(OSDAudioDSPSettings)</onclick>
 			</control>
 		</control>
 		<control type="radiobutton" id="611">

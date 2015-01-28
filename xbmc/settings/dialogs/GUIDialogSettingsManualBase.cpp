@@ -89,7 +89,7 @@ CSettingCategory* CGUIDialogSettingsManualBase::AddCategory(const std::string &i
   return category;
 }
 
-CSettingGroup* CGUIDialogSettingsManualBase::AddGroup(CSettingCategory *category)
+CSettingGroup* CGUIDialogSettingsManualBase::AddGroup(CSettingCategory *category, int label, int help, bool hideSeparator)
 {
   if (category == NULL)
     return NULL;
@@ -99,6 +99,12 @@ CSettingGroup* CGUIDialogSettingsManualBase::AddGroup(CSettingCategory *category
   CSettingGroup *group = new CSettingGroup(StringUtils::Format("%zu", groups + 1), m_settingsManager);
   if (group == NULL)
     return NULL;
+
+  if (label >= 0)
+    group->SetLabel(label);
+  if (help >= 0)
+    group->SetHelp(help);
+  group->SetHideSeparator(hideSeparator);
 
   category->AddGroup(group);
   return group;
@@ -233,6 +239,24 @@ CSettingAction* CGUIDialogSettingsManualBase::AddButton(CSettingGroup *group, co
     return NULL;
 
   setting->SetControl(GetButtonControl("action", delayed));
+  setSettingDetails(setting, level, visible, help);
+
+  group->AddSetting(setting);
+  return setting;
+}
+
+CSettingString* CGUIDialogSettingsManualBase::AddInfoStringButton(CSettingGroup *group, const std::string &id, int label, int level, std::string info, bool delayed /* = false */,
+                                                                  bool visible /* = true */, int help /* = -1 */)
+{
+  if (group == NULL || id.empty() || label < 0 ||
+      GetSetting(id) != NULL)
+    return NULL;
+
+  CSettingString *setting = new CSettingString(id, label, info, m_settingsManager);
+  if (setting == NULL)
+    return NULL;
+
+  setting->SetControl(GetButtonControl("infoaction", delayed));
   setSettingDetails(setting, level, visible, help);
 
   group->AddSetting(setting);

@@ -73,19 +73,20 @@
 	</include>
 	<include name="PVRSideBlade">
 		<control type="group">
-			<left>-250</left>
+			<left>-290</left>
 			<include>SideBladeLeft</include>
 			<control type="grouplist" id="9000">
 				<left>0</left>
-				<top>55</top>
-				<width>250</width>
+				<top>60</top>
+				<width>290</width>
+				<height>600</height>
 				<onleft>9000</onleft>
 				<onright>50</onright>
 				<onup>9000</onup>
 				<ondown>9000</ondown>
 				<itemgap>0</itemgap>
 				<control type="label" id="200">
-					<width>250</width>
+					<width>290</width>
 					<height>35</height>
 					<font>font12caps</font>
 					<label>33063</label>
@@ -95,7 +96,9 @@
 				</control>
 				<control type="button" id="100">
 					<description>Channels</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<top>0</top>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>19019</label>
 					<onclick condition="Window.IsActive(TVChannels) | Window.IsActive(RadioChannels)">NextChannelGroup</onclick>
@@ -104,7 +107,9 @@
 				</control>
 				<control type="button" id="101">
 					<description>TV Guide</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<top>80</top>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>22020</label>
 					<onclick condition="Window.IsActive(TVGuide) | Window.IsActive(RadioGuide)">NextChannelGroup</onclick>
@@ -113,7 +118,9 @@
 				</control>
 				<control type="button" id="102">
 					<description>Recordings</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<top>120</top>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>19163</label>
 					<onclick condition="IsEmpty(Window.Property(IsRadio))">ActivateWindow(TVRecordings)</onclick>
@@ -121,7 +128,9 @@
 				</control>
 				<control type="button" id="103">
 					<description>Timers</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<top>160</top>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>19040</label>
 					<onclick condition="IsEmpty(Window.Property(IsRadio))">ActivateWindow(TVTimers)</onclick>
@@ -129,7 +138,9 @@
 				</control>
 				<control type="button" id="104">
 					<description>Search</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<top>200</top>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>137</label>
 					<onclick condition="IsEmpty(Window.Property(IsRadio))">ActivateWindow(TVSearch)</onclick>
@@ -146,13 +157,26 @@
 				</control>
 				<control type="button" id="28">
 					<description>Channel Groups</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<right>40</right>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>-</label>
 				</control>
+				<control type="radiobutton" id="5">
+					<description>Group recording items by folder structure</description>
+					<left>0</left>
+					<right>40</right>
+					<textwidth>275</textwidth>
+					<include>ButtonCommonValues</include>
+					<label>19270</label>
+					<visible>Window.IsActive(TVRecordings) | Window.IsActive(RadioRecordings)</visible>
+				</control>
 				<control type="button" id="2">
 					<description>View As button</description>
-					<textwidth>235</textwidth>
+					<left>0</left>
+					<right>40</right>
+					<textwidth>275</textwidth>
 					<include>ButtonCommonValues</include>
 					<label>-</label>
 					<!-- <visible>Window.IsActive(TVGuide) | Window.IsActive(RadioGuide)</visible> -->

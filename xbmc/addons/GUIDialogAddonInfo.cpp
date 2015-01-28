@@ -27,6 +27,7 @@
 #include "filesystem/Directory.h"
 #include "filesystem/SpecialProtocol.h"
 #include "GUIDialogAddonSettings.h"
+#include "cores/AudioEngine/DSPAddons/ActiveAEDSP.h"
 #include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogTextViewer.h"
 #include "GUIUserMessages.h"
@@ -86,6 +87,15 @@ bool CGUIDialogAddonInfo::OnMessage(CGUIMessage& message)
       }
       if (iControl == CONTROL_BTN_INSTALL)
       {
+        if (m_localAddon)
+        {
+          if (m_localAddon->Type() == ADDON_ADSPDLL && ActiveAE::CActiveAEDSP::Get().IsProcessing())
+          {
+            CGUIDialogOK::ShowAndGetInput(24077, 0, 24085, 0);
+            return true;
+          }
+        }
+
         if (!m_localAddon)
         {
           OnInstall();
@@ -104,6 +114,15 @@ bool CGUIDialogAddonInfo::OnMessage(CGUIMessage& message)
       }
       else if (iControl == CONTROL_BTN_ENABLE)
       {
+        if (m_localAddon)
+        {
+          if (m_localAddon->Type() == ADDON_ADSPDLL && ActiveAE::CActiveAEDSP::Get().IsProcessing())
+          {
+            CGUIDialogOK::ShowAndGetInput(24077, 0, 24085, 0);
+            return true;
+          }
+        }
+
         OnEnable(!m_item->GetProperty("Addon.Enabled").asBoolean());
         return true;
       }
@@ -161,8 +180,9 @@ void CGUIDialogAddonInfo::UpdateControls()
 
   // TODO: System addons should be able to be disabled
   bool isPVR = isInstalled && m_localAddon->Type() == ADDON_PVRDLL;
-  bool canDisable = isInstalled && (!isSystem || isPVR) && !m_localAddon->IsInUse();
-  bool canInstall = !isInstalled && m_item->GetProperty("Addon.Broken").empty();
+  bool isADSP = isInstalled && m_localAddon->Type() == ADDON_ADSPDLL;
+  bool canDisable = isInstalled && (!isSystem || isPVR || isADSP) && !m_localAddon->IsInUse();
+  bool canInstall = !isInstalled && m_item->GetProperty("Addon.Broken").empty() && !(isADSP && ActiveAE::CActiveAEDSP::Get().IsProcessing());
   bool isRepo = (isInstalled && m_localAddon->Type() == ADDON_REPOSITORY) || (m_addon && m_addon->Type() == ADDON_REPOSITORY);
 
   CONTROL_ENABLE_ON_CONDITION(CONTROL_BTN_INSTALL, canDisable || canInstall);
