@@ -24,17 +24,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "xbmc_adsp_types.h"
+#ifdef BUILD_KODI_ADDON
+#include "kodi/xbmc_adsp_types.h"
+#else
+#include "addons/include/xbmc_adsp_types.h"
+#endif
 #include "libXBMC_addon.h"
 
 typedef void* ADSPHANDLE;
-
-#ifdef _WIN32
-#define ADSP_HELPER_DLL "\\library.xbmc.adsp\\libXBMC_adsp" ADDON_HELPER_EXT
-#else
-#define ADSP_HELPER_DLL_NAME "libXBMC_adsp-" ADDON_HELPER_ARCH ADDON_HELPER_EXT
-#define ADSP_HELPER_DLL "/library.xbmc.adsp/" ADSP_HELPER_DLL_NAME
-#endif
 
 class CAddonSoundPlay;
 
@@ -65,20 +62,7 @@ public:
   {
     m_Handle = handle;
 
-    std::string libBasePath;
-    libBasePath  = ((cb_array*)m_Handle)->libPath;
-    libBasePath += ADSP_HELPER_DLL;
-
-#if defined(ANDROID)
-      struct stat st;
-      if(stat(libBasePath.c_str(),&st) != 0)
-      {
-        std::string tempbin = getenv("XBMC_ANDROID_LIBS");
-        libBasePath = tempbin + "/" + ADSP_HELPER_DLL_NAME;
-      }
-#endif
-
-    m_libXBMC_adsp = dlopen(libBasePath.c_str(), RTLD_LAZY);
+    m_libXBMC_adsp = dlopen(NULL, RTLD_LAZY);
     if (m_libXBMC_adsp == NULL)
     {
       fprintf(stderr, "Unable to load %s\n", dlerror());

@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string>
-#include "../../../addons/library.xbmc.adsp/libXBMC_adsp.h"
+#include "libXBMC_adsp.h"
 #include "addons/AddonCallbacks.h"
 
 #ifdef _WIN32
