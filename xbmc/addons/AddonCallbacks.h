@@ -25,7 +25,7 @@
 #include "addons/include/xbmc_pvr_types.h"
 #include "addons/include/xbmc_codec_types.h"
 #include "bindings/libXBMC_gui.h"
-#include "../../addons/library.xbmc.adsp/libXBMC_adsp.h"
+#include "bindings/libXBMC_adsp.h"
 
 #ifdef TARGET_WINDOWS
 #ifndef _SSIZE_T_DEFINED

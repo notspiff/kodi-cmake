@@ -196,6 +196,7 @@ function(add_addon_separate entry)
      "${id}" MATCHES "^audiodecoder\\." OR
      "${id}" MATCHES "^audioencoder\\." OR
      "${id}" MATCHES "^pvr\\." OR
+     "${id}" MATCHES "^adsp\\." OR
      "${id}" MATCHES "^vfs\\.")
    add_git_cmake(${id} ${repo} ${hash})
   else()

@@ -17,7 +17,12 @@ set(SOURCES AEFactory.cpp
             Engines/ActiveAE/ActiveAESink.cpp
             Engines/ActiveAE/ActiveAEStream.cpp
             Engines/ActiveAE/ActiveAESound.cpp
-            Engines/ActiveAE/ActiveAEBuffer.cpp)
+            Engines/ActiveAE/ActiveAEBuffer.cpp
+            DSPAddons/ActiveAEDSPAddon.cpp
+            DSPAddons/ActiveAEDSP.cpp
+            DSPAddons/ActiveAEDSPDatabase.cpp
+            DSPAddons/ActiveAEDSPMode.cpp
+            DSPAddons/ActiveAEDSPProcess.cpp)
 
 if(ALSA_FOUND)
   list(APPEND SOURCES Sinks/AESinkALSA.cpp)

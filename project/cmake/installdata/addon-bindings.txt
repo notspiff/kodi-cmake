@@ -1,5 +1,7 @@
 xbmc/addons/include/xbmc_addon_cpp_dll.h
 xbmc/addons/include/xbmc_addon_cpp_dll.h
+xbmc/addons/include/xbmc_adsp_types.h
+xbmc/addons/include/xbmc_adsp_dll.h
 xbmc/addons/include/xbmc_addon_dll.h
 xbmc/addons/include/xbmc_addon_types.h
 xbmc/addons/include/kodi_audiodec_dll.h
@@ -22,6 +24,7 @@ xbmc/addons/bindings/libXBMC_addon.h
 xbmc/addons/bindings/libXBMC_gui.h
 xbmc/addons/bindings/libXBMC_pvr.h
 xbmc/addons/bindings/libXBMC_codec.h
+xbmc/addons/bindings/libXBMC_adsp.h
 xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h
 xbmc/cores/AudioEngine/Utils/AEChannelData.h
 xbmc/filesystem/IFileTypes.h
