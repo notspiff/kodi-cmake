@@ -24,6 +24,7 @@
 #include "guilib/GUIWindowManager.h"
 #include "threads/SingleLock.h"
 #include "video/VideoDatabase.h"
+#include "video/jobs/VideoLibraryCleaningJob.h"
 #include "video/jobs/VideoLibraryJob.h"
 #include "video/jobs/VideoLibraryMarkWatchedJob.h"
 
@@ -31,7 +32,8 @@ using namespace std;
 
 CVideoLibraryQueue::CVideoLibraryQueue()
   : CJobQueue(false, 1, CJob::PRIORITY_LOW_PAUSABLE),
-    m_jobs()
+    m_jobs(),
+    m_cleaning(false)
 { }
 
 CVideoLibraryQueue::~CVideoLibraryQueue()
@@ -44,6 +46,26 @@ CVideoLibraryQueue& CVideoLibraryQueue::Get()
 {
   static CVideoLibraryQueue s_instance;
   return s_instance;
+}
+
+void CVideoLibraryQueue::CleanLibrary(const std::set<int>& paths /* = std::set<int>() */, bool asynchronous /* = true */, CGUIDialogProgressBarHandle* progressBar /* = NULL */)
+{
+  CVideoLibraryCleaningJob* cleaningJob = NULL;
+  if (progressBar != NULL)
+    cleaningJob = new CVideoLibraryCleaningJob(paths, progressBar);
+  else
+    cleaningJob = new CVideoLibraryCleaningJob(paths, !asynchronous);
+
+  if (asynchronous)
+    AddJob(cleaningJob);
+  else
+  {
+    m_cleaning = true;
+    cleaningJob->DoWork();
+
+    delete cleaningJob;
+    m_cleaning = false;
+  }
 }
 
 void CVideoLibraryQueue::MarkAsWatched(const CFileItemPtr &item, bool watched)

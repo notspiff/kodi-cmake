@@ -26,6 +26,7 @@
 #include "threads/CriticalSection.h"
 #include "utils/JobManager.h"
 
+class CGUIDialogProgressBarHandle;
 class CVideoLibraryJob;
 
 class CVideoLibraryQueue : protected CJobQueue
@@ -35,6 +36,7 @@ public:
 
   static CVideoLibraryQueue& Get();
 
+  void CleanLibrary(const std::set<int>& paths = std::set<int>(), bool asynchronous = true, CGUIDialogProgressBarHandle* progressBar = NULL);
   void MarkAsWatched(const CFileItemPtr &item, bool watched);
 
   void AddJob(CVideoLibraryJob *job);
@@ -56,4 +58,6 @@ private:
   typedef std::map<std::string, VideoLibraryJobs> VideoLibraryJobMap;
   VideoLibraryJobMap m_jobs;
   CCriticalSection m_critical;
+
+  bool m_cleaning;
 };
