@@ -22,6 +22,7 @@
 #include "Util.h"
 #include "network/httprequesthandler/IHTTPRequestHandler.h"
 #include "utils/Variant.h"
+#include "PlatformDefs.h"
 
 #include <algorithm>
 
