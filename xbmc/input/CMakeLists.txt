@@ -1,5 +1,6 @@
 set(SOURCES ButtonTranslator.cpp
             InertialScrollingHandler.cpp
+            InputManager.cpp
             KeyboardLayout.cpp
             KeyboardLayoutConfiguration.cpp
             KeyboardStat.cpp

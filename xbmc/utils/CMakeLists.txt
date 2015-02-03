@@ -30,6 +30,7 @@ set(SOURCES ActorProtocol.cpp
             HTMLUtil.cpp
             HttpHeader.cpp
             HttpParser.cpp
+            HttpRangeUtils.cpp
             HttpResponse.cpp
             InfoLoader.cpp
             JobManager.cpp

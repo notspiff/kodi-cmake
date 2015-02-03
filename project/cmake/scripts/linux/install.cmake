@@ -13,8 +13,6 @@ configure_file(${CORE_SOURCE_DIR}/tools/Linux/kodi.sh.in
                ${CORE_BUILD_DIR}/scripts/${APP_NAME_LC} @ONLY)
 configure_file(${CORE_SOURCE_DIR}/tools/Linux/kodi-standalone.sh.in
                 ${CORE_BUILD_DIR}/scripts/${APP_NAME_LC}-standalone @ONLY)
-configure_file(${CORE_SOURCE_DIR}/tools/Linux/FEH.py.in ${CORE_BUILD_DIR}/FEH.py)
-configure_file(${CORE_SOURCE_DIR}/tools/Linux/FEH-ARM.py.in ${CORE_BUILD_DIR}/FEH-ARM.py)
 
 install(TARGETS ${APP_NAME_LC}.bin DESTINATION ${libdir}/kodi)
 install(TARGETS ${APP_NAME_LC}-xrandr DESTINATION ${libdir}/${APP_NAME_LC})
@@ -24,8 +22,6 @@ install(FILES ${cmake-files}
 install(PROGRAMS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/${APP_NAME_LC}
                 ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/${APP_NAME_LC}-standalone
         DESTINATION ${bindir})
-install(FILES ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/FEH.py
-        DESTINATION ${datarootdir}/kodi)
 
 # Backwards compat
 install(DIRECTORY ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include/xbmc DESTINATION ${includedir})

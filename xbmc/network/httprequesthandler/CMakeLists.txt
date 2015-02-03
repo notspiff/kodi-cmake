@@ -1,4 +1,5 @@
-set(SOURCES HTTPImageHandler.cpp
+set(SOURCES HTTPFileHandler.cpp
+            HTTPImageHandler.cpp
             HTTPJsonRpcHandler.cpp
             HTTPVfsHandler.cpp
             HTTPWebinterfaceAddonsHandler.cpp
