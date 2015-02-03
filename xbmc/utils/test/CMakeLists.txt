@@ -20,6 +20,7 @@ set(SOURCES TestAlarmClock.cpp
             TestHTMLUtil.cpp
             TestHttpHeader.cpp
             TestHttpParser.cpp
+            TestHttpRangeUtils.cpp
             TestHttpResponse.cpp
             TestJobManager.cpp
             TestJSONVariantParser.cpp
