@@ -732,8 +732,7 @@ bool CApplication::Create()
 
   // Create the Mouse, Keyboard, Remote, and Joystick devices
   // Initialize after loading settings to get joystick deadzone setting
-  g_Mouse.Initialize();
-  g_Mouse.SetEnabled(CSettings::Get().GetBool("input.enablemouse"));
+  
 
   CInputManager::Get().InitializeInputs();
 
@@ -2140,7 +2139,7 @@ bool CApplication::OnAction(const CAction &action)
   }
 
   if (action.IsMouse())
-    g_Mouse.SetActive(true);
+    CInputManager::Get().SetMouseActive(true);
 
   
   if (action.GetID() == ACTION_CREATE_EPISODE_BOOKMARK)   
