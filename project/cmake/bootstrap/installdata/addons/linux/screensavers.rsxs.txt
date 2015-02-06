@@ -1,1 +1,1 @@
-screensavers.rsxs https://github.com/notspiff/screensavers.rsxs c0c89ab
+screensavers.rsxs https://github.com/notspiff/screensavers.rsxs 8de7a4b
