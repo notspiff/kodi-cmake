@@ -20,6 +20,7 @@
 
 #include <time.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include "HTTPSessionManager.h"
 #include "interfaces/legacy/mod_python/HttpRequest.h"
