@@ -29,6 +29,7 @@
 #include "network/httprequesthandler/python/HTTPModPythonInvoker.h"
 #include "network/httprequesthandler/python/HTTPPythonInvoker.h"
 #include "utils/log.h"
+#include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
 #define MAX_STRING_POST_SIZE 20000
