@@ -237,24 +237,39 @@ void doMethod(Node method, MethodType methodType)
     { 
       CLog::Log(LOGERROR,"EXCEPTION: %s",e.GetMessage());
       PyErr_SetString(PyExc_TypeError, e.GetMessage()); <%
-      if (!destructor) {  %>
+      if (!destructor) {
+      if (!doAsSequence) { %>
       return NULL; <%
+      }
+      if (doAsSequence) { %>
+      return -1; <%
+      }
       } %>
     }
     catch (const XbmcCommons::Exception& e)
     { 
       CLog::Log(LOGERROR,"EXCEPTION: %s",e.GetMessage());
       PyErr_SetString(PyExc_RuntimeError, e.GetMessage()); <%
-      if (!destructor) {  %>
+      if (!destructor) {
+      if (!doAsSequence) { %>
       return NULL; <%
+      }
+      if (doAsSequence) { %>
+      return -1; <%
+      }
       } %>
     }
     catch (...)
     {
       CLog::Log(LOGERROR,"EXCEPTION: Unknown exception thrown from the call \"${Helper.callingName(method)}\"");
       PyErr_SetString(PyExc_RuntimeError, "Unknown exception thrown from the call \"${Helper.callingName(method)}\""); <%
-      if (!destructor) {  %>
+      if (!destructor) {
+      if (!doAsSequence) { %>
       return NULL; <%
+      }
+      if (doAsSequence) { %>
+      return -1; <%
+      }
       } %>
     }
 <%
@@ -618,19 +633,19 @@ void doClassMethodInfo(Node clazz, List initTypeCalls)
     {
       CLog::Log(LOGERROR,"EXCEPTION: %s",e.GetMessage());
       PyErr_SetString(PyExc_TypeError, e.GetMessage());
-      return NULL;
+      return -1;
     }
     catch (const XbmcCommons::Exception& e)
     {
       CLog::Log(LOGERROR,"EXCEPTION: %s",e.GetMessage());
       PyErr_SetString(PyExc_RuntimeError, e.GetMessage());
-      return NULL;
+      return -1;
     }
     catch (...)
     {
       CLog::Log(LOGERROR,"EXCEPTION: Unknown exception thrown from the call \"${classNameAsVariable}_getMember()\"");
       PyErr_SetString(PyExc_RuntimeError, "Unknown exception thrown from the call \"${classNameAsVariable}_getMember()\"");
-      return NULL;
+      return -1;
     }
 
 <%
