@@ -72,7 +72,7 @@ std::string CHTTPSessionManager::GenerateSessionId(XBMCAddon::xbmcmod_python::Ht
   CSingleLock lock(m_critSection);
   do
   {
-    std::string temp = StringUtils::Format("%d%d%d%s", time(NULL) * (10000 + count), rand(), rand(), inet_ntoa(static_cast<struct sockaddr_in*>(ipInfo->client_addr)->sin_addr));
+    std::string temp = StringUtils::Format("%ld%d%d%s", time(NULL) * (10000 + count), rand(), rand(), inet_ntoa(reinterpret_cast<struct sockaddr_in* const>(ipInfo->client_addr)->sin_addr));
     sessionId = XBMC::XBMC_MD5::GetMD5(temp);
 
     count += 1;
