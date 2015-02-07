@@ -171,9 +171,9 @@ namespace XBMCAddon
           StringUtils::EqualsNoCase(key, "Port"))
         {
           // remove any leading/trailing quotes
-          if (value.front() == '"')
+          if (!value.empty() && value[0] == '"')
             value = value.substr(1);
-          if (value.back() == '"')
+          if (!value.empty() && value[value.size()-1] == '"')
             value = value.substr(0, value.size() - 1);
 
           if (StringUtils::EqualsNoCase(key, "Path"))
@@ -224,7 +224,7 @@ namespace XBMCAddon
         else
         {
           // ignore cookies starting with a '$' (see RFC2965)
-          if (cookie->name.front() == '$')
+          if (!cookie->name.empty() && cookie->name[0] == '$')
             delete cookie;
           // add the parsed cookie to the list
           else
@@ -238,7 +238,7 @@ namespace XBMCAddon
       if (cookie != NULL)
       {
         // ignore cookies starting with a '$' (see RFC2965)
-        if (cookie->name.front() == '$')
+        if (!cookie->name.empty() && cookie->name[0] == '$')
           delete cookie;
         // add the parsed cookie to the list
         else
