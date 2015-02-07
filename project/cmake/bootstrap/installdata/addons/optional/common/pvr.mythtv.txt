@@ -1,1 +1,1 @@
-pvr.mythtv https://github.com/janbar/pvr.mythtv eed2504 # PVRADDONS;PVRMYTH OFF
+pvr.mythtv https://github.com/janbar/pvr.mythtv 49ac284 # PVRADDONS;PVRMYTH OFF
