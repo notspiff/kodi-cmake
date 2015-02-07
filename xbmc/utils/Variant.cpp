@@ -172,6 +172,12 @@ CVariant::CVariant(int integer)
   m_data.integer = integer;
 }
 
+CVariant::CVariant(long long integer)
+{
+  m_type = VariantTypeInteger;
+  m_data.integer = integer;
+}
+
 CVariant::CVariant(int64_t integer)
 {
   m_type = VariantTypeInteger;

@@ -50,6 +50,7 @@ public:
 
   CVariant(VariantType type = VariantTypeNull);
   CVariant(int integer);
+  CVariant(long long integer);
   CVariant(int64_t integer);
   CVariant(unsigned int unsignedinteger);
   CVariant(uint64_t unsignedinteger);
