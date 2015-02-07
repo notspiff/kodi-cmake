@@ -36,6 +36,7 @@ endif()
 set(INPUTS AddonModuleXbmcaddon.i
            AddonModuleXbmcgui.i
            AddonModuleXbmc.i
+           AddonModuleXbmcmod_python.i
            AddonModuleXbmcplugin.i
            AddonModuleXbmcvfs.i)
 

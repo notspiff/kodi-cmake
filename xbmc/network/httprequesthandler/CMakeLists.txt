@@ -2,6 +2,7 @@ set(SOURCES HTTPFileHandler.cpp
             HTTPImageHandler.cpp
             HTTPImageTransformationHandler.cpp
             HTTPJsonRpcHandler.cpp
+            HTTPPythonHandler.cpp
             HTTPVfsHandler.cpp
             HTTPWebinterfaceAddonsHandler.cpp
             HTTPWebinterfaceHandler.cpp

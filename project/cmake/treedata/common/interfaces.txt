@@ -1,7 +1,8 @@
-xbmc/interfaces          interfaces
-xbmc/interfaces/generic  interfaces/generic
-xbmc/interfaces/info     interfaces/info
-xbmc/interfaces/json-rpc interfaces/json-rpc
-xbmc/interfaces/json-rpc/schema interfaces/json-rpc/schema
-xbmc/interfaces/legacy   interfaces/legacy
-xbmc/interfaces/python   interfaces/python
+xbmc/interfaces                   interfaces
+xbmc/interfaces/generic           interfaces/generic
+xbmc/interfaces/info              interfaces/info
+xbmc/interfaces/json-rpc          interfaces/json-rpc
+xbmc/interfaces/json-rpc/schema   interfaces/json-rpc/schema
+xbmc/interfaces/legacy            interfaces/legacy
+xbmc/interfaces/legacy/mod_python interfaces/legacy/python
+xbmc/interfaces/python            interfaces/python
