@@ -57,7 +57,7 @@ bool CPosixDirectory::GetDirectory(const CURL& url, CFileItemList &items)
   struct dirent* entry;
   while ((entry = readdir(dir)) != NULL)
   {
-    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 || !entry->d_name)
+    if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
       continue;
 
     std::string itemLabel(entry->d_name);
