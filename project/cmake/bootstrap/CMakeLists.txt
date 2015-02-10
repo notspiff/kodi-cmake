@@ -227,38 +227,58 @@ function(add_addon_separate entry)
 endfunction()
 
 function(add_addon_multi lines)
+  list(LENGTH lines listlen)
   list(GET lines 0 base)
-  list(GET lines 1 base2)
-  list(REMOVE_ITEM lines ${base})
+  if(listlen GREATER 1)
+    list(GET lines 1 base2)
+    list(REMOVE_ITEM lines ${base})
+  endif()
   string(REPLACE " " ";" base ${base})
   list(GET base 0 id)
   list(GET base 1 repo)
   list(GET base 2 hash)
-  if(NOT BOOTSTRAP_DIR)
+  if(listlen GREATER 1)
+    if(NOT BOOTSTRAP_DIR)
+      externalproject_add(${id}
+                          GIT_REPOSITORY ${repo}
+                          PREFIX build/${id}
+                          GIT_TAG ${hash}
+                          UPDATE_COMMAND ""
+                          CONFIGURE_COMMAND ""
+                          BUILD_COMMAND ""
+                          INSTALL_COMMAND "")
+    endif()
+    foreach(entry ${lines})
+      if(BOOTSTRAP_DIR)
+        add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
+                           COMMAND ${CMAKE_COMMAND} -E copy_directory
+                                   ${BOOTSTRAP_DIR}}/${entry} ${OUTPUT_DIR}/addons/${entry})
+      else()
+        add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
+                           COMMAND ${CMAKE_COMMAND} -E copy_directory
+                                   ${CMAKE_CURRENT_BINARY_DIR}/build/${id}/src/${id}/${entry}
+                                   ${OUTPUT_DIR}/addons/${entry}
+                           DEPENDS ${id})
+      endif()
+      list(APPEND SOURCES ${OUTPUT_DIR}/addons/${entry})
+      list(APPEND install_dirs ${OUTPUT_DIR}/addons/${entry})
+    endforeach()
+  else()
     externalproject_add(${id}
                         GIT_REPOSITORY ${repo}
                         PREFIX build/${id}
                         GIT_TAG ${hash}
-                        UPDATE_COMMAND ""
-                        CONFIGURE_COMMAND ""
-                        BUILD_COMMAND ""
-                        INSTALL_COMMAND "")
+                        CONFIGURE_COMMAND ${CMAKE_COMMAND} ${PROJECT_SOURCE_DIR}/addon-build
+                                          -DADDON_DIR=${PROJECT_BINARY_DIR}/build/${id}/src/${id}
+                                          -DKODI_BUILD_DIR=${CMAKE_BINARY_DIR}
+                                          -DCMAKE_PREFIX_PATH=${CMAKE_BINARY_DIR}/build
+					  -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+					  -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+					  -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+                        INSTALL_COMMAND ""
+                        DEPENDS kodi-platform)
+    list(APPEND install_dirs ${PROJECT_BINARY_DIR}/build/${id}/src/${id}-build)
   endif()
-  foreach(entry ${lines})
-    if(BOOTSTRAP_DIR)
-      add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND ${CMAKE_COMMAND} -E copy_directory
-                                 ${BOOTSTRAP_DIR}}/${entry} ${OUTPUT_DIR}/addons/${entry})
-    else()
-      add_custom_command(OUTPUT ${OUTPUT_DIR}/addons/${entry}
-                         COMMAND ${CMAKE_COMMAND} -E copy_directory
-                                 ${CMAKE_CURRENT_BINARY_DIR}/build/${id}/src/${id}/${entry}
-                                 ${OUTPUT_DIR}/addons/${entry}
-                         DEPENDS ${id})
-    endif()
-    list(APPEND SOURCES ${OUTPUT_DIR}/addons/${entry})
-    list(APPEND install_dirs ${OUTPUT_DIR}/addons/${entry})
-  endforeach()
   set(SOURCES ${SOURCES} PARENT_SCOPE)
   set(install_dirs ${install_dirs} PARENT_SCOPE)
 endfunction()
@@ -274,8 +294,8 @@ file(GLOB multi_input_files installdata/addons/multi/common/*.txt)
 file(GLOB multi2 installdata/addons/multi/${CORE_SYSTEM_NAME}/*.txt)
 list(APPEND multi_input_files ${multi2})
 
-file(GLOB optional_multi_input_files installdata/addons/optional/multi/common/*.txt)
-file(GLOB multiopt2 installdata/addons/optional/multi/${CORE_SYSTEM_NAME}/*.txt)
+file(GLOB optional_multi_input_files installdata/addons/multi/optional/common/*.txt)
+file(GLOB multiopt2 installdata/addons/multi/optional/${CORE_SYSTEM_NAME}/*.txt)
 list(APPEND optional_multi_input_files ${multiopt2})
 
 file(GLOB_RECURSE lib_input_files installdata/lib/common/*.txt)
@@ -350,7 +370,9 @@ foreach(file ${multi_input_files})
   add_addon_multi("${lines}")
 endforeach()
 
-# Optional multi-addons
+# Optional multi-addons;
+# either copies subdirs of a repo
+# or builds multiple addons in a git
 foreach(file ${optional_multi_input_files})
   file(STRINGS ${file} lines2)
   string(REPLACE "\n" ";" lines "${lines2}")
@@ -359,17 +381,15 @@ foreach(file ${optional_multi_input_files})
   list(GET base 0 id)
   list(GET base 1 repo)
   list(GET base 2 hash)
-  list(GET base 3 opts)
+  list(GET base 3 opt)
   list(GET base 4 def)
-  foreach(opt ${opts})
-    option(ENABLE_${opt} "Enable ${id}?" ${def})
-    if(ENABLE_${opt})
-      string(REPLACE "\n" ";" lines "${lines2}")
-      list(REMOVE_AT lines 0)
-      list(INSERT lines 0 "${id} ${repo} ${hash}")
-      add_addon_multi("${lines}")
-    endif()
-  endforeach()
+  option(ENABLE_${opt} "Enable ${id}?" ${def})
+  if(ENABLE_${opt})
+    string(REPLACE "\n" ";" lines "${lines2}")
+    list(REMOVE_AT lines 0)
+    list(INSERT lines 0 "${id} ${repo} ${hash}")
+    add_addon_multi("${lines}")
+  endif()
 endforeach()
 
 # Write a list of dirs to glob at installation time
