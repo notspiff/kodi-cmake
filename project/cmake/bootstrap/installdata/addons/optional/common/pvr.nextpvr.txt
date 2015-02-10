@@ -1,1 +1,0 @@
-pvr.nextpvr https://github.com/notspiff/pvr.nextpvr f75d1ec # PVRADDONS;PVRNEXTPVR OFF

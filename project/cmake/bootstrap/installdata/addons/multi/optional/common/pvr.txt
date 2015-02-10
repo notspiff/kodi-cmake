@@ -1,0 +1,1 @@
+pvraddons https://github.com/notspiff/pvr-addons origin/master PVRADDONS OFF

@@ -1,1 +1,0 @@
-pvr.dvbviewer https://github.com/notspiff/pvr.dvbviewer a1069a9 # PVRADDONS;PVRDVBVIEWER OFF
