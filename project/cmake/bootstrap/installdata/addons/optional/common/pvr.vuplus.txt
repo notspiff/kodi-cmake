@@ -1,1 +1,0 @@
-pvr.vuplus https://github.com/notspiff/pvr.vuplus 439eb29 # PVRADDONS;PVRVUPLUS OFF

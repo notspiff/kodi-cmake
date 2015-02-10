@@ -1,1 +1,0 @@
-screensaver.greynetic https://github.com/notspiff/screensaver.greynetic c27a2a5

@@ -1,1 +1,0 @@
-pvr.njoy https://github.com/notspiff/pvr.njoy b238fac # PVRADDONS;PVRNJOY OFF

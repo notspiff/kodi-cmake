@@ -1,1 +1,0 @@
-screensaver.pingpong https://github.com/notspiff/screensaver.pingpong 8562fec

@@ -1,1 +1,0 @@
-pvr.wmc https://github.com/notspiff/pvr.wmc 4d901b7 # PVRADDONS;PVRWMC OFF
