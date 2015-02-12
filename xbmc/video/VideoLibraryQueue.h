@@ -36,10 +36,32 @@ public:
 
   static CVideoLibraryQueue& Get();
 
+  /*! \brief Enqueue a library scan job
+      \param[in] directory Directory to scan
+      \param[in] scanAll Ignore exclude setting for items. Defaults to false
+      \param[in] showProgress Whether or not to show a progress Dialog. Defaults to true
+   */
   void ScanLibrary(const std::string& directory, bool scanAll = false, bool showProgress = true);
+
+  /*! \brief Check if a library scan is in progress
+      \return True if a scan is in progress, false otherwise
+   */
   bool IsScanningLibrary() const;
+
+  //! \brief Stop and dequeue all scanning jobs
   void StopLibraryScanning();
+
+  /*! \brief Enqueue a library clean job
+      \param[in] paths Vector with database IDs of paths to clean for
+      \param[in] asynchronous Run the clean job asynchronously. Defaults to true
+      \param[in] progressBar Progress bar to update in GUI. Defaults to NULL (no progress bar to update)
+   */
   void CleanLibrary(const std::set<int>& paths = std::set<int>(), bool asynchronous = true, CGUIDialogProgressBarHandle* progressBar = NULL);
+
+  /*! \brief Queue a watched status update job
+      \param[in] item Item to update watched status for
+      \param[in] watched New watched status
+   */
   void MarkAsWatched(const CFileItemPtr &item, bool watched);
 
   void AddJob(CVideoLibraryJob *job);
