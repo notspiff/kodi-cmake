@@ -837,6 +837,17 @@ bool CDVDPlayer::OpenDemuxStream()
   if(len > 0 && tim > 0)
     m_pInputStream->SetReadRate((unsigned int) (g_advancedSettings.m_readBufferFactor * len * 1000 / tim));
 
+  if (m_pDemuxer->GetChapterCount() > 0)
+  {
+    m_State.chapters.clear();
+    for (size_t i=0;i<m_State.chapters.size();++i)
+    {
+      std::string name;
+      m_pDemuxer->GetChapterName(name,i+1);
+      m_State.chapters.push_back(make_pair(name, m_pDemuxer->GetChapterPos(i+1)));
+    }
+  }
+
   return true;
 }
 
@@ -4073,7 +4084,7 @@ bool CDVDPlayer::SetPlayerState(const std::string& state)
 int CDVDPlayer::GetChapterCount()
 {
   CSingleLock lock(m_StateSection);
-  return m_State.chapter_count;
+  return m_State.chapters.size();
 }
 
 int CDVDPlayer::GetChapter()
@@ -4086,12 +4097,9 @@ void CDVDPlayer::GetChapterName(std::string& strChapterName, int chapterIdx)
 {
   CSingleLock lock(m_StateSection);
   if (chapterIdx == -1)
-    strChapterName = m_State.chapter_name;
+    strChapterName = m_State.chapters[m_State.chapter-1].first;
   else
-  {
-    if (m_pDemuxer)
-      m_pDemuxer->GetChapterName(strChapterName, chapterIdx);
-  }
+    strChapterName = m_State.chapters[chapterIdx-1].first;
 }
 
 int CDVDPlayer::SeekChapter(int iChapter)
@@ -4114,8 +4122,8 @@ int CDVDPlayer::SeekChapter(int iChapter)
 int64_t CDVDPlayer::GetChapterPos(int chapterIdx)
 {
   CSingleLock lock(m_StateSection);
-  if (m_pDemuxer)
-    return m_pDemuxer->GetChapterPos(chapterIdx);
+  if (chapterIdx < m_State.chapters.size())
+    return m_State.chapters[chapterIdx].second;
 
   return -1;
 }
@@ -4289,8 +4297,6 @@ void CDVDPlayer::UpdatePlayState(double timeout)
   if(m_pDemuxer)
   {
     state.chapter       = m_pDemuxer->GetChapter();
-    state.chapter_count = m_pDemuxer->GetChapterCount();
-    m_pDemuxer->GetChapterName(state.chapter_name);
 
     if(state.dts == DVD_NOPTS_VALUE)
       state.time     = 0;
