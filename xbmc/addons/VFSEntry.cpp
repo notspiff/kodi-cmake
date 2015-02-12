@@ -634,7 +634,7 @@ VFSEntryPtr CVFSEntryManager::GetAddon(const std::string& id)
     CAddonMgr::Get().GetAddon(id, addon, ADDON_VFS);
     if (addon)
     {
-      VFSEntryPtr ptr = boost::static_pointer_cast<CVFSEntry>(addon);
+      VFSEntryPtr ptr = std::static_pointer_cast<CVFSEntry>(addon);
       ptr->Create();
       m_addons.insert(make_pair(id, ptr));
       return m_addons[id];

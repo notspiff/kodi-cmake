@@ -28,6 +28,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <unistd.h>
 
 #include "sqlitedataset.h"
 #include "utils/log.h"

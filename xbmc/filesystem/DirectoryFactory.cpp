@@ -209,7 +209,7 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
     CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
     for (size_t i=0;i<addons.size();++i)
     {
-      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      VFSEntryPtr vfs(std::static_pointer_cast<CVFSEntry>(addons[i]));
       if (vfs->HasDirectories() && vfs->GetProtocols().find(url.GetProtocol()) != std::string::npos)
         return new CVFSEntryIDirectoryWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
     }

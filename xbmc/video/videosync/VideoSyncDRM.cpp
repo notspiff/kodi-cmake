@@ -32,6 +32,7 @@
 #include "guilib/GraphicContext.h"
 #include "utils/log.h"
 #include <fcntl.h>
+#include <unistd.h>
 
 static drmVBlankSeqType CrtcSel(void)
 {

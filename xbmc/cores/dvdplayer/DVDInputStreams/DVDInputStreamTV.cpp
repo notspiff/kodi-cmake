@@ -60,7 +60,7 @@ bool CDVDInputStreamTV::Open(const char* strFile, const std::string& content)
     CAddonMgr::Get().GetAddons(ADDON_VFS, addons);
     for (size_t i=0;i<addons.size();++i)
     {
-      VFSEntryPtr vfs(boost::static_pointer_cast<CVFSEntry>(addons[i]));
+      VFSEntryPtr vfs(std::static_pointer_cast<CVFSEntry>(addons[i]));
       if (vfs->HasLiveTV() && vfs->GetProtocols().find(strProtocol) != std::string::npos)
       {
         CVFSEntryILiveTVWrapper* wrap = new CVFSEntryILiveTVWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));

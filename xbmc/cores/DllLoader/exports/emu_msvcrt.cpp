@@ -79,6 +79,7 @@
 #endif
 #include "utils/Environment.h"
 #include "utils/StringUtils.h"
+#include <unistd.h>
 
 using namespace std;
 using namespace XFILE;

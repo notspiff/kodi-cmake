@@ -36,7 +36,7 @@ ICodec* CodecFactory::CreateCodec(const std::string& strFileType)
   CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
   for (size_t i=0;i<codecs.size();++i)
   {
-    boost::shared_ptr<CAudioDecoder> dec(boost::static_pointer_cast<CAudioDecoder>(codecs[i]));
+    std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
     if (dec->GetExtensions().find("."+fileType) != std::string::npos)
     {
       CAudioDecoder* result = new CAudioDecoder(*dec);
@@ -59,7 +59,7 @@ ICodec* CodecFactory::CreateCodecDemux(const std::string& strFile, const std::st
     CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
     for (size_t i=0;i<codecs.size();++i)
     {
-      boost::shared_ptr<CAudioDecoder> dec(boost::static_pointer_cast<CAudioDecoder>(codecs[i]));
+      std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
       if (dec->GetMimetypes().find(content) != std::string::npos)
       {
         CAudioDecoder* result = new CAudioDecoder(*dec);

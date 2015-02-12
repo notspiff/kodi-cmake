@@ -62,7 +62,7 @@ IMusicInfoTagLoader* CMusicInfoTagLoaderFactory::CreateLoader(const std::string&
   CAddonMgr::Get().GetAddons(ADDON_AUDIODECODER, codecs);
   for (size_t i=0;i<codecs.size();++i)
   {
-    boost::shared_ptr<CAudioDecoder> dec(boost::static_pointer_cast<CAudioDecoder>(codecs[i]));
+    std::shared_ptr<CAudioDecoder> dec(std::static_pointer_cast<CAudioDecoder>(codecs[i]));
     if (dec->HasTags() && dec->GetExtensions().find("."+strExtension) != std::string::npos)
     {
       CAudioDecoder* result = new CAudioDecoder(*dec);
