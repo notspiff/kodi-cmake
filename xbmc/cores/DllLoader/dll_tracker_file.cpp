@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #ifdef TARGET_POSIX
 #define dll_open open

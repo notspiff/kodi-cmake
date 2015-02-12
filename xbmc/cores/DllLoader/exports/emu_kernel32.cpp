@@ -44,6 +44,8 @@
 #include <string.h>
 #include <vector>
 #include <stdlib.h>
+#include <unistd.h>
+
 using namespace std;
 
 vector<string> m_vecAtoms;

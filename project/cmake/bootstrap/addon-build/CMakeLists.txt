@@ -16,6 +16,7 @@ function(add_git_cmake id repo hash)
                                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                                         -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                                         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+                                        -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
                                         -DKODI_BUILD_DIR=${KODI_BUILD_DIR}
                                         -DBOOTSTRAP_IN_TREE=1
                                         -DPACKAGE_ZIP=1

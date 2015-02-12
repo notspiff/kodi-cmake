@@ -87,7 +87,7 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   CAddonMgr::Get().GetAddons(ADDON_VFS, codecs);
   for (size_t i=0;i<codecs.size();++i)
   {
-    boost::shared_ptr<CVFSEntry> dec(boost::static_pointer_cast<CVFSEntry>(codecs[i]));
+    std::shared_ptr<CVFSEntry> dec(std::static_pointer_cast<CVFSEntry>(codecs[i]));
     if (!strExtension.empty() && dec->HasFileDirectories() &&
         dec->GetExtensions().find(strExtension) != std::string::npos)
     {

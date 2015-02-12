@@ -87,7 +87,7 @@ namespace ADDON
     bool m_livetv;
   };
 
-  typedef boost::shared_ptr<CVFSEntry> VFSEntryPtr;
+  typedef std::shared_ptr<CVFSEntry> VFSEntryPtr;
 
   class CVFSEntryIFileWrapper : public XFILE::IFile
   {
