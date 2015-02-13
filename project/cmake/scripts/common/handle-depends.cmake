@@ -12,7 +12,8 @@ function(add_addon_depends addon searchpath)
             file MATCHES install.txt OR
             file MATCHES noinstall.txt OR
             file MATCHES flags.txt OR
-            file MATCHES deps.txt))
+            file MATCHES deps.txt OR
+            file MATCHES platforms.txt))
       message(STATUS "Processing ${file}")
       file(STRINGS ${file} def)
       separate_arguments(def)
@@ -33,7 +34,38 @@ function(add_addon_depends addon searchpath)
         get_filename_component(id ${file} NAME_WE)
       endif()
 
-      if(NOT TARGET ${id})
+      # check if the addon has a platforms.txt
+      set(platform_found FALSE)
+      if(EXISTS ${dir}/platforms.txt)
+        # get all the specified platforms
+        file(STRINGS ${dir}/platforms.txt platforms)
+        separate_arguments(platforms)
+
+        # check if the addon should be built for the current platform
+        foreach(platform ${platforms})
+          if(${platform} STREQUAL "all" OR ${platform} STREQUAL ${CORE_SYSTEM_NAME})
+            set(platform_found TRUE)
+          else()
+            # check if the platform is defined as "!<platform>"
+            string(SUBSTRING ${platform} 0 1 platform_first)
+            if(${platform_first} STREQUAL "!")
+              # extract the platform
+              string(LENGTH ${platform} platform_length)
+              MATH(EXPR platform_length "${platform_length} - 1")
+              string(SUBSTRING ${platform} 1 ${platform_length} platform)
+
+              # check if the current platform does not match the extracted platform
+              if (NOT ${platform} STREQUAL ${CORE_SYSTEM_NAME})
+                set(platform_found TRUE)
+              endif()
+            endif()
+          endif()
+        endforeach()
+      else()
+        set(platform_found TRUE)
+      endif()
+
+      if(${platform_found} AND NOT TARGET ${id})
         # check if there are any library specific flags that need to be passed on
         if(EXISTS ${dir}/flags.txt)
           file(STRINGS ${dir}/flags.txt extraflags)
