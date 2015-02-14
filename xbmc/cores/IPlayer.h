@@ -151,7 +151,7 @@ public:
   virtual void SetDynamicRangeCompression(long drc){}
   virtual void GetAudioInfo(std::string& strAudioInfo) = 0;
   virtual void GetVideoInfo(std::string& strVideoInfo) = 0;
-  virtual void GetGeneralInfo(std::string& strVideoInfo) = 0;
+  virtual void GetGeneralInfo(std::string& strGeneralInfo) = 0;
   virtual bool CanRecord() { return false;};
   virtual bool IsRecording() { return false;};
   virtual bool Record(bool bOnOff) { return false;};
