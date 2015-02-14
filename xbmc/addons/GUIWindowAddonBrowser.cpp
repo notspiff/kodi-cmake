@@ -46,7 +46,7 @@
 #include "settings/AdvancedSettings.h"
 #include "storage/MediaManager.h"
 #include "LangInfo.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 
 #define CONTROL_AUTOUPDATE    5
 #define CONTROL_SHUTUP        6
