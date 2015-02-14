@@ -48,7 +48,7 @@ public:
     video_only = false;
   }
   double  starttime; /* start time in seconds */
-  double  startpercent; /* start time in percent */  
+  double  startpercent; /* start time in percent */
   bool    identify;  /* identify mode, used for checking format and length of a file */
   std::string state;  /* potential playerstate to restore to */
   bool    fullscreen; /* player is allowed to switch to fullscreen */
@@ -149,9 +149,9 @@ public:
   virtual void SetVolume(float volume){}
   virtual bool ControlsVolume(){ return false;}
   virtual void SetDynamicRangeCompression(long drc){}
-  virtual void GetAudioInfo( std::string& strAudioInfo) = 0;
-  virtual void GetVideoInfo( std::string& strVideoInfo) = 0;
-  virtual void GetGeneralInfo( std::string& strVideoInfo) = 0;
+  virtual void GetAudioInfo(std::string& strAudioInfo) = 0;
+  virtual void GetVideoInfo(std::string& strVideoInfo) = 0;
+  virtual void GetGeneralInfo(std::string& strVideoInfo) = 0;
   virtual bool CanRecord() { return false;};
   virtual bool IsRecording() { return false;};
   virtual bool Record(bool bOnOff) { return false;};
@@ -214,7 +214,7 @@ public:
   //returns a state that is needed for resuming from a specific time
   virtual std::string GetPlayerState() { return ""; };
   virtual bool SetPlayerState(const std::string& state) { return false;};
-  
+
   virtual std::string GetPlayingTitle() { return ""; };
 
   virtual bool SwitchChannel(PVR::CPVRChannel &channel) { return false; }
