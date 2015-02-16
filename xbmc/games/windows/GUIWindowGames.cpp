@@ -25,9 +25,9 @@
 #include "FileItem.h"
 #include "games/tags/GameInfoTag.h"
 #include "guilib/GUIWindowManager.h"
-#include "guilib/Key.h"
 #include "guilib/WindowIDs.h"
 #include "GUIPassword.h"
+#include "input/Key.h"
 #include "settings/Settings.h"
 #include "URL.h"
 #include "Util.h"
@@ -224,9 +224,9 @@ bool CGUIWindowGames::PlayGame(const CFileItem &item)
   return g_application.PlayFile(gameFile) == PLAYBACK_OK;
 }
 
-CStdString CGUIWindowGames::GetStartFolder(const CStdString &dir)
+std::string CGUIWindowGames::GetStartFolder(const std::string &dir)
 {
-  if (dir.Equals("Plugins") || dir.Equals("Addons"))
+  if (dir == "plugins" || dir == "addons")
     return "addons://sources/game/";
 
   SetupShares();

@@ -22,9 +22,9 @@
 #include "games/GameManager.h"
 #include "FileItem.h"
 #include "guilib/GraphicContext.h" // include before ViewState.h
-#include "guilib/Key.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/WindowIDs.h"
+#include "input/Key.h"
 #include "settings/Settings.h"
 #include "utils/StringUtils.h"
 #include "view/ViewState.h"

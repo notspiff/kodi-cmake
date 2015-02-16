@@ -37,7 +37,7 @@ protected:
   bool PlayGame(const CFileItem &item);
   virtual void GetContextButtons(int itemNumber, CContextButtons &buttons);
   virtual bool OnContextButton(int itemNumber, CONTEXT_BUTTON button);
-  virtual CStdString GetStartFolder(const CStdString &dir);
+  virtual std::string GetStartFolder(const std::string &dir);
 
   CGUIDialogProgress *m_dlgProgress;
 };
