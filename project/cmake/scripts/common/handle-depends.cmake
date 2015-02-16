@@ -98,12 +98,15 @@ function(add_addon_depends addon searchpath)
           MESSAGE(${BUILD_ARGS})
         endif()
 
+        set(PATCH_FILE ${BUILD_DIR}/${id}/tmp/patch.cmake)
+        file(WRITE ${PATCH_FILE} "# cmake patch file for ${id}\n")
+
         # if there's a CMakeLists.txt use it to prepare the build
         if(EXISTS ${dir}/CMakeLists.txt)
-          file(APPEND ${BUILD_DIR}/${id}/tmp/patch.cmake
+          file(APPEND ${PATCH_FILE}
                "file(COPY ${dir}/CMakeLists.txt
                    DESTINATION ${BUILD_DIR}/${id}/src/${id})\n")
-          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${BUILD_DIR}/${id}/tmp/patch.cmake)
+          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${PATCH_FILE})
         else()
           set(PATCH_COMMAND "")
         endif()
@@ -112,8 +115,8 @@ function(add_addon_depends addon searchpath)
         file(GLOB patches ${dir}/*.patch)
         list(SORT patches)
         foreach(patch ${patches})
-          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${BUILD_DIR}/${id}/tmp/patch.cmake)
-          file(APPEND ${BUILD_DIR}/${id}/tmp/patch.cmake
+          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${PATCH_FILE})
+          file(APPEND ${PATCH_FILE}
                "execute_process(COMMAND patch -p1 -i ${patch})\n")
         endforeach()
 
@@ -142,9 +145,9 @@ function(add_addon_depends addon searchpath)
         endif()
 
         if(CROSS_AUTOCONF)
-          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${BUILD_DIR}/${id}/tmp/patch.cmake)
+          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${PATCH_FILE})
           foreach(afile ${AUTOCONF_FILES})
-            file(APPEND ${BUILD_DIR}/${id}/tmp/patch.cmake
+            file(APPEND ${PATCH_FILE}
                  "message(STATUS \"AUTOCONF: copying ${afile} to ${BUILD_DIR}/${id}/src/${id}\")\n
                  file(COPY ${afile} DESTINATION ${BUILD_DIR}/${id}/src/${id})\n")
           endforeach()
