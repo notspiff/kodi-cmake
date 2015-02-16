@@ -16,7 +16,7 @@ DEPENDS = \
 	libplist libcec libbluray boost tinyxml dummy-libxbmc \
 	libamplayer libssh taglib libusb libnfs libmp3lame \
 	xbmc-pvr-addons xbmc-audioencoder-addons xbmc-peripheral-addons \
-	pythonmodule-pil libxslt ffmpeg
+	xbmc-game-addons pythonmodule-pil libxslt ffmpeg
 
 FFMPEG_DEPENDS = gnutls
 
