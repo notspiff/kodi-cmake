@@ -68,7 +68,7 @@
 #include "addons/include/xbmc_addon_types.h"
 #include "threads/CriticalSection.h"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -83,8 +83,8 @@ namespace GAME
 {
 
 class CGameClient;
-typedef boost::shared_ptr<CGameClient> GameClientPtr;
-typedef std::vector<GameClientPtr>     GameClientVector;
+typedef std::shared_ptr<CGameClient> GameClientPtr;
+typedef std::vector<GameClientPtr>   GameClientVector;
 
 class CGameClient : public ADDON::CAddonDll<DllGameClient, GameClient, game_client_properties>
 {

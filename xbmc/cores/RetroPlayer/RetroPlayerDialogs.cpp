@@ -35,6 +35,7 @@
 #include "utils/URIUtils.h"
 
 #include <map>
+#include <memory>
 
 using namespace ADDON;
 using namespace GAME;
@@ -60,7 +61,7 @@ bool CRetroPlayerDialogs::GetGameClient(const CFileItem &file, GameClientPtr &re
     AddonPtr addon;
     GameClientPtr gc;
     if (CAddonMgr::Get().GetAddon(candidates[0], addon, ADDON_GAMEDLL))
-      gc = boost::dynamic_pointer_cast<CGameClient>(addon);
+      gc = std::dynamic_pointer_cast<CGameClient>(addon);
     if (!gc)
     {
       CLog::Log(LOGDEBUG, "RetroPlayer: Game client failed");
@@ -130,7 +131,7 @@ bool CRetroPlayerDialogs::InstallGameClientDialog(const CFileItem &file, GameCli
   {
     if (!(*itRemote)->IsType(ADDON_GAMEDLL))
       continue;
-    GameClientPtr gc = boost::dynamic_pointer_cast<CGameClient>(*itRemote);
+    GameClientPtr gc = std::dynamic_pointer_cast<CGameClient>(*itRemote);
 
     // Only add game clients to the list if they provide extensions or platforms
     if (!gc || (gc->GetExtensions().empty() /* && gc->GetPlatforms().empty() */))
@@ -230,7 +231,7 @@ bool CRetroPlayerDialogs::InstallGameClientDialog(const CFileItem &file, GameCli
     }
   }
 
-  GameClientPtr gameClient = boost::dynamic_pointer_cast<CGameClient>(addon);
+  GameClientPtr gameClient = std::dynamic_pointer_cast<CGameClient>(addon);
   if (!gameClient)
   {
     CLog::Log(LOGERROR, "RetroPlayer: Add-on was not a game client!");
@@ -254,14 +255,14 @@ bool CRetroPlayerDialogs::InstallGameClient(const string &strId, const CFileItem
   CAddonDatabase database;
   if (database.Open() && database.GetAddon(strId, addon))
   {
-    GameClientPtr gc = boost::dynamic_pointer_cast<CGameClient>(addon);
+    GameClientPtr gc = std::dynamic_pointer_cast<CGameClient>(addon);
     if (gc && gc->CanOpen(file))
     {
       CLog::Log(LOGDEBUG, "RetroPlayer: Installing game client %s", strId.c_str());
       addon.reset();
       if (CAddonInstaller::Get().PromptForInstall(strId, addon))
       {
-        gc = boost::dynamic_pointer_cast<CGameClient>(addon);
+        gc = std::dynamic_pointer_cast<CGameClient>(addon);
         if (gc)
         {
           result = gc;
@@ -285,7 +286,7 @@ bool CRetroPlayerDialogs::ChooseGameClientDialog(const vector<string> &clientIds
     GameClientPtr gc;
     if (CAddonMgr::Get().GetAddon(*it, addon, ADDON_GAMEDLL))
     {
-      gc = boost::dynamic_pointer_cast<CGameClient>(addon);
+      gc = std::dynamic_pointer_cast<CGameClient>(addon);
       if (gc)
       {
         string strName = gc->Name();

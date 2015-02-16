@@ -25,7 +25,7 @@
 #include "cores/VideoRenderers/RenderManager.h"
 #include "dialogs/GUIDialogOK.h"
 #include "games/tags/GameInfoTag.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "settings/Settings.h"
 #include "threads/SingleLock.h"
 #include "threads/SystemClock.h"

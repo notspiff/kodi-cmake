@@ -29,7 +29,6 @@
 #include "threads/SingleLock.h"
 #include "URL.h"
 #include "utils/log.h"
-#include "utils/StdString.h"
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
@@ -132,7 +131,7 @@ AddonPtr CGameClient::GetRunningInstance() const
 {
   GameClientPtr gameAddon;
   if (CGameManager::Get().GetClient(ID(), gameAddon))
-    return boost::dynamic_pointer_cast<CAddon>(gameAddon);
+    return std::dynamic_pointer_cast<CAddon>(gameAddon);
 
   return CAddon::GetRunningInstance();
 }
@@ -182,7 +181,7 @@ void CGameClient::Destroy(void)
 
 void CGameClient::OnEnabled()
 {
-  CGameManager::Get().RegisterAddon(boost::dynamic_pointer_cast<CGameClient>(GetRunningInstance()));
+  CGameManager::Get().RegisterAddon(std::dynamic_pointer_cast<CGameClient>(GetRunningInstance()));
 }
 
 void CGameClient::OnDisabled()

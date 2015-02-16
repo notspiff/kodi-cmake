@@ -20,8 +20,9 @@
 
 #include "GameInfoTag.h"
 #include "utils/Archive.h"
-#include "utils/StdString.h"
 #include "utils/Variant.h"
+
+#include <string>
 
 using namespace GAME;
 
@@ -79,14 +80,14 @@ void CGameInfoTag::Archive(CArchive& ar)
   if (ar.IsStoring())
   {
     ar << m_bLoaded;
-    ar << CStdString(m_strURL);
-    ar << CStdString(m_strName);
-    ar << CStdString(m_strPlatform);
-    ar << CStdString(m_strID);
-    ar << CStdString(m_strRegion);
-    ar << CStdString(m_strPublisher);
-    ar << CStdString(m_strFormat);
-    ar << CStdString(m_strCartridgeType);
+    ar << std::string(m_strURL);
+    ar << std::string(m_strName);
+    ar << std::string(m_strPlatform);
+    ar << std::string(m_strID);
+    ar << std::string(m_strRegion);
+    ar << std::string(m_strPublisher);
+    ar << std::string(m_strFormat);
+    ar << std::string(m_strCartridgeType);
   }
   else
   {

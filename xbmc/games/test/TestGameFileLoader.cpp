@@ -54,7 +54,7 @@ TEST(TestGameFileLoader, CGameFileLoaderUseHD)
   EXPECT_FALSE(loaderHD.CanLoad(gc_noVFS, smbFile));
 
   // Scenario 3: zip:// file
-  CStdString strZipPath;
+  std::string strZipPath;
   URIUtils::CreateArchivePath(strZipPath, "zip", XBMC_REF_FILE_PATH("xbmc/games/test/LocalFile.zip"), "ZipFile.nes");
   CFileItem zipFile(strZipPath, false);
   EXPECT_FALSE(loaderHD.CanLoad(gc, zipFile));
@@ -87,7 +87,7 @@ TEST(TestGameFileLoader, CGameFileLoaderUseVFS)
   EXPECT_FALSE(loaderVFS.CanLoad(gc_noVFS, smbFile));
 
   // Scenario 3: zip:// file
-  CStdString strZipPath;
+  std::string strZipPath;
   URIUtils::CreateArchivePath(strZipPath, "zip", XBMC_REF_FILE_PATH("xbmc/games/test/LocalFile.zip"), "ZipFile.nes");
   CFileItem zipFile(strZipPath, false);
   EXPECT_TRUE(loaderVFS.CanLoad(gc, zipFile));
@@ -107,7 +107,7 @@ TEST(TestGameFileLoader, CGameFileLoaderUseParentZip)
   GameClientConfig gc_noVFS;   gc_noVFS.bAllowVFS = false;
 
   // Scenario 1: Parent zip (zip:// file)
-  CStdString strZipPath;
+  std::string strZipPath;
   URIUtils::CreateArchivePath(strZipPath, "zip", XBMC_REF_FILE_PATH("xbmc/games/test/LocalFile.zip"), "ZipFile.smc");
   CFileItem zipFile(strZipPath, false);
   EXPECT_TRUE(loaderParentZip.CanLoad(gc, zipFile));
@@ -125,7 +125,7 @@ TEST(TestGameFileLoader, CGameFileLoaderUseParentZip)
   EXPECT_FALSE(loaderParentZip.CanLoad(gc_noVFS, localFile));
 
   // Scenario 3: Not in a zip's root directory
-  CStdString strDeepZipPath;
+  std::string strDeepZipPath;
   URIUtils::CreateArchivePath(strDeepZipPath, "zip", XBMC_REF_FILE_PATH("xbmc/games/test/LocalFile.zip"), "folder/ZipFile.smc");
   CFileItem deepZipFile(strDeepZipPath, false);
   EXPECT_FALSE(loaderParentZip.CanLoad(gc, deepZipFile));
@@ -135,9 +135,9 @@ TEST(TestGameFileLoader, CGameFileLoaderUseParentZip)
   EXPECT_FALSE(loaderParentZip.CanLoad(gc_noVFS, deepZipFile));
 
   // Scenario 4: Inside a zip file, embedded in another zip file
-  CStdString strOuterZipPath;
+  std::string strOuterZipPath;
   URIUtils::CreateArchivePath(strOuterZipPath, "zip", XBMC_REF_FILE_PATH("xbmc/games/test/LocalFile.zip"), "InnerZipFile.zip");
-  CStdString strInnerZipPath;
+  std::string strInnerZipPath;
   URIUtils::CreateArchivePath(strInnerZipPath, "zip", strOuterZipPath, "ZipFile.smc");
   CFileItem embeddedZipFile(strInnerZipPath, false);
   EXPECT_FALSE(loaderParentZip.CanLoad(gc, embeddedZipFile));
@@ -147,7 +147,7 @@ TEST(TestGameFileLoader, CGameFileLoaderUseParentZip)
   EXPECT_FALSE(loaderParentZip.CanLoad(gc_noVFS, embeddedZipFile));
 
   // Scenario 5: Parent zip is not local
-  CStdString strSmbZipPath;
+  std::string strSmbZipPath;
   URIUtils::CreateArchivePath(strSmbZipPath, "zip", "smb://server/share/SmbFile.zip", "ZipFile.smc");
   CFileItem smbZipFile(strSmbZipPath, false);
   EXPECT_FALSE(loaderParentZip.CanLoad(gc, smbZipFile));

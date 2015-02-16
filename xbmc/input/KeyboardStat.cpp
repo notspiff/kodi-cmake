@@ -161,6 +161,7 @@ CKey CKeyboardStat::TranslateKey(XBMC_keysym& keysym)
     if ((unicode < 'A' || unicode > 'Z') && (unicode < 'a' || unicode > 'z') && (vkey < XBMCVK_F1 || vkey > XBMCVK_F24))
       modifiers = 0;
 
+  /* TODO
   if (keysym.mod      == g_Keyboard.m_lastKeysym.mod &&
       keysym.scancode == g_Keyboard.m_lastKeysym.scancode &&
       keysym.sym      == g_Keyboard.m_lastKeysym.sym &&
@@ -168,6 +169,7 @@ CKey CKeyboardStat::TranslateKey(XBMC_keysym& keysym)
   {
     held = CTimeUtils::GetFrameTime() - g_Keyboard.m_lastKeyTime;
   }
+  */
 
   // Create and return a CKey
 

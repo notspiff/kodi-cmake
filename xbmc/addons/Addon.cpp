@@ -178,10 +178,10 @@ AddonProps::AddonProps(const cp_extension_t *ext)
   // If extending xbmc.gameclient, load additional game client info
   if (type == ADDON_GAMEDLL)
   {
-    CStdString platforms = CAddonMgr::Get().GetTranslatedString(ext->configuration, "platforms");
+    std::string platforms = CAddonMgr::Get().GetTranslatedString(ext->configuration, "platforms");
     if (!platforms.empty())
       extrainfo.insert(make_pair("platforms", platforms));
-    CStdString extensions = CAddonMgr::Get().GetTranslatedString(ext->configuration, "extensions");
+    std::string extensions = CAddonMgr::Get().GetTranslatedString(ext->configuration, "extensions");
     if (!extensions.empty())
       extrainfo.insert(make_pair("extensions", extensions));
   }

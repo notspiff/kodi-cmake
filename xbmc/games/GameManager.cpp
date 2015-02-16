@@ -99,7 +99,7 @@ bool CGameManager::UpdateAddons()
 
     for (VECADDONS::const_iterator it = gameClients.begin(); it != gameClients.end(); it++)
     {
-      if (!RegisterAddon(boost::dynamic_pointer_cast<CGameClient>(*it)) && (*it)->Enabled())
+      if (!RegisterAddon(std::dynamic_pointer_cast<CGameClient>(*it)) && (*it)->Enabled())
         CAddonMgr::Get().DisableAddon((*it)->ID());
     }
   }
@@ -122,7 +122,7 @@ void CGameManager::UpdateExtensions()
       if (!addon->IsType(ADDON_GAMEDLL))
         continue;
 
-      GameClientPtr gc = boost::dynamic_pointer_cast<CGameClient>(addon);
+      GameClientPtr gc = std::dynamic_pointer_cast<CGameClient>(addon);
       if (!gc)
         continue;
 

@@ -2551,8 +2551,6 @@ bool CApplication::Cleanup()
     g_windowManager.Delete(WINDOW_DIALOG_PVR_UPDATE_PROGRESS);
     g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_CHANNELS);
     g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_GUIDE);
-    g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_DIRECTOR);
-    g_windowManager.Delete(WINDOW_DIALOG_PVR_OSD_CUTTER);
     g_windowManager.Delete(WINDOW_DIALOG_OSD_TELETEXT);
 
     g_windowManager.Delete(WINDOW_DIALOG_TEXT_VIEWER);
