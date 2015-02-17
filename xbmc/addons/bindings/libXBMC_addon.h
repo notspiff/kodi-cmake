@@ -597,11 +597,11 @@ namespace ADDON
     bool (*XBMC_wake_on_lan)(void *HANDLE, void* CB, const char* mac);
     char* (*XBMC_unknown_to_utf8)(void *HANDLE, void* CB, const char* str);
     char* (*XBMC_get_localized_string)(void *HANDLE, void* CB, int dwCode);
-    char* (*XBMC_get_dvd_menu_language)(void *HANDLE, void* CB);
+    char* (*XBMC_get_dvd_menu_language)(void *HANDLE, const void* CB);
     char* (*XBMC_dns_lookup)(void *HANDLE, void* CB, const char* url);
     char* (*XBMC_url_encode)(void *HANDLE, void* CB, const char* url);
     bool  (*XBMC_authenticate_url)(void *HANDLE, void* CB, VFSURL* url);
-    void (*XBMC_free_string)(void *HANDLE, void* CB, char* str);
+    void (*XBMC_free_string)(void *HANDLE, const void* CB, const char* str);
     void* (*XBMC_open_file)(void *HANDLE, void* CB, const char* strFileName, unsigned int flags);
     void* (*XBMC_open_file_for_write)(void *HANDLE, void* CB, const char* strFileName, bool bOverWrite);
     ssize_t (*XBMC_read_file)(void *HANDLE, void* CB, void* file, void* lpBuf, size_t uiBufSize);

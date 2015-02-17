@@ -357,7 +357,7 @@ bool CAddonCallbacksAddon::AuthenticateURL(const void* addonData, VFSURL* url)
 
 void CAddonCallbacksAddon::FreeString(const void* addonData, char* str)
 {
-  free(str);
+  free((char*)str);
 }
 
 void* CAddonCallbacksAddon::OpenFile(const void* addonData, const char* strFileName, unsigned int flags)
