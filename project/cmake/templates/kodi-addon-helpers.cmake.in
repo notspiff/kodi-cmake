@@ -24,12 +24,14 @@ endmacro()
 
 # Build, link and optionally package an add-on
 macro (build_addon target prefix libs)
-  add_library(${target} ${${prefix}_SOURCES})
-  target_link_libraries(${target} ${${libs}})
   addon_version(${target} ${prefix})
-  SET_TARGET_PROPERTIES(${target} PROPERTIES VERSION ${${prefix}_VERSION}
-                                             SOVERSION @APP_VERSION_MAJOR@.@APP_VERSION_MINOR@
-                                             PREFIX "")
+  if(${${prefix_SOURCES}})
+    add_library(${target} ${${prefix}_SOURCES})
+    target_link_libraries(${target} ${${libs}})
+    set_target_properties(${target} PROPERTIES VERSION ${${prefix}_VERSION}
+                                               SOVERSION @APP_VERSION_MAJOR@.@APP_VERSION_MINOR@
+                                               PREFIX "")
+  endif()
   if(OS STREQUAL "android")
     set_target_properties(${target} PROPERTIES PREFIX "lib")
   endif()
@@ -52,18 +54,20 @@ macro (build_addon target prefix libs)
     list(APPEND CPACK_COMPONENTS_ALL ${target}-${${prefix}_VERSION})
     # Pack files together to create an archive
     install(DIRECTORY ${target} DESTINATION ./ COMPONENT ${target}-${${prefix}_VERSION})
-    if(WIN32)
+    if(WIN32 AND TARGET ${target})
       install(PROGRAMS ${CMAKE_BINARY_DIR}/${target}.dll
               DESTINATION ${target}
               COMPONENT ${target}-${${prefix}_VERSION})
-    else()
+    elseif(TARGET ${target})
       install(TARGETS ${target} DESTINATION ${target}
               COMPONENT ${target}-${${prefix}_VERSION})
     endif(WIN32)
     add_cpack_workaround(${target} ${${prefix}_VERSION} ${ext})
   else()
-    install(TARGETS ${target} DESTINATION lib/xbmc/addons/${target})
-    install(DIRECTORY ${target} DESTINATION share/xbmc/addons)
+    if(TARGET ${target})
+      install(TARGETS ${target} DESTINATION lib/kodi/addons/${target})
+    endif()
+    install(DIRECTORY ${target} DESTINATION share/kodi/addons)
   endif()
   if(KODI_BUILD_DIR)
     file(GLOB_RECURSE files ${CMAKE_CURRENT_SOURCE_DIR}/${target}/*)
@@ -83,7 +87,8 @@ macro (build_addon target prefix libs)
       add_custom_command(TARGET ${custom_target} POST_BUILD
                         COMMAND ${CMAKE_COMMAND} -E rename
                                 ${from_binary}
-                                ${XBMC_BUILD_DIR}/addons/${target}/${to_binary})
+                                ${KODI_BUILD_DIR}/addons/${target}/${to_binary})
+      install(FILES ${KODI_BUILD_DIR}/addons/${target}/${to_binary} DESTINATION lib/kodi/addons/${target} RENAME ${to_binary})
     endif()
   endif()
 endmacro()
