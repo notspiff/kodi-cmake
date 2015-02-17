@@ -123,6 +123,7 @@ config.log
 /addons/script.module.pil/
 /addons/audioencoder.*
 /addons/pvr.*
+/addons/game.*
 /addons/peripheral.*
 /addons/repository.libretro-linux32/addon.xml
 /addons/repository.libretro-linux64/addon.xml
