@@ -38,6 +38,11 @@ else()
 endif()
 get_filename_component(DEPENDS_PATH "${DEPENDS_PATH}" ABSOLUTE)
 
+if(NOT PLATFORM_DIR)
+  set(PLATFORM_DIR ${APP_ROOT}/project/cmake/platform/${CORE_SYSTEM_NAME})
+  file(TO_CMAKE_PATH "${PLATFORM_DIR}" PLATFORM_DIR)
+endif()
+
 # make sure CMAKE_PREFIX_PATH is set
 if(NOT CMAKE_PREFIX_PATH)
   set(CMAKE_PREFIX_PATH "${DEPENDS_PATH}")
@@ -63,6 +68,7 @@ set(BUILD_ARGS -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                -DCMAKE_BUILD_TYPE=Release
                -DCMAKE_USER_MAKE_RULES_OVERRIDE=${CMAKE_USER_MAKE_RULES_OVERRIDE}
                -DCMAKE_USER_MAKE_RULES_OVERRIDE_CXX=${CMAKE_USER_MAKE_RULES_OVERRIDE_CXX}
+               -DCORE_SYSTEM_NAME=${CORE_SYSTEM_NAME}
                -DBUILD_SHARED_LIBS=1)
 
 if(PACKAGE_ZIP)
@@ -88,6 +94,15 @@ if(NOT KODI_LIB_DIR)
   set(KODI_LIB_DIR "${DEPENDS_PATH}/lib/kodi")
 else()
   file(TO_CMAKE_PATH "${KODI_LIB_DIR}" KODI_LIB_DIR)
+endif()
+
+# check for platform specific stuff
+if(EXISTS ${PLATFORM_DIR}/defines.txt)
+  file(STRINGS ${PLATFORM_DIR}/defines.txt platformdefines)
+
+  if(NOT ARCH_DEFINES AND platformdefines)
+    set(ARCH_DEFINES ${platformdefines})
+  endif()
 endif()
 
 ### prepare the build environment for the binary addons
@@ -170,7 +185,7 @@ foreach(addon ${addons})
         endif()
 
         # download and extract the addon
-        if(NOT EXISTS ${BUILD_DIR}/download/${archive_name}.tar.gz)
+# TODO        if(NOT EXISTS ${BUILD_DIR}/download/${archive_name}.tar.gz)
           # cleanup any of the previously downloaded archives of this addon
           file(GLOB archives "${BUILD_DIR}/download/${id}*.tar.gz")
           if(archives)
@@ -184,7 +199,7 @@ foreach(addon ${addons})
           if(NOT ${retcode} EQUAL 0)
             message(FATAL_ERROR "ERROR downloading ${url} - status: ${dlstatus} log: ${dllog}")
           endif()
-        endif()
+# TODO        endif()
 
         # remove any previously extracted version of the addon
         if(EXISTS "${BUILD_DIR}/${id}")
@@ -213,6 +228,9 @@ foreach(id ${downloaded_addons})
                       SOURCE_DIR ${BUILD_DIR}/${id}
                       INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
                       CMAKE_ARGS ${BUILD_ARGS})
+
+  # add "kodi-platform" as a dependency to every addon
+  add_dependencies(${id} kodi-platform)
 
   set(${id}_DEPENDS_DIR ${BUILD_DIR}/${id}/depends)
 

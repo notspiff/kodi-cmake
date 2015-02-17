@@ -31,18 +31,13 @@
 #include "cores/playercorefactory/PlayerCoreFactory.h"
 #include "cores/VideoRenderers/BaseRenderer.h"
 #include "filesystem/File.h"
+#include "games/GameSettings.h"
 #include "guilib/GraphicContext.h"
 #include "guilib/GUIAudioManager.h"
 #include "guilib/GUIFontManager.h"
 #include "guilib/LocalizeStrings.h"
 #include "guilib/StereoscopicsManager.h"
 #include "input/KeyboardLayout.h"
-#include "input/MouseStat.h"
-#if defined(TARGET_WINDOWS)
-#include "input/windows/WINJoystick.h"
-#elif defined(HAS_SDL_JOYSTICK)
-#include "input/SDLJoystick.h"
-#endif // defined(HAS_SDL_JOYSTICK)
 #if defined(TARGET_POSIX)
 #include "linux/LinuxTimezone.h"
 #endif // defined(TARGET_POSIX)
@@ -271,13 +266,11 @@ void CSettings::Uninitialize()
   m_settingsManager->UnregisterCallback(&g_charsetConverter);
   m_settingsManager->UnregisterCallback(&g_graphicsContext);
   m_settingsManager->UnregisterCallback(&g_langInfo);
-#if defined(TARGET_WINDOWS) || defined(HAS_SDL_JOYSTICK)
-  m_settingsManager->UnregisterCallback(&CInputManager::GetInstance().m_Joystick);
-#endif
-  m_settingsManager->UnregisterCallback(&g_Mouse);
+  m_settingsManager->UnregisterCallback(&CInputManager::Get());
   m_settingsManager->UnregisterCallback(&CNetworkServices::Get());
   m_settingsManager->UnregisterCallback(&g_passwordManager);
   m_settingsManager->UnregisterCallback(&PVR::g_PVRManager);
+  m_settingsManager->UnregisterCallback(&GAME::CGameSettings::Get());
   m_settingsManager->UnregisterCallback(&CRssManager::Get());
 #if defined(TARGET_LINUX)
   m_settingsManager->UnregisterCallback(&g_timezone);
@@ -759,15 +752,10 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("locale.country");
   m_settingsManager->RegisterCallback(&g_langInfo, settingSet);
 
-#if defined(HAS_SDL_JOYSTICK)
   settingSet.clear();
   settingSet.insert("input.enablejoystick");
-  m_settingsManager->RegisterCallback(&CInputManager::GetInstance().m_Joystick, settingSet);
-#endif
-
-  settingSet.clear();
   settingSet.insert("input.enablemouse");
-  m_settingsManager->RegisterCallback(&g_Mouse, settingSet);
+  m_settingsManager->RegisterCallback(&CInputManager::Get(), settingSet);
 
   settingSet.clear();
   settingSet.insert("services.webserver");
@@ -806,6 +794,10 @@ void CSettings::InitializeISettingCallbacks()
   settingSet.insert("epg.resetepg");
   settingSet.insert("pvrparental.enabled");
   m_settingsManager->RegisterCallback(&PVR::g_PVRManager, settingSet);
+
+  settingSet.clear();
+  settingSet.insert("gamesgeneral.manageaddons");
+  m_settingsManager->RegisterCallback(&GAME::CGameSettings::Get(), settingSet);
 
   settingSet.clear();
   settingSet.insert("lookandfeel.rssedit");

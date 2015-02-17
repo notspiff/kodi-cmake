@@ -310,12 +310,6 @@ AC_ARG_ENABLE([profiling],
   [use_profiling=$enableval],
   [use_profiling=no])
 
-AC_ARG_ENABLE([joystick],
-  [AS_HELP_STRING([--enable-joystick],
-  [enable SDL joystick support (default is auto)])],
-  [use_joystick=$enableval],
-  [use_joystick=auto])
-
 AC_ARG_ENABLE([xrandr],
   [AS_HELP_STRING([--enable-xrandr],
   [enable XRandR support (default is yes)])],
@@ -598,7 +592,6 @@ case $host in
      ARCH="i486-linux"
      use_arch="x86"
      use_cpu="i686"
-     use_joystick=no
      use_gles=yes
      use_optical_drive=no
      use_x11=no
@@ -629,7 +622,6 @@ case $host in
      MAKE="gmake"
      ;;
   arm-apple-darwin*)
-     use_joystick=no
      use_neon=yes
      use_libcec=no
      use_vtbdecoder=yes
@@ -648,14 +640,12 @@ case $host in
      AC_SUBST([DEPENDS_ROOT_FOR_XCODE])
      ;;
   *86*-apple-darwin*)
-     use_joystick=no
      use_vtbdecoder=no
      ARCH="x86-osx"
      DEPENDS_ROOT_FOR_XCODE=$(echo ${prefix%/*})
      AC_SUBST([DEPENDS_ROOT_FOR_XCODE])
      ;;
   powerpc-apple-darwin*)
-     use_joystick=no
      use_vtbdecoder=no
      ARCH="powerpc-osx"
      use_arch="ppc"
@@ -671,7 +661,6 @@ case $host in
   arm*-*-linux-gnu*|arm*-*-linux-uclibc*)
      ARCH="arm"
      use_arch="arm"
-     use_joystick=no
      use_neon=yes
      use_gles=yes
      use_gl=no
@@ -683,7 +672,6 @@ case $host in
      use_arch="arm"
      use_cpu=cortex-a9
      ARCH="arm"
-     use_joystick=no
      use_neon=yes
      use_gles=yes
      use_optical_drive=no
@@ -999,7 +987,6 @@ if test "$use_wayland" = "yes" && test "$host_vendor" != "apple"; then
   fi
 
   # Disable SDL and X11 builds
-  use_joystick=no
   use_x11=no
 
   # Wayland requires the EGL "window system" which in turn only supports
@@ -2131,13 +2118,6 @@ else
   final_message="$final_message\n  OpenMax:\tNo"
 fi
 
-if test "$use_joystick" = "yes"; then
-  final_message="$final_message\n  Joystick:\tYes"
-  AC_DEFINE([HAS_SDL_JOYSTICK],[1],["Define to 1 if using SDL joystick"])
-else
-  final_message="$final_message\n  Joystick:\tNo"
-fi
-
 if test "$use_xrandr" = "yes"; then
   final_message="$final_message\n  XRandR:\tYes"
   USE_XRANDR=1
@@ -2489,6 +2469,16 @@ else
   final_message="$final_message\n  PVR add-ons:\t\tNo"
 fi
 
+USE_PERIPHERAL_ADDONS=0
+DISABLE_PERIPHERAL_ADDON_CONFIG=1
+if [[ -f "peripheral-addons/Makefile.am" ]]; then
+  final_message="$final_message\n  PERIPHERAL add-ons:\t\tYes"
+  USE_PERIPHERAL_ADDONS=1
+  DISABLE_PERIPHERAL_ADDON_CONFIG=0
+else
+  final_message="$final_message\n  PERIPHERAL add-ons:\t\tNo"
+fi
+
 OUTPUT_FILES="Makefile \
     Makefile.include \
     addons/skin.confluence/media/Makefile \
@@ -2548,12 +2538,15 @@ OUTPUT_FILES="Makefile \
     lib/addons/library.xbmc.codec/Makefile \
     lib/addons/library.xbmc.gui/Makefile \
     lib/addons/library.xbmc.pvr/Makefile \
+    lib/addons/library.xbmc.game/Makefile \
+    lib/addons/library.xbmc.peripheral/Makefile \
     xbmc/visualizations/EGLHelpers/Makefile \
     tools/Linux/${APP_NAME_LC}.sh \
     tools/Linux/${APP_NAME_LC}-standalone.sh \
     tools/Linux/${APP_NAME_LC}-xsession.desktop \
     tools/EventClients/Makefile \
     tools/EventClients/Clients/OSXRemote/Makefile \
+    xbmc/peripherals/addons/Makefile \
     xbmc/peripherals/bus/Makefile \
     xbmc/peripherals/devices/Makefile \
     xbmc/android/activity/Makefile \
@@ -2601,6 +2594,15 @@ fi
 OUTPUT_FILES="$OUTPUT_FILES \
   xbmc/interfaces/python/Makefile \
   xbmc/interfaces/python/test/Makefile"
+
+case $host in
+  i*86*-linux-gnu*|i*86*-*-linux-uclibc*)
+     OUTPUT_FILES="$OUTPUT_FILES addons/repository.libretro-linux32/addon.xml"
+     ;;
+  x86_64-*-linux-gnu*|x86_64-*-linux-uclibc*)
+     OUTPUT_FILES="$OUTPUT_FILES addons/repository.libretro-linux64/addon.xml"
+     ;;
+esac
 
 # Line below is used so we can use AM_INIT_AUTOMAKE. The corresponding
 # .dummy.am does nothing.
@@ -2677,6 +2679,7 @@ AC_SUBST(UPNP_DEFINES)
 AC_SUBST(USE_SSE4)
 AC_SUBST(USE_MMAL)
 AC_SUBST(USE_X11)
+AC_SUBST(USE_PERIPHERAL_ADDONS)
 
 # pushd and popd are not available in other shells besides bash, so implement
 # our own pushd/popd functions
@@ -2880,6 +2883,18 @@ XB_CONFIG_MODULE([pvr-addons], [
     CFLAGS="$CFLAGS" \
     CXXFLAGS="$CXXFLAGS"
 ], [$DISABLE_PVR_ADDON_CONFIG])
+
+XB_CONFIG_MODULE([peripheral-addons], [
+  ./configure \
+    --prefix="${prefix}" \
+    --host=$host_alias \
+    --build=$build_alias \
+    --target=$target_alias \
+    CC="$CC" \
+    CXX="$CXX" \
+    CFLAGS="$CFLAGS" \
+    CXXFLAGS="$CXXFLAGS"
+], [$DISABLE_PERIPHERAL_ADDON_CONFIG])
 
 AC_OUTPUT
 

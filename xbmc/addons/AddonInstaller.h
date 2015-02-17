@@ -21,6 +21,7 @@
 
 #include "utils/FileOperationJob.h"
 #include "addons/Addon.h"
+#include "utils/Observer.h"
 #include "utils/Stopwatch.h"
 #include "threads/Event.h"
 
@@ -33,7 +34,7 @@ enum {
   AUTO_UPDATES_MAX
 };
 
-class CAddonInstaller : public IJobCallback
+class CAddonInstaller : public IJobCallback, public Observable
 {
 public:
   static CAddonInstaller &Get();

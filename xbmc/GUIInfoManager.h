@@ -112,6 +112,7 @@ namespace INFO
 #define PLAYER_ISINTERNETSTREAM      54
 #define PLAYER_FILENAME              55
 #define PLAYER_SEEKSTEPSIZE          56
+#define PLAYER_HAS_GAME              57
 
 #define WEATHER_CONDITIONS          100
 #define WEATHER_TEMPERATURE         101
@@ -776,6 +777,7 @@ public:
   void SetCurrentSlide(CFileItem &item);
   const CFileItem &GetCurrentSlide() const;
   void ResetCurrentSlide();
+  void SetCurrentGame(CFileItem &item);
   void SetCurrentSongTag(const MUSIC_INFO::CMusicInfoTag &tag);
   void SetCurrentVideoTag(const CVideoInfoTag &tag);
 

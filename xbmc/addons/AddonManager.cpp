@@ -41,9 +41,12 @@
 #include "DllPVRClient.h"
 #include "pvr/addons/PVRClient.h"
 #endif
+#include "games/GameClient.h"
+#include "games/GameManager.h"
 //#ifdef HAS_SCRAPERS
 #include "Scraper.h"
 //#endif
+#include "peripherals/addons/PeripheralAddon.h"
 #include "PluginSource.h"
 #include "Repository.h"
 #include "Skin.h"
@@ -51,6 +54,7 @@
 #include "Util.h"
 
 using namespace std;
+using namespace GAME;
 using namespace XFILE;
 
 namespace ADDON
@@ -117,6 +121,9 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
     case ADDON_AUDIODECODER:
     case ADDON_AUDIOENCODER:
     case ADDON_VFS:
+    case ADDON_GAMEDLL:
+    case ADDON_SHARED_LIBRARY:
+    case ADDON_PERIPHERALDLL:
       { // begin temporary platform handling for Dlls
         // ideally platforms issues will be handled by C-Pluff
         // this is not an attempt at a solution
@@ -169,8 +176,20 @@ AddonPtr CAddonMgr::Factory(const cp_extension_t *props)
           return AddonPtr(new CAudioEncoder(props));
         else if (type == ADDON_VFS)
           return AddonPtr(new CVFSEntry(props));
-        else
+        else if (type == ADDON_GAMEDLL)
+        {
+          return AddonPtr(new CGameClient(props));
+        }
+        else if (type == ADDON_SCREENSAVER)
+        {
           return AddonPtr(new CScreenSaver(props));
+        }
+        else if (type == ADDON_AUDIOENCODER)
+          return AddonPtr(new CAudioEncoder(props));
+        else if (type == ADDON_PERIPHERALDLL)
+          return AddonPtr(new PERIPHERALS::CPeripheralAddon(props));
+        else
+          return AddonPtr(new CAddon(props));
       }
     case ADDON_SKIN:
       return AddonPtr(new CSkinInfo(props));
@@ -675,6 +694,8 @@ AddonPtr CAddonMgr::AddonFromProps(AddonProps& addonProps)
       return AddonPtr(new CAudioEncoder(addonProps));
     case ADDON_VFS:
       return AddonPtr(new CVFSEntry(addonProps));
+    case ADDON_GAMEDLL:
+      return AddonPtr(new CGameClient(addonProps));
     case ADDON_REPOSITORY:
       return AddonPtr(new CRepository(addonProps));
     default:

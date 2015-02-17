@@ -12,28 +12,62 @@ function(add_addon_depends addon searchpath)
             file MATCHES install.txt OR
             file MATCHES noinstall.txt OR
             file MATCHES flags.txt OR
-            file MATCHES deps.txt))
+            file MATCHES deps.txt OR
+            file MATCHES platforms.txt))
       message(STATUS "Processing ${file}")
       file(STRINGS ${file} def)
       separate_arguments(def)
       list(LENGTH def deflength)
       get_filename_component(dir ${file} PATH)
 
-      # get the id and url of the dependency
-      set(url "")
+      # get the id of the dependency
       if(NOT "${def}" STREQUAL "")
-        # read the id and the url from the file
+        # read the id from the file
         list(GET def 0 id)
-        if(deflength GREATER 1)
-          list(GET def 1 url)
-          message(STATUS "${id} url: ${url}")
-        endif()
       else()
         # read the id from the filename
         get_filename_component(id ${file} NAME_WE)
       endif()
 
-      if(NOT TARGET ${id})
+      # check if the addon has a platforms.txt
+      set(platform_found FALSE)
+      if(EXISTS ${dir}/platforms.txt)
+        # get all the specified platforms
+        file(STRINGS ${dir}/platforms.txt platforms)
+        separate_arguments(platforms)
+
+        # check if the addon should be built for the current platform
+        foreach(platform ${platforms})
+          if(${platform} STREQUAL "all" OR ${platform} STREQUAL ${CORE_SYSTEM_NAME})
+            set(platform_found TRUE)
+          else()
+            # check if the platform is defined as "!<platform>"
+            string(SUBSTRING ${platform} 0 1 platform_first)
+            if(${platform_first} STREQUAL "!")
+              # extract the platform
+              string(LENGTH ${platform} platform_length)
+              MATH(EXPR platform_length "${platform_length} - 1")
+              string(SUBSTRING ${platform} 1 ${platform_length} platform)
+
+              # check if the current platform does not match the extracted platform
+              if (NOT ${platform} STREQUAL ${CORE_SYSTEM_NAME})
+                set(platform_found TRUE)
+              endif()
+            endif()
+          endif()
+        endforeach()
+      else()
+        set(platform_found TRUE)
+      endif()
+
+      if(${platform_found} AND NOT TARGET ${id})
+        # determine the download URL of the dependency
+        set(url "")
+        if(deflength GREATER 1)
+          list(GET def 1 url)
+          message(STATUS "${id} url: ${url}")
+        endif()
+
         # check if there are any library specific flags that need to be passed on
         if(EXISTS ${dir}/flags.txt)
           file(STRINGS ${dir}/flags.txt extraflags)
@@ -47,6 +81,7 @@ function(add_addon_depends addon searchpath)
                        -DCMAKE_USER_MAKE_RULES_OVERRIDE=${CMAKE_USER_MAKE_RULES_OVERRIDE}
                        -DCMAKE_USER_MAKE_RULES_OVERRIDE_CXX=${CMAKE_USER_MAKE_RULES_OVERRIDE_CXX}
                        -DCMAKE_INSTALL_PREFIX=${OUTPUT_DIR}
+                       -DCORE_SYSTEM_NAME=${CORE_SYSTEM_NAME}
                        -DENABLE_STATIC=1
                        -DBUILD_SHARED_LIBS=0)
         # if there are no make rules override files available take care of manually passing on ARCH_DEFINES
@@ -63,12 +98,15 @@ function(add_addon_depends addon searchpath)
           MESSAGE(${BUILD_ARGS})
         endif()
 
+        set(PATCH_FILE ${BUILD_DIR}/${id}/tmp/patch.cmake)
+        file(WRITE ${PATCH_FILE} "# cmake patch file for ${id}\n")
+
         # if there's a CMakeLists.txt use it to prepare the build
         if(EXISTS ${dir}/CMakeLists.txt)
-          file(APPEND ${BUILD_DIR}/${id}/tmp/patch.cmake
+          file(APPEND ${PATCH_FILE}
                "file(COPY ${dir}/CMakeLists.txt
                    DESTINATION ${BUILD_DIR}/${id}/src/${id})\n")
-          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${BUILD_DIR}/${id}/tmp/patch.cmake)
+          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${PATCH_FILE})
         else()
           set(PATCH_COMMAND "")
         endif()
@@ -77,8 +115,8 @@ function(add_addon_depends addon searchpath)
         file(GLOB patches ${dir}/*.patch)
         list(SORT patches)
         foreach(patch ${patches})
-          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${BUILD_DIR}/${id}/tmp/patch.cmake)
-          file(APPEND ${BUILD_DIR}/${id}/tmp/patch.cmake
+          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${PATCH_FILE})
+          file(APPEND ${PATCH_FILE}
                "execute_process(COMMAND patch -p1 -i ${patch})\n")
         endforeach()
 
@@ -107,9 +145,9 @@ function(add_addon_depends addon searchpath)
         endif()
 
         if(CROSS_AUTOCONF)
-          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${BUILD_DIR}/${id}/tmp/patch.cmake)
+          set(PATCH_COMMAND ${CMAKE_COMMAND} -P ${PATCH_FILE})
           foreach(afile ${AUTOCONF_FILES})
-            file(APPEND ${BUILD_DIR}/${id}/tmp/patch.cmake
+            file(APPEND ${PATCH_FILE}
                  "message(STATUS \"AUTOCONF: copying ${afile} to ${BUILD_DIR}/${id}/src/${id}\")\n
                  file(COPY ${afile} DESTINATION ${BUILD_DIR}/${id}/src/${id})\n")
           endforeach()
@@ -164,11 +202,13 @@ function(add_addon_depends addon searchpath)
         if(deps)
           add_dependencies(${id} ${deps})
         endif()
-      endif()
 
-      set(${addon}_DEPS ${${addon}_DEPS} ${id})
-      set(${addon}_DEPS "${${addon}_DEPS}" PARENT_SCOPE)
+        list(APPEND ${addon}_DEPS ${id})
+      endif()
     endif()
   endforeach()
+
+  # make the ${addon}_DEPS variable available to the calling script
+  set(${addon}_DEPS "${${addon}_DEPS}" PARENT_SCOPE)
 endfunction()
 

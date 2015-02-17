@@ -46,7 +46,7 @@
 #include "settings/AdvancedSettings.h"
 #include "storage/MediaManager.h"
 #include "LangInfo.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 
 #define CONTROL_AUTOUPDATE    5
 #define CONTROL_SHUTUP        6
@@ -498,6 +498,8 @@ int CGUIWindowAddonBrowser::SelectAddonID(const vector<ADDON::TYPE> &types, vect
       CAddonsDirectory::GetScriptsAndPlugins("image",addons);
     else if (*it == ADDON_VIDEO)
       CAddonsDirectory::GetScriptsAndPlugins("video",addons);
+    else if (*it == ADDON_GAME)
+      CAddonsDirectory::GetScriptsAndPlugins("game",addons);
     else
       CAddonMgr::Get().GetAddons(*it, addons);
     for (ADDON::IVECADDONS it2 = addons.begin() ; it2 != addons.end() ; ++it2)

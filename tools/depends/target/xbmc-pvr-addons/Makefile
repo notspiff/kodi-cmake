@@ -67,3 +67,5 @@ distclean::
 	rm -rf $(PLATFORM) .installed-$(PLATFORM)
 	rm -rf $(GIT_DIR)/current
 
+-include ../../Makefile.include
+include ../../xbmc-addons.include

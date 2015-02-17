@@ -80,13 +80,17 @@ static const TypeMapping types[] =
    {"xbmc.python.library",               ADDON_SCRIPT_LIBRARY,      24081, "DefaultAddonHelper.png" },
    {"xbmc.python.module",                ADDON_SCRIPT_MODULE,       24082, "DefaultAddonLibrary.png" },
    {"xbmc.subtitle.module",              ADDON_SUBTITLE_MODULE,     24012, "DefaultAddonSubtitles.png" },
+   {"xbmc.shared-library",               ADDON_SHARED_LIBRARY,          0, "" },
    {"xbmc.gui.skin",                     ADDON_SKIN,                  166, "DefaultAddonSkin.png" },
    {"xbmc.webinterface",                 ADDON_WEB_INTERFACE,         199, "DefaultAddonWebSkin.png" },
    {"xbmc.addon.repository",             ADDON_REPOSITORY,          24011, "DefaultAddonRepository.png" },
    {"xbmc.pvrclient",                    ADDON_PVRDLL,              24019, "DefaultAddonPVRClient.png" },
+   {"xbmc.gameclient",                   ADDON_GAMEDLL,             27018, "DefaultAddonGame.png" },
+   {"xbmc.peripheral",                   ADDON_PERIPHERALDLL,       35010, "DefaultAddonPeripheral.png" },
    {"xbmc.addon.video",                  ADDON_VIDEO,                1037, "DefaultAddonVideo.png" },
    {"xbmc.addon.audio",                  ADDON_AUDIO,                1038, "DefaultAddonMusic.png" },
    {"xbmc.addon.image",                  ADDON_IMAGE,                1039, "DefaultAddonPicture.png" },
+   {"xbmc.addon.game",                   ADDON_GAME,                27016, "DefaultAddonGame.png" },
    {"xbmc.addon.executable",             ADDON_EXECUTABLE,           1043, "DefaultAddonProgram.png" },
    {"xbmc.audioencoder",                 ADDON_AUDIOENCODER,         200,  "DefaultAddonAudioEncoder.png" },
    {"kodi.audiodecoder",                 ADDON_AUDIODECODER,         201,  "DefaultAddonAudioDecoder.png" },
@@ -172,6 +176,17 @@ AddonProps::AddonProps(const cp_extension_t *ext)
     EMPTY_IF("nofanart",fanart)
     EMPTY_IF("noicon",icon)
     EMPTY_IF("nochangelog",changelog)
+  }
+
+  // If extending xbmc.gameclient, load additional game client info
+  if (type == ADDON_GAMEDLL)
+  {
+    std::string platforms = CAddonMgr::Get().GetTranslatedString(ext->configuration, "platforms");
+    if (!platforms.empty())
+      extrainfo.insert(make_pair("platforms", platforms));
+    std::string extensions = CAddonMgr::Get().GetTranslatedString(ext->configuration, "extensions");
+    if (!extensions.empty())
+      extrainfo.insert(make_pair("extensions", extensions));
   }
   BuildDependencies(ext->plugin);
 }
@@ -381,7 +396,6 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
   {
     switch (m_props.type)
     {
-      case ADDON_SCREENSAVER:
       case ADDON_SCRIPT:
       case ADDON_SCRIPT_LIBRARY:
       case ADDON_SCRIPT_LYRICS:
@@ -394,7 +408,6 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_SCRAPER_MUSICVIDEOS:
       case ADDON_SCRAPER_TVSHOWS:
       case ADDON_SCRAPER_LIBRARY:
-      case ADDON_PVRDLL:
       case ADDON_PLUGIN:
       case ADDON_SERVICE:
       case ADDON_REPOSITORY:
@@ -404,6 +417,29 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
         {
           std::string temp = CAddonMgr::Get().GetExtValue(extension->configuration, "@library");
           m_strLibName = temp;
+        }
+        break;
+      case ADDON_VIZ:
+      case ADDON_SCREENSAVER:
+      case ADDON_PVRDLL:
+      case ADDON_GAMEDLL:
+      case ADDON_SHARED_LIBRARY:
+      case ADDON_PERIPHERALDLL:
+        {
+          // Look for a system-dependent one
+#if defined(TARGET_ANDROID)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_android");
+#elif defined(TARGET_LINUX) || defined(TARGET_FREEBSD)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_linux");
+#elif defined(TARGET_WINDOWS) && defined(HAS_SDL_OPENGL)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_wingl");
+#elif defined(TARGET_WINDOWS) && defined(HAS_DX)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_windx");
+#elif defined(TARGET_DARWIN)
+          m_strLibName = CAddonMgr::Get().GetExtValue(extension->configuration, "@library_osx");
+#else
+          m_strLibName.clear();
+#endif
         }
         break;
       default:

@@ -1,0 +1,1 @@
+pvr.iptvsimple https://github.com/Montellese/pvr.iptvsimple depends_simple

@@ -1924,6 +1924,47 @@
       </group>
     </category>
   </section>
+  <section id="games" label="15016" help="27006">
+    <category id="gamesgeneral" label="16000" help="27007">
+      <group id="1">
+        <setting id="gamesgeneral.enablerewind" type="boolean" label="27001" help="27008">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle" />
+        </setting>
+        <setting id="gamesgeneral.rewindtime" type="integer" label="27002" help="27009">
+          <level>2</level>
+          <default>60</default>
+          <constraints>
+            <minimum>10</minimum>
+            <step>10</step>
+            <maximum>600</maximum>
+          </constraints>
+          <dependencies>
+            <dependency type="enable" setting="gamesgeneral.enablerewind">true</dependency>
+          </dependencies>
+          <control type="spinner" format="string">
+            <formatlabel>14045</formatlabel>
+          </control>
+        </setting>
+      </group>
+      <group id="2">
+        <setting id="gamesgeneral.manageaddons" type="action" label="27005" help="27010">
+          <level>0</level>
+          <control type="button" format="action" />
+        </setting>
+      </group>
+    </category>
+    <category id="gamesdebug" label="14092" help="27011">
+      <group id="1">
+        <setting id="gamesdebug.prefervfs" type="boolean" label="27000" help="27012">
+          <level>2</level>
+          <default>true</default>
+          <control type="toggle" />
+        </setting>
+      </group>
+    </category>
+  </section>
   <section id="pictures" label="1" help="36304">
     <category id="pictures" label="14081" help="36305">
       <group id="1">
@@ -2650,7 +2691,6 @@
           <default>true</default>
         </setting>
         <setting id="input.enablejoystick" type="boolean" label="35100" help="36378">
-          <requirement>HAS_SDL_JOYSTICK</requirement>
           <level>0</level>
           <default>true</default>
           <control type="toggle" />

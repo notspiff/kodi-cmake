@@ -36,17 +36,6 @@
 #define XBMC_RELEASED	0
 #define XBMC_PRESSED	1
 
-/* Hat definitions */
-#define XBMC_HAT_CENTERED    0
-#define XBMC_HAT_UP          0x01
-#define XBMC_HAT_RIGHT       0x02
-#define XBMC_HAT_DOWN        0x04
-#define XBMC_HAT_LEFT        0x08
-#define XBMC_HAT_LEFTUP      XBMC_HAT_UP   | XBMC_HAT_LEFT
-#define XBMC_HAT_RIGHTUP     XBMC_HAT_UP   | XBMC_HAT_RIGHT
-#define XBMC_HAT_LEFTDOWN    XBMC_HAT_DOWN | XBMC_HAT_LEFT
-#define XBMC_HAT_RIGHTDOWN   XBMC_HAT_DOWN | XBMC_HAT_RIGHT
-
 /* Event enumerations */
 typedef enum {
        XBMC_NOEVENT = 0,        /* Unused (do not remove) */
@@ -56,11 +45,8 @@ typedef enum {
        XBMC_MOUSEMOTION,        /* Mouse moved */
        XBMC_MOUSEBUTTONDOWN,    /* Mouse button pressed */
        XBMC_MOUSEBUTTONUP,      /* Mouse button released */
-       XBMC_JOYAXISMOTION,      /* Joystick axis motion */
-       XBMC_JOYBALLMOTION,      /* Joystick trackball motion */
-       XBMC_JOYHATMOTION,       /* Joystick hat position change */
-       XBMC_JOYBUTTONDOWN,      /* Joystick button pressed */
-       XBMC_JOYBUTTONUP,        /* Joystick button released */
+       XBMC_JOYDIGITAL,         /* Joystick digital button motion */
+       XBMC_JOYANALOG,          /* Joystick button motion with amount */
        XBMC_QUIT,               /* User-requested quit */
        XBMC_SYSWMEVENT,         /* System specific event */
        XBMC_VIDEORESIZE,        /* User resized video mode */
@@ -108,45 +94,13 @@ typedef struct XBMC_MouseButtonEvent {
 	uint16_t x, y;	/* The X/Y coordinates of the mouse at press time */
 } XBMC_MouseButtonEvent;
 
-/* Joystick axis motion event structure */
-typedef struct XBMC_JoyAxisEvent {
-	unsigned char type;	/* XBMC_JOYAXISMOTION */
-	unsigned char which;	/* The joystick device index */
-	unsigned char axis;	/* The joystick axis index */
-	int16_t value;	/* The axis value (range: -32768 to 32767) */
-	float   fvalue; /* The axis value (range: -1.0 to 1.0) */
-} XBMC_JoyAxisEvent;
-
-/* Joystick trackball motion event structure */
-typedef struct XBMC_JoyBallEvent {
-	unsigned char type;	/* XBMC_JOYBALLMOTION */
-	unsigned char which;	/* The joystick device index */
-	unsigned char ball;	/* The joystick trackball index */
-	int16_t xrel;	/* The relative motion in the X direction */
-	int16_t yrel;	/* The relative motion in the Y direction */
-} XBMC_JoyBallEvent;
-
-/* Joystick hat position change event structure */
-typedef struct XBMC_JoyHatEvent {
-	unsigned char type;	/* XBMC_JOYHATMOTION */
-	unsigned char which;	/* The joystick device index */
-	unsigned char hat;	/* The joystick hat index */
-	unsigned char value;	/* The hat position value:
-			    XBMC_HAT_LEFTUP   XBMC_HAT_UP       XBMC_HAT_RIGHTUP
-			    XBMC_HAT_LEFT     XBMC_HAT_CENTERED XBMC_HAT_RIGHT
-			    XBMC_HAT_LEFTDOWN XBMC_HAT_DOWN     XBMC_HAT_RIGHTDOWN
-			   Note that zero means the POV is centered.
-			*/
-} XBMC_JoyHatEvent;
-
-/* Joystick button event structure */
-typedef struct XBMC_JoyButtonEvent {
-	unsigned char type;	/* XBMC_JOYBUTTONDOWN or XBMC_JOYBUTTONUP */
-	unsigned char which;	/* The joystick device index */
-	unsigned char button;	/* The joystick button index */
-	unsigned char state;	/* XBMC_PRESSED or XBMC_RELEASED */
-  uint32_t      holdTime; /*holdTime of the pressed button*/
-} XBMC_JoyButtonEvent;
+/* Joystick event structure */
+typedef struct XBMC_JoystickEvent {
+    unsigned char type;     /* XBMC_JOYDIGITAL or XBMC_JOYANALOG */
+    unsigned int  button;   /* The joystick button's key ID */
+    unsigned int  holdtime; /* The hold time (ms) for digital buttons */
+    float         amount;   /* The amount for analog events */
+} XBMC_JoystickEvent;
 
 /* The "window resized" event
    When you get this event, you are responsible for setting a new video
@@ -218,10 +172,7 @@ typedef union XBMC_Event {
   XBMC_KeyboardEvent key;
   XBMC_MouseMotionEvent motion;
   XBMC_MouseButtonEvent button;
-  XBMC_JoyAxisEvent jaxis;
-  XBMC_JoyBallEvent jball;
-  XBMC_JoyHatEvent jhat;
-  XBMC_JoyButtonEvent jbutton;
+  XBMC_JoystickEvent joystick;
   XBMC_ResizeEvent resize;
   XBMC_MoveEvent move;
   XBMC_ExposeEvent expose;

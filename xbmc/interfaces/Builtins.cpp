@@ -27,11 +27,12 @@
 #include "Autorun.h"
 #include "Builtins.h"
 #include "input/ButtonTranslator.h"
+#include "input/InputManager.h"
 #include "FileItem.h"
 #include "addons/GUIDialogAddonSettings.h"
 #include "dialogs/GUIDialogFileBrowser.h"
 #include "guilib/GUIKeyboardFactory.h"
-#include "guilib/Key.h"
+#include "input/Key.h"
 #include "guilib/StereoscopicsManager.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogNumeric.h"
@@ -65,6 +66,7 @@
 #include "URL.h"
 #include "music/MusicDatabase.h"
 #include "cores/IPlayer.h"
+#include "games/tags/GameInfoTag.h"
 
 #include "filesystem/PluginDirectory.h"
 #include "filesystem/ZipManager.h"
@@ -664,6 +666,12 @@ int CBuiltins::Execute(const std::string& execString)
         // (params[1] ... params[x]) separated by a comma to RunScript
         Execute(StringUtils::Format("RunScript(%s)", StringUtils::Join(params, ",").c_str()));
       }
+      else if (addon->Type() == ADDON_GAMEDLL && params.size() >= 2)
+      {
+        CFileItem item(params[1], false);
+        item.SetProperty("gameclient", params[0]);
+        return g_application.PlayMedia(item);
+      }
       else
         CLog::Log(LOGERROR, "RunAddon: unknown add-on id '%s', or unexpected add-on type (not a script or plugin).", params[0].c_str());
     }
@@ -731,6 +739,16 @@ int CBuiltins::Execute(const std::string& execString)
         playOffset = atoi(params[i].substr(11).c_str()) - 1;
         item.SetProperty("playlist_starting_track", playOffset);
       }
+      else if (StringUtils::StartsWithNoCase(params[i], "platform="))
+      {
+        // A game platform was specified, record the request for when we choose a game client
+        item.GetGameInfoTag()->SetPlatform(params[i].substr(9));
+      }
+      else if (StringUtils::StartsWithNoCase(params[i], "gameclient="))
+      {
+        // A game client ID was specified
+        item.SetProperty("gameclient", params[i].substr(11));
+      }
     }
 
     if (!item.m_bIsFolder && item.IsPlugin())
@@ -753,7 +771,7 @@ int CBuiltins::Execute(const std::string& execString)
         bool isVideo = items[i]->IsVideo();
         containsMusic |= !isVideo;
         containsVideo |= isVideo;
-        
+
         if (containsMusic && containsVideo)
           break;
       }
@@ -773,7 +791,7 @@ int CBuiltins::Execute(const std::string& execString)
             items.Remove(i);
         }
       }
-      
+
       g_playlistPlayer.ClearPlaylist(playlist);
       g_playlistPlayer.Add(playlist, items);
       g_playlistPlayer.SetCurrentPlaylist(playlist);
@@ -1078,7 +1096,7 @@ int CBuiltins::Execute(const std::string& execString)
     {
       if(params.size() > 1 && StringUtils::EqualsNoCase(params[1], "showVolumeBar"))
       {
-        CApplicationMessenger::Get().ShowVolumeBar(oldVolume < volume);  
+        CApplicationMessenger::Get().ShowVolumeBar(oldVolume < volume);
       }
     }
   }
@@ -1369,7 +1387,7 @@ int CBuiltins::Execute(const std::string& execString)
             CSkinSettings::Get().SetString(string, replace);
         }
       }
-      else 
+      else
       {
         if (params.size() > 2)
         {
@@ -1730,7 +1748,7 @@ int CBuiltins::Execute(const std::string& execString)
     if (type == ADDON_VIZ)
       allowNone = true;
 
-    if (type != ADDON_UNKNOWN && 
+    if (type != ADDON_UNKNOWN &&
         CGUIWindowAddonBrowser::SelectAddonID(type,addonID,allowNone))
     {
       CAddonMgr::Get().SetDefault(type,addonID);
@@ -1768,29 +1786,6 @@ int CBuiltins::Execute(const std::string& execString)
   {
     CApplicationMessenger::Get().CECStandby();
   }
-#if defined(HAS_LIRC) || defined(HAS_IRSERVERSUITE)
-  else if (execute == "lirc.stop")
-  {
-    g_RemoteControl.Disconnect();
-    g_RemoteControl.setUsed(false);
-  }
-  else if (execute == "lirc.start")
-  {
-    g_RemoteControl.setUsed(true);
-    g_RemoteControl.Initialize();
-  }
-  else if (execute == "lirc.send")
-  {
-    std::string command;
-    for (int i = 0; i < (int)params.size(); i++)
-    {
-      command += params[i];
-      if (i < (int)params.size() - 1)
-        command += ' ';
-    }
-    g_RemoteControl.AddSendCommand(command);
-  }
-#endif
   else if (execute == "weather.locationset" && !params.empty())
   {
     int loc = atoi(params[0].c_str());
@@ -1847,6 +1842,6 @@ int CBuiltins::Execute(const std::string& execString)
     }
   }
   else
-    return -1;
+    return CInputManager::Get().ExecuteBuiltin(execute, params);
   return 0;
 }

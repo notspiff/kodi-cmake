@@ -76,7 +76,10 @@ CAddonInstaller &CAddonInstaller::Get()
 void CAddonInstaller::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   if (success)
+  {
+    SetChanged();
     CAddonMgr::Get().FindAddons();
+  }
 
   CSingleLock lock(m_critSection);
   if (strncmp(job->GetType(), "repoupdate", 10) == 0)
@@ -93,6 +96,8 @@ void CAddonInstaller::OnJobComplete(unsigned int jobID, bool success, CJob* job)
     lock.Leave();
     PrunePackageCache();
   }
+
+  NotifyObservers(ObservableMessageRemoteAddons);
 
   CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE);
   g_windowManager.SendThreadMessage(msg);

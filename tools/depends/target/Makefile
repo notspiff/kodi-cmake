@@ -15,8 +15,8 @@ DEPENDS = \
 	python26 afpfs-ng libshairplay \
 	libplist libcec libbluray boost tinyxml dummy-libxbmc \
 	libamplayer libssh taglib libusb libnfs libmp3lame \
-	xbmc-pvr-addons xbmc-audioencoder-addons \
-	pythonmodule-pil libxslt ffmpeg
+	xbmc-pvr-addons xbmc-audioencoder-addons xbmc-peripheral-addons \
+	xbmc-game-addons pythonmodule-pil libxslt ffmpeg
 
 FFMPEG_DEPENDS = gnutls
 
