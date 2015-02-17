@@ -68,12 +68,12 @@ GAME_ERROR Reset(void);
  *  - character is the text character of the pressed key. (UTF-32)
  *  - key_modifiers is a set of RETROKMOD values or'ed together
  *
- * The pressed/keycode state can be indepedent of the character. It is also
+ * The pressed/keycode state can be independent of the character. It is also
  * possible that multiple characters are generated from a single keypress.
  * Keycode events should be treated separately from character events.
  * However, when possible, the frontend should try to synchronize these. If
  * only a character is posted, keycode should be GAME_KEY_UNKNOWN.
- * Similarily if only a keycode event is generated with no corresponding
+ * Similarly if only a keycode event is generated with no corresponding
  * character, character should be 0.
  *
  * Replaces RETRO_ENVIRONMENT_SET_KEYBOARD_CALLBACK.
@@ -94,7 +94,7 @@ GAME_ERROR SetControllerPortDevice(unsigned port, unsigned device);
 
 /*!
  * Returns the amount of data the implementation requires to serialize
- * internal state (save states). Beetween calls to Load() and
+ * internal state (save states). Between calls to Load() and
  * Unload(), the returned size is never allowed to be larger than
  * a previous returned value, to ensure that the frontend can allocate a save
  * state buffer once.
@@ -208,7 +208,7 @@ GAME_ERROR HwContextDestroy(void);
  * has to call the normal audio functions to write audio. The audio
  * functions must be called from within the notification function. The
  * amount of audio data to write is up to the implementation. Generally,
- * the audio function will be called continously in a loop.
+ * the audio function will be called continuously in a loop.
  *
  * Due to thread safety guarantees and lack of sync between audio and
  * video, a frontend can selectively disallow this interface based on
@@ -221,7 +221,7 @@ GAME_ERROR AudioAvailable(void);
 
 /*!
  * If enabled is true, audio driver in frontend is active, and callback is
- * expected to be called regularily. If enabled is false, audio driver in
+ * expected to be called regularly. If enabled is false, audio driver in
  * frontend is paused or inactive. Audio callback will not be called until
  * audio_set_state() has been called with true. Initial state is false
  * (inactive).
