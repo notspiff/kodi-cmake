@@ -45,7 +45,7 @@ typedef char* (*AddOnGetDVDMenuLanguage)(const void* addonData);
 typedef char* (*AddOnDNSLookup)(const void* addonData, const char* url);
 typedef char* (*AddOnURLEncode)(const void* addonData, const char* url);
 typedef bool  (*AddOnAuthenticateURL)(const void* addonData, VFSURL* url);
-typedef void (*AddOnFreeString)(const void* addonData, char* str);
+typedef void (*AddOnFreeString)(const void* addonData, const char* str);
 typedef void* (*AddOnOpenFile)(const void* addonData, const char* strFileName, unsigned int flags);
 typedef void* (*AddOnOpenFileForWrite)(const void* addonData, const char* strFileName, bool bOverWrite);
 typedef ssize_t (*AddOnReadFile)(const void* addonData, void* file, void* lpBuf, size_t uiBufSize);
