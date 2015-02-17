@@ -1406,3 +1406,8 @@ void CAdvancedSettings::setExtraLogLevel(const std::vector<CVariant> &components
     m_extraLogLevels |= static_cast<int>(it->asInteger());
   }
 }
+
+std::string CAdvancedSettings::GetMusicExtensions() const
+{
+  return m_musicExtensions;
+}
