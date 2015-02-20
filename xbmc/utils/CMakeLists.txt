@@ -40,7 +40,6 @@ set(SOURCES ActorProtocol.cpp
             LangCodeExpander.cpp
             LegacyPathTranslation.cpp
             log.cpp
-            MarkWatchedJob.cpp
             md5.cpp
             Mime.cpp
             Observer.cpp
@@ -52,6 +51,7 @@ set(SOURCES ActorProtocol.cpp
             RingBuffer.cpp
             RssManager.cpp
             RssReader.cpp
+            ProgressJob.cpp
             SaveFileStateJob.cpp
             ScraperParser.cpp
             ScraperUrl.cpp

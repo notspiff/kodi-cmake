@@ -141,7 +141,7 @@ DLLEXPORT bool XBMC_authenticate_url(void *hdl, void* cb, VFSURL* url)
   return ((CB_AddOnLib*)cb)->AuthenticateURL(((AddonCB*)hdl)->addonData, url);
 }
 
-DLLEXPORT void XBMC_free_string(void* hdl, void* cb, const char* str)
+DLLEXPORT void XBMC_free_string(void* hdl, void* cb, char* str)
 {
   if (cb == NULL)
     return;
