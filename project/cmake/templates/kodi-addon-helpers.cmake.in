@@ -22,8 +22,24 @@ macro (addon_version dir prefix)
   message(STATUS ${prefix}_VERSION=${${prefix}_VERSION})
 endmacro()
 
+# Add a target to build doxy if a Doxyfile.in is available
+macro(add_doc_target)
+  if(NOT TARGET doc)
+    if(EXISTS ${PROJECT_SOURCE_DIR}/Doxyfile.in)
+      find_package(Doxygen)
+      if(DOXYGEN_FOUND)
+        configure_file(${PROJECT_SOURCE_DIR}/Doxyfile.in Doxyfile @ONLY)
+        add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/Doxyfile
+                          WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+                          COMMENT "Generating API documentation" VERBATIM)
+      endif()
+    endif()
+  endif()
+endmacro()
+
 # Build, link and optionally package an add-on
 macro (build_addon target prefix libs)
+  add_doc_target()
   add_library(${target} ${${prefix}_SOURCES})
   target_link_libraries(${target} ${${libs}})
   addon_version(${target} ${prefix})
