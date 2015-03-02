@@ -1,7 +1,8 @@
 set(SOURCES AddonPythonInvoker.cpp
             CallbackHandler.cpp
+            ContextItemAddonInvoker.cpp
             LanguageHook.cpp
-	    PythonInvoker.cpp
+            PythonInvoker.cpp
             XBPython.cpp
             swig.cpp
             PyContext.cpp)

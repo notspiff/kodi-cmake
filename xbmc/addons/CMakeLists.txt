@@ -11,6 +11,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             AddonVersion.cpp
             AudioDecoder.cpp
             AudioEncoder.cpp
+            ContextItemAddon.cpp
             GUIDialogAddonInfo.cpp
             GUIDialogAddonSettings.cpp
             GUIViewStateAddonBrowser.cpp

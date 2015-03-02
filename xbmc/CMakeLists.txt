@@ -6,6 +6,7 @@ set(SOURCES Application.cpp
             AutoSwitch.cpp
             BackgroundInfoLoader.cpp
             ContextButtons.cpp
+            ContextMenuManager.cpp
             CueDocument.cpp
             DatabaseManager.cpp
             DbUrl.cpp
