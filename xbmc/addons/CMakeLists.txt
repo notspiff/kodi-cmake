@@ -22,7 +22,8 @@ set(SOURCES AddonCallbacksAddon.cpp
             Service.cpp
             Skin.cpp
             VFSEntry.cpp
-            Visualisation.cpp)
+            Visualisation.cpp
+            Webinterface.cpp)
 
 core_add_library(addons)
 add_dependencies(addons libcpluff ffmpeg)

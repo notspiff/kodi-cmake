@@ -30,6 +30,10 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 
+#ifdef TARGET_POSIX
+#include "XTimeUtils.h"
+#endif
+
 using namespace std;
 using namespace XFILE;
 

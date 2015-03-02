@@ -37,7 +37,8 @@ set(INPUTS AddonModuleXbmcaddon.i
            AddonModuleXbmcgui.i
            AddonModuleXbmc.i
            AddonModuleXbmcplugin.i
-           AddonModuleXbmcvfs.i)
+           AddonModuleXbmcvfs.i
+           AddonModuleXbmcwsgi.i)
 
 set(GROOVY_DIR ${CORE_SOURCE_DIR}/lib/groovy)
 
