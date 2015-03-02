@@ -304,6 +304,9 @@ bool CVFSEntry::ContainsFiles(const CURL& url, CFileItemList& items)
   if (!Initialized())
     Create();
 
+  if (!m_pStruct)
+    return false;
+
   VFSDirEntry* entries;
   int num_entries;
 
