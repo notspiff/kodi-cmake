@@ -314,6 +314,18 @@ bool CPosixFile::Rename(const CURL& url, const CURL& urlnew)
   
   if (rename(name.c_str(), newName.c_str()) == 0)
     return true;
+
+  // rename across mount points - need to copy/delete
+  if (errno == EXDEV)
+  {
+    if (XFILE::CFile::Copy(name, newName))
+    {
+      if (XFILE::CFile::Delete(name))
+        return true;
+      else
+        XFILE::CFile::Delete(newName);
+    }
+  }
   
   if (errno == EACCES || errno == EPERM)
     CLog::LogF(LOGWARNING, "Can't access file \"%s\" for rename to \"%s\"", name.c_str(), newName.c_str());
