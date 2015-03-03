@@ -67,7 +67,6 @@ set(SOURCES AnimatedGif.cpp
             imagefactory.cpp
             IWindowManagerCallback.cpp
             JpegIO.cpp
-            Key.cpp
             LocalizeStrings.cpp
             Shader.cpp
             StereoscopicsManager.cpp
