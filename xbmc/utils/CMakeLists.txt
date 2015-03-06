@@ -39,6 +39,7 @@ set(SOURCES ActorProtocol.cpp
             LabelFormatter.cpp
             LangCodeExpander.cpp
             LegacyPathTranslation.cpp
+            Locale.cpp
             log.cpp
             md5.cpp
             Mime.cpp

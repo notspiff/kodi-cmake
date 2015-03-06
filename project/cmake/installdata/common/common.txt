@@ -1,4 +1,3 @@
-language/*
 media/*
 sounds/*
 system/keymaps/*

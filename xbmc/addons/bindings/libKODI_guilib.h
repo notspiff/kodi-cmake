@@ -27,7 +27,7 @@
 #ifdef BUILD_KODI_ADDON
 #include "kodi/libXBMC_addon.h"
 #else
-#include "addons/library.xbmc.addon/libXBMC_addon.h"
+#include "libXBMC_addon.h"
 #endif
 
 typedef void* GUIHANDLE;

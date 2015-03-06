@@ -54,6 +54,8 @@ set(SOURCES AddonsDirectory.cpp
             PluginDirectory.cpp
             PVRDirectory.cpp
             PVRFile.cpp
+            ResourceDirectory.cpp
+            ResourceFile.cpp
             RSSDirectory.cpp
             SAPDirectory.cpp
             SAPFile.cpp

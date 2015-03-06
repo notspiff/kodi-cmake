@@ -22,6 +22,7 @@
 
 #include "Application.h"
 #include "ApplicationMessenger.h"
+#include "dialogs/GUIDialogContextMenu.h"
 #include "dialogs/GUIDialogNumeric.h"
 #include "dialogs/GUIDialogKaiToast.h"
 #include "dialogs/GUIDialogOK.h"
