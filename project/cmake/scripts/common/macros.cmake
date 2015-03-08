@@ -336,4 +336,8 @@ macro(core_find_versions)
   set(APP_NAME ${APP_APP_NAME}) # inconsistency in upstream
   string(TOLOWER ${APP_APP_NAME} APP_NAME_LC)
   string(TOLOWER ${APP_VERSION_TAG} APP_VERSION_TAG_LC)
+  file(STRINGS ${CORE_SOURCE_DIR}/xbmc/addons/bindings/libKODI_guilib.h guilib_version REGEX "^.*GUILIB_API_VERSION (.*)$")
+  string(REGEX REPLACE ".*\"(.*)\"" "\\1" guilib_version ${guilib_version})
+  file(STRINGS ${CORE_SOURCE_DIR}/xbmc/addons/bindings/libKODI_guilib.h guilib_version_min REGEX "^.*GUILIB_MIN_API_VERSION (.*)$")
+  string(REGEX REPLACE ".*\"(.*)\"" "\\1" guilib_version_min ${guilib_version_min})
 endmacro()

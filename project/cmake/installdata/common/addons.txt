@@ -1,5 +1,7 @@
-addons/xbmc.addon/*
-addons/xbmc.audiodecoder/*
+addons/kodi.audiodecoder/*
+addons/kodi.resource/*
+addons/kodi.vfs/*
+addons/xbmc.audioencoder/*
 addons/xbmc.codec/*
 addons/xbmc.core/*
 addons/xbmc.gui/*

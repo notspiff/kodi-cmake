@@ -115,7 +115,6 @@
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
 #include "filesystem/SMBDirectory.h"
 #endif
-#endif
 #include "addons/VFSEntry.h"
 #include "PartyModeManager.h"
 #ifdef HAS_VIDEO_PLAYBACK

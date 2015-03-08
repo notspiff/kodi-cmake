@@ -161,6 +161,7 @@ add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
                                             -P ${PROJECT_SOURCE_DIR}/scripts/common/generateversionedfiles.cmake
                   DEPENDS ${CORE_SOURCE_DIR}/version.txt
                           ${CORE_SOURCE_DIR}/addons/xbmc.addon/addon.xml.in
+                          ${CORE_SOURCE_DIR}/addons/kodi.guilib/addon.xml.in
                           ${CORE_SOURCE_DIR}/xbmc/CompileInfo.cpp.in
                           ${CORE_SOURCE_DIR}/project/cmake/templates/kodi-config.cmake.in
                           ${CORE_SOURCE_DIR}/project/cmake/templates/kodi-addon-helpers.cmake.in)

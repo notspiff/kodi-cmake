@@ -25,8 +25,8 @@ fi")
                                  -DUSE_STATIC_FFMPEG=1)
   set(FFMPEG_FOUND 1)
 else()
-  set(FFMPEG_PKGS libavcodec>=56.1.100 libavfilter>=5.1.100 libavformat>=56.4.101
-                  libavutil>=54.7.100 libswscale>=3.0.100 libswresample>=1.1.100 libpostproc>=53.0.100)
+  set(FFMPEG_PKGS libavcodec>=56.26.100 libavfilter>=5.11.100 libavformat>=56.25.101
+                  libavutil>=54.20.100 libswscale>=3.1.101 libswresample>=1.1.100 libpostproc>=53.3.100)
   if(PKG_CONFIG_FOUND)
     pkg_check_modules (FFMPEG ${FFMPEG_PKGS})
   endif()
