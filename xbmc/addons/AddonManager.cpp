@@ -344,7 +344,7 @@ bool CAddonMgr::GetAllAddons(VECADDONS &addons, bool enabled /*= true*/)
 
   cp_status_t status;
   int num;
-  cp_plugin_info_t **cpaddons = m_cpluff->get_plugins_info(m_cp_context, &status, &num);
+  cp_plugin_info_t **cpaddons = cp_get_plugins_info(m_cp_context, &status, &num);
 
   for (int i = 0; i < num; ++i)
   {
@@ -366,7 +366,7 @@ bool CAddonMgr::GetAllAddons(VECADDONS &addons, bool enabled /*= true*/)
       }
     }
   }
-  m_cpluff->release_info(m_cp_context, cpaddons);
+  cp_release_info(m_cp_context, cpaddons);
   return !addons.empty();
 }
 

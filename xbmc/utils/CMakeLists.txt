@@ -69,7 +69,6 @@ set(SOURCES ActorProtocol.cpp
             TextSearch.cpp
             TimeSmoother.cpp
             TimeUtils.cpp
-            TuxBoxUtil.cpp
             URIUtils.cpp
             UrlOptions.cpp
             Utf8Utils.cpp

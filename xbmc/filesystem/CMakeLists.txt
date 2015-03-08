@@ -68,8 +68,6 @@ set(SOURCES AddonsDirectory.cpp
             SpecialProtocolDirectory.cpp
             SpecialProtocolFile.cpp
             StackDirectory.cpp
-            TuxBoxDirectory.cpp
-            TuxBoxFile.cpp
             udf25.cpp
             UDFDirectory.cpp
             UDFFile.cpp
