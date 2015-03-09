@@ -26,7 +26,6 @@ set(SOURCES ActorProtocol.cpp
             fft.cpp
             GLUtils.cpp
             GroupUtils.cpp
-            HTMLTable.cpp
             HTMLUtil.cpp
             HttpHeader.cpp
             HttpParser.cpp

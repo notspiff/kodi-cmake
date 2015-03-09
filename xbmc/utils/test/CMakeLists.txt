@@ -16,7 +16,6 @@ set(SOURCES TestAlarmClock.cpp
             TestFileUtils.cpp
             Testfstrcmp.cpp
             TestGlobalsHandling.cpp
-            TestHTMLTable.cpp
             TestHTMLUtil.cpp
             TestHttpHeader.cpp
             TestHttpParser.cpp
