@@ -1,4 +1,5 @@
 xbmc/utils/test/CXBMCTinyXML-test.xml
+xbmc/utils/test/data/language/Spanish/strings.po
 xbmc/filesystem/test/reffile.txt
 xbmc/filesystem/test/reffile.txt.rar
 xbmc/filesystem/test/reffile.txt.zip
