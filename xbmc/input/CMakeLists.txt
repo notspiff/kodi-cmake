@@ -3,7 +3,7 @@ set(SOURCES ButtonTranslator.cpp
             InputManager.cpp
             Key.cpp
             KeyboardLayout.cpp
-            KeyboardLayoutConfiguration.cpp
+            KeyboardLayoutManager.cpp
             KeyboardStat.cpp
             MouseStat.cpp
             XBMC_keytable.cpp)

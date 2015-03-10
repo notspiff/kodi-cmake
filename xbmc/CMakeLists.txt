@@ -24,7 +24,6 @@ set(SOURCES Application.cpp
             PartyModeManager.cpp
             SectionLoader.cpp
             SystemGlobals.cpp
-            Temperature.cpp
             TextureCache.cpp
             TextureCacheJob.cpp
             TextureDatabase.cpp

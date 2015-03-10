@@ -58,6 +58,7 @@ set(SOURCES ActorProtocol.cpp
             Screenshot.cpp
             SeekHandler.cpp
             SortUtils.cpp
+            Speed.cpp
             Splash.cpp
             Stopwatch.cpp
             StreamDetails.cpp
@@ -65,6 +66,7 @@ set(SOURCES ActorProtocol.cpp
             StringUtils.cpp
             StringValidation.cpp
             SystemInfo.cpp
+            Temperature.cpp
             TextSearch.cpp
             TimeSmoother.cpp
             TimeUtils.cpp
