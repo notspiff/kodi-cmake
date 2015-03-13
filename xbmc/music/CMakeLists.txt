@@ -1,5 +1,6 @@
 set(SOURCES Album.cpp
             Artist.cpp
+            CueInfoLoader.cpp
             GUIViewStateMusic.cpp
             MusicDatabase.cpp
             MusicDbUrl.cpp
