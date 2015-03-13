@@ -573,6 +573,7 @@
     </ClCompile>
     <ClCompile Include="..\..\xbmc\interfaces\python\XBPython.cpp" />
     <ClCompile Include="..\..\xbmc\LangInfo.cpp" />
+    <ClCompile Include="..\..\xbmc\LibraryQueue.cpp" />
     <ClCompile Include="..\..\xbmc\listproviders\IListProvider.cpp" />
     <ClCompile Include="..\..\xbmc\listproviders\DirectoryProvider.cpp" />
     <ClCompile Include="..\..\xbmc\listproviders\StaticProvider.cpp" />
@@ -957,6 +958,7 @@
     <ClInclude Include="..\..\xbmc\interfaces\python\PyContext.h" />
     <ClInclude Include="..\..\xbmc\interfaces\python\PythonInvoker.h" />
     <ClInclude Include="..\..\xbmc\interfaces\python\pythreadstate.h" />
+    <ClInclude Include="..\..\xbmc\LibraryQueue.h" />
     <ClInclude Include="..\..\xbmc\media\MediaType.h" />
     <ClInclude Include="..\..\xbmc\music\CueInfoLoader.h" />
     <ClInclude Include="..\..\xbmc\music\EmbeddedArt.h" />
@@ -1175,7 +1177,6 @@
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryScanningJob.cpp" />
     <ClCompile Include="..\..\xbmc\video\PlayerController.cpp" />
     <ClCompile Include="..\..\xbmc\video\videosync\VideoSyncD3D.cpp" />
-    <ClCompile Include="..\..\xbmc\video\VideoLibraryQueue.cpp" />
     <ClCompile Include="..\..\xbmc\video\VideoThumbLoader.cpp" />
     <ClCompile Include="..\..\xbmc\music\MusicThumbLoader.cpp" />
     <ClCompile Include="..\..\xbmc\ThumbnailCache.cpp" />
@@ -2033,7 +2034,6 @@
     <ClInclude Include="..\..\xbmc\video\PlayerController.h" />
     <ClInclude Include="..\..\xbmc\video\videosync\VideoSync.h" />
     <ClInclude Include="..\..\xbmc\video\videosync\VideoSyncD3D.h" />
-    <ClInclude Include="..\..\xbmc\video\VideoLibraryQueue.h" />
     <ClInclude Include="..\..\xbmc\video\VideoThumbLoader.h" />
     <ClInclude Include="..\..\xbmc\music\MusicThumbLoader.h" />
     <ClInclude Include="..\..\xbmc\ThumbnailCache.h" />

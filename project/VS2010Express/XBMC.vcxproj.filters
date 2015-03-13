@@ -2996,9 +2996,6 @@
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryJob.cpp">
       <Filter>video\jobs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\xbmc\video\VideoLibraryQueue.cpp">
-      <Filter>video</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xbmc\video\jobs\VideoLibraryScanningJob.cpp">
       <Filter>video\jobs</Filter>
     </ClCompile>
@@ -3087,6 +3084,7 @@
     <ClCompile Include="..\..\xbmc\test\TestUtil.cpp">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\xbmc\LibraryQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\xbmc\win32\pch.h">
@@ -5881,12 +5879,6 @@
     <ClInclude Include="..\..\xbmc\dialogs\GUIDialogSimpleMenu.h">
       <Filter>dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\xbmc\video\jobs\VideoLibraryJob.h">
-      <Filter>video\jobs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\xbmc\video\VideoLibraryQueue.h">
-      <Filter>video</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\xbmc\video\jobs\VideoLibraryScanningJob.h">
       <Filter>video\jobs</Filter>
     </ClInclude>
@@ -5970,6 +5962,10 @@
     </ClInclude>
     <ClInclude Include="..\..\xbmc\music\EmbeddedArt.h">
       <Filter>music</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\xbmc\LibraryQueue.h" />
+    <ClInclude Include="..\..\xbmc\video\jobs\VideoLibraryJob.h">
+      <Filter>video\jobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
