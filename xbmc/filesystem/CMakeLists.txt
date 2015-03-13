@@ -41,9 +41,6 @@ set(SOURCES AddonsDirectory.cpp
             MusicDatabaseFile.cpp
             MusicFileDirectory.cpp
             MusicSearchDirectory.cpp
-            MythDirectory.cpp
-            MythFile.cpp
-            MythSession.cpp
             NptXbmcFile.cpp
             OverrideDirectory.cpp
             OverrideFile.cpp
