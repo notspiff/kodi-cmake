@@ -3,7 +3,6 @@ set(SOURCES DVDDemuxBXA.cpp
             DVDDemuxCDDA.cpp
             DVDDemux.cpp
             DVDDemuxFFmpeg.cpp
-            DVDDemuxHTSP.cpp
             DVDDemuxPVRClient.cpp
             DVDDemuxShoutcast.cpp
             DVDDemuxUtils.cpp
