@@ -16,7 +16,6 @@ set(SOURCES ActorProtocol.cpp
             CryptThreading.cpp
             DatabaseUtils.cpp
             EndianSwap.cpp
-            EdenVideoArtUpdater.cpp
             Environment.cpp
             Fanart.cpp
             fastmemcpy.c
