@@ -11,4 +11,4 @@ set(SOURCES GUIDialogAudioSubtitleSettings.cpp
 
 core_add_library(video_dialogs)
 
-add_dependencies(video_dialogs libcpluff)
+add_dependencies(video_dialogs libcpluff ffmpeg)
