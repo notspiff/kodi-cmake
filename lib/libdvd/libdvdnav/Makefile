@@ -12,7 +12,7 @@ SRCS = dvdnav.c highlight.c navigation.c read_cache.c remap.c searching.c settin
 VPATH+= $(SRC_PATH_BARE)/src/vm
 SRCS+= decoder.c vm.c vmcmd.c
 
-HEADERS = src/dvdnav/dvd_types.h src/dvdnav/dvdnav.h src/dvdnav/dvdnav_events.h
+HEADERS = $(SRC_PATH)/src/dvdnav/dvd_types.h $(SRC_PATH)/src/dvdnav/dvdnav.h $(SRC_PATH)/src/dvdnav/dvdnav_events.h
 
 CFLAGS += $(USEDEBUG) -Wall -funsigned-char
 CFLAGS += -I$(CURDIR) -I$(SRC_PATH)/src -I$(SRC_PATH)/src/vm
