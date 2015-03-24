@@ -60,7 +60,7 @@ typedef struct {
 
 /* the following types are currently unused */
 
-#if 0
+#if 1
 
 /* Domain */
 typedef enum {
@@ -222,6 +222,7 @@ typedef enum {
 } DVDDisplayMode_t;
 
 /* Audio attributes */
+/*
 typedef struct {
   DVDAudioAppMode_t     AppMode;
   DVDAudioFormat_t      AudioFormat;
@@ -235,7 +236,7 @@ typedef struct {
 typedef int DVDAudioSampleFreq_t;
 typedef int DVDAudioSampleQuant_t;
 typedef int DVDChannelNumber_t;
-
+*/
 /* Subpicture attributes */
 typedef enum {
   DVD_SUBPICTURE_TYPE_NotSpecified = 0,
@@ -255,6 +256,7 @@ typedef struct {
 } DVDSubpictureAttributes_t;
 
 /* Video attributes */
+/*
 typedef struct {
   DVDBool_t PanscanPermitted;
   DVDBool_t LetterboxPermitted;
@@ -268,7 +270,7 @@ typedef struct {
   int more_to_come;
 } DVDVideoAttributes_t;
 typedef int DVDVideoCompression_t;
-
+*/
 #endif
 
 #endif /* LIBDVDNAV_DVD_TYPES_H */

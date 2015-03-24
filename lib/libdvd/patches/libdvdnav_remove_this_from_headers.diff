@@ -1,0 +1,41 @@
+diff --git a/lib/libdvd/libdvdnav/src/dvdnav_internal.h b/lib/libdvd/libdvdnav/src/dvdnav_internal.h
+index df26014..cfae7a8 100644
+--- a/lib/libdvd/libdvdnav/src/dvdnav_internal.h
++++ b/lib/libdvd/libdvdnav/src/dvdnav_internal.h
+@@ -218,12 +218,12 @@ int64_t dvdnav_convert_time(dvd_time_t *time);
+ /*
+  * Get current playback state
+  */
+-dvdnav_status_t dvdnav_get_state(dvdnav_t *this, dvd_state_t *save_state);
++dvdnav_status_t dvdnav_get_state(dvdnav_t *, dvd_state_t *save_state);
+ 
+ /*
+  * Resume playback state
+  */
+-dvdnav_status_t dvdnav_set_state(dvdnav_t *this, dvd_state_t *save_state);
++dvdnav_status_t dvdnav_set_state(dvdnav_t *, dvd_state_t *save_state);
+ /* end XBMC */
+ 
+ /** USEFUL MACROS **/
+diff --git a/lib/libdvd/libdvdnav/src/dvdnav/dvdnav.h b/lib/libdvd/libdvdnav/src/dvdnav/dvdnav.h
+index 506a286..b5a6c30 100644
+--- a/lib/libdvd/libdvdnav/src/dvdnav/dvdnav.h
++++ b/lib/libdvd/libdvdnav/src/dvdnav/dvdnav.h
+@@ -275,7 +275,7 @@ dvdnav_status_t dvdnav_part_play(dvdnav_t *self, int32_t title, int32_t part);
+ /*
+  * Plays the specified title, starting from the specified program
+  */
+-dvdnav_status_t dvdnav_program_play(dvdnav_t *this, int32_t title, int32_t pgcn, int32_t pgn);
++dvdnav_status_t dvdnav_program_play(dvdnav_t *, int32_t title, int32_t pgcn, int32_t pgn);
+ 
+ /*
+  * Stores in *times an array (that the application *must* free) of
+@@ -377,7 +377,7 @@ int64_t dvdnav_get_current_time(dvdnav_t *self);
+  *
+  * Alternative to dvdnav_time_search
+  */
+-dvdnav_status_t dvdnav_jump_to_sector_by_time(dvdnav_t *this,
++dvdnav_status_t dvdnav_jump_to_sector_by_time(dvdnav_t *,
+             uint64_t time_in_pts_ticks, int32_t mode);
+ 
+ /*
