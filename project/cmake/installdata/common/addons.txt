@@ -20,3 +20,4 @@ addons/audioencoder.xbmc.builtin.wav/*
 addons/audioencoder.xbmc.builtin.wma/*
 addons/resource.language.en_gb/*
 addons/resource.uisounds.confluence/*
+addons/resource.images.weather.default/*
