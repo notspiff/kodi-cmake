@@ -16,6 +16,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             GUIDialogAddonSettings.cpp
             GUIViewStateAddonBrowser.cpp
             GUIWindowAddonBrowser.cpp
+            ImageResource.cpp
             LanguageResource.cpp
             PluginSource.cpp
             Repository.cpp
