@@ -1156,6 +1156,7 @@ int CGUIInfoManager::TranslateSingleString(const std::string &strCondition, bool
         else if (cat == "compilations") return LIBRARY_HAS_COMPILATIONS;
         else if (cat == "role" && prop.num_params() > 1)
           return AddMultiInfo(GUIInfo(LIBRARY_HAS_ROLE, ConditionalStringParameter(prop.param(1)), 0));
+        else if (cat == "audiobooks") return LIBRARY_HAS_AUDIOBOOKS;
       }
     }
     else if (cat.name == "musicplayer")
@@ -2494,7 +2495,7 @@ bool CGUIInfoManager::GetBool(int condition1, int contextWindow, const CGUIListI
   }
   else if (condition == PLAYER_MUTED)
     bReturn = (g_application.IsMuted() || g_application.GetVolume(false) <= VOLUME_MINIMUM);
-  else if (condition >= LIBRARY_HAS_MUSIC && condition <= LIBRARY_HAS_COMPILATIONS)
+  else if ((condition >= LIBRARY_HAS_MUSIC && condition <= LIBRARY_HAS_COMPILATIONS) || condition == LIBRARY_HAS_AUDIOBOOKS)
     bReturn = GetLibraryBool(condition);
   else if (condition == LIBRARY_IS_SCANNING)
   {
@@ -6333,6 +6334,7 @@ void CGUIInfoManager::ResetLibraryBools()
   m_libraryHasSingles = -1;
   m_libraryHasCompilations = -1;
   m_libraryRoleCounts.clear();
+  m_libraryHasAudiobooks = -1;
 }
 
 bool CGUIInfoManager::GetLibraryBool(int condition)
@@ -6429,6 +6431,19 @@ bool CGUIInfoManager::GetLibraryBool(int condition)
       }
     }
     return m_libraryHasCompilations > 0;
+  }
+  else if (condition == LIBRARY_HAS_AUDIOBOOKS)
+  {
+    if (m_libraryHasAudiobooks < 0)
+    {
+      CMusicDatabase db;
+      if (db.Open())
+      {
+        m_libraryHasAudiobooks = (db.GetAudiobookCount() > 0) ? 1 : 0;
+        db.Close();
+      }
+    }
+    return m_libraryHasAudiobooks > 0;
   }
   else if (condition == LIBRARY_HAS_VIDEO)
   {
