@@ -146,6 +146,7 @@ void CMusicDatabase::CreateTables()
   m_pDS->exec("CREATE TABLE audiobook (idBook integer primary key, "
               " strBook varchar(256), strAuthor text,"
               " bookmark integer, file text, duration integer,"
+              " albumID integer default 0,"
               " dateAdded varchar (20) default NULL)");
   CLog::Log(LOGINFO, "create album_artist table");
   m_pDS->exec("CREATE TABLE album_artist (idArtist integer, idAlbum integer, strJoinPhrase text, boolFeatured integer, iOrder integer, strArtist text)");
@@ -3957,6 +3958,7 @@ void CMusicDatabase::UpdateTables(int version)
     m_pDS->exec("CREATE TABLE audiobook (idBook integer primary key, "
                 " strBook varchar(256), strAuthor text,"
                 " bookmark integer, file text, duration integer"
+                " albumID integer default 0,"
                 " dateAdded varchar (20) default NULL)");
   }
 }
@@ -5805,12 +5807,17 @@ void CMusicDatabase::UpdateFileDateAdded(int songId, const std::string& strFileN
 
 bool CMusicDatabase::AddAudioBook(const CFileItem& item)
 {
-  std::string strSQL = PrepareSQL("INSERT INTO audiobook (idBook,strBook,strAuthor,bookmark,file,duration,dateAdded) VALUES (NULL,'%s','%s',%i,'%s',%i,'%s')",
+  int albumID = 0;
+  if (item.HasMusicInfoTag())
+    albumID = item.GetMusicInfoTag()->GetAlbumId();
+
+  std::string strSQL = PrepareSQL("INSERT INTO audiobook (idBook,strBook,strAuthor,bookmark,file,duration,dateAdded,albumID) VALUES (NULL,'%s','%s',%i,'%s',%i,'%s',%i)",
                                  item.GetMusicInfoTag()->GetAlbum().c_str(),
                                  item.GetMusicInfoTag()->GetArtist()[0].c_str(), 0,
                                  item.GetPath().c_str(),
                                  item.GetMusicInfoTag()->GetDuration(),
-                                 CDateTime::GetCurrentDateTime().GetAsDBDateTime().c_str());
+                                 CDateTime::GetCurrentDateTime().GetAsDBDateTime().c_str(),
+                                 albumID);
   return ExecuteQuery(strSQL);
 }
 
@@ -5843,13 +5850,16 @@ bool CMusicDatabase::GetResumeBookmarkForAudioBook(const std::string& path, int&
 
 bool CMusicDatabase::GetAudioBooks(CFileItemList& items)
 {
-  std::string strSQL = PrepareSQL("SELECT strBook, strAuthor, file, duration, bookmark FROM audiobook");
+  std::string strSQL = PrepareSQL("SELECT strBook, strAuthor, file, duration, bookmark, albumID FROM audiobook");
   if (!m_pDS->query(strSQL.c_str()) || m_pDS->num_rows() == 0)
     return false;
 
   while (!m_pDS->eof())
   {
-    CFileItemPtr item(new CFileItem(m_pDS->fv(2).get_asString(), false));
+    bool folder = false;
+    if (m_pDS->fv(5).get_asInt() > 0)
+      folder = true;
+    CFileItemPtr item(new CFileItem(m_pDS->fv(2).get_asString(), folder));
     item->SetLabel(m_pDS->fv(0).get_asString());
     item->SetProperty("audiobook", "1");
     item->GetMusicInfoTag()->SetDuration(m_pDS->fv(3).get_asInt());
@@ -5882,7 +5892,7 @@ int CMusicDatabase::GetAudiobookCount(const Filter &filter)
     if (NULL == m_pDB.get()) return 0;
     if (NULL == m_pDS.get()) return 0;
 
-    std::string strSQL = "select count(idBook) as NumSongs from audiobook";
+    std::string strSQL = "select count(idBook) from audiobook";
     if (!CDatabase::BuildSQL(strSQL, filter, strSQL))
       return false;
 
@@ -5893,7 +5903,7 @@ int CMusicDatabase::GetAudiobookCount(const Filter &filter)
       return 0;
     }
 
-    int iNumSongs = m_pDS->fv("NumSongs").get_asInt();
+    int iNumSongs = m_pDS->fv(0).get_asInt();
     // cleanup
     m_pDS->close();
     return iNumSongs;
