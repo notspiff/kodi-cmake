@@ -885,7 +885,7 @@ private:
   virtual void CreateTables();
   virtual void CreateAnalytics();
   virtual void UpdateTables(int version);
-  void CreateLinkIndex(const char *table);
+  void CreateLinkIndex(const char *table, bool createNameIndex = true);
   void CreateForeignLinkIndex(const char *table, const char *foreignkey);
 
   /*! \brief (Re)Create the generic database views for movies, tvshows,
