@@ -3533,27 +3533,8 @@ void CVideoDatabase::DeleteFile(int idFile, const std::string &strFilenameAndPat
   std::string sql;
   try
   {
-    // prepare the SQL WHERE condition as it's the same for all following SQL queries
-    std::string condition = PrepareSQL("WHERE idFile = %d", idFile);
-
-    // delete bookmarks
-    sql = "DELETE FROM bookmark " + condition;
-    m_pDS->exec(sql.c_str());
-
-    // delete file-specific settings
-    sql = "DELETE FROM settings " + condition;
-    m_pDS->exec(sql.c_str());
-
-    // delete stack information
-    sql = "DELETE FROM stacktimes " + condition;
-    m_pDS->exec(sql.c_str());
-
-    // delete streamdetails
-    sql = "DELETE FROM streamdetails " + condition;
-    m_pDS->exec(sql.c_str());
-
     // finally delete the file itself
-    sql = "DELETE FROM files " + condition;
+    sql = PrepareSQL("DELETE FROM files WHERE idFile = %d", idFile);
     m_pDS->exec(sql.c_str());
   }
   catch (...)
