@@ -31,6 +31,7 @@
 #include "filesystem/StackDirectory.h"
 #include "VideoInfoDownloader.h"
 #include "GUIInfoManager.h"
+#include "LibraryQueue.h"
 #include "filesystem/File.h"
 #include "dialogs/GUIDialogExtendedProgressBar.h"
 #include "dialogs/GUIDialogProgress.h"
@@ -46,7 +47,6 @@
 #include "utils/log.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
-#include "video/VideoLibraryQueue.h"
 #include "video/VideoThumbLoader.h"
 #include "TextureCache.h"
 #include "GUIUserMessages.h"
@@ -95,7 +95,7 @@ namespace VIDEO
       if (m_bClean && m_pathsToScan.empty())
       {
         std::set<int> paths;
-        CVideoLibraryQueue::Get().CleanLibrary(paths, false, m_handle);
+        CLibraryQueue::Get().CleanVideoLibrary(paths, false, m_handle);
 
         if (m_handle)
           m_handle->MarkFinished();
@@ -151,7 +151,7 @@ namespace VIDEO
       if (!bCancelled)
       {
         if (m_bClean)
-          CVideoLibraryQueue::Get().CleanLibrary(m_pathsToClean, false, m_handle);
+          CLibraryQueue::Get().CleanVideoLibrary(m_pathsToClean, false, m_handle);
         else
         {
           if (m_handle)
@@ -785,7 +785,7 @@ namespace VIDEO
       if (m_bClean)
       {
         m_pathsToClean.insert(m_database.GetPathId(item->GetPath()));
-        m_database.GetPathsForTvShow(m_database.GetTvShowId(item->GetPath()), m_pathsToClean);
+        m_database.GetPathsForTvShowFromEpisodes(m_database.GetTvShowId(item->GetPath()), m_pathsToClean);
       }
       item->SetProperty("hash", hash);
     }

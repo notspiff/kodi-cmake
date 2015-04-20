@@ -328,6 +328,7 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
     return *this;
 
   CGUIListItem::operator=(item);
+  m_enabled = item.m_enabled;
   m_bLabelPreformated=item.m_bLabelPreformated;
   FreeMemory();
   m_strPath = item.GetPath();
@@ -397,6 +398,8 @@ const CFileItem& CFileItem::operator=(const CFileItem& item)
   m_extrainfo = item.m_extrainfo;
   m_specialSort = item.m_specialSort;
   m_bIsAlbum = item.m_bIsAlbum;
+  m_source = item.m_source;
+  m_importPath = item.m_importPath;
   return *this;
 }
 
@@ -406,6 +409,7 @@ void CFileItem::Initialize()
   m_videoInfoTag = NULL;
   m_pictureInfoTag = NULL;
   m_bLabelPreformated = false;
+  m_enabled = true;
   m_bIsAlbum = false;
   m_dwSize = 0;
   m_bIsParentFolder = false;
@@ -433,6 +437,8 @@ void CFileItem::Reset()
   m_bSelected = false;
   m_bIsFolder = false;
 
+  m_source.clear();
+  m_importPath.clear();
   m_strDVDLabel.clear();
   m_strTitle.clear();
   m_strPath.clear();
@@ -506,6 +512,10 @@ void CFileItem::Archive(CArchive& ar)
     }
     else
       ar << 0;
+
+    ar << m_enabled;
+    ar << m_source;
+    ar << m_importPath;
   }
   else
   {
@@ -545,6 +555,10 @@ void CFileItem::Archive(CArchive& ar)
     ar >> iType;
     if (iType == 1)
       ar >> *GetPictureInfoTag();
+
+    ar >> m_enabled;
+    ar >> m_source;
+    ar >> m_importPath;
 
     SetInvalid();
   }
@@ -1003,6 +1017,11 @@ bool CFileItem::IsReadOnly() const
     return true;
 
   return !CUtil::SupportsWriteFileOperations(m_strPath);
+}
+
+bool CFileItem::IsImported() const
+{
+  return !m_source.empty() && !m_importPath.empty();
 }
 
 void CFileItem::FillInDefaultIcon()
@@ -1521,6 +1540,11 @@ CFileItemList::CFileItemList(const std::string& strPath)
   m_cacheToDisc(CACHE_IF_SLOW),
   m_replaceListing(false)
 {
+}
+
+CFileItemList::CFileItemList(const CFileItemList &other)
+{
+  Copy(other, true);
 }
 
 CFileItemList::~CFileItemList()

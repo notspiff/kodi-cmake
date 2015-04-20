@@ -74,6 +74,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
 
   // check if Kodi is already running
   std::string appName = CSysInfo::GetAppName();
+  /*
   CreateMutex(NULL, FALSE, (appName + " Media Center").c_str());
   if(GetLastError() == ERROR_ALREADY_EXISTS)
   {
@@ -86,6 +87,7 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR commandLine, INT )
     }
     return 0;
   }
+  */
 
 #ifndef HAS_DX
   if(CWIN32Util::GetDesktopColorDepth() < 32)

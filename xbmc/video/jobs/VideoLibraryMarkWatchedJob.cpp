@@ -27,6 +27,7 @@
 #ifdef HAS_UPNP
 #include "network/upnp/UPnP.h"
 #endif
+#include "media/import/MediaImportManager.h"
 #include "profiles/ProfilesManager.h"
 #include "utils/URIUtils.h"
 #include "video/VideoDatabase.h"
@@ -96,6 +97,9 @@ bool CVideoLibraryMarkWatchedJob::Work(CVideoDatabase &db)
     }
     else
       db.SetPlayCount(*item, 0);
+
+    if (item->IsImported())
+      CMediaImportManager::Get().UpdateImportedItem(*item);
   }
 
   db.CommitTransaction();

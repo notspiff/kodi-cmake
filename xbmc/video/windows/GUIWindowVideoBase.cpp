@@ -380,6 +380,22 @@ bool CGUIWindowVideoBase::ShowIMDB(CFileItem *item, const ScraperPtr &info2, boo
   }
   else if(item->HasVideoInfoTag())
   {
+    if (!item->GetVideoInfoTag()->m_hasDetails)
+    {
+      std::string path = item->GetPath();
+      CVideoInfoTag &videoInfo = *item->GetVideoInfoTag();
+      int dbId = videoInfo.m_iDbId;
+
+      if (item->GetVideoInfoTag()->m_type ==MediaTypeMovie)
+        m_database.GetMovieInfo(path, videoInfo, dbId);
+      else if (item->GetVideoInfoTag()->m_type == MediaTypeEpisode)
+        m_database.GetEpisodeInfo(path, videoInfo, dbId);
+      else if (item->GetVideoInfoTag()->m_type == MediaTypeTvShow)
+        m_database.GetTvShowInfo(path, videoInfo, dbId);
+      else if (item->GetVideoInfoTag()->m_type == MediaTypeMusicVideo)
+        m_database.GetMusicVideoInfo(path, videoInfo, dbId);
+    }
+
     bHasInfo = true;
     movieDetails = *item->GetVideoInfoTag();
   }
@@ -974,7 +990,8 @@ bool CGUIWindowVideoBase::OnInfo(int iItem)
     if (!scraper &&
         !(m_database.HasMovieInfo(item->GetPath()) ||
           m_database.HasTvShowInfo(strDir)           ||
-          m_database.HasEpisodeInfo(item->GetPath())))
+          m_database.HasEpisodeInfo(item->GetPath())) &&
+        !item->IsImported())
     {
       return false;
     }

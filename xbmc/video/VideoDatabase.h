@@ -33,6 +33,8 @@ class CFileItemList;
 class CVideoSettings;
 class CGUIDialogProgress;
 class CGUIDialogProgressBarHandle;
+class CMediaImport;
+class CMediaImportSource;
 
 namespace dbiplus
 {
@@ -68,7 +70,7 @@ namespace VIDEO
 // these defines are based on how many columns we have and which column certain data is going to be in
 // when we do GetDetailsForMovie()
 #define VIDEODB_MAX_COLUMNS 24
-#define VIDEODB_DETAILS_FILEID      1
+#define VIDEODB_DETAILS_FILEID			1
 
 #define VIDEODB_DETAILS_MOVIE_SET_ID            VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_MOVIE_SET_NAME          VIDEODB_MAX_COLUMNS + 3
@@ -79,6 +81,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_MOVIE_DATEADDED         VIDEODB_MAX_COLUMNS + 8
 #define VIDEODB_DETAILS_MOVIE_RESUME_TIME       VIDEODB_MAX_COLUMNS + 9
 #define VIDEODB_DETAILS_MOVIE_TOTAL_TIME        VIDEODB_MAX_COLUMNS + 10
+#define VIDEODB_DETAILS_MOVIE_SOURCE            VIDEODB_MAX_COLUMNS + 11
+#define VIDEODB_DETAILS_MOVIE_ENABLED           VIDEODB_MAX_COLUMNS + 12
+#define VIDEODB_DETAILS_MOVIE_IMPORTPATH        VIDEODB_MAX_COLUMNS + 13
 
 #define VIDEODB_DETAILS_EPISODE_TVSHOW_ID       VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_EPISODE_FILE            VIDEODB_MAX_COLUMNS + 3
@@ -93,6 +98,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_EPISODE_RESUME_TIME     VIDEODB_MAX_COLUMNS + 12
 #define VIDEODB_DETAILS_EPISODE_TOTAL_TIME      VIDEODB_MAX_COLUMNS + 13
 #define VIDEODB_DETAILS_EPISODE_SEASON_ID       VIDEODB_MAX_COLUMNS + 14
+#define VIDEODB_DETAILS_EPISODE_SOURCE          VIDEODB_MAX_COLUMNS + 15
+#define VIDEODB_DETAILS_EPISODE_ENABLED         VIDEODB_MAX_COLUMNS + 16
+#define VIDEODB_DETAILS_EPISODE_IMPORTPATH      VIDEODB_MAX_COLUMNS + 17
 
 #define VIDEODB_DETAILS_TVSHOW_PARENTPATHID     VIDEODB_MAX_COLUMNS + 1
 #define VIDEODB_DETAILS_TVSHOW_PATH             VIDEODB_MAX_COLUMNS + 2
@@ -101,6 +109,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_TVSHOW_NUM_EPISODES     VIDEODB_MAX_COLUMNS + 5
 #define VIDEODB_DETAILS_TVSHOW_NUM_WATCHED      VIDEODB_MAX_COLUMNS + 6
 #define VIDEODB_DETAILS_TVSHOW_NUM_SEASONS      VIDEODB_MAX_COLUMNS + 7
+#define VIDEODB_DETAILS_TVSHOW_SOURCE           VIDEODB_MAX_COLUMNS + 8
+#define VIDEODB_DETAILS_TVSHOW_ENABLED          VIDEODB_MAX_COLUMNS + 9
+#define VIDEODB_DETAILS_TVSHOW_IMPORTPATH       VIDEODB_MAX_COLUMNS + 10
 
 #define VIDEODB_DETAILS_MUSICVIDEO_FILE         VIDEODB_MAX_COLUMNS + 2
 #define VIDEODB_DETAILS_MUSICVIDEO_PATH         VIDEODB_MAX_COLUMNS + 3
@@ -109,6 +120,9 @@ namespace VIDEO
 #define VIDEODB_DETAILS_MUSICVIDEO_DATEADDED    VIDEODB_MAX_COLUMNS + 6
 #define VIDEODB_DETAILS_MUSICVIDEO_RESUME_TIME  VIDEODB_MAX_COLUMNS + 7
 #define VIDEODB_DETAILS_MUSICVIDEO_TOTAL_TIME   VIDEODB_MAX_COLUMNS + 8
+#define VIDEODB_DETAILS_MUSICVIDEO_SOURCE       VIDEODB_MAX_COLUMNS + 9
+#define VIDEODB_DETAILS_MUSICVIDEO_ENABLED      VIDEODB_MAX_COLUMNS + 10
+#define VIDEODB_DETAILS_MUSICVIDEO_IMPORTPATH   VIDEODB_MAX_COLUMNS + 11
 
 #define VIDEODB_TYPE_STRING 1
 #define VIDEODB_TYPE_INT 2
@@ -381,8 +395,8 @@ public:
   virtual bool Open();
   virtual bool CommitTransaction();
 
-  int AddMovie(const std::string& strFilenameAndPath);
-  int AddEpisode(int idShow, const std::string& strFilenameAndPath);
+  int AddMovie(const std::string& strFilenameAndPathh, CDateTime dateAdded = CDateTime());
+  int AddEpisode(int idShow, const std::string& strFilenameAndPathh, CDateTime dateAdded = CDateTime());
 
   // editing functions
   /*! \brief Set the playcount of an item
@@ -499,9 +513,9 @@ public:
 
   void DeleteMovie(int idMovie, bool bKeepId = false);
   void DeleteMovie(const std::string& strFilenameAndPath, bool bKeepId = false);
-  void DeleteTvShow(int idTvShow, bool bKeepId = false);
-  void DeleteTvShow(const std::string& strPath);
-  void DeleteSeason(int idSeason, bool bKeepId = false);
+  void DeleteTvShow(int idTvShow, bool bKeepId = false, bool deleteChildren = true);
+  void DeleteTvShow(const std::string& strPath, bool deleteChildren = true);
+  void DeleteSeason(int idSeason, bool bKeepId = false, bool deleteChildren = true);
   void DeleteEpisode(int idEpisode, bool bKeepId = false);
   void DeleteEpisode(const std::string& strFilenameAndPath, bool bKeepId = false);
   void DeleteMusicVideo(int idMusicVideo, bool bKeepId = false);
@@ -563,6 +577,8 @@ public:
   bool GetResumePoint(CVideoInfoTag& tag);
   bool GetStreamDetails(CFileItem& item);
   bool GetStreamDetails(CVideoInfoTag& tag) const;
+  void DeleteFile(int idFile, const std::string &strFilenameAndPath = "");
+  void DeletePath(int idPath, const std::string &strPath = "");
 
   // scraper settings
   void SetScraperForPath(const std::string& filePath, const ADDON::ScraperPtr& info, const VIDEO::SScanSettings& settings);
@@ -607,7 +623,8 @@ public:
   bool SetPathHash(const std::string &path, const std::string &hash);
   bool GetPathHash(const std::string &path, std::string &hash);
   bool GetPaths(std::set<std::string> &paths);
-  bool GetPathsForTvShow(int idShow, std::set<int>& paths);
+  bool GetPathsForTvShowFromEpisodes(int idShow, std::set<int>& paths);
+  bool GetPathsForTvShow(int idShow, std::map<int, std::string>& paths);
 
   /*! \brief return the paths linked to a tvshow.
    \param idShow the id of the tvshow.
@@ -696,9 +713,10 @@ public:
   /*! \brief Add a file to the database, if necessary
    If the file is already in the database, we simply return its id.
    \param url - full path of the file to add.
+   \param parentPath the parent path of the path to add. If empty, URIUtils::GetParentPath() will determine the path.
    \return id of the file, -1 if it could not be added.
    */
-  int AddFile(const std::string& url);
+  int AddFile(const std::string& url, const std::string &parentPath = "");
 
   /*! \brief Add a file to the database, if necessary
    Works for both videodb:// items and normal fileitems
@@ -716,12 +734,90 @@ public:
    */
   int AddPath(const std::string& strPath, const std::string &parentPath = "", const std::string &strDateAdded = "");
 
+  std::vector<CMediaImportSource> GetSources();
+
+  /*! \brief Add a source to the database, if necessary
+   If the identifier is already in the database, we simply return its id.
+   \param source Source to be added
+   \return id of the source, -1 if it could not be added.
+   */
+  int AddSource(const CMediaImportSource &source);
+
+  /*! \brief Updates the values of the given source.
+   \param source Source with updated values
+   \return True if the update was successful, false otherwise
+   */
+  bool SetDetailsForSource(const CMediaImportSource &source);
+
+  /*! \brief sets the given media types for the source with the given identifier
+   \param sourceIDentifier identifier of the source
+   \param mediaTypes Media types to be set
+   */
+  void SetMediaTypesForSource(const std::string& sourceIdentifier, const std::set<MediaType> &mediaTypes);
+
+  /*! \brief Remove source with the given identifier from the database
+   \param sourceIdentifier identifier of the source
+   */
+  void RemoveSource(const std::string& sourceIdentifier);
+
+  std::vector<CMediaImport> GetImports();
+
+  /*! \brief Add an import to the database, if necessary
+   If the import is already in the database, we simply return its id.
+   \param import Import to be added
+   \return id of the import, -1 if it could not be added.
+   */
+  int AddImport(const CMediaImport &import);
+
+  /*! \brief Updates the values of the given import.
+   \param import Import with updated values
+   \return True if the update was successful, false otherwise
+   */
+  bool SetDetailsForImport(const CMediaImport &import);
+
+  /*! \brief Update last synced date of the import with the given path
+   \param sourceIDentifier identifier of the source
+   */
+  void UpdateImportLastSynced(const CMediaImport& import, const CDateTime &lastSynced = CDateTime());
+
+  /*! \brief Remove the import with the given path from the database
+   \param path Path of the import
+   */
+  bool RemoveImport(const CMediaImport& import, bool standalone = true);
+
+  /*! \brief Set the import of an item
+   \param idMedia Database ID of the item belonging to the given import
+   \param import Import the given item belongs to
+   */
+  bool SetImportForItem(int idMedia, const CMediaImport& import);
+
+  /*! \brief Remove the import from an item
+  \param idMedia Database ID of the item belonging to the given import
+  \param import Import the given item belonged to
+  */
+  bool RemoveImportFromItem(int idMedia, const CMediaImport& import);
+
+  /*! \brief Deletes all items from the given import
+   \param import Import from which all items are deleted
+   */
+  bool DeleteItemsFromImport(const CMediaImport& import);
+  
+  /*! \brief Enable/Disable all import items from the given import path
+   \param enabled Whether to enable or disable the items
+   */
+  void SetImportItemsEnabled(bool enabled);
+  
+  /*! \brief Enable/Disable all import items from the given import path
+   \param enabled Whether to enable or disable the items
+   */
+  void SetImportItemsEnabled(bool enabled, const CMediaImport& import);
+
   /*! \brief Updates the dateAdded field in the files table for the file
    with the given idFile and the given path based on the files modification date
    \param idFile id of the file in the files table
    \param strFileNameAndPath path to the file
    */
-  void UpdateFileDateAdded(int idFile, const std::string& strFileNameAndPath);
+  void UpdateFileDateAdded(int idFile, const std::string& strFileNameAndPathh, CDateTime dateAdded = CDateTime());
 
   void ExportToXML(const std::string &path, bool singleFiles = false, bool images=false, bool actorThumbs=false, bool overwrite=false);
   void ExportActorThumbs(const std::string &path, const CVideoInfoTag& tag, bool singleFiles, bool overwrite=false);
@@ -730,12 +826,12 @@ public:
   bool ImportArtFromXML(const TiXmlNode *node, std::map<std::string, std::string> &artwork);
 
   // smart playlists and main retrieval work in these functions
-  bool GetMoviesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription());
+  bool GetMoviesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   bool GetSetsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool ignoreSingleMovieSets = false);
-  bool GetTvShowsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription());
+  bool GetTvShowsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   bool GetSeasonsByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription());
-  bool GetEpisodesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription());
-  bool GetMusicVideosByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const SortDescription &sortDescription = SortDescription());
+  bool GetEpisodesByWhere(const std::string& strBaseDir, const Filter &filter, CFileItemList& items, bool appendFullShowPath = true, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
+  bool GetMusicVideosByWhere(const std::string &baseDir, const Filter &filter, CFileItemList& items, bool checkLocks = true, const SortDescription &sortDescription = SortDescription(), bool getDetails = false);
   
   // retrieve sorted and limited items
   bool GetSortedVideos(const MediaType &mediaType, const std::string& strBaseDir, const SortDescription &sortDescription, CFileItemList& items, const Filter &filter = Filter());
@@ -793,6 +889,20 @@ public:
   void ClearMovieSet(int idMovie);
   void SetMovieSet(int idMovie, int idSet);
 
+  /*! \brief Removes the path from the tvshow link table.
+  \param idShow the id of the show.
+  \param path the path to remove.
+  \return true if successfully removed, false otherwise.
+  */
+  bool RemovePathFromTvShow(int idShow, const std::string &path);
+
+  /*! \brief Removes the path from the tvshow link table.
+  \param idShow the id of the show.
+  \param idPath the id of the path to remove.
+  \return true if successfully removed, false otherwise.
+  */
+  bool RemovePathFromTvShow(int idShow, int idPath);
+
 protected:
   int GetMovieId(const std::string& strFilenameAndPath);
   int GetMusicVideoId(const std::string& strFilenameAndPath);
@@ -810,6 +920,22 @@ protected:
    */
   int GetFileId(const std::string& url);
 
+  /*! \brief Get the id of a source from its identifier
+   \param sourceIdentifier identifier of the source
+   \return id of the source, -1 if it is not in the db.
+   */
+  int GetSourceId(const std::string& sourceIdentifier);
+
+  /*! \brief Get the id of an import from its path
+   \param path path of the import
+   \param mediaType media type of the import
+   \param sourceIdentifier optional source identifier
+   \return id of the import, -1 if it is not in the db.
+   */
+  int GetImportId(const std::string& path, const MediaType& mediaType, const std::string &sourceIdentifier = "");
+  int GetImportId(const CMediaImport& import);
+  int GetImportId(int idPath, const MediaType& mediaType, int idSource = -1);
+
   int AddToTable(const std::string& table, const std::string& firstField, const std::string& secondField, const std::string& value);
   int AddActor(const std::string& strActor, const std::string& thumbURL, const std::string &thumb = "");
 
@@ -820,9 +946,10 @@ protected:
    \param idShow the id of the show.
    \param path the path to add.
    \param parentPath the parent path of the path to add.
+   \param dateAdded date/time when the path was added
    \return true if successfully added, false otherwise.
    */
-  bool AddPathToTvShow(int idShow, const std::string &path, const std::string &parentPath);
+  bool AddPathToTvShow(int idShow, const std::string &path, const std::string &parentPath, CDateTime dateAdded = CDateTime());
 
   /*! \brief Check whether a show is already in the library.
    Matches on unique identifier or matching title and premiered date.
@@ -866,7 +993,7 @@ private:
   virtual void CreateTables();
   virtual void CreateAnalytics();
   virtual void UpdateTables(int version);
-  void CreateLinkIndex(const char *table);
+  void CreateLinkIndex(const char *table, bool createNameIndex = true);
   void CreateForeignLinkIndex(const char *table, const char *foreignkey);
 
   /*! \brief (Re)Create the generic database views for movies, tvshows,

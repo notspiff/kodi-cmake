@@ -25,6 +25,7 @@
 #include "FileItemListModification.h"
 #include "GUIPassword.h"
 #include "GUIUserMessages.h"
+#include "LibraryQueue.h"
 #include "PartyModeManager.h"
 #include "PlayListPlayer.h"
 #include "URL.h"
@@ -72,7 +73,6 @@
 #include "utils/TimeUtils.h"
 #include "utils/URIUtils.h"
 #include "video/VideoInfoTag.h"
-#include "video/VideoLibraryQueue.h"
 #include "windows/GUIWindowFileManager.h"
 
 #define CONTROL_BTNVIEWASICONS       2
@@ -1574,7 +1574,7 @@ bool CGUIMediaWindow::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
     {
       CFileItemPtr item = m_vecItems->Get(itemNumber);
       m_viewControl.SetSelectedItem(m_viewControl.GetSelectedItem() + 1);
-      CVideoLibraryQueue::Get().MarkAsWatched(item, (button == CONTEXT_BUTTON_MARK_WATCHED));
+      CLibraryQueue::Get().MarkAsWatched(item, (button == CONTEXT_BUTTON_MARK_WATCHED));
       return true;
     }
   case CONTEXT_BUTTON_ADD_FAVOURITE:

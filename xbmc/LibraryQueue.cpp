@@ -18,12 +18,11 @@
  *
  */
 
-#include "VideoLibraryQueue.h"
+#include "LibraryQueue.h"
 #include "GUIUserMessages.h"
 #include "Util.h"
 #include "guilib/GUIWindowManager.h"
 #include "threads/SingleLock.h"
-#include "video/VideoDatabase.h"
 #include "video/jobs/VideoLibraryCleaningJob.h"
 #include "video/jobs/VideoLibraryJob.h"
 #include "video/jobs/VideoLibraryMarkWatchedJob.h"
@@ -31,65 +30,67 @@
 
 using namespace std;
 
-CVideoLibraryQueue::CVideoLibraryQueue()
+CLibraryQueue::CLibraryQueue()
   : CJobQueue(false, 1, CJob::PRIORITY_LOW),
     m_jobs(),
+    m_callbacks(),
     m_cleaning(false)
 { }
 
-CVideoLibraryQueue::~CVideoLibraryQueue()
+CLibraryQueue::~CLibraryQueue()
 {
   CSingleLock lock(m_critical);
   m_jobs.clear();
+  m_callbacks.clear();
 }
 
-CVideoLibraryQueue& CVideoLibraryQueue::Get()
+CLibraryQueue& CLibraryQueue::Get()
 {
-  static CVideoLibraryQueue s_instance;
+  static CLibraryQueue s_instance;
   return s_instance;
 }
 
-void CVideoLibraryQueue::ScanLibrary(const std::string& directory, bool scanAll /* = false */ , bool showProgress /* = true */)
+void CLibraryQueue::ScanVideoLibrary(const std::string& directory, bool scanAll /* = false */ , bool showProgress /* = true */)
 {
   AddJob(new CVideoLibraryScanningJob(directory, scanAll, showProgress));
 }
 
-bool CVideoLibraryQueue::IsScanningLibrary() const
+bool CLibraryQueue::IsScanningLibrary() const
 {
   // check if the library is being cleaned synchronously
   if (m_cleaning)
     return true;
 
   // check if the library is being scanned asynchronously
-  VideoLibraryJobMap::const_iterator scanningJobs = m_jobs.find("VideoLibraryScanningJob");
+  LibraryJobMap::const_iterator scanningJobs = m_jobs.find("VideoLibraryScanningJob");
   if (scanningJobs != m_jobs.end() && !scanningJobs->second.empty())
     return true;
 
   // check if the library is being cleaned asynchronously
-  VideoLibraryJobMap::const_iterator cleaningJobs = m_jobs.find("VideoLibraryCleaningJob");
+  LibraryJobMap::const_iterator cleaningJobs = m_jobs.find("VideoLibraryCleaningJob");
   if (cleaningJobs != m_jobs.end() && !cleaningJobs->second.empty())
     return true;
 
   return false;
 }
 
-void CVideoLibraryQueue::StopLibraryScanning()
+void CLibraryQueue::StopLibraryScanning()
 {
   CSingleLock lock(m_critical);
-  VideoLibraryJobMap::const_iterator scanningJobs = m_jobs.find("VideoLibraryScanningJob");
+  LibraryJobMap::const_iterator scanningJobs = m_jobs.find("VideoLibraryScanningJob");
   if (scanningJobs == m_jobs.end())
     return;
 
   // get a copy of the scanning jobs because CancelJob() will modify m_scanningJobs
-  VideoLibraryJobs tmpScanningJobs(scanningJobs->second.begin(), scanningJobs->second.end());
+  LibraryJobs tmpScanningJobs(scanningJobs->second.begin(), scanningJobs->second.end());
 
   // cancel all scanning jobs
-  for (VideoLibraryJobs::const_iterator job = tmpScanningJobs.begin(); job != tmpScanningJobs.end(); ++job)
+  for (LibraryJobs::const_iterator job = tmpScanningJobs.begin(); job != tmpScanningJobs.end(); ++job)
     CancelJob(*job);
   Refresh();
 }
 
-void CVideoLibraryQueue::CleanLibrary(const std::set<int>& paths /* = std::set<int>() */, bool asynchronous /* = true */, CGUIDialogProgressBarHandle* progressBar /* = NULL */)
+void CLibraryQueue::CleanVideoLibrary(const std::set<int>& paths /* = std::set<int>() */, bool asynchronous /* = true */, CGUIDialogProgressBarHandle* progressBar /* = NULL */)
 {
   CVideoLibraryCleaningJob* cleaningJob = new CVideoLibraryCleaningJob(paths, progressBar);
 
@@ -106,7 +107,7 @@ void CVideoLibraryQueue::CleanLibrary(const std::set<int>& paths /* = std::set<i
   }
 }
 
-void CVideoLibraryQueue::CleanLibraryModal(const std::set<int>& paths /* = std::set<int>() */)
+void CLibraryQueue::CleanVideoLibraryModal(const std::set<int>& paths /* = std::set<int>() */)
 {
   // we can't perform a modal library cleaning if other jobs are running
   if (IsRunning())
@@ -119,7 +120,7 @@ void CVideoLibraryQueue::CleanLibraryModal(const std::set<int>& paths /* = std::
   Refresh();
 }
 
-void CVideoLibraryQueue::MarkAsWatched(const CFileItemPtr &item, bool watched)
+void CLibraryQueue::MarkAsWatched(const CFileItemPtr &item, bool watched)
 {
   if (item == NULL)
     return;
@@ -127,7 +128,7 @@ void CVideoLibraryQueue::MarkAsWatched(const CFileItemPtr &item, bool watched)
   AddJob(new CVideoLibraryMarkWatchedJob(item, watched));
 }
 
-void CVideoLibraryQueue::AddJob(CVideoLibraryJob *job)
+void CLibraryQueue::AddJob(CLibraryJob* job, IJobCallback* callback /* = NULL */)
 {
   if (job == NULL)
     return;
@@ -138,18 +139,22 @@ void CVideoLibraryQueue::AddJob(CVideoLibraryJob *job)
 
   // add the job to our list of queued/running jobs
   std::string jobType = job->GetType();
-  VideoLibraryJobMap::iterator jobsIt = m_jobs.find(jobType);
+  LibraryJobMap::iterator jobsIt = m_jobs.find(jobType);
   if (jobsIt == m_jobs.end())
   {
-    VideoLibraryJobs jobs;
+    LibraryJobs jobs;
     jobs.insert(job);
     m_jobs.insert(std::make_pair(jobType, jobs));
   }
   else
     jobsIt->second.insert(job);
+
+  // if there's a specific callback, add it to the callback map
+  if (callback != NULL)
+    m_callbacks.insert(std::make_pair(job, callback));
 }
 
-void CVideoLibraryQueue::CancelJob(CVideoLibraryJob *job)
+void CLibraryQueue::CancelJob(CLibraryJob* job)
 {
   if (job == NULL)
     return;
@@ -169,33 +174,51 @@ void CVideoLibraryQueue::CancelJob(CVideoLibraryJob *job)
   CJobQueue::CancelJob(job);
 
   // remove the job from our list of queued/running jobs
-  VideoLibraryJobMap::iterator jobsIt = m_jobs.find(jobType);
+  LibraryJobMap::iterator jobsIt = m_jobs.find(jobType);
   if (jobsIt != m_jobs.end())
     jobsIt->second.erase(job);
+
+  // remove the job (and its callback) from the callback map
+  m_callbacks.erase(job);
 }
 
-void CVideoLibraryQueue::CancelAllJobs()
+void CLibraryQueue::CancelAllJobs()
 {
   CSingleLock lock(m_critical);
   CJobQueue::CancelJobs();
 
-  // remove all scanning jobs
+  // remove all jobs
   m_jobs.clear();
+  m_callbacks.clear();
 }
 
-bool CVideoLibraryQueue::IsRunning() const
+bool CLibraryQueue::IsRunning() const
 {
   return CJobQueue::IsProcessing() || m_cleaning;
 }
 
-void CVideoLibraryQueue::Refresh()
+void CLibraryQueue::Refresh()
 {
   CUtil::DeleteVideoDatabaseDirectoryCache();
   CGUIMessage msg(GUI_MSG_NOTIFY_ALL, 0, 0, GUI_MSG_UPDATE);
   g_windowManager.SendThreadMessage(msg);
 }
 
-void CVideoLibraryQueue::OnJobComplete(unsigned int jobID, bool success, CJob *job)
+void CLibraryQueue::OnJobProgress(unsigned int jobID, unsigned int progress, unsigned int total, const CJob* job)
+{
+  if (job == NULL)
+    return;
+
+  // check if we need to call a specific callback
+  LibraryJobCallbacks::iterator callback = m_callbacks.find(static_cast<const CLibraryJob*>(job));
+  if (callback != m_callbacks.end())
+    callback->second->OnJobProgress(jobID, progress, total, job);
+
+  // let the generic job queue do its work
+  CJobQueue::OnJobProgress(jobID, progress, total, job);
+}
+
+void CLibraryQueue::OnJobComplete(unsigned int jobID, bool success, CJob* job)
 {
   if (success)
   {
@@ -205,11 +228,19 @@ void CVideoLibraryQueue::OnJobComplete(unsigned int jobID, bool success, CJob *j
 
   {
     CSingleLock lock(m_critical);
+    CLibraryJob* libraryJob = static_cast<CLibraryJob*>(job);
+
+    // check if we need to call a specific callback
+    LibraryJobCallbacks::iterator callback = m_callbacks.find(libraryJob);
+    if (callback != m_callbacks.end())
+      callback->second->OnJobComplete(jobID, success, job);
+
     // remove the job from our list of queued/running jobs
-    VideoLibraryJobMap::iterator jobsIt = m_jobs.find(job->GetType());
+    LibraryJobMap::iterator jobsIt = m_jobs.find(job->GetType());
     if (jobsIt != m_jobs.end())
-      jobsIt->second.erase(static_cast<CVideoLibraryJob*>(job));
+      jobsIt->second.erase(libraryJob);
   }
 
+  // let the generic job queue do its work
   return CJobQueue::OnJobComplete(jobID, success, job);
 }

@@ -1,0 +1,89 @@
+From d75e7367ef3b3876cf1cf986a033114b4709bc41 Mon Sep 17 00:00:00 2001
+From: montellese <montellese@xbmc.org>
+Date: Sun, 8 Mar 2015 23:49:24 +0100
+Subject: [PATCH] platinum: add xbmc:country for countries
+
+---
+ lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.cpp   |  2 ++
+ lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.h     |  2 ++
+ .../Platinum/Source/Devices/MediaServer/PltMediaItem.cpp      | 11 +++++++++++
+ .../Platinum/Source/Devices/MediaServer/PltMediaItem.h        |  1 +
+ 4 files changed, 16 insertions(+)
+
+diff --git a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.cpp b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.cpp
+index b58aa50..0f24ab3 100644
+--- a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.cpp
++++ b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.cpp
+@@ -173,6 +173,8 @@ PLT_Didl::ConvertFilterToMask(const NPT_String& filter)
+             mask |= PLT_FILTER_MASK_XBMC_ARTWORK;
+         } else if (NPT_String::CompareN(s+i, PLT_FILTER_FIELD_XBMC_UNIQUE_IDENTIFIER, len, true) == 0) {
+             mask |= PLT_FILTER_MASK_XBMC_UNIQUE_IDENTIFIER;
++        } else if (NPT_String::CompareN(s + i, PLT_FILTER_FIELD_XBMC_COUNTRY, len, true) == 0) {
++          mask |= PLT_FILTER_MASK_XBMC_COUNTRY;
+         }
+ 
+         if (next_comma < 0) {
+diff --git a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.h b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.h
+index fe1de45..49b92d0 100644
+--- a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.h
++++ b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltDidl.h
+@@ -100,6 +100,7 @@
+ #define PLT_FILTER_MASK_XBMC_VOTES                  NPT_UINT64_C(0x0000400000000000)
+ #define PLT_FILTER_MASK_XBMC_ARTWORK                NPT_UINT64_C(0x0000800000000000)
+ #define PLT_FILTER_MASK_XBMC_UNIQUE_IDENTIFIER      NPT_UINT64_C(0x0001000000000000)
++#define PLT_FILTER_MASK_XBMC_COUNTRY                NPT_UINT64_C(0x0002000000000000)
+ 
+ #define PLT_FILTER_FIELD_TITLE                      "dc:title"
+ #define PLT_FILTER_FIELD_CREATOR                    "dc:creator"
+@@ -150,6 +151,7 @@
+ #define PLT_FILTER_FIELD_XBMC_VOTES                 "xbmc:votes"
+ #define PLT_FILTER_FIELD_XBMC_ARTWORK               "xbmc:artwork"
+ #define PLT_FILTER_FIELD_XBMC_UNIQUE_IDENTIFIER     "xbmc:uniqueidentifier"
++#define PLT_FILTER_FIELD_XBMC_COUNTRY               "xbmc:country"
+ 
+ extern const char* didl_header;
+ extern const char* didl_footer;
+diff --git a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.cpp b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.cpp
+index f937df2..95b2241 100644
+--- a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.cpp
++++ b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.cpp
+@@ -261,6 +261,7 @@ PLT_MediaObject::Reset()
+     m_XbmcInfo.votes = "";
+     m_XbmcInfo.artwork.Clear();
+     m_XbmcInfo.unique_identifier = "";
++    m_XbmcInfo.countries.Clear();
+ 
+     m_Didl = "";
+ 
+@@ -606,6 +607,16 @@ PLT_MediaObject::ToDidl(NPT_UInt64 mask, NPT_String& didl)
+         didl += "</xbmc:uniqueidentifier>";
+     }
+ 
++    // genre
++    if (mask & PLT_FILTER_MASK_XBMC_COUNTRY) {
++      for (NPT_List<NPT_String>::Iterator it =
++        m_XbmcInfo.countries.GetFirstItem(); it; ++it) {
++        didl += "<xbmc:country>";
++        PLT_Didl::AppendXmlEscape(didl, (*it));
++        didl += "</xbmc:country>";
++      }
++    }
++
+     // class is required
+     didl += "<upnp:class";
+ 	if (!m_ObjectClass.friendly_name.IsEmpty()) {
+diff --git a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.h b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.h
+index 6461b81..0efd505 100644
+--- a/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.h
++++ b/lib/libUPnP/Platinum/Source/Devices/MediaServer/PltMediaItem.h
+@@ -170,6 +170,7 @@ typedef struct {
+   NPT_String votes;
+   PLT_Artworks artwork;
+   NPT_String unique_identifier;
++  NPT_List<NPT_String> countries;
+ } PLT_XbmcInfo;
+ 
+ typedef struct {
+-- 
+1.9.4.msysgit.2
+

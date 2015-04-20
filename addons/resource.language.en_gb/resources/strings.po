@@ -2470,6 +2470,7 @@ msgid "Studio"
 msgstr ""
 
 #: xbmc/playlists/SmartPlaylist.cpp
+#: skin.confluence
 msgctxt "#573"
 msgid "Path"
 msgstr ""
@@ -2494,7 +2495,12 @@ msgctxt "#577"
 msgid "Date Taken"
 msgstr ""
 
-#empty strings from id 578 to 579
+#: xbmc/media/import/windows/GUIViewStateMediaSourceBrowser.cpp
+msgctxt "#578"
+msgid "Last synced"
+msgstr ""
+
+#empty string with id 579
 
 msgctxt "#580"
 msgid "Sort direction"
@@ -3138,7 +3144,11 @@ msgctxt "#751"
 msgid "Removing source"
 msgstr ""
 
-#empty strings from id 752 to 753
+msgctxt "#752"
+msgid "Media sources"
+msgstr ""
+
+#empty string with id 753
 
 msgctxt "#754"
 msgid "Add program link"
@@ -7018,6 +7028,7 @@ msgid "Keep"
 msgstr ""
 
 #: xbmc/dialogs/GUIDialogFavourites.cpp
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
 #: xbmc/video/VideoDatabase.cpp
 msgctxt "#15015"
 msgid "Remove"
@@ -7788,6 +7799,7 @@ msgctxt "#19032"
 msgid "Timeline"
 msgstr ""
 
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
 msgctxt "#19033"
 msgid "Information"
 msgstr ""
@@ -16191,7 +16203,27 @@ msgctxt "#36549"
 msgid "Use iOS8 compatible AirPlay support. If you have trouble with older iOS devices detecting this application as a valid target try switching this off. This option requires a restart to take effect!"
 msgstr ""
 
-#empty strings from id 36550 to 36599
+#: system/settings/settings.xml
+msgctxt "#36550"
+msgid "Import media items from UPnP servers"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#36551"
+msgid "Shows a popup for every new UPnP server available and asks whether to import media items available into the local library. It is possible to choose which media items to import and which not. The imported items appear in the library like any other media item except that it can only be played if the UPnP server they were imported from is available."
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#36552"
+msgid "Ignore incompatible UPnP servers"
+msgstr ""
+
+#: system/settings/settings.xml
+msgctxt "#36553"
+msgid "For the UPnP import to be able to import specific media items the UPnP server must support the UPnP Search functionality (ContentDirectory:Search). Otherwise all available items are imported for every media item to import. Therefore this option should only be enabled if only items of a single media item are imported from a UPnP server which doesn't support the UPnP Search functionality."
+msgstr ""
+
+#empty strings from id 36554 to 36599
 #reserved strings 365XX
 
 #. Description of settings category "Music -> Library" with label #14022
@@ -16584,3 +16616,326 @@ msgstr ""
 msgctxt "#38016"
 msgid "%d fps"
 msgstr ""
+
+# empty strings from id 38017 to 38999
+
+#: xbmc/media/import/MediaImportManager.cpp
+msgctxt "#39000"
+msgid "New media provider detected"
+msgstr ""
+
+#: xbmc/media/import/task/MediaImportSourceRegistrationTask.cpp
+msgctxt "#39001"
+msgid "Unable to import items"
+msgstr ""
+
+# empty strings from id 39002 to 39004
+
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39005"
+msgid "Media types available for import:"
+msgstr ""
+
+#. (media type plural), (media type plural) (in combination with #39007)
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39006"
+msgid "%s, %s"
+msgstr ""
+
+#. (media type plural) and (media type plural) (in combination with #39006)
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39007"
+msgid "%s and %s"
+msgstr ""
+
+#. Retrieving media items from (media provider name)
+#: xbmc/media/import/task/MediaImportRetrievalTask.cpp
+msgctxt "#39008"
+msgid "Retrieving media items from %s..."
+msgstr ""
+
+#. Retrieving media items from (media provider name)
+#: xbmc/media/import/task/MediaImportChangesetTask.cpp
+msgctxt "#39009"
+msgid "Processing media items from %s..."
+msgstr "
+
+#. Processing (media type plural)...
+#: xbmc/media/import/task/MediaImportChangesetTask.cpp
+msgctxt "#39010"
+msgid "Processing %s..."
+msgstr ""
+
+#. Importing (media type plural) from (media provider name)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39011"
+msgid "Importing %s from %s..."
+msgstr ""
+
+#. Adding (media item title)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39012"
+msgid "Adding %s..."
+msgstr ""
+
+#. Updating (media item title)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39013"
+msgid "Updating %s..."
+msgstr ""
+
+#. Removing (media item title)...
+#: xbmc/media/import/task/MediaImportSynchronisationTask.cpp
+msgctxt "#39014"
+msgid "Removing %s..."
+msgstr ""
+
+#. (container title): (media item title)
+#: xbmc/filesystem/MediaImportDirectory.cpp
+#: xbmc/media/import/handler/EpisodeImportHandler.cpp
+#: xbmc/media/import/handler/SeasonImportHandler.cpp
+msgctxt "#39015"
+msgid "%s: %s"
+msgstr ""
+
+#. Removing import of (media type plural) from (media provider name)...
+#: xbmc/media/import/repositories/GenericMediaImportRepository.cpp
+#: xbmc/media/import/task/MediaImportRemovalTask.cpp
+msgctxt "#39016"
+msgid "Removing import of %s from %s..."
+msgstr ""
+
+#. Removing (media provider name)...
+#: xbmc/media/import/repositories/GenericMediaImportRepository.cpp
+msgctxt "#39017"
+msgid "Removing %s..."
+msgstr ""
+
+#. Retrieving (media type plural)...
+#: xbmc/network/upnp/UPnPMediaImporter.cpp
+msgctxt "#39018"
+msgid "Retrieving %s..."
+msgstr ""
+
+#. Cleaning up (media type plural) from (media provider name)...
+#: xbmc/media/import/task/MediaImportCleanupTask.cpp
+msgctxt "#39019"
+msgid "Cleaning up %s from %s..."
+msgstr ""
+
+#. Title of the node showing all available media imports
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39020"
+msgid "All media imports"
+msgstr ""
+
+#. Title of the node showing all media imports grouped by media provider
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39021"
+msgid "By media providers"
+msgstr ""
+
+#. Title of the node showing all media imports grouped by media types
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39022"
+msgid "By media types"
+msgstr ""
+
+#. Title of the node showing all available media providers
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39023"
+msgid "All media providers"
+msgstr ""
+
+#. Title of the node showing all active media providers
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39024"
+msgid "Active media providers"
+msgstr ""
+
+#. Title of the node showing all inactive media providers
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39025"
+msgid "Inactive media providers"
+msgstr ""
+
+#. Label of the state of an active media provider
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39026"
+msgid "Active"
+msgstr ""
+
+#. Label of the state of an inactive media provider
+#: xbmc/filesystem/MediaImportDirectory.cpp
+msgctxt "#39027"
+msgid "Inactive"
+msgstr ""
+
+# strings from id 39028 to 39099 reserved for media import
+
+#: xbmc/filesystem/MediaImportDirectory.cpp
+#: xbmc/media/import/windows/GUIViewStateMediaSourceBrowser.cpp
+msgctxt "#39100"
+msgid "Media providers"
+msgstr ""
+
+#: xbmc/filesystem/MediaImportDirectory.cpp
+#: xbmc/media/import/windows/GUIViewStateMediaSourceBrowser.cpp
+msgctxt "#39101"
+msgid "Media imports"
+msgstr ""
+
+#. Title of the dialog asking whether to really remove a media provider
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39102"
+msgid "Remove media provider"
+msgstr ""
+
+#. Text of the dialog asking whether to really remove a media provider/import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39103"
+msgid "Are you sure you want to remove %s and all of its items?"
+msgstr ""
+
+#. Title of the dialog asking whether to really remove a media import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39104"
+msgid "Remove media import"
+msgstr ""
+
+#. Additional text of the dialog asking whether to really remove a media import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39105"
+msgid "Are you sure you want to remove %s and all of its items? It will also remove the imports of %s and their items."
+msgstr ""
+
+#. Label of the button to add a new import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39106"
+msgid "Add import..."
+msgstr ""
+
+#. Context button label to synchronise a media provider/import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39107"
+msgid "Synchronise"
+msgstr ""
+
+#. Title of the dialog reporting an error adding a new media import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39108"
+msgid "New media import"
+msgstr ""
+
+#. Text of the dialog reporting an error adding a new media import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39109"
+msgid "Adding a new media import failed!"
+msgstr ""
+
+#. Title of the dialog reporting an error synchronising a media provider
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39110"
+msgid "Synchronising media provider failed"
+msgstr ""
+
+#. Text of the dialog reporting an error synchronising a media provider
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39111"
+msgid "Synchronising with the media provider %s failed!"
+msgstr ""
+
+#. Title of the dialog reporting an error synchronising a media import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39112"
+msgid "Synchronising media import failed"
+msgstr ""
+
+#. Text of the dialog reporting an error synchronising a media import
+#: xbmc/media/import/windows/GUIWindowMediaSourceBrowser.cpp
+msgctxt "#39113"
+msgid "Synchronising with the media import %s failed!"
+msgstr ""
+
+# strings from id 39114 to 39199 reserved for media import GUI integration
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39200"
+msgid "Media provider information"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39201"
+msgid "Media import information"
+msgstr ""
+
+#: skin.confluence
+msgctxt "#39202"
+msgid "Provider"
+msgstr ""
+
+#: skin.confluence
+msgctxt "#39203"
+msgid "Media type"
+msgstr ""
+
+#: skin.confluence
+msgctxt "#39204"
+msgid "Status"
+msgstr ""
+
+#: skin.confluence
+msgctxt "#39205"
+msgid "Last synced"
+msgstr ""
+
+#: skin.confluence
+msgctxt "#39206"
+msgid "Available media types"
+msgstr ""
+
+#strings from 39207 to 39249 are reserved for media import GUI info
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39250"
+msgid "Synchronisation"
+msgstr ""
+
+#strings from 39251 to 39299 are reserved for media import settings
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39300"
+msgid "Update imported media items"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39301"
+msgid "Update playback-related metadata"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39302"
+msgid "Update metadata on the media provider"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39303"
+msgid "Update playback-related metadata on the media provider"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39304"
+msgid "Start synchronisation"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39305"
+msgid "Automatically"
+msgstr ""
+
+#: xbmc/media/import/dialogs/GUIDialogMediaImportInfo.cpp
+msgctxt "#39306"
+msgid "Manually"
+msgstr ""
+
+# strings from id 39306 to 39399 reserved for media import settings

@@ -66,12 +66,13 @@ typedef struct {
 typedef struct {
     NPT_String name;
     NPT_String role;
+    NPT_String thumb;
 } PLT_PersonRole;
 
 class PLT_PersonRoles  : public NPT_List<PLT_PersonRole>
 {
 public:
-    NPT_Result Add(const NPT_String& name, const NPT_String& role = "");
+    NPT_Result Add(const NPT_String& name, const NPT_String& role = "", const NPT_String& thumb = "");
     NPT_Result ToDidl(NPT_String& didl, const NPT_String& tag);
     NPT_Result FromDidl(const NPT_Array<NPT_XmlElementNode*>& nodes);
 };
@@ -170,6 +171,7 @@ typedef struct {
   NPT_String votes;
   PLT_Artworks artwork;
   NPT_String unique_identifier;
+  NPT_List<NPT_String> countries;
 } PLT_XbmcInfo;
 
 typedef struct {

@@ -61,6 +61,7 @@
 #include "video/dialogs/GUIDialogVideoInfo.h"
 #include "pvr/recordings/PVRRecording.h"
 #include "ContextMenuManager.h"
+#include "media/import/MediaImportManager.h"
 
 using namespace XFILE;
 using namespace VIDEODATABASEDIRECTORY;
@@ -899,11 +900,15 @@ void CGUIWindowVideoNav::GetContextButtons(int itemNumber, CContextButtons &butt
       VIDEO::SScanSettings settings;
       GetScraperForItem(item.get(), info, settings);
 
-      if (info && info->Content() == CONTENT_TVSHOWS)
+      if ((info && info->Content() == CONTENT_TVSHOWS) ||
+        (item->IsVideoDb() &&
+         (item->GetVideoContentType() == VIDEODB_CONTENT_TVSHOWS || item->GetVideoContentType() == VIDEODB_CONTENT_EPISODES)))
         buttons.Add(CONTEXT_BUTTON_INFO, item->m_bIsFolder ? 20351 : 20352);
-      else if (info && info->Content() == CONTENT_MUSICVIDEOS)
+      else if ((info && info->Content() == CONTENT_MUSICVIDEOS) ||
+               (item->IsVideoDb() && item->GetVideoContentType() == VIDEODB_CONTENT_MUSICVIDEOS))
         buttons.Add(CONTEXT_BUTTON_INFO,20393);
-      else if (info && info->Content() == CONTENT_MOVIES)
+      else if ((info && info->Content() == CONTENT_MOVIES) ||
+               (item->IsVideoDb() && item->GetVideoContentType() == VIDEODB_CONTENT_MOVIES))
         buttons.Add(CONTEXT_BUTTON_INFO, 13346);
 
       // can we update the database?
@@ -1087,7 +1092,17 @@ bool CGUIWindowVideoNav::OnContextButton(int itemNumber, CONTEXT_BUTTON button)
 bool CGUIWindowVideoNav::OnClick(int iItem)
 {
   CFileItemPtr item = m_vecItems->Get(iItem);
-  if (!item->m_bIsFolder && item->IsVideoDb() && !item->Exists())
+  if (!item->m_bIsFolder && item->IsImported() && !CMediaImportManager::Get().IsSourceActive(item->GetSource()))
+  {
+    CMediaImportSource source(item->GetSource());
+    if (CMediaImportManager::Get().GetSource(source.GetIdentifier(), source))
+      CGUIDialogOK::ShowAndGetInput("Media provider unavailable", "The media provider " + source.GetFriendlyName() + " is currently not available.");
+    else
+      CGUIDialogOK::ShowAndGetInput("Media provider unavailable", "The media provider is currently not available.");
+
+    return true;
+  }
+  else if (!item->m_bIsFolder && item->IsVideoDb() && !item->Exists())
   {
     CLog::Log(LOGDEBUG, "%s called on '%s' but file doesn't exist", __FUNCTION__, item->GetPath().c_str());
     if (CProfilesManager::Get().GetCurrentProfile().canWriteDatabases() || g_passwordManager.bMasterUser)
