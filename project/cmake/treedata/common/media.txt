@@ -1,0 +1,7 @@
+xbmc/media                     media
+xbmc/media/import              media/import
+xbmc/media/import/dialogs      media/import/dialogs
+xbmc/media/import/handler      media/import/handler
+xbmc/media/import/repositories media/import/repositories
+xbmc/media/import/task         media/import/task
+xbmc/media/import/windows      media/import/windows

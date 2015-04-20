@@ -30,6 +30,7 @@ set(SOURCES AddonsDirectory.cpp
             ISO9660Directory.cpp
             ISOFile.cpp
             LibraryDirectory.cpp
+            MediaImportDirectory.cpp
             MemBufferCache.cpp
             MultiPathDirectory.cpp
             MultiPathFile.cpp

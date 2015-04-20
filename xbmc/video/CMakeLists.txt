@@ -8,7 +8,6 @@ set(SOURCES Bookmark.cpp
             VideoInfoDownloader.cpp
             VideoInfoScanner.cpp
             VideoInfoTag.cpp
-            VideoLibraryQueue.cpp
             VideoReferenceClock.cpp
             VideoThumbLoader.cpp)
 
