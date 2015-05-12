@@ -36,6 +36,7 @@
 #include "input/Key.h"
 #include "utils/log.h"
 #include "utils/SystemInfo.h"
+#include "guilib/GUIWindowManager.h"
 #include "Util.h"
 #include <map>
 #include <queue>
@@ -352,7 +353,13 @@ bool CEventServer::ExecuteNextAction()
           CButtonTranslator::TranslateActionString(actionEvent.actionName.c_str(), actionID);
           CAction action(actionID, 1.0f, 0.0f, actionEvent.actionName);
           g_audioManager.PlayActionSound(action);
+          int currentWindow = g_windowManager.GetActiveWindow();
           g_application.OnAction(action);
+          // need to return false or screensaver is immediately reset
+          // in CInputManager::ProcessEventServer()
+          if (g_windowManager.GetActiveWindow() == WINDOW_SCREENSAVER &&
+              currentWindow != WINDOW_SCREENSAVER)
+            return false;
         }
         break;
       }
