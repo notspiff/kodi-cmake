@@ -4140,7 +4140,8 @@ void CApplication::CheckScreenSaverAndDPMS()
 // activate the screensaver.
 // if forceType is true, we ignore the various conditions that can alter
 // the type of screensaver displayed
-void CApplication::ActivateScreenSaver(bool forceType /*= false */)
+void CApplication::ActivateScreenSaver(bool forceType /*= false */,
+                                       std::string addonID /* = "" */)
 {
   if (m_pPlayer->IsPlayingAudio() && CSettings::GetInstance().GetBool(CSettings::SETTING_SCREENSAVER_USEMUSICVISINSTEAD) && !CSettings::GetInstance().GetString(CSettings::SETTING_MUSICPLAYER_VISUALISATION).empty())
   { // just activate the visualisation if user toggled the usemusicvisinstead option
@@ -4149,6 +4150,9 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
   }
 
   m_bScreenSave = true;
+
+  if (addonID.empty())
+    addonID = CSettings::Get().GetString("screensaver.mode");
 
   // Get Screensaver Mode
   m_screenSaver.reset();
@@ -4180,7 +4184,7 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */)
   else if (m_screenSaver->ID().empty())
     return;
   else
-    g_windowManager.ActivateWindow(WINDOW_SCREENSAVER);
+    g_windowManager.ActivateWindow(WINDOW_SCREENSAVER, addonID);
 }
 
 void CApplication::CheckShutdown()
