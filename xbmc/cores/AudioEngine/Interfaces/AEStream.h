@@ -39,6 +39,15 @@ enum AEStreamOptions
 };
 
 /**
+ * Callback interafce for VideoPlayer clock needed by AE for sync
+ */
+class IAEClockCallback
+{
+public:
+  virtual double GetClock() = 0;
+};
+
+/**
  * IAEStream Stream Interface for streaming audio
  */
 class IAEStream

@@ -133,6 +133,7 @@ struct MsgStreamNew
 {
   AEAudioFormat format;
   unsigned int options;
+  IAEClockCallback *clock;
 };
 
 struct MsgStreamSample
@@ -234,8 +235,8 @@ public:
   virtual void  SetSoundMode(const int mode);
 
   /* returns a new stream for data in the specified format */
-  virtual IAEStream *MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo& channelLayout, unsigned int options = 0);
-  virtual IAEStream *FreeStream(IAEStream *stream);
+  virtual IAEStream *MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo& channelLayout, unsigned int options = 0, IAEClockCallback *clock = NULL);
+  virtual bool FreeStream(IAEStream *stream);
 
   /* returns a new sound object */
   virtual IAESound *MakeSound(const std::string& file);

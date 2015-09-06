@@ -27,8 +27,7 @@
 #include "cores/AudioEngine/Interfaces/AEStream.h"
 #include "settings/MediaSettings.h"
 
-CDVDAudio::CDVDAudio(volatile bool &bStop)
-  : m_bStop(bStop)
+CDVDAudio::CDVDAudio(volatile bool &bStop, CDVDClock *clock) : m_bStop(bStop), m_pClock(clock)
 {
   m_pAudioStream = NULL;
   m_bPassthrough = false;
@@ -67,7 +66,8 @@ bool CDVDAudio::Create(const DVDAudioFrame &audioframe, AVCodecID codec, bool ne
     audioframe.sample_rate,
     audioframe.encoded_sample_rate,
     audioframe.channel_layout,
-    options
+    options,
+    this
   );
   if (!m_pAudioStream) return false;
 
@@ -125,7 +125,7 @@ unsigned int CDVDAudio::AddPackets(const DVDAudioFrame &audioframe)
   unsigned int offset = 0;
   do
   {
-    unsigned int copied = m_pAudioStream->AddData(audioframe.data, offset, frames);
+    unsigned int copied = m_pAudioStream->AddData(audioframe.data, offset, frames, audioframe.pts / DVD_TIME_BASE * 1000);
     offset += copied;
     frames -= copied;
     if (frames <= 0)
@@ -288,4 +288,13 @@ double CDVDAudio::GetPlayingPts()
   m_timeOfPts = now;
   m_playingPts += played;
   return m_playingPts;
+}
+
+double CDVDAudio::GetClock()
+{
+  double absolute;
+  if (m_pClock)
+    return m_pClock->GetClock(absolute) / DVD_TIME_BASE * 1000;
+  else
+    return 0.0;
 }

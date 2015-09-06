@@ -64,6 +64,7 @@ CActiveAEStream::CActiveAEStream(AEAudioFormat *format)
   m_profile = 0;
   m_matrixEncoding = AV_MATRIX_ENCODING_NONE;
   m_audioServiceType = AV_AUDIO_SERVICE_TYPE_MAIN;
+  m_pClock = NULL;
 }
 
 CActiveAEStream::~CActiveAEStream()

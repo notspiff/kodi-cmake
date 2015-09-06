@@ -99,7 +99,7 @@ CVideoPlayerAudio::CVideoPlayerAudio(CDVDClock* pClock, CDVDMessageQueue& parent
 : CThread("VideoPlayerAudio")
 , m_messageQueue("audio")
 , m_messageParent(parent)
-, m_dvdAudio((bool&)m_bStop)
+, m_dvdAudio((bool&)m_bStop, pClock)
 {
   m_pClock = pClock;
   m_pAudioCodec = NULL;

@@ -304,6 +304,7 @@ void CActiveAE::StateMachine(int signal, Protocol *port, Message *msg)
           CActiveAEStream *stream;
           stream = *(CActiveAEStream**)msg->data;
           DiscardStream(stream);
+          msg->Reply(CActiveAEDataProtocol::ACC);
           return;
         case CActiveAEDataProtocol::FREESOUND:
           sound = *(CActiveAESound**)msg->data;
@@ -519,6 +520,8 @@ void CActiveAE::StateMachine(int signal, Protocol *port, Message *msg)
         case CActiveAEControlProtocol::RESUMESTREAM:
           stream = *(CActiveAEStream**)msg->data;
           stream->m_paused = false;
+          stream->m_syncClock = true;
+          stream->m_syncError.Flush(100);
           streaming = true;
           m_sink.m_controlPort.SendOutMessage(CSinkControlProtocol::STREAMING, &streaming, sizeof(bool));
           m_extTimeout = 0;
@@ -638,6 +641,7 @@ void CActiveAE::StateMachine(int signal, Protocol *port, Message *msg)
         case CActiveAEDataProtocol::FREESTREAM:
           stream = *(CActiveAEStream**)msg->data;
           DiscardStream(stream);
+          msg->Reply(CActiveAEDataProtocol::ACC);
           if (m_streams.empty())
           {
             if (m_extKeepConfig)
@@ -762,6 +766,8 @@ void CActiveAE::StateMachine(int signal, Protocol *port, Message *msg)
           CActiveAEStream *stream;
           stream = *(CActiveAEStream**)msg->data;
           stream->m_paused = false;
+          stream->m_syncClock = true;
+          stream->m_syncError.Flush(100);
           m_state = AE_TOP_CONFIGURED_PLAY;
           m_extTimeout = 0;
           return;
@@ -1307,6 +1313,8 @@ CActiveAEStream* CActiveAE::CreateStream(MsgStreamNew *streamMsg)
     stream->m_bypassDSP = true;
   }
 
+  stream->m_pClock = streamMsg->clock;
+
   m_streams.push_back(stream);
 
   return stream;
@@ -1351,6 +1359,8 @@ void CActiveAE::SFlushStream(CActiveAEStream *stream)
   stream->m_streamPort->Purge();
   stream->m_bufferedTime = 0.0;
   stream->m_paused = false;
+  stream->m_syncClock = true;
+  stream->m_syncError.Flush(100);
 
   // flush the engine if we only have a single stream
   if (m_streams.size() == 1)
@@ -1799,6 +1809,31 @@ bool CActiveAE::RunStages()
   if (m_stats.GetWaterLevel() < MAX_WATER_LEVEL &&
      (m_mode != MODE_TRANSCODE || (m_encoderBuffers && !m_encoderBuffers->m_freeSamples.empty())))
   {
+    // calculate sync error
+    for (it = m_streams.begin(); it != m_streams.end(); ++it)
+    {
+      if ((*it)->m_paused || !(*it)->m_started || !(*it)->m_resampleBuffers || !(*it)->m_pClock)
+        continue;
+
+      if ((*it)->m_resampleBuffers->m_outputSamples.empty())
+        continue;
+
+      CSampleBuffer *buf = (*it)->m_resampleBuffers->m_outputSamples.front();
+      if (buf->timestamp)
+      {
+        AEDelayStatus status;
+        m_stats.GetDelay(status);
+        double pts = buf->timestamp - (buf->pkt_start_offset / buf->pkt->config.sample_rate * 1000);
+        double delay = status.GetDelay() * 1000;
+        double playingPts = pts - delay;
+        if (playingPts < 0)
+          playingPts = 0;
+        double error = playingPts - (*it)->m_pClock->GetClock();
+
+        (*it)->m_syncError.Add(error);
+      }
+    }
+
     // mix streams and sounds sounds
     if (m_mode != MODE_RAW)
     {
@@ -1840,6 +1875,7 @@ bool CActiveAE::RunStages()
         if (!(*it)->m_resampleBuffers->m_outputSamples.empty())
         {
           (*it)->m_started = true;
+          (*it)->m_syncError.Flush(100);
 
           if (!out)
           {
@@ -2855,7 +2891,7 @@ bool CActiveAE::ResampleSound(CActiveAESound *sound)
 // Streams
 //-----------------------------------------------------------------------------
 
-IAEStream *CActiveAE::MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo& channelLayout, unsigned int options)
+IAEStream *CActiveAE::MakeStream(enum AEDataFormat dataFormat, unsigned int sampleRate, unsigned int encodedSampleRate, CAEChannelInfo& channelLayout, unsigned int options, IAEClockCallback *clock)
 {
   if (IsSuspended())
     return NULL;
@@ -2874,6 +2910,7 @@ IAEStream *CActiveAE::MakeStream(enum AEDataFormat dataFormat, unsigned int samp
   MsgStreamNew msg;
   msg.format = format;
   msg.options = options;
+  msg.clock = clock;
 
   Message *reply;
   if (m_dataPort.SendOutMessageSync(CActiveAEDataProtocol::NEWSTREAM,
@@ -2894,10 +2931,22 @@ IAEStream *CActiveAE::MakeStream(enum AEDataFormat dataFormat, unsigned int samp
   return NULL;
 }
 
-IAEStream *CActiveAE::FreeStream(IAEStream *stream)
+bool CActiveAE::FreeStream(IAEStream *stream)
 {
-  m_dataPort.SendOutMessage(CActiveAEDataProtocol::FREESTREAM, &stream, sizeof(IAEStream*));
-  return NULL;
+  Message *reply;
+  if (m_dataPort.SendOutMessageSync(CActiveAEDataProtocol::FREESTREAM,
+                                    &reply,1000,
+                                    &stream, sizeof(IAEStream*)))
+  {
+    bool success = reply->signal == CActiveAEControlProtocol::ACC;
+    reply->Release();
+    if (success)
+    {
+      return true;
+    }
+  }
+  CLog::Log(LOGERROR, "CActiveAE::FreeStream - failed");
+  return false;
 }
 
 void CActiveAE::FlushStream(CActiveAEStream *stream)

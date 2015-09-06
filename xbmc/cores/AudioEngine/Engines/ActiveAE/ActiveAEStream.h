@@ -26,6 +26,52 @@
 namespace ActiveAE
 {
 
+class CSyncError
+{
+public:
+  CSyncError()
+  {
+    Flush();
+  }
+  void Add(double error)
+  {
+    m_buffer += error;
+    m_count++;
+  }
+
+  void Flush(int interval = 100)
+  {
+    m_buffer = 0.0f;
+    m_count  = 0;
+    m_timer.Set(interval);
+  }
+
+  bool Get(double& error, int interval = 100)
+  {
+    if(m_timer.IsTimePast())
+    {
+      error = Get();
+      Flush(interval);
+      return true;
+    }
+    else
+      return false;
+  }
+
+protected:
+  double Get()
+  {
+    if(m_count)
+      return m_buffer / m_count;
+    else
+      return 0.0;
+  }
+  double m_buffer;
+  int m_count;
+  XbmcThreads::EndTime m_timer;
+};
+
+
 class CActiveAEStream : public IAEStream
 {
 protected:
@@ -128,6 +174,9 @@ protected:
   enum AVMatrixEncoding m_matrixEncoding;
   enum AVAudioServiceType m_audioServiceType;
   bool m_forceResampler;
+  IAEClockCallback *m_pClock;
+  CSyncError m_syncError;
+  bool m_syncClock;
 };
 }
 
