@@ -1,4 +1,22 @@
 if(ENABLE_INTERNAL_FFMPEG)
+  include(ExternalProject)
+  file(STRINGS ${CORE_SOURCE_DIR}/tools/depends/target/ffmpeg/FFMPEG-VERSION VER)
+  string(REGEX MATCH "VERSION=[^ ]*$.*" FFMPEG_VER "${VER}")
+  list(GET FFMPEG_VER 0 FFMPEG_VER)
+  string(SUBSTRING "${FFMPEG_VER}" 8 -1 FFMPEG_VER)
+  string(REGEX MATCH "BASE_URL=([^ ]*)" FFMPEG_BASE_URL "${VER}")
+  list(GET FFMPEG_BASE_URL 0 FFMPEG_BASE_URL)
+  string(SUBSTRING "${FFMPEG_BASE_URL}" 9 -1 FFMPEG_BASE_URL)
+
+  externalproject_add(ffmpeg
+                      URL ${FFMPEG_BASE_URL}/${FFMPEG_VER}.tar.gz
+                      PATCH_COMMAND ${CMAKE_COMMAND} -e copy
+                                    ${CORE_SOURCE_DIR}/tools/depends/ffmpeg/CMakeLists.txt
+                                    <SOURCE_DIR>
+                      PATCH_COMMAND ${CMAKE_COMMAND} -e copy
+                                    ${CORE_SOURCE_DIR}/tools/depends/ffmpeg/FindGnuTls.cmake
+                                    <SOURCE_DIR>)
+
   file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/ffmpeg-link-wrapper
 "#!/bin/bash
 if [[ $@ == *${APP_NAME_LC}.bin* || $@ == *${APP_NAME_LC}-test* ]]
@@ -18,10 +36,7 @@ fi")
        FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
   set(FFMPEG_LINK_EXECUTABLE "${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg-link-wrapper <CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>" PARENT_SCOPE)
   set(FFMPEG_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/include)
-  file(STRINGS ${PROJECT_SOURCE_DIR}/bootstrap/installdata/lib/optional/linux/ffmpeg/ffmpeg.txt def)
-  string(REPLACE " " ";" def ${def})
-  list(GET def 2 hash)
-  list(APPEND FFMPEG_DEFINITIONS -DFFMPEG_VER_SHA=\"${hash}\"
+  list(APPEND FFMPEG_DEFINITIONS -DFFMPEG_VER_SHA=\"${FFMPEG_VER}\"
                                  -DUSE_STATIC_FFMPEG=1)
   set(FFMPEG_FOUND 1)
 else()
