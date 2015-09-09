@@ -30,7 +30,7 @@
 class DllLibCPluff;
 extern "C"
 {
-#include "lib/cpluff/libcpluff/cpluff.h"
+#include "cpluff/libcpluff/cpluff.h"
 }
 
 namespace ADDON

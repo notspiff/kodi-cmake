@@ -62,7 +62,7 @@ set(INCLUDES ${CORE_SOURCE_DIR}/lib
              ${CORE_SOURCE_DIR}/lib/gtest/include
              ${CORE_SOURCE_DIR}/xbmc
              ${CORE_SOURCE_DIR}/xbmc/linux
-             ${CORE_SOURCE_DIR}/xbmc/cores/dvdplayer
+             ${CORE_SOURCE_DIR}/xbmc/cores/VideoPlayer
              ${CORE_SOURCE_DIR}/tools/depends/native/libsquish-native/src
              ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR})
 

@@ -29,7 +29,7 @@
 #else
 #include "addons/include/kodi_adsp_types.h"
 #endif
-#include "libXBMC_addon.h"
+#include "../library.xbmc.addon/libXBMC_addon.h"
 
 typedef void* ADSPHANDLE;
 

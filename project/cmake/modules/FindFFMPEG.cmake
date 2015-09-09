@@ -10,11 +10,13 @@ if(ENABLE_INTERNAL_FFMPEG)
 
   externalproject_add(ffmpeg
                       URL ${FFMPEG_BASE_URL}/${FFMPEG_VER}.tar.gz
-                      PATCH_COMMAND ${CMAKE_COMMAND} -e copy
-                                    ${CORE_SOURCE_DIR}/tools/depends/ffmpeg/CMakeLists.txt
-                                    <SOURCE_DIR>
-                      PATCH_COMMAND ${CMAKE_COMMAND} -e copy
-                                    ${CORE_SOURCE_DIR}/tools/depends/ffmpeg/FindGnuTls.cmake
+                      PREFIX ${CORE_BUILD_DIR}/ffmpeg
+                      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
+                      PATCH_COMMAND ${CMAKE_COMMAND} -E copy
+                                    ${CORE_SOURCE_DIR}/tools/depends/target/ffmpeg/CMakeLists.txt
+                                    <SOURCE_DIR> &&
+                                    ${CMAKE_COMMAND} -E copy
+                                    ${CORE_SOURCE_DIR}/tools/depends/target/ffmpeg/FindGnuTls.cmake
                                     <SOURCE_DIR>)
 
   file(WRITE ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ffmpeg/ffmpeg-link-wrapper
