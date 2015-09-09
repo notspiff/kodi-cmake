@@ -32,7 +32,7 @@ if(UNIX)
   option(ENABLE_LIBUSB      "Enable libusb support?" ON)
   option(ENABLE_UDEV        "Enable UDev support?" ON)
   option(ENABLE_OPENGL      "Enable OpenGL?" ON)
-  option(ENABLE_SDL         "Enable SDL?" ON)
+  option(ENABLE_SDL         "Enable SDL?" OFF)
   option(ENABLE_X11         "Enable X11 support?" ON)
   option(ENABLE_WAYLAND     "Enable Wayland support?" OFF)
   option(ENABLE_EGL         "Enable EGL?" OFF)
@@ -222,6 +222,10 @@ add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
 
 configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
+
+# Build helpers
+add_executable(JsonSchemaBuilder ${CORE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder.cpp)
+add_subdirectory(${CORE_SOURCE_DIR}/tools/depends/native/TexturePacker texturepacker)
 
 # main binary
 add_executable(${APP_NAME_LC}.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)

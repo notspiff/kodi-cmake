@@ -8,9 +8,7 @@ set(SOURCES src/md5.cpp
             src/decoder/GIFDecoder.cpp
             ${CORE_SOURCE_DIR}/xbmc/guilib/XBTF.cpp)
 
-include(addoptions)
-include(macros)
-add_options(CXX ALL_BUILDS "-fPIC")
+set(CMAKE_POSITITION_INDEPENDENT_CODE 1)
 
 # Fixme
 add_definitions(-DTARGET_POSIX -DUSE_LZO_PACKING)

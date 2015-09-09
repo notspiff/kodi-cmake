@@ -4,11 +4,7 @@ set(JSON_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/version.txt
               ${CMAKE_CURRENT_SOURCE_DIR}/types.json
               ${CMAKE_CURRENT_SOURCE_DIR}/notifications.json)
 
-if(BOOTSTRAP_IN_TREE)
-  set(JsonSchemaBuilder ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/bootstrap/JsonSchemaBuilder)
-else()
-  set(JsonSchemaBuilder ${BOOTSTRAP_DIR}/JsonSchemaBuilder)
-endif()
+set(JsonSchemaBuilder JsonSchemaBuilder)
 
 add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ServiceDescription.h
                    COMMAND ${JsonSchemaBuilder} ${JSON_SRCS}
@@ -18,8 +14,8 @@ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/ServiceDescripti
 
 add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/addons/xbmc.json/addon.xml
                    COMMAND ${CMAKE_COMMAND}
-                           -DXBMC_SOURCE_DIR=${CORE_SOURCE_DIR}
-                           -DXBMC_BINARY_DIR=${CMAKE_BINARY_DIR}
+                           -DCORE_SOURCE_DIR=${CORE_SOURCE_DIR}
+                           -DCORE_BINARY_DIR=${CMAKE_BINARY_DIR}
                            -P ${CMAKE_CURRENT_SOURCE_DIR}/GenerateAddonXml.cmake
                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
                    DEPENDS ${JSON_SRCS} ${CORE_SOURCE_DIR}/addons/xbmc.json/addon.xml.in
