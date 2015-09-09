@@ -30,10 +30,6 @@ else()
   endif()
 endif()
 
-set(SQUISH_NATIVE 1)
-add_subdirectory(${CORE_SOURCE_DIR}/tools/depends/native/libsquish-native squish-native)
-set(SQUISH_NATIVE)
-
 include_directories(${PNG_INCLUDE_DIRS}
                     ${JPEG_INCLUDE_DIR}
                     ${GIF_INCLUDE_DIR}
@@ -42,7 +38,7 @@ include_directories(${PNG_INCLUDE_DIRS}
                     ${CMAKE_CURRENT_SOURCE_DIR}/src
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/decoder)
 add_executable(TexturePacker ${SOURCES})
-target_link_libraries(TexturePacker ${SYSTEM_LDFLAGS} squish-native
+target_link_libraries(TexturePacker ${SYSTEM_LDFLAGS} squish
                                     ${GIF_LIBRARIES}
                                     ${PNG_LIBRARIES}
                                     ${JPEG_LIBRARIES}

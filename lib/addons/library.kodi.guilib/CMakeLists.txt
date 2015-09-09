@@ -1,10 +1,9 @@
 set(SOURCES libKODI_guilib.cpp)
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${XBMC_SOURCE_DIR}/xbmc/addons/include
-                    ${XBMC_SOURCE_DIR}/xbmc
-                    ${XBMC_SOURCE_DIR}/xbmc/cores/dvdplayer/DVDDemuxers)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CORE_SOURCE_DIR}/xbmc/addons/include
+                    ${CORE_SOURCE_DIR}/xbmc)
 
-add_options(CXX ALL_BUILDS "-fPIC")
+set(CMAKE_POSITION_INDEPENDENT_CODE 1)
 
-core_add_library(XBMC_gui 1)
+core_add_library(KODI_guilib 1)

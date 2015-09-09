@@ -3,7 +3,7 @@ set(SOURCES ExifParse.cpp
             JpegParse.cpp
             libexif.cpp)
 
-add_options(CXX ALL_BUILDS "-fPIC")
+set(CMAKE_POSITION_INDEPENDENT_CODE 1)
 
 add_definitions(-D_LINUX -D_DLL)
 

@@ -211,11 +211,10 @@ set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
 
 core_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
 core_link_library(exif system/libexif)
-core_link_library(hdhomerun system/hdhomerun)
 
 core_link_library(XBMC_addon addons/library.xbmc.addon/libXBMC_addon)
 core_link_library(XBMC_codec addons/library.xbmc.codec/libXBMC_codec)
-core_link_library(XBMC_gui   addons/library.xbmc.gui/libXBMC_gui)
+core_link_library(KODI_guilib addons/library.kodi.guilib/libKODI_guilib)
 core_link_library(XBMC_pvr   addons/library.xbmc.pvr/libXBMC_pvr)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
@@ -226,7 +225,10 @@ configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
 
 # Build helpers
 add_executable(JsonSchemaBuilder ${CORE_SOURCE_DIR}/tools/depends/native/JsonSchemaBuilder/src/JsonSchemaBuilder.cpp)
-add_subdirectory(${CORE_SOURCE_DIR}/tools/depends/native/TexturePacker texturepacker)
+add_subdirectory(${CORE_SOURCE_DIR}/tools/depends/native/TexturePacker build/texturepacker)
+
+# Codegen
+add_subdirectory(${CORE_SOURCE_DIR}/xbmc/interfaces/swig build/swig)
 
 # main binary
 add_executable(${APP_NAME_LC}.bin ${CORE_SOURCE_DIR}/xbmc/main/main.cpp $<TARGET_OBJECTS:compileinfo>)
