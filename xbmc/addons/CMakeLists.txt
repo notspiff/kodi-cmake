@@ -21,6 +21,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             LanguageResource.cpp
             PluginSource.cpp
             Repository.cpp
+            RepositoryUpdater.cpp
             Scraper.cpp
             ScreenSaver.cpp
             Service.cpp

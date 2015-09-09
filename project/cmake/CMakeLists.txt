@@ -26,6 +26,7 @@ option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
 option(ENABLE_CEC         "Enable CEC support?" ON)
 if(UNIX)
   option(ENABLE_INTERNAL_FFMPEG "Enable internal ffmpeg?" ON)
+  option(ENABLE_INTERNAL_CROSSGUID "Enable internal crossguid?" ON)
   option(ENABLE_ALSA        "Enable ALSA support?" ON)
   option(ENABLE_PULSEAUDIO  "Enable PulseAudio support?" ON)
   option(ENABLE_DBUS        "Enable dbus support?" ON)
@@ -79,7 +80,7 @@ list(APPEND DEPLIBS ${CMAKE_THREAD_LIBS_INIT})
 # Required dependencies
 set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
                   TinyXML Python Yajl LibSmbClient ZLIB Xslt
-                  JPEG Lzo2 Fribidi TagLib Boost FFMPEG)
+                  JPEG Lzo2 Fribidi TagLib Boost FFMPEG CrossGUID)
 
 # Optional dependencies
 set(optional_deps MicroHttpd MySqlClient SSH

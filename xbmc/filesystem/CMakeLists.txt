@@ -12,6 +12,7 @@ set(SOURCES AddonsDirectory.cpp
             DirectoryFactory.cpp
             DirectoryHistory.cpp
             DllLibCurl.cpp
+            EventsDirectory.cpp
             FavouritesDirectory.cpp
             FileCache.cpp
             File.cpp
@@ -46,6 +47,9 @@ set(SOURCES AddonsDirectory.cpp
             PluginDirectory.cpp
             PVRDirectory.cpp
             PVRFile.cpp
+            RarDirectory.cpp
+            RarFile.cpp
+            RarManager.cpp
             ResourceDirectory.cpp
             ResourceFile.cpp
             RSSDirectory.cpp
@@ -69,6 +73,9 @@ set(SOURCES AddonsDirectory.cpp
             UPnPFile.cpp
             VideoDatabaseDirectory.cpp
             VirtualDirectory.cpp
+            XbtDirectory.cpp
+            XbtFile.cpp
+            XbtManager.cpp
             ZeroconfDirectory.cpp
             ZipDirectory.cpp
             ZipFile.cpp

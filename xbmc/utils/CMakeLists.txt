@@ -85,4 +85,4 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 core_add_library(utils)
-add_dependencies(utils libcpluff ffmpeg)
+add_dependencies(utils libcpluff ffmpeg crossguid)
