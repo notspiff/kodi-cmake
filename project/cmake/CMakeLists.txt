@@ -205,6 +205,9 @@ foreach(skin ${SKINS})
   copy_skin_to_buildtree(${dir} ${relative})
 endforeach()
 
+add_custom_target(pack-skins ALL
+                  DEPENDS TexturePacker export-files ${XBT_FILES})
+
 set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
                     ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
                     ${JASPER_LIBRARIES} )
