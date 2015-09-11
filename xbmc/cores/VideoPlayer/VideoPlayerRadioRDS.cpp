@@ -62,7 +62,7 @@
 #include "utils/StringUtils.h"
 #include "utils/log.h"
 
-#include "DVDPlayerRadioRDS.h"
+#include "VideoPlayerRadioRDS.h"
 
 using namespace XFILE;
 using namespace PVR;
@@ -679,7 +679,7 @@ void CDVDRadioRDSData::Flush()
 {
   if(!m_messageQueue.IsInited())
     return;
-  /* flush using message as this get's called from dvdplayer thread */
+  /* flush using message as this get's called from VideoPlayer thread */
   /* and any demux packet that has been taken out of queue need to */
   /* be disposed of before we flush */
   m_messageQueue.Flush();
