@@ -3001,7 +3001,7 @@ void CApplication::Stop(int exitCode)
 
     CLog::Log(LOGNOTICE, "clean cached files!");
 
-    CVFSEntryManager::Get().DisconnectAll();
+    CVFSEntryManager::GetInstance().DisconnectAll();
 
 #if defined(TARGET_POSIX) && defined(HAS_FILESYSTEM_SMB)
     smb.Deinit();
@@ -4152,7 +4152,7 @@ void CApplication::ActivateScreenSaver(bool forceType /*= false */,
   m_bScreenSave = true;
 
   if (addonID.empty())
-    addonID = CSettings::Get().GetString("screensaver.mode");
+    addonID = CSettings::GetInstance().GetString("screensaver.mode");
 
   // Get Screensaver Mode
   m_screenSaver.reset();
@@ -4671,7 +4671,7 @@ void CApplication::ProcessSlow()
   smb.CheckIfIdle();
 #endif
 
-  CVFSEntryManager::Get().ClearOutIdle();
+  CVFSEntryManager::GetInstance().ClearOutIdle();
 
   g_mediaManager.ProcessEvents();
 
@@ -5297,7 +5297,7 @@ void CApplication::CloseNetworkShares()
   smb.Deinit();
 #endif
   
-  CVFSEntryManager::Get().DisconnectAll();
+  CVFSEntryManager::GetInstance().DisconnectAll();
 }
 
 void CApplication::RegisterActionListener(IActionListener *listener)

@@ -120,7 +120,7 @@ bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSi
   return true;
 }
 
-bool CFFmpegImage::Decode(const unsigned char *pixels, unsigned int pitch,
+bool CFFmpegImage::Decode(unsigned char * const pixels, unsigned int pitch,
                           unsigned int format)
 {
   av_image_copy_to_buffer(const_cast<uint8_t*>(pixels), pitch,

@@ -12,7 +12,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             AddonVersion.cpp
             AudioDecoder.cpp
             AudioEncoder.cpp
-            ContextItemAddon.cpp
+            ContextMenuAddon.cpp
             GUIDialogAddonInfo.cpp
             GUIDialogAddonSettings.cpp
             GUIViewStateAddonBrowser.cpp
@@ -21,6 +21,7 @@ set(SOURCES AddonCallbacksAddon.cpp
             LanguageResource.cpp
             PluginSource.cpp
             Repository.cpp
+            RepositoryUpdater.cpp
             Scraper.cpp
             ScreenSaver.cpp
             Service.cpp

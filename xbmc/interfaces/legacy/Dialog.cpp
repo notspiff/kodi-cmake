@@ -109,7 +109,6 @@ namespace XBMCAddon
       return pDialog->GetSelectedLabel();
     }
 
-
     std::vector<int>* Dialog::multiselect(const String& heading,
         const std::vector<String>& options, int autoclose)
     {

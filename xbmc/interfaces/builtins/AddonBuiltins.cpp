@@ -124,7 +124,7 @@ static int RunAddon(const std::vector<std::string>& params)
       // (params[1] ... params[x]) separated by a comma to RunScript
       CBuiltins::GetInstance().Execute(StringUtils::Format("RunScript(%s)", StringUtils::Join(params, ",").c_str()));
     }
-    else if (CAddonMgr::Get().GetAddon(params[0], addon, ADDON_SCREENSAVER))
+    else if (CAddonMgr::GetInstance().GetAddon(params[0], addon, ADDON_SCREENSAVER))
       g_application.ActivateScreenSaver(true, params[0]);
     else
       CLog::Log(LOGERROR, "RunAddon: unknown add-on id '%s', or unexpected add-on type (not a script or plugin).", params[0].c_str());

@@ -16,6 +16,6 @@ endif()
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Sdl DEFAULT_MSG SDL_INCLUDE_DIRS SDL_LIBRARIES)
 
-list(APPEND SDL_DEFINITIONS -DHAVE_SDL=1)
+list(APPEND SDL_DEFINITIONS -DHAVE_SDL=1 -DHAVE_SDL_VERSION=2)
 
 mark_as_advanced(SDL_INCLUDE_DIRS SDL_LIBRARIES SDL_DEFINITIONS)

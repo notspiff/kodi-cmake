@@ -13,6 +13,7 @@ set(SOURCES AddonsDirectory.cpp
             DirectoryFactory.cpp
             DirectoryHistory.cpp
             DllLibCurl.cpp
+            EventsDirectory.cpp
             FavouritesDirectory.cpp
             FileCache.cpp
             File.cpp
@@ -69,6 +70,9 @@ set(SOURCES AddonsDirectory.cpp
             VideoDatabaseDirectory.cpp
             VirtualDirectory.cpp
             ZeroconfDirectory.cpp
+            XbtDirectory.cpp
+            XbtFile.cpp
+            XbtManager.cpp
             ZipDirectory.cpp
             ZipFile.cpp
             ZipManager.cpp)

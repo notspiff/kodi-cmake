@@ -81,14 +81,14 @@ IFileDirectory* CFileDirectoryFactory::Create(const CURL& url, CFileItem* pItem,
   }
 
 #ifdef HAS_FILESYSTEM
-  CAddonMgr::Get().GetAddons(ADDON_VFS, codecs);
+  CAddonMgr::GetInstance().GetAddons(ADDON_VFS, codecs);
   for (size_t i=0;i<codecs.size();++i)
   {
     std::shared_ptr<CVFSEntry> dec(std::static_pointer_cast<CVFSEntry>(codecs[i]));
     if (!strExtension.empty() && dec->HasFileDirectories() &&
         dec->GetExtensions().find(strExtension) != std::string::npos)
     {
-      CVFSEntryIFileDirectoryWrapper* wrap = new CVFSEntryIFileDirectoryWrapper(CVFSEntryManager::Get().GetAddon(dec->ID()));
+      CVFSEntryIFileDirectoryWrapper* wrap = new CVFSEntryIFileDirectoryWrapper(CVFSEntryManager::GetInstance().GetAddon(dec->ID()));
       if (wrap->ContainsFiles(url))
       {
         if (wrap->m_items.Size() == 1)

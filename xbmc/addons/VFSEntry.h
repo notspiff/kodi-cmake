@@ -197,7 +197,7 @@ namespace ADDON
   class CVFSEntryManager
   {
   public:
-    static CVFSEntryManager& Get();
+    static CVFSEntryManager& GetInstance();
 
     VFSEntryPtr GetAddon(const std::string& id);
 

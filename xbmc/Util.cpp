@@ -1836,7 +1836,7 @@ int CUtil::ScanArchiveForAssociatedItems(const std::string& strArchivePath,
       urlRar = URIUtils::CreateArchivePath("rar", pathToUrl, strPathInRar);
     else
       urlRar = URIUtils::CreateArchivePath("zip", pathToUrl, strPathInRar);
-    ScanArchiveForSubtitles(urlRar.Get(), strMovieFileNameNoExt, vecSubtitles);
+    ScanArchiveForAssociatedItems(urlRar.Get(), videoNameNoExt, item_exts, associatedFiles);
    }
    // done checking if this is a rar-in-rar
 

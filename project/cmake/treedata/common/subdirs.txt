@@ -10,7 +10,6 @@ xbmc/guilib                     guilib
 xbmc/input                      input
 xbmc/listproviders              listproviders
 xbmc/media                      media
-xbmc/messaging                  messaging
 xbmc/pictures                   pictures
 xbmc/playlists                  playlists
 xbmc/powermanagement            powermanagement

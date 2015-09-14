@@ -42,6 +42,7 @@
 
 using namespace KODI::MESSAGING;
 
+
 /*! \brief Execute a GUI action.
  *  \param params The parameters.
  *  \details params[0] = Action to execute.
@@ -54,7 +55,8 @@ static int Action(const std::vector<std::string>& params)
   if (CButtonTranslator::TranslateActionString(params[0].c_str(), actionID))
   {
     int windowID = params.size() == 2 ? CButtonTranslator::TranslateWindow(params[1]) : WINDOW_INVALID;
-    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, windowID, -1, static_cast<void*>(new CAction(actionID)));
+    CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, windowID, -1,
+                                                 static_cast<void*>(new CAction(actionID)));
   }
 
   return 0;
@@ -394,8 +396,15 @@ static int SetStereoMode(const std::vector<std::string>& params)
     CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, WINDOW_INVALID, -1, static_cast<void*>(new CAction(action)));
   else
   {
-    CLog::Log(LOGERROR,"Builtin 'SetStereoMode' called with unknown parameter: %s", params[0].c_str());
-    return -2;
+    CAction action = CStereoscopicsManager::GetInstance().ConvertActionCommandToAction("SetStereoMode", params[0]);
+    if (action.GetID() != ACTION_NONE)
+      CApplicationMessenger::GetInstance().SendMsg(TMSG_GUI_ACTION, -1, -1,
+                                                   static_cast<void*>(new CAction(action)));
+    else
+    {
+      CLog::Log(LOGERROR,"Builtin 'SetStereoMode' called with unknown parameter: %s", params[0].c_str());
+      return -2;
+    }
   }
 
   return 0;

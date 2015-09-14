@@ -32,6 +32,8 @@
 #include "utils/StringUtils.h"
 #include "utils/URIUtils.h"
 #include "utils/Variant.h"
+#include "URL.h"
+
 #include <stdlib.h>
 
 using namespace KODI::MESSAGING;
