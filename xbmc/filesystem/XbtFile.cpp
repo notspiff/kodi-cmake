@@ -26,6 +26,7 @@
 #endif
 
 #include <lzo/lzo1x.h>
+#include <string.h>
 
 #include "XbtFile.h"
 #include "URL.h"

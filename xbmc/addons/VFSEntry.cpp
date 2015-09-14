@@ -58,11 +58,11 @@ class CVFSURLWrapper
 
 CVFSEntry::CVFSEntry(const cp_extension_t* ext)
  : VFSEntryDll(ext),
-   m_protocols(CAddonMgr::Get().GetExtValue(ext->configuration, "@protocols")),
-   m_extensions(CAddonMgr::Get().GetExtValue(ext->configuration, "@extensions")),
-   m_files(CAddonMgr::Get().GetExtValue(ext->configuration, "@files") == "true"),
-   m_directories(CAddonMgr::Get().GetExtValue(ext->configuration, "@directories") == "true"),
-   m_filedirectories(CAddonMgr::Get().GetExtValue(ext->configuration, "@filedirectories") == "true")
+   m_protocols(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@protocols")),
+   m_extensions(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@extensions")),
+   m_files(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@files") == "true"),
+   m_directories(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@directories") == "true"),
+   m_filedirectories(CAddonMgr::GetInstance().GetExtValue(ext->configuration, "@filedirectories") == "true")
 {
 }
 
@@ -622,7 +622,7 @@ CVFSEntryManager::CVFSEntryManager()
 {
 }
 
-CVFSEntryManager& CVFSEntryManager::Get()
+CVFSEntryManager& CVFSEntryManager::GetInstance()
 {
   static CVFSEntryManager instance;
 
@@ -634,7 +634,7 @@ VFSEntryPtr CVFSEntryManager::GetAddon(const std::string& id)
   if (m_addons.find(id) == m_addons.end())
   {
     AddonPtr addon;
-    CAddonMgr::Get().GetAddon(id, addon, ADDON_VFS);
+    CAddonMgr::GetInstance().GetAddon(id, addon, ADDON_VFS);
     if (addon)
     {
       VFSEntryPtr ptr = std::static_pointer_cast<CVFSEntry>(addon);

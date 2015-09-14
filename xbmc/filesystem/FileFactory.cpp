@@ -112,7 +112,7 @@ IFile* CFileFactory::CreateLoader(const CURL& url)
     {
       VFSEntryPtr vfs(std::static_pointer_cast<CVFSEntry>(addons[i]));
       if (vfs->HasFiles() && vfs->GetProtocols().find(strProtocol) != std::string::npos)
-        return new CVFSEntryIFileWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
+        return new CVFSEntryIFileWrapper(CVFSEntryManager::GetInstance().GetAddon(vfs->ID()));
     }
   }
 

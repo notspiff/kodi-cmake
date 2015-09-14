@@ -3,7 +3,7 @@ macro(generate_file file)
                      COMMAND ${SWIG_EXECUTABLE}
                      ARGS -w401 -c++ -o ${file}.xml -xml -I${CORE_SOURCE_DIR}/xbmc -xmllang python ${CMAKE_CURRENT_SOURCE_DIR}/../swig/${file}
                      COMMAND ${Java_JAVA_EXECUTABLE}
-                     ARGS -cp ${GROOVY_DIR}/groovy-all-2.1.7.jar:${GROOVY_DIR}/commons-lang-2.6.jar:${CORE_SOURCE_DIR}/tools/codegenerator:${CMAKE_CURRENT_SOURCE_DIR}/../python groovy.ui.GroovyMain ${CORE_SOURCE_DIR}/tools/codegenerator/Generator.groovy ${file}.xml ${CMAKE_CURRENT_SOURCE_DIR}/../python/PythonSwig.cpp.template ${file}.cpp ${CMAKE_CURRENT_BINARY_DIR}/doxygenxml
+                     ARGS -cp ${GROOVY_DIR}/groovy-all-${GROOVY_VER}.jar:${GROOVY_DIR}/commons-lang-2.6.jar:${CORE_SOURCE_DIR}/tools/codegenerator:${CMAKE_CURRENT_SOURCE_DIR}/../python groovy.ui.GroovyMain ${CORE_SOURCE_DIR}/tools/codegenerator/Generator.groovy ${file}.xml ${CMAKE_CURRENT_SOURCE_DIR}/../python/PythonSwig.cpp.template ${file}.cpp ${CMAKE_CURRENT_BINARY_DIR}/doxygenxml
                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${INTERFACE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/.doxygen-gen
                      IMPLICIT_DEPENDS CXX ${CMAKE_CURRENT_SOURCE_DIR}/../swig/${file})
   list(APPEND SOURCES ${file}.cpp)
@@ -40,7 +40,8 @@ set(INPUTS AddonModuleXbmcaddon.i
            AddonModuleXbmcvfs.i
            AddonModuleXbmcwsgi.i)
 
-set(GROOVY_DIR ${CORE_SOURCE_DIR}/lib/groovy)
+set(GROOVY_DIR ${CORE_SOURCE_DIR}/tools/codegenerator/groovy)
+set(GROOVY_VER 2.4.4)
 
 file(GLOB INTERFACE_FILES ${CORE_SOURCE_DIR}/xbmc/lib/legacy)
 

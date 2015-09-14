@@ -35,6 +35,7 @@
 #include "include/kodi_vfs_types.h"
 #include "VFSEntry.h"
 #include "PasswordManager.h"
+#include "URL.h"
 
 using namespace XFILE;
 

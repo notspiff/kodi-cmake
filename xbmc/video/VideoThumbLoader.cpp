@@ -276,7 +276,7 @@ bool CVideoThumbLoader::LoadItemCached(CFileItem* pItem)
   if (pItem->HasVideoInfoTag() &&
       pItem->GetVideoInfoTag()->m_iEpisode >= 0 &&
       pItem->GetVideoInfoTag()->m_playCount == 0 &&
-      !CSettings::Get().GetBool("videolibrary.showunwatchedplots"))
+      !CSettings::GetInstance().GetBool("videolibrary.showunwatchedplots"))
 
  {
    pItem->SetArt("thumb","DefaultEpisodeHidden.png");

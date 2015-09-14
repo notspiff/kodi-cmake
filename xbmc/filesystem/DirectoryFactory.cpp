@@ -193,7 +193,7 @@ IDirectory* CDirectoryFactory::Create(const CURL& url)
     {
       VFSEntryPtr vfs(std::static_pointer_cast<CVFSEntry>(addons[i]));
       if (vfs->HasDirectories() && vfs->GetProtocols().find(url.GetProtocol()) != std::string::npos)
-        return new CVFSEntryIDirectoryWrapper(CVFSEntryManager::Get().GetAddon(vfs->ID()));
+        return new CVFSEntryIDirectoryWrapper(CVFSEntryManager::GetInstance().GetAddon(vfs->ID()));
     }
   }
 

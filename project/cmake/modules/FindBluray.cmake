@@ -6,7 +6,7 @@
 # BLURAY_LIBRARIES - The libbluray libraries
 
 if(PKG_CONFIG_FOUND)
-  pkg_check_modules (BLURAY libbluray)
+  pkg_check_modules (BLURAY libbluray>=0.7.0)
   list(APPEND BLURAY_INCLUDE_DIRS ${BLURAY_INCLUDEDIR})
 else()
   find_path(BLURAY_INCLUDE_DIRS libbluray/bluray.h)

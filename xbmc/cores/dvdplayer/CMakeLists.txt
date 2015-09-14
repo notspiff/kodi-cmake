@@ -8,6 +8,7 @@ set(SOURCES DVDAudio.cpp
             DVDOverlayRenderer.cpp
             DVDPlayerAudio.cpp
             DVDPlayer.cpp
+            DVDPlayerRadioRDS.cpp
             DVDPlayerSubtitle.cpp
             DVDPlayerTeletext.cpp
             DVDPlayerVideo.cpp

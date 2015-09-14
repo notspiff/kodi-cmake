@@ -129,7 +129,6 @@ CFFmpegImage::~CFFmpegImage()
 bool CFFmpegImage::LoadImageFromMemory(unsigned char* buffer, unsigned int bufSize,
                                       unsigned int width, unsigned int height)
 {
-  
   uint8_t* fbuffer = (uint8_t*)av_malloc(FFMPEG_FILE_BUFFER_SIZE);
   if (!fbuffer)
   {

@@ -4,7 +4,7 @@ set(SOURCES Application.cpp
             Autorun.cpp
             AutoSwitch.cpp
             BackgroundInfoLoader.cpp
-            ContextButtons.cpp
+            ContextMenuItem.cpp
             ContextMenuManager.cpp
             CueDocument.cpp
             DatabaseManager.cpp

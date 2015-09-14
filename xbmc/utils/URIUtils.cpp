@@ -373,7 +373,7 @@ bool URIUtils::GetParentPath(const std::string& strPath, std::string& strParent)
     }
     return false;
   }
-  else if (StringUtils::StartsWith(strFileLow, "sacd://"))
+  else if (StringUtils::StartsWith(strFile, "sacd://"))
     return true;
 
   if (HasSlashAtEnd(strFile) )

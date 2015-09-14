@@ -1,6 +1,9 @@
 set(SOURCES ButtonTranslator.cpp
             InertialScrollingHandler.cpp
             InputManager.cpp
+            InputCodingTableBaiduPY.cpp
+            InputCodingTableBasePY.cpp
+            InputCodingTableFactory.cpp
             Key.cpp
             KeyboardLayout.cpp
             KeyboardLayoutManager.cpp
