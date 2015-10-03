@@ -6,6 +6,7 @@ xbmc/addons/include/kodi_audiodec_dll.h
 xbmc/addons/include/kodi_audiodec_types.h
 xbmc/addons/include/xbmc_audioenc_dll.h
 xbmc/addons/include/xbmc_audioenc_types.h
+xbmc/addons/include/kodi_audioengine_types.h
 xbmc/addons/include/xbmc_codec_types.h
 xbmc/addons/include/xbmc_epg_types.h
 xbmc/addons/include/xbmc_pvr_dll.h
@@ -18,6 +19,7 @@ xbmc/addons/include/xbmc_vis_dll.h
 xbmc/addons/include/xbmc_vis_types.h
 xbmc/addons/include/xbmc_stream_utils.hpp
 xbmc/addons/bindings/libXBMC_addon.h
+xbmc/addons/bindings/libKODI_audioengine.h
 xbmc/addons/bindings/libKODI_guilib.h
 xbmc/addons/bindings/libXBMC_pvr.h
 xbmc/addons/bindings/libXBMC_codec.h
