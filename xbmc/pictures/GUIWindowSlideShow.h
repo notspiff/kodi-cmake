@@ -77,6 +77,7 @@ public:
   const CFileItemPtr GetCurrentSlide();
   void RunSlideShow(const std::string &strPath, bool bRecursive = false,
                     bool bRandom = false, bool bNotRandom = false,
+                    bool bTransitions = true,
                     const std::string &beginSlidePath="", bool startSlideShow = true,
                     SortBy method = SortByLabel,
                     SortOrder order = SortOrderAscending,
@@ -143,6 +144,7 @@ private:
   bool m_bPause;
   bool m_bPlayingVideo;
   bool m_bErrorMessage;
+  bool m_bTransitions;
 
   CFileItemList* m_slides;
 

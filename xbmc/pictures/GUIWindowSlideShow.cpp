@@ -950,7 +950,7 @@ bool CGUIWindowSlideShow::OnMessage(CGUIMessage& message)
       Reset();
       CFileItem item(strFile, false);
       Add(&item);
-      RunSlideShow("", false, false, true, "", false);
+      RunSlideShow("", false, false, true, true, "", false);
     }
     break;
 
@@ -964,6 +964,7 @@ bool CGUIWindowSlideShow::OnMessage(CGUIMessage& message)
       bool bRandom = false;
       bool bNotRandom = false;
       bool bPause = false;
+      bool bTransitions = true;
       if (iParams > 0)
       {
         if ((iParams & 1) == 1)
@@ -974,8 +975,10 @@ bool CGUIWindowSlideShow::OnMessage(CGUIMessage& message)
           bNotRandom = true;
         if ((iParams & 8) == 8)
           bPause = true;
+        if ((iParams & 16) == 116)
+          bTransitions = false;
       }
-      RunSlideShow(strFolder, bRecursive, bRandom, bNotRandom, beginSlidePath, !bPause);
+      RunSlideShow(strFolder, bRecursive, bRandom, bNotRandom, bTransitions, beginSlidePath, !bPause);
     }
     break;
 
@@ -1130,7 +1133,7 @@ bool CGUIWindowSlideShow::PlayVideo()
 CSlideShowPic::DISPLAY_EFFECT CGUIWindowSlideShow::GetDisplayEffect(int iSlideNumber) const
 {
   if (m_bSlideShow && !m_bPause && !m_slides->Get(iSlideNumber)->IsVideo())
-    return CSettings::GetInstance().GetBool(CSettings::SETTING_SLIDESHOW_DISPLAYEFFECTS) ? CSlideShowPic::EFFECT_RANDOM : CSlideShowPic::EFFECT_NONE;
+    return m_bTransitions ? CSlideShowPic::EFFECT_RANDOM : CSlideShowPic::EFFECT_NONE;
   else
     return CSlideShowPic::EFFECT_NO_TIMEOUT;
 }
@@ -1216,7 +1219,7 @@ void CGUIWindowSlideShow::AddFromPath(const std::string &strPath,
 
 void CGUIWindowSlideShow::RunSlideShow(const std::string &strPath, 
                                        bool bRecursive /* = false */, bool bRandom /* = false */,
-                                       bool bNotRandom /* = false */, const std::string &beginSlidePath /* = "" */,
+                                       bool bNotRandom /* = false */, bool bTransitions, const std::string &beginSlidePath /* = "" */,
                                        bool startSlideShow /* = true */, SortBy method /* = SortByLabel */, 
                                        SortOrder order /* = SortOrderAscending */, SortAttribute sortAttributes /* = SortAttributeNone */,
                                        const std::string &strExtensions)
@@ -1251,6 +1254,8 @@ void CGUIWindowSlideShow::RunSlideShow(const std::string &strPath,
     param["player"]["playerid"] = PLAYLIST_PICTURE;
     ANNOUNCEMENT::CAnnouncementManager::GetInstance().Announce(ANNOUNCEMENT::Player, "xbmc", "OnPlay", GetCurrentSlide(), param);
   }
+
+  m_bTransitions = bTransitions ? CSettings::GetInstance().GetBool(CSettings::SETTING_SLIDESHOW_DISPLAYEFFECTS) : false;
 
   g_windowManager.ActivateWindow(WINDOW_SLIDESHOW);
 }

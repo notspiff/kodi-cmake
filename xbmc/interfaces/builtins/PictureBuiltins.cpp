@@ -47,6 +47,7 @@ static int Show(const std::vector<std::string>& params)
  *           params[1,...] = "notrandom" to not randomize slideshow.
  *           params[1,...] = "pause" to start slideshow paused.
  *           params[1,...] = "beginslide=<number>" to start at a given slide.
+ *           params[1,...] = "notransitions" to disable transitions.
  *
  *  Set the template parameter Recursive to true to run a recursive slideshow.
  */
@@ -74,6 +75,8 @@ static int Slideshow(const std::vector<std::string>& params)
         flags |= 4;
       else if (StringUtils::EqualsNoCase(params[i], "pause"))
         flags |= 8;
+      else if (StringUtils::EqualsNoCase(params[i],"notransitions"))
+        flags |= 16;
       else if (StringUtils::StartsWithNoCase(params[i], "beginslide="))
         beginSlidePath = params[i].substr(11);
     }
