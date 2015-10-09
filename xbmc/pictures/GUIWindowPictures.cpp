@@ -404,7 +404,7 @@ void CGUIWindowPictures::OnSlideShowRecursive(const std::string &strPicture)
 
     SortDescription sorting = m_guiState->GetSortMethod();
     pSlideShow->RunSlideShow(strPicture, true,
-                             CSettings::GetInstance().GetBool(CSettings::SETTING_SLIDESHOW_SHUFFLE),false,
+                             CSettings::GetInstance().GetBool(CSettings::SETTING_SLIDESHOW_SHUFFLE),false,true,
                              "", true,
                              sorting.sortBy, sorting.sortOrder, sorting.sortAttributes,
                              strExtensions);
@@ -438,7 +438,7 @@ void CGUIWindowPictures::OnSlideShow(const std::string &strPicture)
     m_slideShowStarted = true;
 
     SortDescription sorting = m_guiState->GetSortMethod();
-    pSlideShow->RunSlideShow(strPicture, false ,false, false,
+    pSlideShow->RunSlideShow(strPicture, false ,false, false, true,
                              "", true,
                              sorting.sortBy, sorting.sortOrder, sorting.sortAttributes,
                              strExtensions);
