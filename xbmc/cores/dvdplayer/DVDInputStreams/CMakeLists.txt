@@ -4,6 +4,7 @@ set(SOURCES DVDFactoryInputStream.cpp
             DVDInputStreamFile.cpp
             DVDInputStreamHttp.cpp
             DVDInputStreamMemory.cpp
+            DVDInputStreamMpegDash.cpp
             DVDInputStreamNavigator.cpp
             DVDInputStreamPVRManager.cpp
             DVDInputStreamRTMP.cpp
