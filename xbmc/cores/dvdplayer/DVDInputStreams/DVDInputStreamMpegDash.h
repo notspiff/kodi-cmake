@@ -19,8 +19,53 @@
  *
  */
 
-#include "DVDInputStream.h"
+#include "DVDInputStreamFile.h"
 #include "filesystem/File.h"
+
+//! \brief Wraps a multi-segment stream from MPEG DASH.
+class CDVDInputStreamMpegDashComponent : public CDVDInputStreamFile
+{
+  public:
+    //! \brief Constructor.
+    //! \param[in] segments List of segment URLs
+    //! \details The segment URLS are relative to the base path which is passed in Open().
+    //!           First entry should be the initialization file.
+    CDVDInputStreamMpegDashComponent(const std::vector<std::string>& segments);
+
+    //! \brief Destructor.
+    virtual ~CDVDInputStreamMpegDashComponent();
+
+    //! \brief Open a segmented stream.
+    //! \param[in] strFile Base path of segment stream.
+    virtual bool    Open(const char* strFile, const std::string &content, bool contentLookup);
+
+    //! \brief Close input stream
+    virtual void    Close();
+
+    //! \brief Read data from stream
+    virtual int     Read(uint8_t* buf, int buf_size);
+
+    //! \brief Seeek in stream
+    virtual int64_t Seek(int64_t offset, int whence);
+
+    //! \brief Seek to a time position in stream
+    bool            SeekTime(int iTimeInMsec);
+
+    //! \brief
+    bool            CanSeek()  { return false; }
+    bool            CanPause() { return false; }
+    //! \brief Pause stream
+    virtual bool    Pause(double dTime);
+    //! \brief Return true if we have reached EOF
+    virtual bool    IsEOF();
+
+    //! \brief Get length of input data
+    virtual int64_t GetLength();
+  protected:
+    size_t      m_cSegId; //!< Current segment ID
+    std::string m_base;
+    std::vector<std::string> m_segments; //!< Vector of segment URLS (relative to the basepath)
+};
 
 //! \brief Input stream class for MPEG DASH.
 class CDVDInputStreamMpegDash
@@ -73,11 +118,10 @@ protected:
     };
 
     std::string base; //!< Base path for segments
-    std::vector<Representation> sets; //!< Adaptation sets available
+    std::map<size_t, std::vector<Representation>> sets; //!< Adaptation sets available. Maps from stream ID
   };
 
   MPD        m_mpd; //!< In-memory representation of opened MPD file
-  XFILE::CFile m_file; //!< The http file reader
   size_t     m_crepId; //!< Current representation ID used.
-  size_t     m_cSegId; //!< Current segment ID
+  std::vector<std::shared_ptr<CDVDInputStreamMpegDashComponent>> m_streams; //!< Input streams for current representation.
 };
