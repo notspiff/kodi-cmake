@@ -413,7 +413,6 @@ void CAddon::BuildLibName(const cp_extension_t *extension)
       case ADDON_SERVICE:
       case ADDON_REPOSITORY:
       case ADDON_CONTEXT_ITEM:
-      case ADDON_AUDIODECODER:
       case ADDON_VFS:
         m_strLibName = CAddonMgr::GetInstance().GetExtValue(extension->configuration, "@library");
         break;

@@ -1,8 +1,11 @@
-set(SOURCES GLContextGLX.cpp
-            XRandR.cpp)
+if(X_FOUND)
+  list(APPEND SOURCES XRandR.cpp
+                      WinSystemX11.cpp)
 
-if(OPENGL_FOUND)
-  list(APPEND SOURCES WinSystemX11GLContext.cpp)
+  if(OPENGL_FOUND)
+    list(APPEND SOURCES GLContextGLX.cpp
+                        GLContextEGL.cpp
+                        WinSystemX11GLContext.cpp)
+  endif()
+  core_add_library(windowing_X11)
 endif()
-
-core_add_library(windowing_X11)

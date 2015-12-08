@@ -32,8 +32,8 @@
 
 using namespace XFILE;
 
-CDVDInputStreamMpegDash::CDVDInputStreamMpegDash()
-  : CDVDInputStream(DVDSTREAM_TYPE_DASH)
+CDVDInputStreamMpegDash::CDVDInputStreamMpegDash(CFileItem& item)
+  : CDVDInputStream(DVDSTREAM_TYPE_DASH, item)
   , m_canSeek(true)
   , m_canPause(true)
 {
@@ -54,7 +54,7 @@ bool CDVDInputStreamMpegDash::IsEOF()
 
 bool CDVDInputStreamMpegDash::Open(const char* strFile, const std::string& content, bool contentLookup)
 {
-  if (!CDVDInputStream::Open(strFile, content, contentLookup))
+  if (!CDVDInputStream::Open())
     return false;
 
   m_eof = false;

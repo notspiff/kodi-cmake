@@ -95,45 +95,6 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, MUSIC_INFO::CMusicIn
 }
 
 
-bool CTagLoaderTagLib::Load(const std::string& strFileName, CVideoInfoTag& tag)
-{
-  std::string strExtension = URIUtils::GetExtension(strFileName);
-  StringUtils::ToLower(strExtension);
-  StringUtils::TrimLeft(strExtension, ".");
-
-  TagLibVFSStream*           stream = new TagLibVFSStream(strFileName, true);
-  if (!stream)
-  {
-    CLog::Log(LOGERROR, "could not create TagLib VFS stream for: %s", strFileName.c_str());
-    return false;
-  }
-
-  TagLib::File*              file = NULL;
-  TagLib::MP4::File*         mp4File = NULL;
-
-  if (strExtension == "mp4")
-    file = mp4File = new MP4::File(stream);
-
-  if (file && !file->isOpen())
-  {
-    delete file;
-    delete stream;
-    CLog::Log(LOGDEBUG, "file could not be opened for tag reading");
-    return false;
-  }
-  if (!file)
-    return true;
-
-  MP4::Tag *mp4 = NULL;
-  mp4 = mp4File->tag();
-  ParseTag(mp4, tag);
-
-  delete file;
-  delete stream;
-
-  return true;
-}
-
 template<>
 bool CTagLoaderTagLib::ParseTag(ASF::Tag *asf, EmbeddedArt *art, CMusicInfoTag& tag)
 {
@@ -1184,3 +1145,46 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
 
   return true;
 }
+
+bool CTagLoaderTagLib::Load(const std::string& strFileName, CVideoInfoTag& tag)
+{
+  std::string strExtension = URIUtils::GetExtension(strFileName);
+  StringUtils::ToLower(strExtension);
+  StringUtils::TrimLeft(strExtension, ".");
+
+  TagLibVFSStream*           stream = new TagLibVFSStream(strFileName, true);
+  if (!stream)
+  {
+    CLog::Log(LOGERROR, "could not create TagLib VFS stream for: %s", strFileName.c_str());
+    return false;
+  }
+
+  TagLib::File*              file = NULL;
+  TagLib::MP4::File*         mp4File = NULL;
+
+  if (strExtension == "mp4")
+    file = mp4File = new MP4::File(stream);
+
+  if (file && !file->isOpen())
+  {
+    delete file;
+    delete stream;
+    CLog::Log(LOGDEBUG, "file could not be opened for tag reading");
+    return false;
+  }
+  if (!file)
+    return true;
+
+  MP4::Tag *mp4 = NULL;
+  mp4 = mp4File->tag();
+  CMusicInfoTag mtag;
+  ParseTag(mp4, nullptr, mtag);
+  tag.SetTitle(mtag.GetTitle());
+  
+
+  delete file;
+  delete stream;
+
+  return true;
+}
+

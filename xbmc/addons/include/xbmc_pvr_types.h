@@ -45,7 +45,7 @@
 #ifdef BUILD_KODI_ADDON
 #include "kodi/DVDDemuxPacket.h"
 #else
-#include "cores/dvdplayer/DVDDemuxers/DVDDemuxPacket.h"
+#include "cores/VideoPlayer/DVDDemuxers/DVDDemuxPacket.h"
 #endif
 #else
 struct DemuxPacket;

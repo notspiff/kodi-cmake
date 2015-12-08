@@ -49,13 +49,7 @@ CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IVideoPlayer* pPlayer
 {
   std::string file = fileitem.GetPath();
 
-  item.SetMimeType(content);
-
-  CURL url(file);
-  std::string strProtocol = url.GetProtocol();
-  StringUtils::ToLower(strProtocol);
-
-  if(item.IsDiscImage())
+  if(fileitem.IsDiscImage())
   {
 #ifdef HAVE_LIBBLURAY
     CURL url("udf://");
@@ -88,8 +82,8 @@ CDVDInputStream* CDVDFactoryInputStream::CreateInputStream(IVideoPlayer* pPlayer
   else if (fileitem.IsType(".bdmv") || fileitem.IsType(".mpls") || file.substr(0, 7) == "bluray:")
     return new CDVDInputStreamBluray(pPlayer, fileitem);
 #endif
-  else if (item.IsType(".mpd"))
-    return new CDVDInputStreamMpegDash();
+  else if (fileitem.IsType(".mpd"))
+    return new CDVDInputStreamMpegDash(fileitem);
   else if(file.substr(0, 6) == "rtp://"
        || file.substr(0, 7) == "rtsp://"
        || file.substr(0, 6) == "sdp://"

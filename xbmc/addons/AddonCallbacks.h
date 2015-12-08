@@ -24,7 +24,7 @@
 #include "addons/bindings/libKODI_guilib.h"
 #include "addons/bindings/libKODI_adsp.h"
 #include "addons/bindings/libKODI_audioengine.h"
-#include "cores/dvdplayer/DVDDemuxers/DVDDemuxUtils.h"
+#include "cores/VideoPlayer/DVDDemuxers/DVDDemuxUtils.h"
 #include "addons/include/kodi_adsp_types.h"
 #include "addons/include/kodi_audioengine_types.h"
 #include "addons/include/xbmc_pvr_types.h"

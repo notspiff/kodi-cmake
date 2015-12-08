@@ -4,6 +4,7 @@ set(SOURCES ButtonTranslator.cpp
             InputCodingTableBaiduPY.cpp
             InputCodingTableBasePY.cpp
             InputCodingTableFactory.cpp
+            InputCodingTableKorean.cpp
             Key.cpp
             KeyboardLayout.cpp
             KeyboardLayoutManager.cpp

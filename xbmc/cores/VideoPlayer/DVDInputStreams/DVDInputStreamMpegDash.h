@@ -27,7 +27,7 @@ class CDVDInputStreamMpegDash
   , public CDVDInputStream::ISeekable
 {
 public:
-  CDVDInputStreamMpegDash();
+  CDVDInputStreamMpegDash(CFileItem& item);
   virtual ~CDVDInputStreamMpegDash();
   virtual bool    Open(const char* strFile, const std::string &content, bool contentLookup);
   virtual void    Close();

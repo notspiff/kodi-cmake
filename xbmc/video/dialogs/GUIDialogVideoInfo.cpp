@@ -1223,7 +1223,6 @@ bool CGUIDialogVideoInfo::UpdateVideoItemTitle(const CFileItemPtr &pItem, bool u
   if (updateItem)
     const_cast<CFileItemPtr&>(pItem)->GetVideoInfoTag()->m_strTitle = detail.m_strTitle;
 
-  database.UpdateMovieTitle(iDbId, detail.m_strTitle, iType);
   return true;
 }
 
