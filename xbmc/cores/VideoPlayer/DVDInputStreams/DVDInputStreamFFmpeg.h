@@ -37,6 +37,8 @@ public:
   virtual bool IsEOF();
   virtual int64_t GetLength();
 
+  const CFileItem& GetItem() const { return m_item; }
+
   virtual void    Abort()    { m_aborted = true;  }
   bool            Aborted()  { return m_aborted;  }
 
