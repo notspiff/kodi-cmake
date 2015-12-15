@@ -629,7 +629,7 @@ void CDVDDemuxFFmpeg::SetSpeed(int iSpeed)
   }
 }
 
-AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
+AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(CURL &url)
 {
 
   AVDictionary *options = NULL;
@@ -682,6 +682,18 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(const CURL &url)
       if (is->GetItem().HasProperty(it.first))
         av_dict_set(&options, it.second.c_str(),
                     is->GetItem().GetProperty(it.first).asString().c_str(),0);
+    }
+    std::vector<std::string> opts = StringUtils::Split(url.Get(), " ");
+    if (opts.size() > 1) // inline rtmp options
+    {
+      for (size_t i = 1; i < opts.size(); ++i)
+      {
+        std::vector<std::string> value = StringUtils::Split(opts[i], "=");
+        auto it = optionmap.find(value[0]);
+        if (it != optionmap.end())
+          av_dict_set(&options, it->second.c_str(), value[1].c_str(), 0);
+      }
+      url = CURL(opts.front());
     }
   }
   return options;
