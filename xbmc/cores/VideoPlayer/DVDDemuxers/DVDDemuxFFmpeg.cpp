@@ -691,12 +691,23 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(CURL &url)
     std::vector<std::string> opts = StringUtils::Split(url.Get(), " ");
     if (opts.size() > 1) // inline rtmp options
     {
+      std::string swfurl;
+      bool swfvfy=false;
       for (size_t i = 1; i < opts.size(); ++i)
       {
         std::vector<std::string> value = StringUtils::Split(opts[i], "=");
         auto it = optionmap.find(value[0]);
         if (it != optionmap.end())
-          av_dict_set(&options, it->second.c_str(), value[1].c_str(), 0);
+        {
+          if (value[0] == "swfurl" || value[0] == "SWFPlayer")
+            swfurl = value[1];
+          if (value[0] == "swfvfy" && value[1] == "true")
+            swfvfy = true;
+          else
+            av_dict_set(&options, it->second.c_str(), value[1].c_str(), 0);
+        }
+        if (swfvfy)
+          av_dict_set(&options, "rtmp_swfverify", swfurl.c_str(), 0);
       }
       url = CURL(opts.front());
     }
