@@ -93,10 +93,7 @@ set(optional_deps MicroHttpd MySqlClient
 set(required_dyload Curl ASS LibDvd)
 
 # Optional, dyloaded deps
-set(dyload_optional RTMP CEC Bluray Plist)
-
-# Required by shared objects we link
-set(required_dep_libs Jasper PNG TIFF EXPAT)
+set(dyload_optional CEC Bluray Plist)
 
 foreach(dep ${required_dep_libs})
   find_package(${dep} REQUIRED)
@@ -220,14 +217,7 @@ if(BOOTSTRAP_IN_TREE)
   add_dependencies(pack-skins TexturePacker)
 endif()
 
-#set(CXIMAGE_DEPLIBS ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES}
-#                    ${TIFF_LIBRARIES} ${PNG_LIBRARIES}
-#                    ${JASPER_LIBRARIES} )
-
-#core_link_library(cximage system/ImageLib "nowrap" "${CXIMAGE_DEPLIBS}")
-
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/system/players/dvdplayer)
-add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
+#add_custom_target(wrap-libraries ALL DEPENDS ${WRAP_FILES})
 
 configure_file(${CORE_SOURCE_DIR}/xbmc/DllPaths_generated.h.in
                ${CORE_BUILD_DIR}/DllPaths_generated.h @ONLY)
