@@ -198,6 +198,7 @@ CDVDDemuxFFmpeg::CDVDDemuxFFmpeg() : CDVDDemux()
   memset(&m_pkt.pkt, 0, sizeof(AVPacket));
   m_streaminfo = true; /* set to true if we want to look for streams before playback */
   m_checkvideo = false;
+  avformat_network_init();
 }
 
 CDVDDemuxFFmpeg::~CDVDDemuxFFmpeg()
@@ -672,12 +673,12 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(CURL &url)
   if (url.IsProtocol("rtmp") || url.IsProtocol("rtmpt") || url.IsProtocol("rtmpe") || url.IsProtocol("rtmpte") || url.IsProtocol("rtmps"))
   {
     static const std::map<std::string,std::string> optionmap =
-      {{{"SWFPlayer", "rtmp_swfurl"},
-        {"PageURL", "rtmp_pageurl"},
-        {"PlayPath", "rtmp_playpath"},
-        {"TcUrl",    "rtmp_tcurl"},
-        {"IsLive",   "rtmp_live"},
+      {{{"swfplayer", "rtmp_swfurl"},
+        {"pageurl", "rtmp_pageurl"},
         {"playpath", "rtmp_playpath"},
+        {"tcurl",    "rtmp_tcurl"},
+        {"islive",   "rtmp_live"},
+        {"live",   "rtmp_live"},
         {"swfurl",   "rtmp_swfurl"},
         {"swfvfy",   "rtmp_swfverify"},
       }};
@@ -695,11 +696,15 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(CURL &url)
       bool swfvfy=false;
       for (size_t i = 1; i < opts.size(); ++i)
       {
-        std::vector<std::string> value = StringUtils::Split(opts[i], "=");
+        std::vector<std::string> value;
+        size_t ofs = opts[i].find_first_of('=');
+        value.push_back(opts[i].substr(0,ofs));
+        StringUtils::ToLower(value[0]);
+        value.push_back(opts[i].substr(ofs+1));
         auto it = optionmap.find(value[0]);
         if (it != optionmap.end())
         {
-          if (value[0] == "swfurl" || value[0] == "SWFPlayer")
+          if (value[0] == "swfurl" || value[0] == "swfplayer")
             swfurl = value[1];
           if (value[0] == "swfvfy" && value[1] == "true")
             swfvfy = true;
