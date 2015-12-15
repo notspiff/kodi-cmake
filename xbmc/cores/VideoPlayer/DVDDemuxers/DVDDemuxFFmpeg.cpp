@@ -669,14 +669,18 @@ AVDictionary *CDVDDemuxFFmpeg::GetFFMpegOptionsFromURL(CURL &url)
       av_dict_set(&options, "cookies", cookies.c_str(), 0);
 
   }
-  if (url.IsProtocol("rtmp"))
+  if (url.IsProtocol("rtmp") || url.IsProtocol("rtmpt") || url.IsProtocol("rtmpe") || url.IsProtocol("rtmpte") || url.IsProtocol("rtmps"))
   {
     static const std::map<std::string,std::string> optionmap =
       {{{"SWFPlayer", "rtmp_swfurl"},
         {"PageURL", "rtmp_pageurl"},
         {"PlayPath", "rtmp_playpath"},
         {"TcUrl",    "rtmp_tcurl"},
-        {"IsLive",   "rtmp_live"}}};
+        {"IsLive",   "rtmp_live"},
+        {"playpath", "rtmp_playpath"},
+        {"swfurl",   "rtmp_swfurl"},
+        {"swfvfy",   "rtmp_swfverify"},
+      }};
     CDVDInputStreamFFmpeg* is = static_cast<CDVDInputStreamFFmpeg*>(m_pInput);
     for (auto& it : optionmap)
     {
