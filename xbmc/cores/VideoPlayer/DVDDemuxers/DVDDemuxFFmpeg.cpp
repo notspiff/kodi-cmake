@@ -263,6 +263,7 @@ bool CDVDDemuxFFmpeg::Open(CDVDInputStream* pInput, bool streaminfo, bool filein
     CURL url = m_pInput->GetURL();
 
     AVDictionary *options = GetFFMpegOptionsFromURL(url);
+    strFile = url.Get();
 
     int result=-1;
     if (url.IsProtocol("mms"))
