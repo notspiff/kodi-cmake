@@ -20,10 +20,18 @@
 
 #include "imagefactory.h"
 #include "guilib/FFmpegImage.h"
+#include "addons/AddonManager.h"
+#include "addons/ImageEncoder.h"
 #include "utils/Mime.h"
+#include "utils/StringUtils.h"
 #if defined(HAS_GIFLIB)
 #include "guilib/Gif.h"
 #endif//HAS_GIFLIB
+#include "FFmpegImage.h"
+
+#include <algorithm>
+
+using namespace ADDON;
 
 IImage* ImageFactory::CreateLoader(const std::string& strFileName)
 {
@@ -41,6 +49,20 @@ IImage* ImageFactory::CreateLoader(const CURL& url)
 
 IImage* ImageFactory::CreateLoaderFromMimeType(const std::string& strMimeType)
 {
+  VECADDONS codecs;
+  CAddonMgr::GetInstance().GetAddons(codecs, ADDON_IMAGE_ENCODER);
+  for (auto& codec : codecs)
+  {
+    std::shared_ptr<CImageEncoder> enc(std::static_pointer_cast<CImageEncoder>(codec));
+    std::vector<std::string> mime = StringUtils::Split(enc->GetMimetypes(), "|");
+    if (std::find(mime.begin(), mime.end(), strMimeType) != mime.end())
+    {
+      CImageEncoder* result = new CImageEncoder(*enc);
+      result->Create(strMimeType);
+      return result;
+    }
+  }
+
 #if defined(HAS_GIFLIB)
   if (strMimeType == "image/gif")
     return new Gif();

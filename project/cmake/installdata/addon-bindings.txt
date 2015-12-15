@@ -7,6 +7,8 @@ xbmc/addons/include/kodi_audiodec_types.h
 xbmc/addons/include/xbmc_audioenc_dll.h
 xbmc/addons/include/xbmc_audioenc_types.h
 xbmc/addons/include/kodi_audioengine_types.h
+xbmc/addons/include/kodi_imageenc_dll.h
+xbmc/addons/include/kodi_imageenc_types.h
 xbmc/addons/include/xbmc_codec_types.h
 xbmc/addons/include/xbmc_epg_types.h
 xbmc/addons/include/xbmc_pvr_dll.h
@@ -26,3 +28,4 @@ xbmc/addons/bindings/libXBMC_codec.h
 xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxPacket.h
 xbmc/cores/AudioEngine/Utils/AEChannelData.h
 xbmc/filesystem/IFileTypes.h
+xbmc/guilib/TextureFormats.h

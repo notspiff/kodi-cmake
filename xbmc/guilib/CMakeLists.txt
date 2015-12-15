@@ -1,8 +1,8 @@
-set(SOURCES cximage.cpp
-            DDSImage.cpp
+set(SOURCES DDSImage.cpp
             DirectXGraphics.cpp
             DirtyRegionSolvers.cpp
             DirtyRegionTracker.cpp
+            FFmpegImage.cpp
             FrameBufferObject.cpp
             GraphicContext.cpp
             GUIAction.cpp
@@ -64,7 +64,6 @@ set(SOURCES cximage.cpp
             GUIWrappingListContainer.cpp
             imagefactory.cpp
             IWindowManagerCallback.cpp
-            JpegIO.cpp
             LocalizeStrings.cpp
             Resolution.cpp
             Shader.cpp
@@ -101,4 +100,4 @@ if(WIN32)
 endif()
 
 core_add_library(guilib)
-add_dependencies(guilib libcpluff)
+add_dependencies(guilib libcpluff ffmpeg)

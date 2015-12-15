@@ -18320,3 +18320,8 @@ msgstr ""
 msgctxt "#38041"
 msgid "Mixer"
 msgstr "" 
+
+#: \xbmc\addons\Addon.cpp
+msgctxt "#38042"
+msgid "Image encoder"
+msgstr ""
