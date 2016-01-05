@@ -803,30 +803,6 @@ bool CTagLoaderTagLib::ParseTag(Tag *generic, EmbeddedArt *art, CMusicInfoTag& t
   return true;
 }
 
-void CTagLoaderTagLib::SetFlacArt(FLAC::File *flacFile, EmbeddedArt *art, CMusicInfoTag &tag)
-{
-  FLAC::Picture *cover[2] = {};
-  List<FLAC::Picture *> pictures = flacFile->pictureList();
-  for (List<FLAC::Picture *>::ConstIterator i = pictures.begin(); i != pictures.end(); ++i)
-  {
-    FLAC::Picture *picture = *i;
-    if (picture->type() == FLAC::Picture::FrontCover)
-      cover[0] = picture;
-    else // anything else is taken as second priority
-      cover[1] = picture;
-  }
-  for (unsigned int i = 0; i < 2; i++)
-  {
-    if (cover[i])
-    {
-      tag.SetCoverArtInfo(cover[i]->data().size(), cover[i]->mimeType().to8Bit(true));
-      if (art)
-        art->set((const uint8_t*)cover[i]->data().data(), cover[i]->data().size(), cover[i]->mimeType().to8Bit(true));
-      return; // one is enough
-    }
-  }
-}
-
 const std::vector<std::string> CTagLoaderTagLib::GetASFStringList(const List<ASF::Attribute>& list)
 {
   std::vector<std::string> values;
@@ -1133,8 +1109,8 @@ bool CTagLoaderTagLib::Load(const std::string& strFileName, CMusicInfoTag& tag, 
     ParseTag(ape, art, tag);
 
   // art for flac files is outside the tag
-  if (flacFile)
-    SetFlacArt(flacFile, art, tag);
+//  if (flacFile)
+//    SetFlacArt(flacFile, art, tag);
 
   if (!tag.GetTitle().empty() || !tag.GetArtist().empty() || !tag.GetAlbum().empty())
     tag.SetLoaded();
