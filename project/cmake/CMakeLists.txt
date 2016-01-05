@@ -22,6 +22,7 @@ option(ENABLE_BLURAY      "Enable BluRay support?" ON)
 option(ENABLE_PLIST       "Enable AirPlay support?" ON)
 option(ENABLE_AIRTUNES    "Enable AirTunes support?" ON)
 option(ENABLE_CEC         "Enable CEC support?" ON)
+option(ENABLE_SSH         "Enable libSSH support?" ON)
 if(UNIX)
   option(ENABLE_INTERNAL_FFMPEG "Enable internal ffmpeg?" ON)
   option(ENABLE_ALSA        "Enable ALSA support?" ON)
@@ -87,7 +88,7 @@ set(required_deps Sqlite3 FreeType PCRE Cpluff OpenSSL
 # Optional dependencies
 set(optional_deps MicroHttpd MySqlClient
                   Alsa UDev Dbus Avahi Wayland
-                  PulseAudio VDPAU VAAPI)
+                  PulseAudio VDPAU VAAPI SSH)
 
 # Required, dyloaded deps
 set(required_dyload Curl ASS LibDvd)
